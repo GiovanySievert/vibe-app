@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.myApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +22,28 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.myApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21mc2VxbDZrMGJoaDJrb2Z1OHFjb2FzMyJ9.NMRxNjZt9Zzn1_nL5uhO3w"
+        }
+      ]
+    ]
+  },
+  "ios": {
+    "infoPlist": {
+      "NSLocationWhenInUseUsageDescription": "O app usa sua localização para mostrar no mapa"
     }
+  },
+  "android": {
+    "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
   }
 }
