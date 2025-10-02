@@ -1,40 +1,59 @@
+import React, { PropsWithChildren, useState } from 'react'
+import { ActivityIndicator, Button as NativeButton, GestureResponderEvent, PressableProps, View } from 'react-native'
+
 import { theme } from '@src/shared/constants/theme'
-import React from 'react'
-import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle } from 'react-native'
 
-interface ButtonProps {
-  title: string
-  onPress: (event: GestureResponderEvent) => void
-  style?: ViewStyle
-  textStyle?: TextStyle
+type ButtonVariant = 'solid' | 'soft' | 'outline' | 'outline-strong' | 'ghost' | 'text' | 'icon'
+type ButtonType = 'primary' | 'secondary' | 'danger' | 'warning' | 'black'
+type IconWeight = 'regular' | 'light' | 'solid' | 'brand' | 'duotone' | 'thin'
+
+type ButtonProps = {
+  variant?: ButtonVariant
+  type?: ButtonType
+  loading?: boolean
   disabled?: boolean
-}
+  startIconName?: string
+  endIconName?: string
+  startIconType?: IconWeight
+  endIconType?: IconWeight
+} & PressableProps
 
-export const Button: React.FC<ButtonProps> = ({ title, onPress, style, textStyle, disabled }) => (
-  <TouchableOpacity
-    style={[styles.button, style, disabled && styles.disabled]}
-    onPress={onPress}
-    activeOpacity={0.7}
-    disabled={disabled}
-  >
-    <Text style={[styles.text, textStyle]}>{title}</Text>
-  </TouchableOpacity>
-)
+export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
+  ({ variant = 'solid', type = 'primary', startIconType = 'light', endIconType = 'light', testID, ...props }, ref) => {
+    const [pressed, setPressed] = useState(false)
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: theme.colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 4,
-    alignItems: 'center'
-  },
-  text: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-  disabled: {
-    backgroundColor: '#cccccc'
+    const disabled = typeof props.disabled === 'boolean' ? props.loading || props.disabled : false
+
+    const handlePressIn = (event: GestureResponderEvent) => {
+      setPressed(true)
+      if (!props.loading && typeof props.onPressIn === 'function') {
+        props.onPressIn(event)
+      }
+    }
+
+    const handlePressOut = (event: GestureResponderEvent) => {
+      setPressed(false)
+      if (!props.loading && typeof props.onPressOut === 'function') {
+        props.onPressOut(event)
+      }
+    }
+
+    const loadingColor = !disabled ? theme.colors.primary : theme.colors.textSecondary
+
+    return (
+      <NativeButton
+        {...props}
+        variant={variant}
+        type={type}
+        state={{ pressed }}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled}
+        testID={testID || 'button-container--button'}
+        ref={ref}
+      >
+        {props.loading && <ActivityIndicator />}
+      </NativeButton>
+    )
   }
-})
+)

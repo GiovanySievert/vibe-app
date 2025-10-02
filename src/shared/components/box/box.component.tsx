@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
+import { ScrollView, StyleProp, View, ViewProps,ViewStyle } from 'react-native'
 
-import { View, ViewStyle, StyleProp, ScrollView, ViewProps } from 'react-native'
 import { theme as defaultTheme } from '@src/shared/constants/theme'
 
 export type SpacingValue = number | keyof (typeof defaultTheme)['spacing']
