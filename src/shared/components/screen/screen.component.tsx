@@ -1,8 +1,8 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { theme } from '@src/shared/constants/theme'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type ScreenProps = {
   children: React.ReactNode
@@ -10,7 +10,7 @@ type ScreenProps = {
 
 export const Screen: React.FC<ScreenProps> = ({ children }) => {
   return (
-    <SafeAreaView style={style.container} edges={['right', 'left']}>
+    <SafeAreaView style={style.container} edges={['right', 'left', 'top', 'bottom']}>
       {children}
     </SafeAreaView>
   )
@@ -18,6 +18,7 @@ export const Screen: React.FC<ScreenProps> = ({ children }) => {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.secondary
+    flex: 1,
+    backgroundColor: theme.colors.background
   }
 })

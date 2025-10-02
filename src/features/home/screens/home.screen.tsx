@@ -1,8 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
-import { Screen } from '@src/shared/components/screen'
-import Mapbox, { MapView, Camera } from '@rnmapbox/maps'
+import { StyleSheet } from 'react-native'
+
+import Mapbox, { Camera,MapView } from '@rnmapbox/maps'
+
 import { Box } from '@src/shared/components'
+import { Screen } from '@src/shared/components/screen'
 
 Mapbox.setAccessToken(
   'sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21mc2VxbDZrMGJoaDJrb2Z1OHFjb2FzMyJ9.NMRxNjZt9Zzn1_nL5uhO3w'

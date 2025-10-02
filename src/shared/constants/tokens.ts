@@ -1,8 +1,15 @@
 export const colors = {
-  text: '#11181C',
-  background: '#120929',
-  primary: '#81CB63',
-  secondary: '#20172D'
+  background: '#121212',
+  backgroundSecondary: '#1C1C1C',
+  surface: '#1E1E1E',
+  primary: '#6B1FA2',
+  accent: '#39FF14',
+  warning: '#FF9800',
+  textPrimary: '#EAEAEA',
+  textSecondary: '#9E9E9E',
+  border: '#8A8A8A',
+  borderFocus: '#39FF14'
+
 } as const
 
 export const typography = {

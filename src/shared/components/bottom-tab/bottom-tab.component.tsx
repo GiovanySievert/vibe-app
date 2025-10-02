@@ -1,7 +1,7 @@
 import React from 'react'
-
-import { Box, ThemedText } from '@src/shared/components'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+
+import { Box, Button } from '@src/shared/components'
 
 type BottomTabProps = BottomTabBarProps
 
@@ -15,6 +15,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
         const focused = state.index === index
         const color = focused ? '#007AFF' : '#222'
         const position = 'below-icon'
+        const isFocused = state.index === index
 
         let labelContent: React.ReactNode
 
@@ -29,9 +30,21 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
           labelContent = label
         }
 
+        const handleNavigation = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true
+          })
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name)
+          }
+        }
+
         return (
           <Box key={route.key} flex={1} alignItems="center" bg="secondary">
-            <ThemedText>{labelContent}</ThemedText>
+            <Button title={labelContent} onPress={() => handleNavigation()} />
           </Box>
         )
       })}

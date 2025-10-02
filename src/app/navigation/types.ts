@@ -1,26 +1,22 @@
-import { NavigationProp, RouteProp, NavigatorScreenParams } from '@react-navigation/native'
+import { NavigationProp, NavigatorScreenParams,RouteProp } from '@react-navigation/native'
 
 export enum TabRoutesName {
   HOME = 'Home',
-  // APPOINTMENTS = 'Agendamentos',
   MENU = 'Menu'
 }
 
 export type UnathenticatedStackParamList = {
   AuthScreen: undefined
+  SignInScreen: undefined
 }
 
 export type AuthenticatedStackParamList = {
   HomeScreen: undefined
-  ProfileScreen: undefined
-}
-
-export type RootStackParamList = {
-  AuthenticatedTab: NavigatorScreenParams<AuthenticatedStackParamList>
+  UserMenuScreen: undefined
 }
 
 export type AppNavigatorRootParamsList = {
-  TabsNavigator: NavigatorScreenParams<RootStackParamList>
+  TabsNavigator: NavigatorScreenParams<AuthenticatedStackParamList>
   UnathenticatedStack: NavigatorScreenParams<UnathenticatedStackParamList>
   Modals: NavigatorScreenParams<ModalNavigatorParamsList>
 }

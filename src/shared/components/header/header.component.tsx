@@ -1,12 +1,12 @@
 import React from 'react'
+import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { getHeaderTitle } from '@react-navigation/elements'
-import { ArrowLeft } from 'lucide-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { ThemedText, Box, Divider } from '@src/shared/components'
-import { theme } from '@src/shared/constants/theme'
+import { ArrowLeft } from 'lucide-react-native'
 
-import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
+import { Box, Divider,ThemedText } from '@src/shared/components'
+import { theme } from '@src/shared/constants/theme'
 
 type HeaderProps = BottomTabHeaderProps
 

@@ -1,16 +1,22 @@
 import 'react-native-gesture-handler'
 
-import { StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { MainAppNavigator } from './navigation'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+import { MainAppNavigator } from './navigation'
+
+const queryClient = new QueryClient()
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <MainAppNavigator />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <MainAppNavigator />
+        </NavigationContainer>
+      </QueryClientProvider>
     </SafeAreaProvider>
   )
 }
