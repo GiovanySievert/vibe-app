@@ -1,1 +1,3 @@
-export const AuthService = () => {}
+export const AuthService = {
+  signIn: () => {}
+}
