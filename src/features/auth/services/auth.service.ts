@@ -1,3 +1,8 @@
+import { AxiosResponse } from 'axios'
+
+import { api } from '@src/services/api'
+
 export const AuthService = {
-  signIn: () => {}
+  checkIfUsernameIsAvailable: (username: string): Promise<AxiosResponse<{ available: boolean }>> =>
+    api.get(`/auth/check-username?username=${username}`)
 }

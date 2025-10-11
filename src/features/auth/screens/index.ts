@@ -1,2 +1,2 @@
 export * from './auth.screen'
-export * from './sign-in.screen'
+export * from './forgot-password.screen'
