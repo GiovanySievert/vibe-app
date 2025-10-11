@@ -1,0 +1,1 @@
+export * from './animated-box.component'
