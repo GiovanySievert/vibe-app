@@ -40,10 +40,5 @@ export const ThemedIcon: React.FC<ThemedIconProps> = ({
 
   const iconColor = getTextColor(color)
 
-  if (type === 'light') {
-    return <Icon size={size} color={iconColor} testID={testID} />
-  }
-  if (type === 'solid') {
-    return <Icon size={size} color={iconColor} testID={testID} />
-  }
+  return <Icon size={size} color={iconColor} testID={testID} />
 }
