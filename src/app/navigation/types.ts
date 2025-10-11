@@ -1,4 +1,4 @@
-import { NavigationProp, NavigatorScreenParams,RouteProp } from '@react-navigation/native'
+import { NavigatorScreenParams } from '@react-navigation/native'
 
 export enum TabRoutesName {
   HOME = 'Home',
@@ -8,6 +8,9 @@ export enum TabRoutesName {
 export type UnathenticatedStackParamList = {
   AuthScreen: undefined
   SignInScreen: undefined
+  ForgotPasswordScreen: {
+    typedEmail?: string
+  }
 }
 
 export type AuthenticatedStackParamList = {
@@ -27,11 +30,11 @@ export type ModalNavigatorParamsList = {
   }
 }
 
-export type GlobalStackParamList = ModalNavigatorParamsList & {
-  MainApp: NavigatorScreenParams<AppNavigatorRootParamsList>
-}
+// export type GlobalStackParamList = ModalNavigatorParamsList & {
+//   MainApp: NavigatorScreenParams<AppNavigatorRootParamsList>
+// }
 
-export type GlobalNavigationProps<Screen extends keyof RootStackParamList> = {
-  navigation: NavigationProp<RootStackParamList>
-  route: RouteProp<RootStackParamList, Screen>
-}
+// export type GlobalNavigationProps<Screen extends keyof RootStackParamList> = {
+//   navigation: NavigationProp<RootStackParamList>
+//   route: RouteProp<RootStackParamList, Screen>
+// }

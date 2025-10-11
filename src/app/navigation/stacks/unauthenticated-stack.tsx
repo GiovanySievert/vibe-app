@@ -14,14 +14,22 @@ export const UnathenticatedStackScreen = () => {
         name="AuthScreen"
         component={AuthFeatures.AuthScreen}
         options={{
+          headerShown: false
+        }}
+      />
+
+      <UnathenticatedStack.Screen
+        name="SignInScreen"
+        component={AuthFeatures.AuthScreen}
+        options={{
           headerShown: false,
           headerTransparent: false
         }}
       />
 
       <UnathenticatedStack.Screen
-        name="SignInScreen"
-        component={AuthFeatures.SignInScreen}
+        name="ForgotPasswordScreen"
+        component={AuthFeatures.ForgotPasswordScreen}
         options={{
           headerShown: false,
           headerTransparent: false

@@ -1,3 +1,4 @@
+export * from './animated-box'
 export * from './bottom-tab'
 export * from './box'
 export * from './button'

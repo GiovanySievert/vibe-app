@@ -1,23 +1,51 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
-import Mapbox, { Camera,MapView } from '@rnmapbox/maps'
+import { useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 
-import { Box } from '@src/shared/components'
+import { authStateAtom } from '@src/features/auth/state'
+import { useUserLocation } from '@src/features/home/hooks/use-get-user-location.hook'
+import { Box, ThemedText } from '@src/shared/components'
+import { Input } from '@src/shared/components/input'
+import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
-
-Mapbox.setAccessToken(
-  'sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21mc2VxbDZrMGJoaDJrb2Z1OHFjb2FzMyJ9.NMRxNjZt9Zzn1_nL5uhO3w'
-)
+import { PlacesModel } from '@src/shared/domain'
+import { PlacesService } from '@src/shared/services'
+import { locationStateAtom } from '@src/shared/state/location.state'
 
 export const HomeScreen = () => {
+  const { loading: locationIsLoading } = useUserLocation()
+  const [authState] = useAtom(authStateAtom)
+  const [locationState] = useAtom(locationStateAtom)
+
+  const fetchPlaces = async () => {
+    const response = await PlacesService.fetchPlaces({
+      lat: locationState.latitude,
+      lon: locationState.longitude,
+      radius: '2km'
+    })
+    return response.data.items
+  }
+
+  const { data, isPending } = useQuery<PlacesModel[], Error>({
+    queryKey: ['fetchPlaces'],
+    queryFn: fetchPlaces,
+    retry: false,
+    staleTime: 0,
+    enabled: !!locationState
+  })
+
+  if (isPending || !data?.length) {
+    return
+  }
   return (
     <Screen>
-      <Box style={styles.card}>
-        <MapView style={styles.map} styleURL={Mapbox.StyleURL.Dark}>
-          <Camera centerCoordinate={[-46.6333, -23.5505]} zoomLevel={12} />
-        </MapView>
+      <Box pl={6} pr={6}>
+        <ThemedText type="link">Hello {authState.user?.name}</ThemedText>
+        <Input placeholder="Procure lugares aqui" />
       </Box>
+      <Box style={styles.card}>{<MapWithPins points={data} onPressPin={(p) => console.log('clicou', p)} />}</Box>
     </Screen>
   )
 }

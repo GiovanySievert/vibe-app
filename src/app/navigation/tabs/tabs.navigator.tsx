@@ -21,6 +21,7 @@ export function TabsNavigator() {
         name="HomeScreen"
         component={HomeFeatures.HomeScreen}
         options={{
+          headerShown: false,
           tabBarLabel: TabRoutesName.HOME
         }}
       />
@@ -29,6 +30,7 @@ export function TabsNavigator() {
         name="UserMenuScreen"
         component={UserMenuFeatures.UserMenuScreen}
         options={{
+          headerShown: false,
           tabBarLabel: TabRoutesName.MENU
         }}
       />

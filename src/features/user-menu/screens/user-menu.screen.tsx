@@ -1,30 +1,35 @@
-import { StyleSheet } from 'react-native'
+import { useState } from 'react'
 
-import { Box, ThemedText } from '@src/shared/components'
+import { useAtom } from 'jotai'
+
+import { authStateAtom } from '@src/features/auth/state'
+import { Box, Button, ThemedText } from '@src/shared/components'
+import { Screen } from '@src/shared/components/screen'
+import { useLogout } from '@src/shared/hooks'
+
+import { DeleteAccount } from '../components'
 
 export const UserMenuScreen = () => {
+  const [authState] = useAtom(authStateAtom)
+  const [shouldShowDeleteAccountInput, setShouldShowDeleteAccountInput] = useState<boolean>(false)
+  const { logout } = useLogout()
+
   return (
-    <Box>
-      <ThemedText>Usermenu</ThemedText>
-    </Box>
+    <Screen>
+      <Box flex={1} bg="background" gap={6} p={6}>
+        <ThemedText type="link">Usermenu: {authState.user.email}</ThemedText>
+        <Button onPress={() => logout()}>
+          <ThemedText>Deslogar</ThemedText>
+        </Button>
+
+        {!shouldShowDeleteAccountInput ? (
+          <Button onPress={() => setShouldShowDeleteAccountInput(true)}>
+            <ThemedText>Deletar conta</ThemedText>
+          </Button>
+        ) : (
+          <DeleteAccount />
+        )}
+      </Box>
+    </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute'
-  }
-})

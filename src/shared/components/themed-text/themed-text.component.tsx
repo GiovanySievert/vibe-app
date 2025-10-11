@@ -1,14 +1,16 @@
 import { StyleSheet, Text, type TextProps } from 'react-native'
 
+import { theme } from '@src/shared/constants/theme'
+
 export type ThemedTextProps = TextProps & {
   weight?: any
   size?: any
   color?: string
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link'
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'bold' | 'subtitle' | 'link' | 'sm'
 }
 
 export function ThemedText({ style, type = 'default', ...rest }: ThemedTextProps) {
-  const color = '#E4DFE9'
+  const color = theme.colors.textPrimary
 
   return (
     <Text
@@ -16,9 +18,10 @@ export function ThemedText({ style, type = 'default', ...rest }: ThemedTextProps
         { color },
         type === 'default' ? styles.default : undefined,
         type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
+        type === 'bold' ? styles.bold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
+        type === 'sm' ? styles.sm : undefined,
         style
       ]}
       {...rest}
@@ -29,25 +32,33 @@ export function ThemedText({ style, type = 'default', ...rest }: ThemedTextProps
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
-    lineHeight: 24
+    lineHeight: 24,
+    fontFamily: 'Urbanist-Regular'
   },
-  defaultSemiBold: {
+  bold: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600'
+    fontWeight: '700',
+    fontFamily: 'Urbanist-Bold'
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    lineHeight: 32
+    lineHeight: 32,
+    fontFamily: 'Urbanist-bold'
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontFamily: 'Urbanist-semibold'
   },
   link: {
     lineHeight: 30,
     fontSize: 16,
-    color: '#0a7ea4'
+    color: '#fff'
+  },
+  sm: {
+    lineHeight: 30,
+    fontSize: 12,
+    color: theme.colors.textSecondary
   }
 })
