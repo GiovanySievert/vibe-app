@@ -4,7 +4,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 
 import { icons } from 'lucide-react-native'
 
-import { Box, ThemedText } from '@src/shared/components'
+import { AnimatedBox, Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 import { ThemedIcon } from '../themed-icon'
@@ -135,7 +135,9 @@ export const Input = forwardRef<TextInput, InputProps>(
                 borderRadius: 8,
                 paddingLeft: startIconName ? 40 : 12,
                 paddingRight: isClearable ? 40 : 12,
-                height: 44
+                height: 44,
+                color: '#fff',
+                fontSize: 16
               },
               borderStyle
             ]}
@@ -146,7 +148,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             ref={ref}
             autoCorrect={false}
             autoCapitalize="none"
-            maxLength={maxLength || 128}
+            maxLength={maxLength || 72}
             multiline={multiline}
             // isTextArea={!!multiline}
             // startIconName={startIconName}
@@ -166,15 +168,11 @@ export const Input = forwardRef<TextInput, InputProps>(
           )}
         </Box>
 
-        <Box>
-          {errorMessage ? (
-            <Box mt={2}>
-              <ThemedText size="sm" weight="semibold" color="danger.600">
-                {errorMessage}
-              </ThemedText>
-            </Box>
-          ) : null}
-        </Box>
+        <AnimatedBox isVisible={!!errorMessage}>
+          <ThemedText type="sm" weight="semibold" color="danger.600">
+            {errorMessage}
+          </ThemedText>
+        </AnimatedBox>
       </Box>
     )
   }
