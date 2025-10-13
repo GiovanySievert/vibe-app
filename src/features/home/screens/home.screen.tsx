@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
-import { useUserLocation } from '@src/features/home/hooks/use-get-user-location.hook'
 import { Box, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { MapWithPins } from '@src/shared/components/map'
@@ -15,7 +14,6 @@ import { PlacesService } from '@src/shared/services'
 import { locationStateAtom } from '@src/shared/state/location.state'
 
 export const HomeScreen = () => {
-  const { loading: locationIsLoading } = useUserLocation()
   const [authState] = useAtom(authStateAtom)
   const [locationState] = useAtom(locationStateAtom)
 
