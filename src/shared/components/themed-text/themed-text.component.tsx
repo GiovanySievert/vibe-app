@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Urbanist-bold'
   },
   subtitle: {
-    fontSize: 20,
-    fontFamily: 'Urbanist-semibold'
+    fontSize: 24,
+    fontFamily: 'Urbanist-Bold'
   },
   link: {
     lineHeight: 30,

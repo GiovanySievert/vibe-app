@@ -19,10 +19,10 @@ type MapWithPinsProps = {
   onPressPin?: (point: PlacesModel) => void
 }
 
-export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, style, onPressPin }) => {
+export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) => {
   const cameraRef = useRef<MapboxGL.Camera>(null)
   const [locationState] = useAtom(locationStateAtom)
-  console.log(points)
+
   const bounds = useMemo(() => {
     if (!points?.length) return null
     let minLat = +Infinity,

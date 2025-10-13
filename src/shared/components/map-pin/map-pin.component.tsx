@@ -1,5 +1,8 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
@@ -11,18 +14,23 @@ type PinProps = {
 }
 
 export const MapPin: React.FC<PinProps> = ({ image, name, onPress }) => {
-  console.log(image, name)
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+
   return (
     <Box style={styles.wrapper} onTouchEnd={onPress}>
-      <Box style={styles.pinContainer}>
-        <Image source={{ uri: image }} style={styles.pinImage} resizeMode="cover" />
-      </Box>
-      <Box style={styles.pinStem} />
-      {!!name && (
-        <ThemedText style={styles.pinLabel} numberOfLines={1}>
-          {name}
-        </ThemedText>
-      )}
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Modals', { screen: 'PlaceDetails', params: { placeId: '123' } })}
+      >
+        <Box style={styles.pinContainer}>
+          <Image source={{ uri: image }} style={styles.pinImage} resizeMode="cover" />
+        </Box>
+        <Box style={styles.pinStem} />
+        {!!name && (
+          <ThemedText style={styles.pinLabel} numberOfLines={1}>
+            {name}
+          </ThemedText>
+        )}
+      </TouchableOpacity>
     </Box>
   )
 }
