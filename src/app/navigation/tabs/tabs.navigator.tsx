@@ -5,9 +5,9 @@ import { HomeFeatures, UserMenuFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
 import { Header } from '@src/shared/components/header'
 
-import { AuthenticatedStackParamList, TabRoutesName } from '../types'
+import { TabRoutesName, TabsNavigatorParamsList } from '../types'
 
-const Tab = createBottomTabNavigator<AuthenticatedStackParamList>()
+const Tab = createBottomTabNavigator<TabsNavigatorParamsList>()
 
 export function TabsNavigator() {
   return (

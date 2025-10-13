@@ -13,21 +13,25 @@ export type UnathenticatedStackParamList = {
   }
 }
 
-export type AuthenticatedStackParamList = {
+export type TabsNavigatorParamsList = {
   HomeScreen: undefined
   UserMenuScreen: undefined
+}
+
+export type ModalNavigatorParamsList = {
+  PlaceDetails: { placeId: string } | undefined
+  LocationModal: undefined
+}
+
+export type AuthenticatedStackParamList = {
+  Tabs: NavigatorScreenParams<TabsNavigatorParamsList>
+  Modals: NavigatorScreenParams<ModalNavigatorParamsList>
 }
 
 export type AppNavigatorRootParamsList = {
   TabsNavigator: NavigatorScreenParams<AuthenticatedStackParamList>
   UnathenticatedStack: NavigatorScreenParams<UnathenticatedStackParamList>
   Modals: NavigatorScreenParams<ModalNavigatorParamsList>
-}
-
-export type ModalNavigatorParamsList = {
-  LocationModal: {
-    onChange?: () => void
-  }
 }
 
 // export type GlobalStackParamList = ModalNavigatorParamsList & {
