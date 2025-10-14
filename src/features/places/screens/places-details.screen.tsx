@@ -1,36 +1,42 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 
-import { Box, Card, Divider, Pill, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, CardLinear, Divider, Pill, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 
 export const PlacesDetailsScreen = () => {
   return (
     <Screen>
-      <Box style={styles.imageHeaderContainer} justifyContent="center" alignItems="center" mt={10} mb={4}>
-        <Image source={{ uri: 'https://picsum.photos/seed/gatopreto/1920/1080' }} style={styles.imageHeader} />
+      <Box style={styles.imageHeaderContainer} justifyContent="center" alignItems="center" mt={10} mb={2}>
+        <Avatar
+          source={{
+            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkB5zkX3mrbLiQ_WjvF-rWwWQJEJ3wK3oB-Q&s'
+          }}
+          size="xl"
+        />
       </Box>
 
-      <Box m={4} gap={2}>
-        <Box alignItems="center">
-          <ThemedText type="title">Gato Preto</ThemedText>
-          <ThemedText type="subtitle">Bar</ThemedText>
+      <Box m={4} gap={3}>
+        <Box alignItems="center" mt={1}>
+          <ThemedText variant="title">Gato Preto</ThemedText>
+          <ThemedText variant="subtitle" weight="light">
+            Bar
+          </ThemedText>
         </Box>
 
         <Box flexDirection="row" gap={2} mb={4}>
           <ThemedIcon name="Star" color="warning" />
-          <ThemedText type="default">4.6</ThemedText>
-          <ThemedText type="default">(127 avaliações)</ThemedText>
+          <ThemedText>4.6</ThemedText>
+          <ThemedText>(127 avaliações)</ThemedText>
         </Box>
 
-        <Card gap={2} mb={4}>
-          <ThemedText type="bold">Sobre</ThemedText>
-          <ThemedText>
+        <CardLinear title="Sobre">
+          <ThemedText variant="secondary">
             Uma das baladas mais badaladas da cidade, com DJs renomados e uma pista sensacional. Ambiente moderno e
             sofisticado.
           </ThemedText>
-        </Card>
+        </CardLinear>
 
         <Box mb={4}>
           <Pill label="Música Eletrônica" />
@@ -56,8 +62,8 @@ export const PlacesDetailsScreen = () => {
         <Card gap={2} mb={2} flexDirection="row" alignItems="center" mb={4}>
           <ThemedIcon name="MapPin" color="primary" />
           <Box>
-            <ThemedText type="bold">Rua Augusta, 1234 - Consolação, São Paulo</ThemedText>
-            <ThemedText type="sm">0.5km de você</ThemedText>
+            <ThemedText>Rua Augusta, 1234 - Consolação, São Paulo</ThemedText>
+            <ThemedText>0.5km de você</ThemedText>
           </Box>
         </Card>
 
