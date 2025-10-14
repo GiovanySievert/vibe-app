@@ -9,18 +9,27 @@ export const colors = {
   textSecondary: '#9E9E9E',
   border: '#8A8A8A',
   borderFocus: '#39FF14'
-
 } as const
 
 export const typography = {
-  sizes: { xs: 12, sm: 14, md: 16, lg: 18, xl: 22, '2xl': 28 },
   lineHeights: { tight: 1.1, normal: 1.4, relaxed: 1.6 }
 }
 
+export const sizes = {
+  xs: 12,
+  sm: 14,
+  md: 16,
+  lg: 18,
+  xl: 22,
+  '2xl': 28
+}
+
 export const weights = {
+  light: '300' as const,
   regular: '400' as const,
   medium: '500' as const,
-  bold: '700'
+  semibold: '600' as const,
+  bold: '700' as const
 } as const
 
 export const spacing = {

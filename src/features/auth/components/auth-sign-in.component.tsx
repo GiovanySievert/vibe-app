@@ -100,8 +100,8 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
     <>
       <Card pt={6} pb={6} pl={6} pr={6}>
         <Box gap={3} mb={4}>
-          <ThemedText type="subtitle">Welcome</ThemedText>
-          <ThemedText type="default">Feel the night</ThemedText>
+          <ThemedText variant="primary">Welcome</ThemedText>
+          <ThemedText variant="primary">Feel the night</ThemedText>
         </Box>
         <Box gap={6}>
           <Input
@@ -117,7 +117,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
             errorMessage={formError.password}
           />
           <Button onPress={() => submitForm()} loading={loading}>
-            <ThemedText type="bold">SignIn</ThemedText>
+            <ThemedText>SignIn</ThemedText>
           </Button>
         </Box>
 

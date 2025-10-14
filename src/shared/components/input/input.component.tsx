@@ -106,9 +106,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       <Box style={{ flexGrow: 1 }}>
         {label && (
           <Box mb={2}>
-            <ThemedText size="sm" weight="semibold" color={!disabled ? 'gray.900' : 'gray.400'}>
-              {label}
-            </ThemedText>
+            <ThemedText color={!disabled ? 'gray.900' : 'gray.400'}>{label}</ThemedText>
           </Box>
         )}
 
