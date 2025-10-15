@@ -8,6 +8,21 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 export const PlacesDetailsScreen = () => {
   return (
     <Screen>
+      <Box flexDirection="row" justifyContent="space-between" p={3}>
+        <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
+          <ThemedIcon name="ArrowLeft" color="textSecondary" />
+        </Box>
+        <Box flexDirection="row" gap={3}>
+          <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
+            <ThemedIcon name="Heart" color="textSecondary" />
+          </Box>
+          <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
+            <ThemedIcon name="Share" color="textSecondary" />
+          </Box>
+        </Box>
+      </Box>
+      <Divider />
+
       <Box style={styles.imageHeaderContainer} justifyContent="center" alignItems="center" mt={10} mb={2}>
         <Avatar
           source={{
@@ -33,30 +48,30 @@ export const PlacesDetailsScreen = () => {
 
         <CardLinear title="Sobre">
           <ThemedText variant="secondary">
-            Uma das baladas mais badaladas da cidade, com DJs renomados e uma pista sensacional. Ambiente moderno e
-            sofisticado.
+            Uma das baladas mais badaladas da cidade, com mulher feia, cerveja quente e musica ruim. sofisticado.
           </ThemedText>
         </CardLinear>
 
-        <Box mb={4}>
+        <Box mb={4} mt={4} flexDirection="row" justifyContent="space-around">
+          <Pill label="Forro" />
           <Pill label="Música Eletrônica" />
           <Pill label="Pista" />
         </Box>
 
-        <Box flexDirection="row" justifyContent="space-between" mb={4}>
-          <Box alignItems="center">
+        <Box flexDirection="row" justifyContent="space-between" mb={4} gap={3}>
+          <Card alignItems="center">
             <ThemedText>Movimento</ThemedText>
             <ThemedText>Lotado</ThemedText>
-          </Box>
-          <Box alignItems="center">
+          </Card>
+          <Card alignItems="center">
             <ThemedText>Pico</ThemedText>
             <ThemedText>1h - 3h</ThemedText>
-          </Box>
+          </Card>
 
-          <Box alignItems="center">
+          <Card alignItems="center">
             <ThemedText>Movimento</ThemedText>
             <ThemedText>Lotado</ThemedText>
-          </Box>
+          </Card>
         </Box>
 
         <Card gap={2} mb={2} flexDirection="row" alignItems="center" mb={4}>
@@ -81,5 +96,12 @@ const styles = StyleSheet.create({
     width: 128,
     height: 128,
     borderRadius: '50%'
+  },
+  iconContainer: {
+    height: 32,
+    width: 32,
+    borderRadius: '50%',
+    borderWidth: 1,
+    borderColor: '#333'
   }
 })
