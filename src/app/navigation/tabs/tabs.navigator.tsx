@@ -27,6 +27,15 @@ export function TabsNavigator() {
       />
 
       <Tab.Screen
+        name="SocialScreen"
+        component={UserMenuFeatures.UserMenuScreen}
+        options={{
+          headerShown: false,
+          tabBarLabel: TabRoutesName.SOCIAL
+        }}
+      />
+
+      <Tab.Screen
         name="UserMenuScreen"
         component={UserMenuFeatures.UserMenuScreen}
         options={{

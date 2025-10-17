@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { ScrollView, StyleProp, View, ViewProps,ViewStyle } from 'react-native'
+import { ScrollView, StyleProp, View, ViewProps, ViewStyle } from 'react-native'
 
 import { theme as defaultTheme } from '@src/shared/constants/theme'
 
@@ -28,7 +28,6 @@ export interface BoxProps extends ViewProps {
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
   gap?: SpacingValue
   scrollable?: boolean
-  showsVerticalScrollIndicator?: boolean
   testID?: string
   children?: ReactNode
   style?: StyleProp<ViewStyle>
@@ -60,7 +59,6 @@ export const Box = React.forwardRef<View, BoxProps>((props, ref) => {
     scrollable,
     children,
     style,
-    showsVerticalScrollIndicator = false,
     ...rest
   } = props
 
@@ -122,7 +120,10 @@ export const Box = React.forwardRef<View, BoxProps>((props, ref) => {
     return (
       <ScrollView
         ref={ref as React.Ref<ScrollView>}
-        showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+        horizontal
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={boxStyle}
         style={[boxStyle, style]}
         {...rest}
       >

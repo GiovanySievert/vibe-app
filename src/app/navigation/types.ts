@@ -2,7 +2,8 @@ import { NavigatorScreenParams } from '@react-navigation/native'
 
 export enum TabRoutesName {
   HOME = 'Home',
-  MENU = 'Menu'
+  MENU = 'Perfil',
+  SOCIAL = 'Social'
 }
 
 export type UnathenticatedStackParamList = {
