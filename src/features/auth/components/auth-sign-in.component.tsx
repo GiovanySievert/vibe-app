@@ -42,7 +42,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
     }))
   }
 
-  const validateSignInSchema = () => {
+  const validateSignInSchema = (): boolean => {
     const values = {
       login: form.login,
       password: form.password
@@ -51,8 +51,10 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
     const result = signInSchema.safeParse(values)
     if (!result.success) {
       setFormError(validationMapErrors(result.error, formError))
-      throw Error
+      return false
     }
+
+    return true
   }
 
   const handleErrorsInSignIn = (error: any) => {
@@ -74,8 +76,9 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
   const submitForm = async () => {
     setLoading(true)
     try {
-      validateSignInSchema()
-
+      if (!validateSignInSchema()) {
+        return
+      }
       const { error, data } = await authClient.signIn.email({
         email: form.login,
         password: form.password

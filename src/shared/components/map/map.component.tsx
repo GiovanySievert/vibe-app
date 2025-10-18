@@ -52,9 +52,11 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
       attributionEnabled={false}
     >
       <MapboxGL.Camera
+        animationDuration={0}
+        animationMode="none"
         centerCoordinate={[locationState.longitude, locationState.latitude]}
         ref={cameraRef}
-        zoomLevel={12}
+        zoomLevel={14}
       />
 
       {points?.map((p) => (

@@ -30,7 +30,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
 
   const handleIconName = (label: string) => {
     if (label === 'Home') return 'MapPin'
-    if (label === 'Social') return 'MoonStar'
+    if (label === 'Social') return 'Compass'
     return 'User'
   }
 

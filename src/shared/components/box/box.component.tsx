@@ -22,6 +22,7 @@ export interface BoxProps extends ViewProps {
   bg?: keyof (typeof defaultTheme)['colors']
   flex?: number
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse'
+  flexGrow?: number
   flexShrink?: number
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
@@ -50,6 +51,7 @@ export const Box = React.forwardRef<View, BoxProps>((props, ref) => {
     bg,
     position,
     flex,
+    flexGrow,
     flexDirection,
     flexShrink,
     flexWrap,
@@ -109,6 +111,7 @@ export const Box = React.forwardRef<View, BoxProps>((props, ref) => {
     ...(position && { position }),
     ...(flex !== undefined && { flex }),
     ...(flexDirection && { flexDirection }),
+    ...(flexGrow && { flexGrow }),
     ...(flexShrink !== undefined && { flexShrink }),
     ...(flexWrap && { flexWrap }),
     ...(alignItems && { alignItems }),

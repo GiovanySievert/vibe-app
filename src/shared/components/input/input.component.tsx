@@ -1,11 +1,12 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { TextInput, TextInputProps, TouchableOpacity } from 'react-native'
+import { StyleSheet, TextInput, TextInputProps, TouchableOpacity } from 'react-native'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { icons } from 'lucide-react-native'
 
 import { AnimatedBox, Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { HIT_SLOP } from '@src/shared/utils'
 
 import { ThemedIcon } from '../themed-icon'
 
@@ -70,14 +71,10 @@ export const Input = forwardRef<TextInput, InputProps>(
       const color = interpolateColor(
         borderState.value,
         [0, 1, 2],
-        [theme.colors.primary, theme.colors.backgroundSecondary, theme.colors.warning]
+        [theme.colors.primaryGlow, theme.colors.primary, theme.colors.error]
       )
       return { borderColor: color }
     })
-
-    const errorStyle = useAnimatedStyle(() => ({
-      height: errorHeight.value
-    }))
 
     const onFocus = (e: FocusEvent) => {
       setIsFocused(true)
@@ -103,16 +100,18 @@ export const Input = forwardRef<TextInput, InputProps>(
     }, [rest.value])
 
     return (
-      <Box style={{ flexGrow: 1 }}>
+      <Box flexGrow={1}>
         {label && (
           <Box mb={2}>
-            <ThemedText color={!disabled ? 'gray.900' : 'gray.400'}>{label}</ThemedText>
+            <ThemedText size="sm" weight="semibold" color={!disabled ? 'textPrimary' : 'textTertiary'}>
+              {label}
+            </ThemedText>
           </Box>
         )}
 
         <Box justifyContent="center">
           {startIconName && (
-            <Box style={{ position: 'absolute', left: 16, zIndex: 10 }}>
+            <Box style={style.startIconContainer}>
               <ThemedIcon
                 name={startIconName as IconName}
                 size={18}
@@ -128,18 +127,12 @@ export const Input = forwardRef<TextInput, InputProps>(
             onFocus={!disabled ? onFocus : undefined}
             onBlur={!disabled ? onBlur : undefined}
             style={[
-              {
-                borderWidth: 1,
-                borderRadius: 8,
-                paddingLeft: startIconName ? 40 : 12,
-                paddingRight: isClearable ? 40 : 12,
-                height: 44,
-                color: '#fff',
-                fontSize: 16
-              },
-              borderStyle
+              style.input,
+              borderStyle,
+              startIconColor && style.hasStartIconInput,
+              isClearable && style.hasEndIcon
             ]}
-            placeholderTextColor={theme.colors.textSecondary}
+            placeholderTextColor={theme.colors.textPrimary}
             textAlign="left"
             textAlignVertical="top"
             editable={!disabled}
@@ -148,30 +141,49 @@ export const Input = forwardRef<TextInput, InputProps>(
             autoCapitalize="none"
             maxLength={maxLength || 72}
             multiline={multiline}
-            // isTextArea={!!multiline}
-            // startIconName={startIconName}
-            // isClearable={isClearable}
             testID="input-field"
             {...rest}
           />
 
           {isClearable && localInputValue && !disabled && (
-            <TouchableOpacity
-              onPress={handleClear}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              style={{ position: 'absolute', right: 16, zIndex: 10 }}
-            >
+            <TouchableOpacity onPress={handleClear} hitSlop={HIT_SLOP} style={style.endIconContainer}>
               <ThemedIcon name={'X'} size={18} testID="clear-button--input" />
             </TouchableOpacity>
           )}
         </Box>
 
         <AnimatedBox isVisible={!!errorMessage}>
-          <ThemedText type="sm" weight="semibold" color="danger.600">
-            {errorMessage}
-          </ThemedText>
+          <Box mt={1}>
+            <ThemedText size="sm" weight="medium" color="error">
+              {errorMessage}
+            </ThemedText>
+          </Box>
         </AnimatedBox>
       </Box>
     )
   }
 )
+
+const style = StyleSheet.create({
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: 44,
+    color: theme.colors.textPrimary,
+    fontSize: 16
+  },
+  hasStartIconInput: {
+    paddingLeft: 40
+  },
+  hasEndIcon: {
+    paddingRight: 40
+  },
+  startIconContainer: {
+    position: 'absolute',
+    left: 16,
+    zIndex: 10
+  },
+  endIconContainer: { position: 'absolute', right: 16, zIndex: 10 }
+})
