@@ -40,7 +40,7 @@ export const HomeScreen = () => {
   return (
     <Screen>
       <Box pl={6} pr={6}>
-        <ThemedText type="link">Hello {authState.user?.name}</ThemedText>
+        <ThemedText>Hello {authState.user?.name}</ThemedText>
         <Input placeholder="Procure lugares aqui" />
       </Box>
       <Box style={styles.card}>{<MapWithPins points={data} onPressPin={(p) => console.log('clicou', p)} />}</Box>
