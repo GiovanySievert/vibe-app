@@ -102,8 +102,8 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
                 />
                 <Animated.View style={[spacerStyle]} />
                 <Animated.View style={animatedTextStyle}>
-                  <ThemedText weight="bold" lineHeight={16} numberOfLines={1} ellipsizeMode="clip">
-                    {label}
+                  <ThemedText weight="semibold" numberOfLines={1} ellipsizeMode="clip">
+                    {label?.toString()}
                   </ThemedText>
                 </Animated.View>
               </Pressable>
