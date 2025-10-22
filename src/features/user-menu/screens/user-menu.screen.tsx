@@ -17,7 +17,7 @@ export const UserMenuScreen = () => {
   return (
     <Screen>
       <Box flex={1} bg="background" gap={6} p={6}>
-        <ThemedText type="link">Usermenu: {authState.user.email}</ThemedText>
+        <ThemedText>Usermenu: {authState.user.email}</ThemedText>
         <Button onPress={() => logout()}>
           <ThemedText>Deslogar</ThemedText>
         </Button>

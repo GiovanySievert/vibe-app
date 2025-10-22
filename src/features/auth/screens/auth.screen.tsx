@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, TouchableOpacity } from 'react-native'
+import { Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { Box } from '@src/shared/components'
@@ -55,36 +55,38 @@ export const AuthScreen = () => {
 
   return (
     <Screen>
-      <Box p={currentStep === AUTH_STEPS.SIGN_IN_STEP ? 6 : 4}>
-        {currentStep !== AUTH_STEPS.SIGN_IN_STEP && (
-          <TouchableOpacity onPress={() => handlePressGoBackButton()}>
-            <ThemedIcon name="ChevronLeft" color="primary" size={24} />
-          </TouchableOpacity>
-        )}
-      </Box>
-      <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
-        <Box p={4} style={{ width: '100%' }}>
-          {currentStep === AUTH_STEPS.SIGN_IN_STEP && (
-            <AuthSignIn
-              goToSignUp={() => goToStep(AUTH_STEPS.SIGN_UP_STEP)}
-              goToVerifyEmail={() => goToStep(AUTH_STEPS.VERIFY_EMAIL_STEP)}
-              setEmailToBeVerified={setEmailToBeVerified}
-            />
+      <ScrollView>
+        <Box p={currentStep === AUTH_STEPS.SIGN_IN_STEP ? 6 : 4}>
+          {currentStep !== AUTH_STEPS.SIGN_IN_STEP && (
+            <TouchableOpacity onPress={() => handlePressGoBackButton()}>
+              <ThemedIcon name="ChevronLeft" color="primary" size={24} />
+            </TouchableOpacity>
           )}
         </Box>
-        <Box p={4} style={{ width: '100%' }}>
-          {currentStep === AUTH_STEPS.SIGN_UP_STEP && (
-            <AuthSignUp
-              goToVerifyEmailStep={() => goToStep(AUTH_STEPS.VERIFY_EMAIL_STEP)}
-              setEmailToBeVerified={setEmailToBeVerified}
-            />
-          )}
-        </Box>
+        <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
+          <Box p={4} style={{ width: '100%' }}>
+            {currentStep === AUTH_STEPS.SIGN_IN_STEP && (
+              <AuthSignIn
+                goToSignUp={() => goToStep(AUTH_STEPS.SIGN_UP_STEP)}
+                goToVerifyEmail={() => goToStep(AUTH_STEPS.VERIFY_EMAIL_STEP)}
+                setEmailToBeVerified={setEmailToBeVerified}
+              />
+            )}
+          </Box>
+          <Box p={4} style={{ width: '100%' }}>
+            {currentStep === AUTH_STEPS.SIGN_UP_STEP && (
+              <AuthSignUp
+                goToVerifyEmailStep={() => goToStep(AUTH_STEPS.VERIFY_EMAIL_STEP)}
+                setEmailToBeVerified={setEmailToBeVerified}
+              />
+            )}
+          </Box>
 
-        <Box style={{ width: '100%' }}>
-          {currentStep === AUTH_STEPS.VERIFY_EMAIL_STEP && <AuthVerifyEmail emailToBeVerified={emailToBeVerified} />}
-        </Box>
-      </Animated.View>
+          <Box style={{ width: '100%' }}>
+            {currentStep === AUTH_STEPS.VERIFY_EMAIL_STEP && <AuthVerifyEmail emailToBeVerified={emailToBeVerified} />}
+          </Box>
+        </Animated.View>
+      </ScrollView>
     </Screen>
   )
 }

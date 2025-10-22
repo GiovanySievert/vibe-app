@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, TouchableOpacity } from 'react-native'
+import { Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -58,25 +58,27 @@ export const ForgotPasswordScreen: React.FC<BranchLaboratoryScreenProps> = ({ ro
 
   return (
     <Screen>
-      <TouchableOpacity onPress={() => handlePressGoBackButton()}>
-        <ThemedIcon name="ChevronLeft" color="primary" size={24} />
-      </TouchableOpacity>
-      <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
-        <Box p={4} style={{ width: '100%' }}>
-          {currentStep === FORGET_PASSWORD_STEPS.TYPE_EMAIL_STEP && (
-            <ForgotPasswordEmailStep
-              typedEmail={typedEmailFromParams}
-              goToCodeStep={() => goToStep(FORGET_PASSWORD_STEPS.TYPE_CODE_STEP)}
-              setTypedEmailFromEmailStep={setTypedEmailFromEmailStep}
-            />
-          )}
-        </Box>
-        <Box p={4} style={{ width: '100%' }}>
-          {currentStep === FORGET_PASSWORD_STEPS.TYPE_CODE_STEP && (
-            <ForgotPasswordCodeStep typedEmail={typedEmailFromParams || typedEmailFromEmailStep} />
-          )}
-        </Box>
-      </Animated.View>
+      <ScrollView>
+        <TouchableOpacity onPress={() => handlePressGoBackButton()}>
+          <ThemedIcon name="ChevronLeft" color="primary" size={24} />
+        </TouchableOpacity>
+        <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
+          <Box p={4} style={{ width: '100%' }}>
+            {currentStep === FORGET_PASSWORD_STEPS.TYPE_EMAIL_STEP && (
+              <ForgotPasswordEmailStep
+                typedEmail={typedEmailFromParams}
+                goToCodeStep={() => goToStep(FORGET_PASSWORD_STEPS.TYPE_CODE_STEP)}
+                setTypedEmailFromEmailStep={setTypedEmailFromEmailStep}
+              />
+            )}
+          </Box>
+          <Box p={4} style={{ width: '100%' }}>
+            {currentStep === FORGET_PASSWORD_STEPS.TYPE_CODE_STEP && (
+              <ForgotPasswordCodeStep typedEmail={typedEmailFromParams || typedEmailFromEmailStep} />
+            )}
+          </Box>
+        </Animated.View>
+      </ScrollView>
     </Screen>
   )
 }

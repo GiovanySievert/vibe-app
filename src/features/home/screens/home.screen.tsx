@@ -34,7 +34,7 @@ export const HomeScreen = () => {
     enabled: !!locationState
   })
 
-  if (isPending || !data?.length) {
+  if (isPending) {
     return
   }
   return (

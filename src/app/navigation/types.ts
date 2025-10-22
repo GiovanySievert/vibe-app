@@ -17,6 +17,7 @@ export type UnathenticatedStackParamList = {
 export type TabsNavigatorParamsList = {
   HomeScreen: undefined
   UserMenuScreen: undefined
+  SocialScreen: undefined
 }
 
 export type ModalNavigatorParamsList = {
