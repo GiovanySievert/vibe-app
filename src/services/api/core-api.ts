@@ -1,15 +1,15 @@
 import axios from 'axios'
 
-export const api = axios.create({
+export const coreApi = axios.create({
   baseURL: 'http://localhost:3000/',
   withCredentials: true
 })
 
-// if (__DEV__) {
-//   attachAxiosLogging(api)
-// }
+if (__DEV__) {
+  attachAxiosLogging(coreApi)
+}
 
-function attachAxiosLogging(instance: typeof api) {
+function attachAxiosLogging(instance: typeof coreApi) {
   instance.interceptors.request.use((config) => {
     // timestamp pra medir duração
     ;(config as any).metadata = { start: Date.now() }

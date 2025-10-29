@@ -16,9 +16,9 @@ enum FORGET_PASSWORD_STEPS {
   TYPE_CODE_STEP = 'TYPE_CODE_STEP'
 }
 
-type BranchLaboratoryScreenProps = NativeStackScreenProps<UnathenticatedStackParamList, 'ForgotPasswordScreen'>
+type ForgotPasswordScreenProps = NativeStackScreenProps<UnathenticatedStackParamList, 'ForgotPasswordScreen'>
 
-export const ForgotPasswordScreen: React.FC<BranchLaboratoryScreenProps> = ({ route }) => {
+export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ route }) => {
   const navigation = useNavigation<NavigationProp<UnathenticatedStackParamList>>()
 
   const animatedValue = useSharedValue(0)

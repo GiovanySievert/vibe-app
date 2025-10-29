@@ -18,7 +18,7 @@ export const HomeScreen = () => {
   const [locationState] = useAtom(locationStateAtom)
 
   const fetchPlaces = async () => {
-    const response = await PlacesService.fetchPlaces({
+    const response = await PlacesService.fetchPlacesNearMe({
       lat: locationState.latitude,
       lon: locationState.longitude,
       radius: '2km'

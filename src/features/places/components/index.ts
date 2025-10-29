@@ -1,0 +1,7 @@
+export * from './places-address.component'
+export * from './places-card-info.component'
+export * from './places-flutuant-button.component'
+export * from './places-info-header.component'
+export * from './places-info-pills.component'
+export * from './places-opening-hours.component'
+export * from './places-screen-header.component'
