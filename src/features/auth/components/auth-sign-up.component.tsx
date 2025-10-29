@@ -50,6 +50,11 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ goToVerifyEmailStep, set
   }
 
   const handleChangeInputValue = (key: string, value: string) => {
+    setFormError({
+      username: '',
+      email: '',
+      password: ''
+    })
     setForm((prevState) => ({
       ...prevState,
       [key]: value
