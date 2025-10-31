@@ -3,9 +3,10 @@ import { StyleSheet } from 'react-native'
 
 import { Avatar, Box, CardLinear, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { PlacesByIdResponse } from '@src/shared/domain'
 
 type PlacesInfoHeaderProps = {
-  place: any
+  place: PlacesByIdResponse
 }
 
 export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place }) => {
@@ -22,9 +23,9 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place }) => 
 
       <Box m={4} gap={3}>
         <Box alignItems="center" mt={1}>
-          <ThemedText variant="title">{place.venues.name}</ThemedText>
+          <ThemedText variant="title">{place.name}</ThemedText>
           <ThemedText variant="subtitle" weight="light">
-            {place.brands.type}
+            {place.brand.type}
           </ThemedText>
         </Box>
 
@@ -35,7 +36,7 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place }) => 
         </Box>
 
         <CardLinear title="Sobre">
-          <ThemedText variant="secondary">{place.venues.about}</ThemedText>
+          <ThemedText variant="secondary">{place.about}</ThemedText>
         </CardLinear>
       </Box>
     </Box>

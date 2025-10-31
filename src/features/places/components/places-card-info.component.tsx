@@ -1,10 +1,15 @@
 import React from 'react'
 
 import { Box, Card, ThemedText } from '@src/shared/components'
+import { PlacesByIdResponse } from '@src/shared/domain'
 
-export const PlacesCardInfo = () => {
+type PlacesCardInfoProps = {
+  place: PlacesByIdResponse
+}
+
+export const PlacesCardInfo: React.FC<PlacesCardInfoProps> = ({ place }) => {
   return (
-    <Box flex={1}>
+    <Box flex={1} pr={5} pl={5}>
       <Box flexDirection="row" justifyContent="space-between" mb={4} gap={3}>
         <Card alignItems="center">
           <ThemedText size="sm" weight="semibold">
@@ -23,7 +28,7 @@ export const PlacesCardInfo = () => {
           <ThemedText size="sm" weight="semibold">
             Preço
           </ThemedText>
-          <ThemedText>$$</ThemedText>
+          <ThemedText>{place.priceRange}</ThemedText>
         </Card>
       </Box>
     </Box>

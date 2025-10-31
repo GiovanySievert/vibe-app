@@ -5,7 +5,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 
 export const PlacesOpeningHours = () => {
   return (
-    <Box flex={1}>
+    <Box flex={1} mr={5} ml={5}>
       <Card gap={3} mb={2} flexDirection="row" alignItems="center">
         <ThemedIcon name="Clock" color="primary" />
         <Box>

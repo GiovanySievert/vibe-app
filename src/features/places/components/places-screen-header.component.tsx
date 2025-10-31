@@ -3,8 +3,13 @@ import { StyleSheet } from 'react-native'
 
 import { Box, Divider } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { PlacesByIdResponse } from '@src/shared/domain'
 
-export const PlacesScreenHeader = () => {
+type PlacesScreenHeaderProps = {
+  place: PlacesByIdResponse
+}
+
+export const PlacesScreenHeader: React.FC<PlacesScreenHeaderProps> = ({ place }) => {
   return (
     <Box flex={1}>
       <Box flexDirection="row" justifyContent="space-between" p={3}>

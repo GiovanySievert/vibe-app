@@ -74,6 +74,6 @@ export function ThemedText({ style, variant = TEXT_VARIANT.primary, size, weight
 const styles = StyleSheet.create({
   primary: { fontSize: 16, lineHeight: 24, fontFamily: 'Poppins-Regular', color: '#FAFAFA' },
   secondary: { fontSize: 16, lineHeight: 24, color: '#B5B5B5', fontFamily: 'Poppins-Regular' },
-  title: { fontSize: 32, lineHeight: 30, color: '#FAFAFA', fontFamily: 'Poppins-Bold' },
-  subtitle: { lineHeight: 32, fontSize: 24, color: '#FAFAFA', fontFamily: 'Poppins-Bold' }
+  title: { fontSize: 30, lineHeight: 32, color: '#FAFAFA', fontFamily: 'Poppins-Bold' },
+  subtitle: { lineHeight: 32, fontSize: 22, color: '#FAFAFA', fontFamily: 'Poppins-Bold' }
 } as const)
