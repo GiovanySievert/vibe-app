@@ -1,12 +1,13 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authStateAtom } from '@src/features/auth/state'
-import { Box, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components/input'
+import { Box, FakeInput, ThemedText } from '@src/shared/components'
 import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
 import { PlacesModel } from '@src/shared/domain'
@@ -14,6 +15,8 @@ import { PlacesService } from '@src/shared/services'
 import { locationStateAtom } from '@src/shared/state/location.state'
 
 export const HomeScreen = () => {
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+
   const [authState] = useAtom(authStateAtom)
   const [locationState] = useAtom(locationStateAtom)
 
@@ -40,9 +43,12 @@ export const HomeScreen = () => {
 
   return (
     <Screen>
-      <Box pl={6} pr={6}>
+      <Box pl={6} pr={6} gap={3}>
         <ThemedText>Hello {authState.user?.name}</ThemedText>
-        <Input placeholder="Procure lugares aqui" />
+        <FakeInput
+          placeholder="Procure lugares aqui"
+          onPress={() => navigation.navigate('Modals', { screen: 'SearchScreen' })}
+        />
       </Box>
       <Box style={styles.card}>{<MapWithPins points={data} onPressPin={(p) => console.log('clicou', p)} />}</Box>
     </Screen>
