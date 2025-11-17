@@ -45,7 +45,6 @@ export async function removeUserDataFromStorage() {
 
 export async function getAuthTokenFromStorage() {
   const token = await SecureStore.getItemAsync(VIBE_APP_KEYS_STORAGE.TOKEN)
-
   if (!token) {
     return null
   }

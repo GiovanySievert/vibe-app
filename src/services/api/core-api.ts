@@ -1,20 +1,33 @@
 import axios from 'axios'
 
+import { authClient } from './auth-client'
+
 export const coreApi = axios.create({
   baseURL: 'http://localhost:3000/',
-  withCredentials: true
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })
 
-if (__DEV__) {
-  attachAxiosLogging(coreApi)
-}
+coreApi.interceptors.request.use(async (config) => {
+  const cookies = authClient.getCookie()
+
+  if (cookies) {
+    config.headers.Cookie = cookies
+  }
+
+  return config
+})
+
+// if (__DEV__) {
+//   attachAxiosLogging(coreApi)
+// }
 
 function attachAxiosLogging(instance: typeof coreApi) {
   instance.interceptors.request.use((config) => {
-    // timestamp pra medir duração
     ;(config as any).metadata = { start: Date.now() }
 
-    // opcional: mascara headers sensíveis
     const maskedHeaders = { ...config.headers }
     if (maskedHeaders?.Authorization) maskedHeaders.Authorization = '****'
 
@@ -28,7 +41,6 @@ function attachAxiosLogging(instance: typeof coreApi) {
       config.data ?? ''
     )
 
-    // opcional: imprime um curl pra você colar no terminal
     try {
       const url = config.baseURL ? new URL(config.url ?? '', config.baseURL).toString() : (config.url ?? '')
       const h = Object.entries(maskedHeaders ?? {})

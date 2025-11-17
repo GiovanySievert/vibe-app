@@ -6,6 +6,7 @@ import { useUserLocation } from '@src/features/home/hooks/use-get-user-location.
 import { authClient } from '@src/services/api/auth-client'
 
 import { authStateAtom } from '../state'
+import { saveAuthTokenInStorage } from '../storage/auth-storage'
 
 export const useInitializeApp = () => {
   const setAuthState = useSetAtom(authStateAtom)
@@ -15,12 +16,14 @@ export const useInitializeApp = () => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        if (data)
+        if (data) {
           setAuthState({
             isAuthenticated: true,
-            user: data.user,
-            session: data?.session
+            user: data.user
           })
+
+          saveAuthTokenInStorage(data.session.token)
+        }
       } catch (error) {
         console.error('Error during app initialization', error)
       }
