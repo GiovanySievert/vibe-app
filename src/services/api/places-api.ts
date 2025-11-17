@@ -4,9 +4,9 @@ export const placesApi = axios.create({
   baseURL: 'http://localhost:3001/'
 })
 
-// if (__DEV__) {
-//   attachAxiosLogging(placesApi)
-// }
+if (__DEV__) {
+  attachAxiosLogging(placesApi)
+}
 
 function attachAxiosLogging(instance: typeof placesApi) {
   instance.interceptors.request.use((config) => {
@@ -15,15 +15,15 @@ function attachAxiosLogging(instance: typeof placesApi) {
     const maskedHeaders = { ...config.headers }
     if (maskedHeaders?.Authorization) maskedHeaders.Authorization = '****'
 
-    console.log(
-      '📤 [REQUEST]',
-      config.method?.toUpperCase(),
-      config.baseURL ? new URL(config.url ?? '', config.baseURL).toString() : config.url,
-      '\nHeaders:',
-      maskedHeaders,
-      config.data ? '\nBody:' : '',
-      config.data ?? ''
-    )
+    // console.log(
+    //   '📤 [REQUEST]',
+    //   config.method?.toUpperCase(),
+    //   config.baseURL ? new URL(config.url ?? '', config.baseURL).toString() : config.url,
+    //   '\nHeaders:',
+    //   maskedHeaders,
+    //   config.data ? '\nBody:' : '',
+    //   config.data ?? ''
+    // )
 
     try {
       const url = config.baseURL ? new URL(config.url ?? '', config.baseURL).toString() : (config.url ?? '')
@@ -33,7 +33,7 @@ function attachAxiosLogging(instance: typeof placesApi) {
       const d = config.data
         ? `--data '${typeof config.data === 'string' ? config.data : JSON.stringify(config.data)}'`
         : ''
-      console.log(`curl -X ${config.method?.toUpperCase()} ${h} ${d} '${url}'`)
+      // console.log(`curl -X ${config.method?.toUpperCase()} ${h} ${d} '${url}'`)
     } catch {}
 
     return config
@@ -45,15 +45,15 @@ function attachAxiosLogging(instance: typeof placesApi) {
       const duration = Date.now() - start
 
       console.log(
-        '📥 [RESPONSE]',
-        response.config.method?.toUpperCase(),
-        response.status,
-        response.config.baseURL
-          ? new URL(response.config.url ?? '', response.config.baseURL).toString()
-          : response.config.url,
-        `\n⏱ ${duration}ms`,
-        '\nHeaders:',
-        response.headers,
+        // '📥 [RESPONSE]',
+        // response.config.method?.toUpperCase(),
+        // response.status,
+        // response.config.baseURL
+        //   ? new URL(response.config.url ?? '', response.config.baseURL).toString()
+        //   : response.config.url,
+        // `\n⏱ ${duration}ms`,
+        // '\nHeaders:',
+        // response.headers,
         response.data != null ? '\nBody:' : '',
         response.data ?? ''
       )

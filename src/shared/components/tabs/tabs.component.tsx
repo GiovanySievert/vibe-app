@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import { theme } from '@src/shared/constants/theme'
-
-import { ThemedText } from '../themed-text'
+import { PrimaryTabs } from './tabs-primary.component'
+import { SecondaryTabs } from './tabs-secondary.component'
 
 type TabProps = {
   titles: string[]
   children: React.ReactNode[]
   defaultIndex?: number
   onChange?: (index: number) => void
+  variant?: 'primary' | 'secondary'
 }
 
-export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onChange }) => {
+export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onChange, variant = 'primary' }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex || 0)
 
   useEffect(() => {
@@ -21,39 +21,9 @@ export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onCha
     }
   }, [defaultIndex])
 
-  const renderTabs = () => {
-    return titles.map((title, index) => (
-      <Pressable
-        key={title + index}
-        style={styles.tab}
-        onPress={() => {
-          setActiveIndex(index)
-          onChange && onChange(index)
-        }}
-      >
-        <View
-          style={[
-            styles.tabTextContainer,
-            {
-              backgroundColor: index === activeIndex ? theme.colors.backgroundTertiary : 'transparent'
-            }
-          ]}
-        >
-          <ThemedText
-            style={[
-              styles.tabText,
-              {
-                color: index === activeIndex ? theme.colors.textPrimary : theme.colors.textSecondary,
-                fontSize: theme.sizes.lg,
-                fontWeight: index === activeIndex ? theme.weights.semibold : theme.weights.regular
-              }
-            ]}
-          >
-            {title}
-          </ThemedText>
-        </View>
-      </Pressable>
-    ))
+  const handleTabPress = (index: number) => {
+    setActiveIndex(index)
+    onChange && onChange(index)
   }
 
   const renderContent = () => {
@@ -62,18 +32,11 @@ export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onCha
 
   return (
     <View style={styles.tabsWrapper}>
-      <View
-        style={[
-          styles.tabContainer,
-          {
-            borderColor: theme.colors.borderFocus,
-            backgroundColor: theme.colors.background,
-            borderRadius: 8
-          }
-        ]}
-      >
-        {renderTabs()}
-      </View>
+      {variant === 'primary' ? (
+        <PrimaryTabs titles={titles} activeIndex={activeIndex} onTabPress={handleTabPress} />
+      ) : (
+        <SecondaryTabs titles={titles} activeIndex={activeIndex} onTabPress={handleTabPress} />
+      )}
       <View style={styles.content}>{renderContent()}</View>
     </View>
   )
@@ -84,23 +47,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%'
   },
-  tabContainer: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    flex: 0,
-    alignSelf: 'center',
-    justifyContent: 'center'
-  },
-  tab: {
-    alignSelf: 'center'
-  },
-  content: {},
-  tabTextContainer: {
-    padding: 8,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    margin: 4,
-    flex: 1
-  },
-  tabText: {}
+  content: {}
 })

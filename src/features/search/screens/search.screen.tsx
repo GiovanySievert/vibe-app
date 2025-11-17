@@ -2,53 +2,31 @@ import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import { useQuery } from '@tanstack/react-query'
-
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
+import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
-import { PlacesByIdResponse } from '@src/shared/domain'
-import { PlacesService } from '@src/shared/services'
 
-import { SearchInput, SearchPlaces } from '../components'
+import { SearchInput, SearchPlaces, SearchUsers } from '../components'
 
 type SearchScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'SearchScreen'>
 
-export const SearchScreen: React.FC<SearchScreenScreenProps> = ({}) => {
+export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
   const [inputSearch, setInputSearch] = useState('')
-
-  const fetchPlacesByName = async () => {
-    const response = await PlacesService.fetchPlaceByName(inputSearch)
-    return response.data
-  }
-
-  const { data: placeData, isLoading } = useQuery<PlacesByIdResponse, Error>({
-    queryKey: ['fetchPlacesByName'],
-    queryFn: fetchPlacesByName,
-    retry: false,
-    staleTime: 0
-  })
-
-  if (isLoading) {
-    return (
-      <Box bg="background">
-        <ThemedText>CARREGANDO</ThemedText>
-      </Box>
-    )
-  }
-
-  // if (!placeData) {
-  //   return
-  // }
 
   return (
     <Box flex={1}>
       <ScrollView style={styles.scroll} overScrollMode="never">
         <Screen>
-          <Box p={5}>
-            <SearchInput />
-            <SearchPlaces />
+          <Box p={5} gap={3}>
+            <Box mb={3}>
+              <SearchInput inputSearch={inputSearch} setInputSearch={setInputSearch} />
+            </Box>
+            <Tabs titles={['Places', 'Users']} defaultIndex={0} variant="secondary">
+              <SearchPlaces inputSearch={inputSearch} />
+              <SearchUsers inputSearch={inputSearch} />
+            </Tabs>
           </Box>
         </Screen>
       </ScrollView>

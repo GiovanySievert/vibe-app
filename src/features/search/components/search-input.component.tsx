@@ -1,9 +1,19 @@
 import { Box, Input } from '@src/shared/components'
 
-export const SearchInput: React.FC = () => {
+type SearchInputProps = {
+  inputSearch: string
+  setInputSearch: (value: string) => void
+}
+
+export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputSearch }) => {
   return (
     <Box>
-      <Input label="busque" />
+      <Input
+        placeholder="Type here"
+        value={inputSearch}
+        onChange={({ nativeEvent }) => setInputSearch(nativeEvent.text)}
+        autoFocus
+      />
     </Box>
   )
 }
