@@ -1,6 +1,7 @@
 export type PlacesModel = {
   id: string
   name: string
+  distance: number
   image: string
   location: {
     lat: number

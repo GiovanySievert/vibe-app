@@ -22,11 +22,10 @@ import {
   PlacesScreenHeader
 } from '../components'
 
-type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'PlaceDetailsScreen'>
+type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'PlacesDetailsScreen'>
 
 export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route }) => {
   const placeId = route.params?.placeId
-
   const fetchPlaces = async () => {
     const response = await PlacesService.fetchPlaceById(placeId)
     return response.data

@@ -23,9 +23,9 @@ export const HomeScreen = () => {
       lon: locationState.longitude,
       radius: '2km'
     })
-    return response.data.items
-  }
 
+    return response.data
+  }
   const { data, isPending } = useQuery<PlacesModel[], Error>({
     queryKey: ['fetchPlaces'],
     queryFn: fetchPlaces,
@@ -37,6 +37,7 @@ export const HomeScreen = () => {
   if (isPending) {
     return
   }
+
   return (
     <Screen>
       <Box pl={6} pr={6}>

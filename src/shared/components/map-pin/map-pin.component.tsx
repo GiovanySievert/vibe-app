@@ -8,26 +8,27 @@ import { Box } from '../box'
 import { ThemedText } from '../themed-text'
 
 type PinProps = {
-  image: string
-  name?: string
+  placeId: string
+  placeImage: string
+  placeName?: string
   onPress?: () => void
 }
 
-export const MapPin: React.FC<PinProps> = ({ image, name, onPress }) => {
+export const MapPin: React.FC<PinProps> = ({ placeId, placeImage, placeName, onPress }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   return (
     <Box style={styles.wrapper} onTouchEnd={onPress}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Modals', { screen: 'PlaceDetails', params: { placeId: '123' } })}
+        onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
       >
         <Box style={styles.pinContainer}>
-          <Image source={{ uri: image }} style={styles.pinImage} resizeMode="cover" />
+          <Image source={{ uri: placeImage }} style={styles.pinImage} resizeMode="cover" />
         </Box>
         <Box style={styles.pinStem} />
-        {!!name && (
+        {!!placeName && (
           <ThemedText style={styles.pinLabel} numberOfLines={1}>
-            {name}
+            {placeName}
           </ThemedText>
         )}
       </TouchableOpacity>

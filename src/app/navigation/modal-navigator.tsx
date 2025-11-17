@@ -10,7 +10,7 @@ const ModalStack = createNativeStackNavigator<ModalNavigatorParamsList>()
 export function ModalNavigator() {
   return (
     <ModalStack.Navigator screenOptions={{ presentation: 'modal', headerShown: false }}>
-      <ModalStack.Screen name="PlaceDetails" component={PlacesDetailsScreen} />
+      <ModalStack.Screen name="PlacesDetailsScreen" component={PlacesDetailsScreen} />
     </ModalStack.Navigator>
   )
 }

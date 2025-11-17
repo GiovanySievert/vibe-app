@@ -21,7 +21,7 @@ export type TabsNavigatorParamsList = {
 }
 
 export type ModalNavigatorParamsList = {
-  PlaceDetailsScreen: { placeId: string }
+  PlacesDetailsScreen: { placeId: string }
   LocationModal: undefined
 }
 

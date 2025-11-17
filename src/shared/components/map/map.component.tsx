@@ -67,7 +67,7 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
           allowOverlap={true}
           anchor={{ x: 0.5, y: 1.0 }}
         >
-          <MapPin name={p.name} image={p.image} onPress={() => onPressPin?.(p)} />
+          <MapPin placeName={p.name} placeImage={p.image} placeId={p.id} onPress={() => onPressPin?.(p)} />
         </MapboxGL.MarkerView>
       ))}
     </MapboxGL.MapView>
