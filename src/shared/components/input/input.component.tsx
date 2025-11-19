@@ -147,7 +147,7 @@ export const Input = forwardRef<TextInput, InputProps>(
 
           {isClearable && localInputValue && !disabled && (
             <TouchableOpacity onPress={handleClear} hitSlop={HIT_SLOP} style={style.endIconContainer}>
-              <ThemedIcon name={'X'} size={18} testID="clear-button--input" />
+              <ThemedIcon name={'X'} size={18} testID="clear-button--input" color="textPrimary" />
             </TouchableOpacity>
           )}
         </Box>
@@ -185,5 +185,5 @@ const style = StyleSheet.create({
     left: 16,
     zIndex: 10
   },
-  endIconContainer: { position: 'absolute', right: 16, zIndex: 10 }
+  endIconContainer: { position: 'absolute', right: 16, zIndex: 10, color: '#fff' }
 })

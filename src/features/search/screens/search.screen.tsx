@@ -7,14 +7,16 @@ import { Box } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
+import { useDebounce } from '@src/shared/hooks'
 
-import { SearchInput, SearchPlaces, SearchUsers } from '../components'
+import { LastSearched, SearchInput, SearchPlaces, SearchUsers } from '../components'
 
 type SearchScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'SearchScreen'>
 
 export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
   const [inputSearch, setInputSearch] = useState('')
 
+  const debouncedSearchTerm = useDebounce(inputSearch, 300)
   return (
     <Box flex={1}>
       <ScrollView style={styles.scroll} overScrollMode="never">
@@ -23,10 +25,14 @@ export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
             <Box mb={3}>
               <SearchInput inputSearch={inputSearch} setInputSearch={setInputSearch} />
             </Box>
-            <Tabs titles={['Places', 'Users']} defaultIndex={0} variant="secondary">
-              <SearchPlaces inputSearch={inputSearch} />
-              <SearchUsers inputSearch={inputSearch} />
-            </Tabs>
+            {inputSearch.length ? (
+              <Tabs titles={['Places', 'Users']} defaultIndex={0} variant="secondary">
+                <SearchPlaces inputSearch={debouncedSearchTerm} />
+                <SearchUsers inputSearch={debouncedSearchTerm} />
+              </Tabs>
+            ) : (
+              <LastSearched />
+            )}
           </Box>
         </Screen>
       </ScrollView>

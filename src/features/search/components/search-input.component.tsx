@@ -13,6 +13,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputS
         value={inputSearch}
         onChange={({ nativeEvent }) => setInputSearch(nativeEvent.text)}
         autoFocus
+        isClearable
+        onClear={() => setInputSearch('')}
       />
     </Box>
   )

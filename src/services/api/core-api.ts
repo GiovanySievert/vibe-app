@@ -20,9 +20,9 @@ coreApi.interceptors.request.use(async (config) => {
   return config
 })
 
-// if (__DEV__) {
-//   attachAxiosLogging(coreApi)
-// }
+if (__DEV__) {
+  attachAxiosLogging(coreApi)
+}
 
 function attachAxiosLogging(instance: typeof coreApi) {
   instance.interceptors.request.use((config) => {

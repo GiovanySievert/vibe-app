@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, LoadingPage, ThemedText } from '@src/shared/components'
 import { PlacesModel } from '@src/shared/domain'
 import { PlacesService } from '@src/shared/services'
 
@@ -19,28 +19,32 @@ export const SearchPlaces: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
     return response.data
   }
 
-  const { data: placeData, isLoading } = useQuery<PlacesModel[], Error>({
-    queryKey: ['fetchPlacesByName'],
+  const { data: placeData, isFetching } = useQuery<PlacesModel[], Error>({
+    queryKey: ['fetchPlacesByName', inputSearch],
     queryFn: fetchPlacesByName,
     retry: false,
-    staleTime: 0
+    staleTime: 0,
+    enabled: inputSearch.length >= 3
   })
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <Box bg="background">
-        <ThemedText>CARREGANDO</ThemedText>
+        <LoadingPage />
       </Box>
     )
   }
 
-  if (!placeData) {
-    return
+  if (!placeData?.length && !isFetching && inputSearch.length >= 3) {
+    return (
+      <Box mt={5}>
+        <ThemedText>No results found.</ThemedText>
+      </Box>
+    )
   }
-
   return (
     <Box mt={5}>
-      <SearchResultItems searchResultItemData={placeData} />
+      <SearchResultItems searchResultItemData={placeData!} searchType="PLACES" />
     </Box>
   )
 }

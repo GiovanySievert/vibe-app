@@ -22,6 +22,7 @@ export type TabsNavigatorParamsList = {
 
 export type ModalNavigatorParamsList = {
   PlacesDetailsScreen: { placeId: string }
+  UsersProfileScreen: { userId: string }
   SearchScreen: undefined
   LocationModal: undefined
 }
