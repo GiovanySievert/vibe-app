@@ -14,9 +14,14 @@ export type UnathenticatedStackParamList = {
   }
 }
 
+export type UserMenuStackParamList = {
+  UserMenuMain: undefined
+  UserEditProfile: undefined
+}
+
 export type TabsNavigatorParamsList = {
   HomeScreen: undefined
-  UserMenuScreen: undefined
+  UserMenuScreen: NavigatorScreenParams<UserMenuStackParamList>
   SocialScreen: undefined
 }
 

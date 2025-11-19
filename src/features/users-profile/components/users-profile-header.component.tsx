@@ -36,6 +36,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({ us
           </Box>
         </Box>
       </Box>
+
       <Divider />
     </>
   )

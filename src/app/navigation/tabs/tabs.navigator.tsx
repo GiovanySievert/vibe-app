@@ -1,10 +1,11 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { HomeFeatures, SocialFeatures, UserMenuFeatures } from '@src/features'
+import { HomeFeatures, SocialFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
 import { Header } from '@src/shared/components/header'
 
+import { UserMenuNavigator } from '../stacks/user-menu-stack'
 import { TabRoutesName, TabsNavigatorParamsList } from '../types'
 
 const Tab = createBottomTabNavigator<TabsNavigatorParamsList>()
@@ -37,7 +38,7 @@ export function TabsNavigator() {
 
       <Tab.Screen
         name="UserMenuScreen"
-        component={UserMenuFeatures.UserMenuScreen}
+        component={UserMenuNavigator}
         options={{
           headerShown: false,
           tabBarLabel: TabRoutesName.MENU

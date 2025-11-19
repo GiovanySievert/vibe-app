@@ -172,7 +172,8 @@ const style = StyleSheet.create({
     paddingRight: 12,
     height: 44,
     color: theme.colors.textPrimary,
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular'
   },
   hasStartIconInput: {
     paddingLeft: 40
