@@ -27,7 +27,11 @@ export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onCha
   }
 
   const renderContent = () => {
-    return children[activeIndex]
+    return children.map((child, index) => (
+      <View key={index} style={index === activeIndex ? styles.visible : styles.hidden}>
+        {child}
+      </View>
+    ))
   }
 
   return (
@@ -47,5 +51,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%'
   },
-  content: {}
+  content: {},
+  visible: {
+    display: 'flex'
+  },
+  hidden: {
+    display: 'none'
+  }
 })
