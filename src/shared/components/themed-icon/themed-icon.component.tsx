@@ -10,7 +10,7 @@ type ThemedIconProps = {
   name: IconName
   size?: number
   color?: keyof AppTheme['colors'] | string
-  type?: 'light' | 'solid' | 'regular' | 'brands'
+  type?: 'light' | 'solid'
   testID?: string
 }
 
@@ -40,5 +40,5 @@ export const ThemedIcon: React.FC<ThemedIconProps> = ({
 
   const iconColor = getTextColor(color)
 
-  return <Icon size={size} color={iconColor} testID={testID} />
+  return <Icon size={size} color={iconColor} fill={type === 'solid' ? iconColor : 'none'} testID={testID} />
 }
