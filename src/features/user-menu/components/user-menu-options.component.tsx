@@ -34,7 +34,7 @@ export const UserMenuOptions = () => {
         </TouchableOpacity>
         <Divider />
 
-        <TouchableOpacity style={styles.actionContainer}>
+        <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('TermsOfUseScreen')}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="Book" color="textPrimary" size={16} />
             <ThemedText weight="medium">Termos de uso</ThemedText>
@@ -42,7 +42,7 @@ export const UserMenuOptions = () => {
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
         <Divider />
-        <TouchableOpacity style={styles.actionContainer}>
+        <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserDeleteAccountScreen')}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="Handshake" color="textPrimary" size={16} />
             <ThemedText weight="medium">Deletar conta</ThemedText>

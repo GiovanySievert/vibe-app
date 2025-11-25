@@ -42,15 +42,6 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
     return (
       <Box bg="background">
         <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
-        <ThemedText>CARREGANDO</ThemedText>
       </Box>
     )
   }

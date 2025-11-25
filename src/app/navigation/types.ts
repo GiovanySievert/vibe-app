@@ -17,6 +17,8 @@ export type UnathenticatedStackParamList = {
 export type UserMenuStackParamList = {
   UserMenuMain: undefined
   UserEditProfile: undefined
+  UserDeleteAccountScreen: undefined
+  TermsOfUseScreen: undefined
 }
 
 export type TabsNavigatorParamsList = {

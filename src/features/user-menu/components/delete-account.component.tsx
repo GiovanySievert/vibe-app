@@ -53,7 +53,7 @@ export const DeleteAccount = () => {
         autoFocus
       />
       <Button type="danger" loading={isLoading} onPress={() => submitFormMutation()}>
-        <ThemedText>Deletar conta</ThemedText>
+        <ThemedText weight="medium">Deletar conta</ThemedText>
       </Button>
     </Box>
   )
