@@ -5,6 +5,8 @@ import { Box, Divider } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { PlacesByIdResponse } from '@src/shared/domain'
 
+import { PlacesHeaderFavoriteButton } from './places-header-favorite-button.component'
+
 type PlacesScreenHeaderProps = {
   place: PlacesByIdResponse
 }
@@ -18,7 +20,7 @@ export const PlacesScreenHeader: React.FC<PlacesScreenHeaderProps> = ({ place })
         </Box>
         <Box flexDirection="row" gap={3}>
           <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
-            <ThemedIcon name="Heart" color="textSecondary" />
+            <PlacesHeaderFavoriteButton place={place} />
           </Box>
           <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
             <ThemedIcon name="Share" color="textSecondary" />

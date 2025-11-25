@@ -14,7 +14,6 @@ type SearchPlacesProps = {
 
 export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
   const fetchPlacesByName = async () => {
-    console.log('CHAMOU')
     const response = await SearchService.fetchUsersByUsername(inputSearch)
 
     return response.data

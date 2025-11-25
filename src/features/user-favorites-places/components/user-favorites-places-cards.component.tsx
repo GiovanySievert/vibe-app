@@ -2,14 +2,16 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
+import { useAtom } from 'jotai'
+
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, Card, Divider, ThemedText } from '@src/shared/components'
-import { useUserFavoritesPlaces } from '@src/shared/hooks/use-user-favorites-places.hook'
+import { userFavoritesPlacesAtom } from '@src/shared/state'
 
 export const UserFavoritesPlacesCards = () => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
-  const { data: userFavoritesPlaces } = useUserFavoritesPlaces()
+  const [userFavoritesPlaces] = useAtom(userFavoritesPlacesAtom)
 
   if (!userFavoritesPlaces?.length) {
     return <ThemedText>Sem favoritos</ThemedText>

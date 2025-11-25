@@ -1,24 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
 
 import { UserFavoritesPlacesService } from '@src/features/user-favorites-places/services'
 
-interface UserFavoritePlace {
-  id: string
-  userId: string
-  venueId: string
-  name: string
-  avatar: string
-  createdAt: string
-}
-
-export const userFavoritesPlacesAtom = atomWithStorage<UserFavoritePlace[]>('userFavoritesPlaces', [])
+import { UserFavoritePlace } from '../domain'
+import { userFavoritesPlacesAtom } from '../state'
 
 export const useUserFavoritesPlaces = () => {
   const setFavoritePlaces = useSetAtom(userFavoritesPlacesAtom)
+  const queryClient = useQueryClient()
 
-  return useQuery<UserFavoritePlace[], Error>({
+  const query = useQuery<UserFavoritePlace[], Error>({
     queryKey: ['fetchUserFavoritesPlaces'],
     queryFn: async () => {
       const response = await UserFavoritesPlacesService.fetchAllPlaces()
@@ -26,6 +18,25 @@ export const useUserFavoritesPlaces = () => {
       return response.data
     },
     retry: false,
-    staleTime: 0
+    staleTime: 1000 * 60 * 5
   })
+
+  const invalidate = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['fetchUserFavoritesPlaces']
+    })
+  }
+
+  const refetch = () => {
+    query.refetch()
+  }
+
+  const isInvalid = queryClient.getQueryState(['fetchUserFavoritesPlaces'])?.isInvalidated
+
+  return {
+    ...query,
+    invalidate,
+    refetch,
+    isInvalid
+  }
 }
