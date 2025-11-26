@@ -1,5 +1,5 @@
-import React, { forwardRef, useEffect, useState } from 'react'
-import { StyleSheet, TextInput, TextInputProps, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, TextInputProps, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 
 import { icons } from 'lucide-react-native'
 
@@ -26,114 +26,112 @@ interface InputProps extends Omit<TextInputProps, 'placeholder'> {
   onPress?: () => void
 }
 
-export const FakeInput = forwardRef<TextInput, InputProps>(
-  ({
-    label,
-    errorMessage,
-    startIconName,
-    startIconColor,
-    endIconName,
-    onEndIconPress,
-    disabled = false,
-    isClearable = false,
-    onClear,
-    placeholder,
-    onPress,
-    ...rest
-  }) => {
-    const [localInputValue, setLocalInputValue] = useState('')
-    const hasSecondBox = (isClearable && localInputValue) || (!isClearable && endIconName)
+export const FakeInput = ({
+  label,
+  errorMessage,
+  startIconName,
+  startIconColor,
+  endIconName,
+  onEndIconPress,
+  disabled = false,
+  isClearable = false,
+  onClear,
+  placeholder,
+  onPress,
+  ...rest
+}: InputProps) => {
+  const [localInputValue, setLocalInputValue] = useState('')
+  const hasSecondBox = (isClearable && localInputValue) || (!isClearable && endIconName)
 
-    const handleClear = () => {
-      setLocalInputValue('')
-      if (rest.onChangeText) {
-        rest.onChangeText('')
-      }
-      if (onClear) {
-        onClear()
-      }
+  const handleClear = () => {
+    setLocalInputValue('')
+    if (rest.onChangeText) {
+      rest.onChangeText('')
     }
+    if (onClear) {
+      onClear()
+    }
+  }
 
-    useEffect(() => {
-      setLocalInputValue(rest.value || '')
-    }, [rest.value])
+  useEffect(() => {
+    setLocalInputValue(rest.value || '')
+  }, [rest.value])
 
-    return (
-      <Box>
-        {label && (
-          <Box mb={2}>
-            <ThemedText size="sm" weight="semibold" color={!disabled ? 'textPrimary' : 'textSecondary'}>
-              {label}
-            </ThemedText>
-          </Box>
-        )}
-        <TouchableWithoutFeedback onPress={onPress} style={{ flex: 1 }}>
-          <Box style={[styles.input, errorMessage && styles.inputError]} testID="fake-input-field--fake-input">
-            <Box flexDirection="row" alignItems="center" justifyContent="space-between" flex={1}>
-              <Box flexDirection="row" alignItems="center" flex={8}>
-                {startIconName && (
-                  <Box style={{ zIndex: 10 }} mr={3}>
-                    <ThemedIcon
-                      name={startIconName as IconName}
-                      size={18}
-                      color={startIconColor}
-                      testID="start-icon--input"
-                    />
-                  </Box>
-                )}
-                <Box flexShrink={1}>
-                  {placeholder &&
-                    !rest.value &&
-                    (typeof placeholder === 'string' ? (
-                      <ThemedText color="textPrimary">{placeholder}</ThemedText>
-                    ) : (
-                      placeholder
-                    ))}
-                  {rest.value && (
-                    <ThemedText color="textPrimary" numberOfLines={1} ellipsizeMode="tail">
-                      {rest.value}
-                    </ThemedText>
-                  )}
-                </Box>
-              </Box>
-              {hasSecondBox && (
-                <Box flex={1}>
-                  {isClearable && localInputValue && (
-                    <TouchableOpacity onPress={handleClear} style={{ zIndex: 10 }}>
-                      <ThemedIcon name="X" size={18} color="textSecondary" testID="clear-button--input" />
-                    </TouchableOpacity>
-                  )}
-                  {!isClearable && endIconName && (
-                    <TouchableOpacity
-                      onPress={onEndIconPress}
-                      style={{ position: 'absolute', right: 0, zIndex: 10, bottom: -10 }}
-                    >
-                      <ThemedIcon
-                        name={endIconName as IconName}
-                        size={18}
-                        color="textSecondary"
-                        testID="end-icon--input"
-                      />
-                    </TouchableOpacity>
-                  )}
+  return (
+    <Box>
+      {label && (
+        <Box mb={2}>
+          <ThemedText size="sm" weight="semibold" color={!disabled ? 'textPrimary' : 'textSecondary'}>
+            {label}
+          </ThemedText>
+        </Box>
+      )}
+      <TouchableWithoutFeedback onPress={onPress} style={{ flex: 1 }}>
+        <Box style={[styles.input, errorMessage && styles.inputError]} testID="fake-input-field--fake-input">
+          <Box flexDirection="row" alignItems="center" justifyContent="space-between" flex={1}>
+            <Box flexDirection="row" alignItems="center" flex={8}>
+              {startIconName && (
+                <Box style={{ zIndex: 10 }} mr={3}>
+                  <ThemedIcon
+                    name={startIconName as IconName}
+                    size={18}
+                    color={startIconColor}
+                    testID="start-icon--input"
+                  />
                 </Box>
               )}
+              <Box flexShrink={1}>
+                {placeholder &&
+                  !rest.value &&
+                  (typeof placeholder === 'string' ? (
+                    <ThemedText color="textPrimary">{placeholder}</ThemedText>
+                  ) : (
+                    placeholder
+                  ))}
+                {rest.value && (
+                  <ThemedText color="textPrimary" numberOfLines={1} ellipsizeMode="tail">
+                    {rest.value}
+                  </ThemedText>
+                )}
+              </Box>
             </Box>
+            {hasSecondBox && (
+              <Box flex={1}>
+                {isClearable && localInputValue && (
+                  <TouchableOpacity onPress={handleClear} style={{ zIndex: 10 }}>
+                    <ThemedIcon name="X" size={18} color="textSecondary" testID="clear-button--input" />
+                  </TouchableOpacity>
+                )}
+                {!isClearable && endIconName && (
+                  <TouchableOpacity
+                    onPress={onEndIconPress}
+                    style={{ position: 'absolute', right: 0, zIndex: 10, bottom: -10 }}
+                  >
+                    <ThemedIcon
+                      name={endIconName as IconName}
+                      size={18}
+                      color="textSecondary"
+                      testID="end-icon--input"
+                    />
+                  </TouchableOpacity>
+                )}
+              </Box>
+            )}
           </Box>
-        </TouchableWithoutFeedback>
-        {errorMessage && (
-          <AnimatedBox isVisible={!!errorMessage}>
-            <Box mt={2}>
-              <ThemedText size="sm" weight="semibold" color="error">
-                {errorMessage}
-              </ThemedText>
-            </Box>
-          </AnimatedBox>
-        )}
-      </Box>
-    )
-  }
-)
+        </Box>
+      </TouchableWithoutFeedback>
+      {errorMessage && (
+        <AnimatedBox isVisible={!!errorMessage}>
+          <Box mt={2}>
+            <ThemedText size="sm" weight="semibold" color="error">
+              {errorMessage}
+            </ThemedText>
+          </Box>
+        </AnimatedBox>
+      )}
+    </Box>
+  )
+}
 
 const styles = StyleSheet.create({
   input: {

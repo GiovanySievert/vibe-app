@@ -1,2 +1,3 @@
 export * from './app.provider'
-export * from './toast.provider'
+export { useToast } from './toast.provider'
+export { ToastProvider } from './toast.provider'

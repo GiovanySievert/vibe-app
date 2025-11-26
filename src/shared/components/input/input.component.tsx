@@ -4,11 +4,13 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 
 import { icons } from 'lucide-react-native'
 
-import { AnimatedBox, Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { HIT_SLOP } from '@src/shared/utils'
 
+import { AnimatedBox } from '../animated-box'
+import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
+import { ThemedText } from '../themed-text'
 
 type IconName = keyof typeof icons
 

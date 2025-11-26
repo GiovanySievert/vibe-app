@@ -6,7 +6,7 @@ import { useSetAtom } from 'jotai'
 import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components/input'
+import { Input } from '@src/shared/components'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { otpSchema, SendVerificationEmailForm } from '../domain'

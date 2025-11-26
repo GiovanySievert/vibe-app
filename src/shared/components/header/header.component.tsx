@@ -5,8 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { ArrowLeft } from 'lucide-react-native'
 
-import { Box, Divider, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+
+import { Box } from '../box'
+import { Divider } from '../divider'
+import { ThemedText } from '../themed-text'
 
 type HeaderProps = BottomTabHeaderProps
 

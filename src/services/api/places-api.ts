@@ -4,9 +4,9 @@ export const placesApi = axios.create({
   baseURL: 'http://localhost:3001/'
 })
 
-if (__DEV__) {
-  attachAxiosLogging(placesApi)
-}
+// if (__DEV__) {
+//   attachAxiosLogging(placesApi)
+// }
 
 function attachAxiosLogging(instance: typeof placesApi) {
   instance.interceptors.request.use((config) => {

@@ -5,8 +5,11 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { TabRoutesName } from '@src/app/navigation/types'
-import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+
+import { Box } from '../box'
+import { ThemedIcon } from '../themed-icon'
+import { ThemedText } from '../themed-text'
 
 type BottomTabProps = BottomTabBarProps
 

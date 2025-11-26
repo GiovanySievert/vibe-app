@@ -45,12 +45,7 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
   }, [bounds])
 
   return (
-    <MapboxGL.MapView
-      style={styles.map}
-      styleURL={MapboxGL.StyleURL.Dark}
-      logoEnabled={false}
-      attributionEnabled={false}
-    >
+    <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Dark}>
       <MapboxGL.Camera
         animationDuration={0}
         animationMode="none"

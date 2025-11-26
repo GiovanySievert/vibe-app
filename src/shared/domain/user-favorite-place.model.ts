@@ -1,6 +1,6 @@
 export type UserFavoritePlace = {
   id: number
-  userId: string
+  userId: number
   venueId: number
   name: string
   avatar: string

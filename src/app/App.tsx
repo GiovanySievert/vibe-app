@@ -8,7 +8,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toast } from '@src/shared/components/toast/toast.component'
 
 import { MainAppNavigator } from './navigation'
-import { AppProvider, ToastProvider } from './providers'
+import { AppProvider } from './providers'
+import { ToastProvider } from './providers/toast.provider'
 
 const queryClient = new QueryClient()
 

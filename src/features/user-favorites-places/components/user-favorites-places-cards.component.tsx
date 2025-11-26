@@ -29,6 +29,7 @@ export const UserFavoritesPlacesCards = () => {
                   params: { placeId: userFavoritePlace.id }
                 })
               }
+              key={index}
             >
               <Box flexDirection="row" alignItems="center" gap={3} key={userFavoritePlace.id}>
                 <Avatar ring={0} uri={userFavoritePlace.avatar} size="sm" />

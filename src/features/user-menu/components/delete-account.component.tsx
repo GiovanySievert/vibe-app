@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components/input'
+import { Input } from '@src/shared/components'
 import { useLogout } from '@src/shared/hooks'
 
 import { deleteAccountSchema } from '../domain'

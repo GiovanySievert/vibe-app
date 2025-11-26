@@ -4,8 +4,8 @@ import { useMutation } from '@tanstack/react-query'
 
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
+import { Input } from '@src/shared/components'
 import { Card } from '@src/shared/components/card/card.component'
-import { Input } from '@src/shared/components/input'
 
 import { forgotPasswordEmailStepSchema } from '../../domain'
 
