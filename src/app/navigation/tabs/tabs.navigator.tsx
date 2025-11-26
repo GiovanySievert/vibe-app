@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { HomeFeatures, SocialFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
-import { Header } from '@src/shared/components/header'
 
 import { UserMenuNavigator } from '../stacks/user-menu-stack'
 import { TabRoutesName, TabsNavigatorParamsList } from '../types'
@@ -15,14 +14,13 @@ export function TabsNavigator() {
     <Tab.Navigator
       tabBar={(props) => <BottomTab {...props} />}
       screenOptions={{
-        header: (props) => <Header {...props} />
+        headerShown: false
       }}
     >
       <Tab.Screen
         name="HomeScreen"
         component={HomeFeatures.HomeScreen}
         options={{
-          headerShown: false,
           tabBarLabel: TabRoutesName.HOME
         }}
       />
@@ -31,7 +29,6 @@ export function TabsNavigator() {
         name="SocialScreen"
         component={SocialFeatures.SocialScreen}
         options={{
-          headerShown: false,
           tabBarLabel: TabRoutesName.SOCIAL
         }}
       />
@@ -40,7 +37,6 @@ export function TabsNavigator() {
         name="UserMenuScreen"
         component={UserMenuNavigator}
         options={{
-          headerShown: false,
           tabBarLabel: TabRoutesName.MENU
         }}
       />

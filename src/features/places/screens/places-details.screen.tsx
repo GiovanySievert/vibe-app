@@ -5,8 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
-import { Box, Divider, ThemedText } from '@src/shared/components'
-import { Screen } from '@src/shared/components/screen'
+import { Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
@@ -53,21 +52,22 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
   return (
     <Box flex={1}>
       <ScrollView style={styles.scroll} overScrollMode="never">
-        <Screen>
-          <PlacesScreenHeader place={placeData} />
-          <PlacesInfoHeader place={placeData} />
-          <Tabs titles={['Info', 'Cardápio']} defaultIndex={0}>
-            <>
-              <PlacesInfoPills place={placeData} />
-              <PlacesCardInfo place={placeData} />
-              <PlacesAddress place={placeData} />
-            </>
-            <PlacesMenu place={placeData} />
-            <Box mb={14}>
-              <Divider />
-            </Box>
-          </Tabs>
-        </Screen>
+        <Box justifyContent="flex-end" alignItems="flex-end" pr={5} pt={5}>
+          <ThemedIcon name="X" color="textSecondary" size={22} />
+        </Box>
+        <PlacesInfoHeader place={placeData} />
+        <PlacesScreenHeader place={placeData} />
+        <Tabs titles={['Info', 'Cardápio']} defaultIndex={0}>
+          <>
+            <PlacesInfoPills place={placeData} />
+            <PlacesCardInfo place={placeData} />
+            <PlacesAddress place={placeData} />
+          </>
+          <PlacesMenu place={placeData} />
+          <Box mb={14}>
+            <Divider />
+          </Box>
+        </Tabs>
       </ScrollView>
 
       <PlacesFlutuantButton />

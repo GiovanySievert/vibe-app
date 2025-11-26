@@ -26,7 +26,7 @@ export const UserFavoritesPlacesCards = () => {
               onPress={() =>
                 navigation.navigate('Modals', {
                   screen: 'PlacesDetailsScreen',
-                  params: { placeId: userFavoritePlace.id }
+                  params: { placeId: userFavoritePlace.venueId }
                 })
               }
               key={index}

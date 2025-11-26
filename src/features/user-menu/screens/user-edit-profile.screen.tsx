@@ -5,7 +5,6 @@ import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
 import { Avatar, Box, Button, Card, Input, ThemedIcon, ThemedText } from '@src/shared/components'
-import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 
 export const UserEditProfile = () => {
@@ -18,32 +17,27 @@ export const UserEditProfile = () => {
   })
 
   return (
-    <Screen>
-      <Box flex={1} bg="background" gap={6} p={6}>
-        <ThemedText variant="primary" weight="semibold" size="lg">
-          Editar Perfil
-        </ThemedText>
-        <Box justifyContent="center" alignItems="center">
-          <Box style={styles.avatarContainer}>
-            <Avatar />
-            <Box style={styles.editIcon}>
-              <ThemedIcon name="Pen" size={16} color="textPrimary" />
-            </Box>
+    <Box flex={1} bg="background" gap={6} p={6}>
+      <Box justifyContent="center" alignItems="center">
+        <Box style={styles.avatarContainer}>
+          <Avatar />
+          <Box style={styles.editIcon}>
+            <ThemedIcon name="Pen" size={16} color="textPrimary" />
           </Box>
         </Box>
-        <Card gap={6}>
-          <Input label="Username" value={form.username} disabled />
-          <Input label="Nome" value={form.name} />
-          <Input label="E-mail" value={form.email} />
-
-          <Button>
-            <ThemedText variant="primary" weight="semibold" size="lg">
-              Salvar
-            </ThemedText>
-          </Button>
-        </Card>
       </Box>
-    </Screen>
+      <Card gap={6}>
+        <Input label="Username" value={form.username} disabled />
+        <Input label="Nome" value={form.name} />
+        <Input label="E-mail" value={form.email} />
+
+        <Button>
+          <ThemedText variant="primary" weight="semibold" size="lg">
+            Salvar
+          </ThemedText>
+        </Button>
+      </Card>
+    </Box>
   )
 }
 
