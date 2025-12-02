@@ -11,16 +11,14 @@ type PlacesMenuProps = {
 export const PlacesMenu: React.FC<PlacesMenuProps> = ({ place }) => {
   if (place.brand.menus.length) {
     return (
-      <Box flex={1} pr={5} pl={5} mt={3} mb={18} alignItems="center">
-        <ThemedText weight="light" ali>
-          Local nāo tem cardápio cadastrado :/
-        </ThemedText>
+      <Box flex={1} pr={5} pl={5} mt={3} mb={100} alignItems="center">
+        <ThemedText weight="light">Local nāo tem cardápio cadastrado :/</ThemedText>
       </Box>
     )
   }
 
   return (
-    <Box flex={1} pr={5} pl={5} mt={3} mb={18}>
+    <Box flex={1} pr={5} pl={5} mt={3}>
       {place.brand.menus.map((brandMenu) => {
         return (
           <Card mt={3}>

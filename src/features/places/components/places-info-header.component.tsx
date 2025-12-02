@@ -5,6 +5,8 @@ import { Avatar, Box, CardLinear, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { PlacesByIdResponse } from '@src/shared/domain'
 
+import { PlacesActions } from './places-screen-header.component'
+
 type PlacesInfoHeaderProps = {
   place: PlacesByIdResponse
 }
@@ -28,9 +30,10 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place }) => 
             {place.brand.type}
           </ThemedText>
         </Box>
+        <PlacesActions place={place} />
 
         <Box flexDirection="row" gap={2} mb={4}>
-          <ThemedIcon name="Star" color="warning" />
+          <ThemedIcon name="Star" color="warning" type="solid" />
           <ThemedText>4.6</ThemedText>
           <ThemedText>(127 avaliações)</ThemedText>
         </Box>

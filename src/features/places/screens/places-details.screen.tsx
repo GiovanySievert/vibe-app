@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useQuery } from '@tanstack/react-query'
@@ -17,13 +17,12 @@ import {
   PlacesFlutuantButton,
   PlacesInfoHeader,
   PlacesInfoPills,
-  PlacesMenu,
-  PlacesScreenHeader
+  PlacesMenu
 } from '../components'
 
 type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'PlacesDetailsScreen'>
 
-export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route }) => {
+export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route, navigation }) => {
   const placeId = route.params?.placeId
   const fetchPlaces = async () => {
     const response = await PlacesService.fetchPlaceById(placeId)
@@ -52,11 +51,12 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
   return (
     <Box flex={1}>
       <ScrollView style={styles.scroll} overScrollMode="never">
-        <Box justifyContent="flex-end" alignItems="flex-end" pr={5} pt={5}>
-          <ThemedIcon name="X" color="textSecondary" size={22} />
-        </Box>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Box justifyContent="flex-end" alignItems="flex-end" pr={5} pt={5}>
+            <ThemedIcon name="X" color="textSecondary" size={22} />
+          </Box>
+        </TouchableOpacity>
         <PlacesInfoHeader place={placeData} />
-        <PlacesScreenHeader place={placeData} />
         <Tabs titles={['Info', 'Cardápio']} defaultIndex={0}>
           <>
             <PlacesInfoPills place={placeData} />
@@ -69,7 +69,6 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
           </Box>
         </Tabs>
       </ScrollView>
-
       <PlacesFlutuantButton />
     </Box>
   )

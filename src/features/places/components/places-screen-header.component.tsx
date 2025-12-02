@@ -3,15 +3,16 @@ import { StyleSheet } from 'react-native'
 
 import { Box } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
 
 import { PlacesHeaderFavoriteButton } from './places-header-favorite-button.component'
 
-type PlacesScreenHeaderProps = {
+type PlacesActionsProps = {
   place: PlacesByIdResponse
 }
 
-export const PlacesScreenHeader: React.FC<PlacesScreenHeaderProps> = ({ place }) => {
+export const PlacesActions: React.FC<PlacesActionsProps> = ({ place }) => {
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
       <Box flexDirection="row" justifyContent="space-between" p={3}>
@@ -20,7 +21,7 @@ export const PlacesScreenHeader: React.FC<PlacesScreenHeaderProps> = ({ place })
             <PlacesHeaderFavoriteButton place={place} />
           </Box>
           <Box style={styles.iconContainer} alignItems="center" justifyContent="center">
-            <ThemedIcon name="Share" color="textSecondary" />
+            <ThemedIcon name="Share" color="textPrimary" />
           </Box>
         </Box>
       </Box>
@@ -30,10 +31,11 @@ export const PlacesScreenHeader: React.FC<PlacesScreenHeaderProps> = ({ place })
 
 const styles = StyleSheet.create({
   iconContainer: {
-    height: 64,
-    width: 64,
+    height: 56,
+    width: 56,
     borderRadius: '50%',
     borderWidth: 1,
-    borderColor: '#333'
+    borderColor: '#333',
+    backgroundColor: theme.colors.primary
   }
 })

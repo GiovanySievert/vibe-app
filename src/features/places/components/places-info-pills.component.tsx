@@ -9,8 +9,8 @@ type PlacesInfoPillsProps = {
 
 export const PlacesInfoPills: React.FC<PlacesInfoPillsProps> = ({ place }) => {
   return (
-    <Box flex={1} pr={5} pl={5}>
-      <Box mb={2} gap={2} mt={2} flexDirection="row" scrollable>
+    <Box flex={1}>
+      <Box mb={2} gap={2} mt={2} flexDirection="row" scrollable pr={5} pl={2.5}>
         <Pill label="Mulher feia" />
         <Pill label="Forro" />
         <Pill label="Música Eletrônica" />

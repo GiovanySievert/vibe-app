@@ -60,7 +60,7 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
         onPress={() => (isPlaceFavorited ? unfavoritePlace() : favoritePlace())}
         style={animatedStyle}
       >
-        <ThemedIcon name="Heart" color="textSecondary" type={isPlaceFavorited ? 'solid' : 'light'} size={16} />
+        <ThemedIcon name="Heart" color="textPrimary" type={isPlaceFavorited ? 'solid' : 'light'} size={20} />
       </AnimatedTouchableOpacity>
     </Box>
   )
