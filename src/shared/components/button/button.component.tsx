@@ -28,15 +28,16 @@ type ButtonProps = {
   disabled?: boolean
   startIconName?: IconName
   endIconName?: IconName
+  flex?: number
 } & PressableProps
 
 export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
-  ({ children, variant = 'solid', type = 'primary', testID, loading, disabled, ...props }, ref) => {
+  ({ children, variant = 'solid', type = 'primary', testID, loading, disabled, flex, ...props }, ref) => {
     const [pressed, setPressed] = useState(false)
 
     const childrenOpacity = useSharedValue(loading ? 0 : 1)
     const loaderOpacity = useSharedValue(loading ? 1 : 0)
-    const loaderTranslateX = useSharedValue(loading ? 0 : -20)
+    const loaderScale = useSharedValue(loading ? 1 : 0.8)
 
     const animatedChildren = useAnimatedStyle(() => ({
       opacity: childrenOpacity.value
@@ -44,7 +45,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
 
     const animatedLoader = useAnimatedStyle(() => ({
       opacity: loaderOpacity.value,
-      transform: [{ translateX: loaderTranslateX.value }]
+      transform: [{ scale: loaderScale.value }]
     }))
 
     const handlePressIn = (event: GestureResponderEvent) => {
@@ -72,7 +73,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         justifyContent: 'center',
         alignItems: 'center',
         opacity: disabled ? 0.5 : 1,
-        paddingHorizontal: 12,
+        paddingHorizontal: 16,
         flexDirection: 'row'
       }
 
@@ -98,15 +99,15 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
 
     useEffect(() => {
       if (loading) {
-        childrenOpacity.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.cubic) })
-        loaderOpacity.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.cubic) })
-        loaderTranslateX.value = withTiming(0, { duration: 600, easing: Easing.out(Easing.cubic) })
+        childrenOpacity.value = withTiming(0, { duration: 200, easing: Easing.in(Easing.cubic) })
+        loaderOpacity.value = withTiming(1, { duration: 300, easing: Easing.out(Easing.cubic) })
+        loaderScale.value = withTiming(1, { duration: 300, easing: Easing.out(Easing.cubic) })
       } else {
-        loaderOpacity.value = withTiming(0, { duration: 100, easing: Easing.in(Easing.cubic) })
-        loaderTranslateX.value = withTiming(-20, { duration: 500, easing: Easing.in(Easing.cubic) })
-        childrenOpacity.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.cubic) })
+        childrenOpacity.value = withTiming(1, { duration: 300, easing: Easing.out(Easing.cubic) })
+        loaderOpacity.value = withTiming(0, { duration: 200, easing: Easing.in(Easing.cubic) })
+        loaderScale.value = withTiming(0.8, { duration: 200, easing: Easing.in(Easing.cubic) })
       }
-    }, [loading, childrenOpacity, loaderOpacity, loaderTranslateX])
+    }, [loading, childrenOpacity, loaderOpacity, loaderScale])
 
     return (
       <Pressable
@@ -116,19 +117,17 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         onPressOut={handlePressOut}
         disabled={disabled || loading}
         testID={testID || 'button-container--button'}
-        style={[getButtonStyle(variant, type, disabled), pressed && { opacity: 0.7 }]}
+        style={[getButtonStyle(variant, type, disabled), pressed && { opacity: 0.7 }, flex !== undefined && { flex }, props.style]}
       >
         {props.startIconName && <ThemedIcon name={props.startIconName} />}
 
-        <View style={styles.viewContainer}>
-          <Animated.View pointerEvents="none" style={[styles.animatedViewContainer, animatedChildren]}>
-            {children}
-          </Animated.View>
+        <Animated.View style={[styles.viewContainer, animatedChildren]}>
+          {children}
+        </Animated.View>
 
-          <Animated.View pointerEvents="none" style={[styles.animatedViewContainer, animatedLoader]}>
-            <ActivityIndicator color={theme.colors.info} />
-          </Animated.View>
-        </View>
+        <Animated.View pointerEvents="none" style={[styles.loaderContainer, animatedLoader]}>
+          <ActivityIndicator color={theme.colors.info} />
+        </Animated.View>
 
         {props.endIconName && <ThemedIcon name={props.endIconName} />}
       </Pressable>
@@ -137,6 +136,18 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
 )
 
 const styles = StyleSheet.create({
-  viewContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 24, marginHorizontal: 8 },
-  animatedViewContainer: { position: 'absolute', left: 0, right: 0, alignItems: 'center' }
+  viewContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 24
+  },
+  loaderContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 })

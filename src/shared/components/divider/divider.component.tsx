@@ -6,7 +6,7 @@ export const Divider: React.FC = () => <View style={styles.divider} />
 const styles = StyleSheet.create({
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#555',
+    backgroundColor: '#fff',
     width: '100%'
   }
 })
