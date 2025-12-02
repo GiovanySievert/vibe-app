@@ -8,11 +8,11 @@ import { ThemedText } from '../themed-text'
 
 type PillProps = {
   label: string
-  textSize: 'sm' | 'md' | 'lg'
+  textSize?: 'sm' | 'md' | 'lg'
   onPress?: () => void
 }
 
-export const Pill: React.FC<PillProps> = ({ label, textSize, onPress }) => {
+export const Pill: React.FC<PillProps> = ({ label, textSize = 'md', onPress }) => {
   return (
     <Box style={styles.pill}>
       <TouchableOpacity onPress={onPress}>
