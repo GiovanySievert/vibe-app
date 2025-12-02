@@ -5,8 +5,8 @@ import { UserFavoritePlace } from '@src/shared/domain'
 
 export const UserFavoritesPlacesService = {
   fetchAllPlaces: async (): Promise<AxiosResponse<any>> => await coreApi.get(`/user-favorites-places`),
-  favoritePlace: async (placeId: number): Promise<AxiosResponse<UserFavoritePlace>> =>
+  favoritePlace: async (placeId: string): Promise<AxiosResponse<UserFavoritePlace>> =>
     await coreApi.post(`/user-favorites-places/${placeId}`),
-  unfavoritePlace: async (placeId: number): Promise<AxiosResponse<void>> =>
+  unfavoritePlace: async (placeId: string): Promise<AxiosResponse<void>> =>
     await coreApi.delete(`/user-favorites-places/${placeId}`)
 }
