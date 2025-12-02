@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
@@ -10,25 +10,40 @@ import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
 
-import { UsersProfileFollowActions, UsersProfileHeaderScreen } from '../components'
+import { UsersProfileFollowActions, UsersProfileFollowList, UsersProfileHeaderScreen } from '../components'
 import { UsersProfileService } from '../services'
 
 type UsersProfileScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'UsersProfileScreen'>
 
 export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ route }) => {
   const userId = route.params?.userId
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
 
   const fetchUser = async () => {
     const response = await UsersProfileService.fetchUserById(userId)
     return response.data
   }
-
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
-    queryKey: ['fetchUserById'],
+    queryKey: ['fetchUserById', userId],
     queryFn: fetchUser,
     retry: false,
     staleTime: 0
   })
+
+  const handleOpenFollowers = () => {
+    setModalType('followers')
+    setIsModalVisible(true)
+  }
+
+  const handleOpenFollowings = () => {
+    setModalType('followings')
+    setIsModalVisible(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false)
+  }
 
   if (isLoading) {
     return (
@@ -46,10 +61,21 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
     <Box flex={1} bg="background">
       <ScrollView style={styles.scroll} overScrollMode="never">
         <Screen>
-          <UsersProfileHeaderScreen userData={userData} />
+          <UsersProfileHeaderScreen
+            userData={userData}
+            onOpenFollowers={handleOpenFollowers}
+            onOpenFollowings={handleOpenFollowings}
+          />
           <UsersProfileFollowActions userData={userData} />
         </Screen>
       </ScrollView>
+
+      <UsersProfileFollowList
+        userId={userData.id}
+        type={modalType}
+        visible={isModalVisible}
+        onClose={handleCloseModal}
+      />
     </Box>
   )
 }

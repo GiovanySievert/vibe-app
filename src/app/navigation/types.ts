@@ -28,8 +28,8 @@ export type TabsNavigatorParamsList = {
 }
 
 export type ModalNavigatorParamsList = {
-  PlacesDetailsScreen: { placeId: number }
-  UsersProfileScreen: { userId: number }
+  PlacesDetailsScreen: { placeId: string }
+  UsersProfileScreen: { userId: string }
   SearchScreen: undefined
   LocationModal: undefined
 }
