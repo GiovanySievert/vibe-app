@@ -10,8 +10,8 @@ export type PlacesModel = {
 }
 
 export type Venue = {
-  id: number
-  brandId: number
+  id: string
+  brandId: string
   name: string
   priceRange: string
   paymentMethods: string
@@ -24,8 +24,8 @@ export type Venue = {
 }
 
 export type BrandMenu = {
-  id: number
-  brandId: number
+  id: string
+  brandId: string
   name: string
   description: string
   priceCents: number
@@ -34,7 +34,7 @@ export type BrandMenu = {
 }
 
 export type Brand = {
-  id: number
+  id: string
   name: string
   taxId: string
   type: string
@@ -45,8 +45,8 @@ export type Brand = {
 }
 
 export type VenueLocation = {
-  id: number
-  venueId: number
+  id: string
+  venueId: string
   addressLine: string
   addressLine2: string
   number: string
@@ -62,8 +62,8 @@ export type VenueLocation = {
 }
 
 export type PlacesByIdResponse = {
-  id: number
-  brandId: number
+  id: string
+  brandId: string
   name: string
   priceRange: string
   paymentMethods: string
