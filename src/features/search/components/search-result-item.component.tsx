@@ -4,22 +4,30 @@ import { GetUserByUsername } from '@src/shared/domain/users.model'
 
 import { SearchResultItem } from './search-result-items.component'
 
-type SearchResultItemsProps = {
-  searchResultItemData: PlacesModel[] | GetUserByUsername[]
-  searchType: 'USERS' | 'PLACES'
-}
+type SearchResultItemsProps =
+  | {
+      searchResultItemData: PlacesModel[]
+      searchType: 'PLACES'
+    }
+  | {
+      searchResultItemData: GetUserByUsername[]
+      searchType: 'USERS'
+    }
 
-export const SearchResultItems: React.FC<SearchResultItemsProps> = ({ searchResultItemData, searchType }) => {
-  if (!searchResultItemData?.length) {
-    return
+export const SearchResultItems: React.FC<SearchResultItemsProps> = (props) => {
+  if (!props.searchResultItemData?.length) {
+    return null
   }
+
   return (
-    <>
-      <Box gap={4}>
-        {searchResultItemData.map((searchResultItem) => {
-          return <SearchResultItem data={searchResultItem} searchType={searchType} />
-        })}
-      </Box>
-    </>
+    <Box gap={4}>
+      {props.searchType === 'PLACES'
+        ? props.searchResultItemData.map((item) => (
+            <SearchResultItem data={item} searchType="PLACES" key={item.id} />
+          ))
+        : props.searchResultItemData.map((item) => (
+            <SearchResultItem data={item} searchType="USERS" key={item.id} />
+          ))}
+    </Box>
   )
 }
