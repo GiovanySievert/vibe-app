@@ -2,11 +2,11 @@ import { TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
+import { UserData } from '@src/features/auth/domain'
 import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
-import { UserModel } from '@src/shared/domain/users.model'
 
 type userMenuHeaderProps = {
-  userData: UserModel
+  userData: UserData
 }
 
 export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
@@ -26,7 +26,7 @@ export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
             }
           >
             <ThemedText variant="primary" size="lg" weight="semibold">
-              Giovany Sievert
+              {userData.name}
             </ThemedText>
 
             <ThemedText variant="secondary" size="sm">
