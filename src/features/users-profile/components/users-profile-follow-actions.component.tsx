@@ -5,7 +5,7 @@ import { Box, Button, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
 import { FollowRequestsService, FollowService } from '../services'
-import { FollowStatus, GetFollowStatusResponse } from '../types'
+import { FollowAction, FollowStatus, GetFollowStatusResponse } from '../types'
 
 type UsersProfileFollowActionsProps = {
   userData: UserModel
@@ -31,9 +31,9 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   })
 
   const followMutation = useMutation({
-    mutationFn: (action: 'follow' | 'unfollow' | 'cancel') => {
-      if (action === 'follow') return FollowRequestsService.requestFollow(userData.id)
-      if (action === 'unfollow') return FollowService.unfollow(userData!.id)
+    mutationFn: (action: FollowAction) => {
+      if (action === FollowAction.FOLLOW) return FollowRequestsService.requestFollow(userData.id)
+      if (action === FollowAction.UNFOLLOW) return FollowService.unfollow(userData!.id)
       return FollowRequestsService.cancelRequestFollow(followData!.id)
     },
     onMutate: async (action) => {
@@ -42,7 +42,7 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
       const previousData = queryClient.getQueryData<GetFollowStatusResponse>(queryKey)
 
       const newStatus =
-        action === 'follow' ? FollowStatus.PENDING : action === 'cancel' ? FollowStatus.NONE : FollowStatus.NONE
+        action === FollowAction.FOLLOW ? FollowStatus.PENDING : action === FollowAction.CANCEL ? FollowStatus.NONE : FollowStatus.NONE
 
       queryClient.setQueryData<GetFollowStatusResponse>(queryKey, { status: newStatus, id: followData!.id })
 
@@ -61,11 +61,11 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
 
   const handlePressToUnfollowOrUnfollow = () => {
     if (followData?.status === FollowStatus.FOLLOWING) {
-      followMutation.mutate('unfollow')
+      followMutation.mutate(FollowAction.UNFOLLOW)
     } else if (followData?.status === FollowStatus.NONE) {
-      followMutation.mutate('follow')
+      followMutation.mutate(FollowAction.FOLLOW)
     } else if (followData?.status === FollowStatus.PENDING) {
-      followMutation.mutate('cancel')
+      followMutation.mutate(FollowAction.CANCEL)
     }
   }
 

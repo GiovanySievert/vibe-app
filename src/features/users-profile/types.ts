@@ -33,6 +33,12 @@ export enum FollowStatus {
   NONE = 'none'
 }
 
+export enum FollowAction {
+  FOLLOW = 'follow',
+  UNFOLLOW = 'unfollow',
+  CANCEL = 'cancel'
+}
+
 export type GetFollowStatusResponse = {
   id: string
   status: FollowStatus
