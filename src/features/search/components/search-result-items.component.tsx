@@ -25,6 +25,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const handleNavigation = () => {
+    navigation.goBack()
     if (searchType === SearchType.PLACES) {
       return navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId: data.id } })
     } else {

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Avatar, Box, Divider, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
-import { FollowService } from '../services'
+import { FollowStatsService } from '../services'
 import { UserFollowStatsResponse } from '../types'
 import { UsersProfileHeaderLoading } from './users-profile-header-loading.component'
 
@@ -21,7 +21,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   onOpenFollowings
 }) => {
   const fetchFollowersStats = async () => {
-    const response = await FollowService.fetchUsersFollowStats(userData.id)
+    const response = await FollowStatsService.fetchUsersFollowStats(userData.id)
     return response.data
   }
   const { data, isLoading } = useQuery<UserFollowStatsResponse, Error>({
@@ -31,7 +31,19 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
     staleTime: 0
   })
 
-  if (!isLoading) {
+  const handleOpenFollowers = () => {
+    if (data && data.followersCount > 0) {
+      onOpenFollowers()
+    }
+  }
+
+  const handleOpenFollowings = () => {
+    if (data && data.followingCount > 0) {
+      onOpenFollowings()
+    }
+  }
+
+  if (isLoading) {
     return <UsersProfileHeaderLoading />
   }
 
@@ -46,18 +58,18 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
         </Box>
 
         <Box flexDirection="row" gap={3} mt={6}>
-          <TouchableOpacity style={styles.centeredBox} onPress={onOpenFollowings}>
+          <TouchableOpacity style={styles.centeredBox} onPress={handleOpenFollowings}>
             <ThemedText variant="primary" weight="semibold">
-              {data?.followingCount}
+              {data?.followingCount || 0}
             </ThemedText>
             <ThemedText variant="secondary" size="sm">
               Seguindo
             </ThemedText>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.centeredBox} onPress={onOpenFollowers}>
+          <TouchableOpacity style={styles.centeredBox} onPress={handleOpenFollowers}>
             <ThemedText variant="primary" weight="semibold">
-              {data?.followersCount}
+              {data?.followersCount || 0}
             </ThemedText>
             <ThemedText variant="secondary" size="sm">
               Seguidores

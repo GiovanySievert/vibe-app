@@ -33,7 +33,7 @@ export const UserFavoritesPlacesCards = () => {
             >
               <Box flexDirection="row" alignItems="center" gap={3} key={userFavoritePlace.id}>
                 <Avatar ring={0} uri={userFavoritePlace.avatar} size="sm" />
-                <ThemedText color="primary" weight="medium">
+                <ThemedText color="textPrimary" weight="medium">
                   {userFavoritePlace.name}
                 </ThemedText>
               </Box>

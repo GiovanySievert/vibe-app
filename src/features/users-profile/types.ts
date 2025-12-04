@@ -26,3 +26,14 @@ export type ListFollowersResponse = {
   username: string
   avatar: string
 }
+
+export enum FollowStatus {
+  FOLLOWING = 'following',
+  PENDING = 'pending',
+  NONE = 'none'
+}
+
+export type GetFollowStatusResponse = {
+  id: string
+  status: FollowStatus
+}

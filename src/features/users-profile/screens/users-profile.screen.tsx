@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
+import { authClient } from '@src/services/api/auth-client'
 import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
@@ -17,6 +18,8 @@ type UsersProfileScreenScreenProps = NativeStackScreenProps<ModalNavigatorParams
 
 export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ route }) => {
   const userId = route.params?.userId
+  const { data: userLoggedData } = authClient.useSession()
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
 
@@ -66,7 +69,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
             onOpenFollowers={handleOpenFollowers}
             onOpenFollowings={handleOpenFollowings}
           />
-          <UsersProfileFollowActions userData={userData} />
+          {userLoggedData?.user.id !== userId && <UsersProfileFollowActions userData={userData} />}
         </Screen>
       </ScrollView>
 

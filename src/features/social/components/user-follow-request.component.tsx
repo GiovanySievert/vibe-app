@@ -5,7 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { FollowService } from '@src/features/users-profile/services'
+import { FollowRequestsService } from '@src/features/users-profile/services'
 import { ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'
 import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Divider, ThemedText } from '@src/shared/components'
@@ -16,7 +16,7 @@ export const UserFollowRequests = () => {
   const queryClient = useQueryClient()
 
   const fetchUser = async () => {
-    const response = await FollowService.listUserAllFollowRequests()
+    const response = await FollowRequestsService.listUserAllFollowRequests()
     return response.data
   }
 
@@ -33,7 +33,7 @@ export const UserFollowRequests = () => {
         prevData.filter((req) => req.id !== requestFollowId)
       )
 
-      await FollowService.acceptFollowRequest(requestFollowId)
+      await FollowRequestsService.acceptFollowRequest(requestFollowId)
     } catch {
       queryClient.invalidateQueries({
         queryKey: ['fetchUserById', userLoggedData?.user.id]
@@ -47,7 +47,7 @@ export const UserFollowRequests = () => {
         prevData.filter((req) => req.id !== requestFollowId)
       )
 
-      await FollowService.rejectFollowRequest(requestFollowId)
+      await FollowRequestsService.rejectFollowRequest(requestFollowId)
     } catch {
       queryClient.invalidateQueries({
         queryKey: ['fetchUserById', userLoggedData?.user.id]
@@ -88,7 +88,7 @@ export const UserFollowRequests = () => {
                     </ThemedText>
                   </Button>
 
-                  <Button onPress={() => rejectFollowRequest(userFollowRequest.id)} type="danger" flex={1}>
+                  <Button onPress={() => rejectFollowRequest(userFollowRequest.id)} type="secondary" flex={1}>
                     <ThemedText variant="primary" weight="medium" size="lg">
                       Rejeitar
                     </ThemedText>
