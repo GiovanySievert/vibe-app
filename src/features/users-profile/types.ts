@@ -18,6 +18,7 @@ export type UserFollowStatsResponse = {
 export type ListFollowingsResponse = {
   id: string
   username: string
+  userId: string
   avatar: string
 }
 
@@ -25,6 +26,7 @@ export type ListFollowersResponse = {
   id: string
   username: string
   avatar: string
+  userId: string
 }
 
 export enum FollowStatus {

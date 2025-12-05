@@ -22,6 +22,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
+  const isUserLoggedProfile = userLoggedData?.user.id === userId
 
   const fetchUser = async () => {
     const response = await UsersProfileService.fetchUserById(userId)
@@ -61,7 +62,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
   }
 
   return (
-    <Box flex={1} bg="background">
+    <>
       <ScrollView style={styles.scroll} overScrollMode="never">
         <Screen>
           <UsersProfileHeaderScreen
@@ -69,7 +70,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
             onOpenFollowers={handleOpenFollowers}
             onOpenFollowings={handleOpenFollowings}
           />
-          {userLoggedData?.user.id !== userId && <UsersProfileFollowActions userData={userData} />}
+          {!isUserLoggedProfile && <UsersProfileFollowActions userData={userData} />}
         </Screen>
       </ScrollView>
 
@@ -78,8 +79,9 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
         type={modalType}
         visible={isModalVisible}
         onClose={handleCloseModal}
+        isUserLoggedProfile={isUserLoggedProfile}
       />
-    </Box>
+    </>
   )
 }
 

@@ -42,7 +42,11 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
       const previousData = queryClient.getQueryData<GetFollowStatusResponse>(queryKey)
 
       const newStatus =
-        action === FollowAction.FOLLOW ? FollowStatus.PENDING : action === FollowAction.CANCEL ? FollowStatus.NONE : FollowStatus.NONE
+        action === FollowAction.FOLLOW
+          ? FollowStatus.PENDING
+          : action === FollowAction.CANCEL
+            ? FollowStatus.NONE
+            : FollowStatus.NONE
 
       queryClient.setQueryData<GetFollowStatusResponse>(queryKey, { status: newStatus, id: followData!.id })
 
@@ -83,10 +87,6 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
     }
 
     return 'Seguir'
-  }
-
-  if (isLoading) {
-    return null
   }
 
   return (

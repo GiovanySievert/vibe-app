@@ -1,32 +1,37 @@
-import React from 'react'
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import React, { useCallback } from 'react'
+import { FlatList, StyleSheet } from 'react-native'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { Avatar, Box, Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'
 
-import { FollowService } from '../services'
+import { FollowService } from '../../services'
+import { ListFollowersResponse } from '../../types'
+import { UsersProfileFollowListItem } from './users-profile-follow-list-item.component'
 import { UsersProfileFollowListLoading } from './users-profile-follow-list-loading.component'
 
 type UsersProfileFollowListProps = {
   userId: string
   type: 'followers' | 'followings'
   visible: boolean
+  isUserLoggedProfile: boolean
   onClose: () => void
 }
 
-export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({ userId, type, visible, onClose }) => {
-  const navigation = useNavigation<any>()
-
+export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({
+  userId,
+  type,
+  visible,
+  onClose,
+  isUserLoggedProfile
+}) => {
   const fetchFollowList = async ({ pageParam = 1 }) => {
     const response =
       type === 'followers'
         ? await FollowService.listFollowers(userId, pageParam, 5)
         : await FollowService.listFollowings(userId, pageParam, 5)
-
-    return response.data || []
+    return response.data
   }
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
@@ -42,16 +47,23 @@ export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({ 
     enabled: visible
   })
 
-  const handlePressUser = (userItemId: string) => {
-    onClose()
-    navigation.navigate('UsersProfileScreen', { userId: userItemId })
-  }
-
   const handleLoadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
   }
+
+  const renderItem = useCallback(
+    ({ item }: { item: ListFollowersResponse }) => (
+      <UsersProfileFollowListItem
+        followRelation={item}
+        type={type}
+        onClose={onClose}
+        isUserLoggedProfile={isUserLoggedProfile}
+      />
+    ),
+    [type, onClose, isUserLoggedProfile]
+  )
 
   const renderContent = () => {
     if (isLoading) {
@@ -60,45 +72,11 @@ export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({ 
 
     const allData = data?.pages.flatMap((page) => page) ?? []
 
-    if (allData.length === 0) {
-      return (
-        <Box alignItems="center" justifyContent="center" p={4}>
-          <ThemedText variant="secondary">
-            {type === 'followers' ? 'Nenhum seguidor ainda' : 'Não está seguindo ninguém'}
-          </ThemedText>
-        </Box>
-      )
-    }
-
     return (
       <FlatList
         data={allData}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.userItem} onPress={() => handlePressUser(item.id)}>
-            <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-              <Box flexDirection="row" alignItems="center" gap={5}>
-                <Avatar size="sm" />
-                <ThemedText variant="primary" weight="semibold">
-                  {item.username}
-                </ThemedText>
-              </Box>
-              {type === 'followers' ? (
-                <Button variant="soft" type="danger">
-                  <ThemedText variant="primary" weight="medium">
-                    Remover
-                  </ThemedText>
-                </Button>
-              ) : (
-                <Button variant="soft">
-                  <ThemedText variant="primary" weight="medium">
-                    Seguindo
-                  </ThemedText>
-                </Button>
-              )}
-            </Box>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
         contentContainerStyle={styles.listContent}
         style={styles.flatList}
         ListFooterComponent={
