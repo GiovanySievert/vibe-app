@@ -1,10 +1,9 @@
 export type ListUserAllFollowRequestsResponse = {
   id: string
-  requesterId: string
-  requesterUsername: string
-  requesterAvatar: string
-  requestedId: string
-  status: 'pending' | 'accepted' | 'rejected'
+  userId: string
+  username: string
+  avatar: string
+  status: FollowRequestStatus
   createdAt: string
 }
 
@@ -39,6 +38,17 @@ export enum FollowAction {
   FOLLOW = 'follow',
   UNFOLLOW = 'unfollow',
   CANCEL = 'cancel'
+}
+
+export enum FollowRequestType {
+  RECEIVED = 'received',
+  SENT = 'sent'
+}
+
+export enum FollowRequestStatus {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected'
 }
 
 export type GetFollowStatusResponse = {

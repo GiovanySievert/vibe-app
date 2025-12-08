@@ -1,9 +1,10 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { HomeFeatures, SocialFeatures } from '@src/features'
+import { HomeFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
 
+import { SocialStackNavigator } from '../social/social-stack.navigator'
 import { UserMenuNavigator } from '../stacks/user-menu-stack'
 import { TabRoutesName, TabsNavigatorParamsList } from '../types'
 
@@ -27,7 +28,7 @@ export function TabsNavigator() {
 
       <Tab.Screen
         name="SocialScreen"
-        component={SocialFeatures.SocialScreen}
+        component={SocialStackNavigator}
         options={{
           tabBarLabel: TabRoutesName.SOCIAL
         }}

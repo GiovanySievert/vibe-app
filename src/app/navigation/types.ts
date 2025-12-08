@@ -21,10 +21,15 @@ export type UserMenuStackParamList = {
   TermsOfUseScreen: undefined
 }
 
+export type SocialStackParamList = {
+  SocialMain: undefined
+  FollowRequestsScreen: { type: 'received' | 'sent' }
+}
+
 export type TabsNavigatorParamsList = {
   HomeScreen: undefined
   UserMenuScreen: NavigatorScreenParams<UserMenuStackParamList>
-  SocialScreen: undefined
+  SocialScreen: NavigatorScreenParams<SocialStackParamList>
 }
 
 export type ModalNavigatorParamsList = {

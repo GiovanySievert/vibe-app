@@ -2,11 +2,12 @@ import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
 import { UserFavoritesPlacesCards } from '@src/features/user-favorites-places/components'
+import { FollowRequestType } from '@src/features/users-profile/types'
 import { Box, Divider, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 
-import { UserFollowRequests } from '../components'
+import { FollowRequestsList } from '../components'
 
 export const SocialScreen = () => {
   return (
@@ -20,7 +21,8 @@ export const SocialScreen = () => {
           <Box pr={5} pl={5}>
             <Divider />
           </Box>
-          <UserFollowRequests />
+          <FollowRequestsList type={FollowRequestType.RECEIVED} limit={1} />
+          <FollowRequestsList type={FollowRequestType.SENT} limit={1} />
         </Box>
       </Screen>
     </ScrollView>
