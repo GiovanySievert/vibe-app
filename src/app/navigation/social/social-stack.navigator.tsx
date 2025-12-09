@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { FollowRequestsScreen, SocialScreen } from '@src/features/social/screens'
+import { BlockedUsersScreen, FollowRequestsScreen, SocialScreen } from '@src/features/social/screens'
 import { Header } from '@src/shared/components'
 
 import { SocialStackParamList } from '../types'
@@ -16,6 +16,11 @@ export function SocialStackNavigator() {
         name="FollowRequestsScreen"
         component={FollowRequestsScreen}
         options={{ headerShown: true, title: 'Solicitações' }}
+      />
+      <SocialStack.Screen
+        name="BlockedUsersScreen"
+        component={BlockedUsersScreen}
+        options={{ headerShown: true, title: 'Bloqueados' }}
       />
     </SocialStack.Navigator>
   )

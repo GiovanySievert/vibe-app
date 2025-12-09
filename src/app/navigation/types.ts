@@ -24,6 +24,7 @@ export type UserMenuStackParamList = {
 export type SocialStackParamList = {
   SocialMain: undefined
   FollowRequestsScreen: { type: 'received' | 'sent' }
+  BlockedUsersScreen: undefined
 }
 
 export type TabsNavigatorParamsList = {

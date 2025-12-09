@@ -1,3 +1,6 @@
 export * from './follow-requests-list.component'
 export * from './follow-request-actions.component'
 export * from './follow-request-item.component'
+export * from './blocked-users-list.component'
+export * from './blocked-user-actions.component'
+export * from './blocked-user-item.component'

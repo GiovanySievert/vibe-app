@@ -7,7 +7,7 @@ import { Box, Divider, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 
-import { FollowRequestsList } from '../components'
+import { BlockedUsersList, FollowRequestsList } from '../components'
 
 export const SocialScreen = () => {
   return (
@@ -21,8 +21,9 @@ export const SocialScreen = () => {
           <Box pr={5} pl={5}>
             <Divider />
           </Box>
-          <FollowRequestsList type={FollowRequestType.RECEIVED} limit={1} />
-          <FollowRequestsList type={FollowRequestType.SENT} limit={1} />
+          <FollowRequestsList type={FollowRequestType.RECEIVED} limit={3} />
+          <FollowRequestsList type={FollowRequestType.SENT} limit={3} />
+          <BlockedUsersList limit={3} />
         </Box>
       </Screen>
     </ScrollView>

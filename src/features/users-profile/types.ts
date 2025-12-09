@@ -69,3 +69,11 @@ export type GetFollowStatusResponse = {
 export type GetBlockStatusResponse = {
   isBlocked: boolean
 }
+
+export type ListBlockedUsersResponse = {
+  id: string
+  userId: string
+  username: string
+  avatar: string
+  blockedAt: string
+}
