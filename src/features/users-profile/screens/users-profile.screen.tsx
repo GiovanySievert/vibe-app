@@ -11,7 +11,12 @@ import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
 
-import { UsersProfileFollowActions, UsersProfileFollowList, UsersProfileHeaderScreen } from '../components'
+import {
+  UsersProfileBlock,
+  UsersProfileFollowActions,
+  UsersProfileFollowList,
+  UsersProfileHeaderScreen
+} from '../components'
 import { UsersProfileService } from '../services'
 
 type UsersProfileScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'UsersProfileScreen'>
@@ -71,6 +76,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
             onOpenFollowings={handleOpenFollowings}
           />
           {!isUserLoggedProfile && <UsersProfileFollowActions userData={userData} />}
+          {!isUserLoggedProfile && <UsersProfileBlock userData={userData} />}
         </Screen>
       </ScrollView>
 

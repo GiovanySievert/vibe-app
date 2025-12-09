@@ -1,3 +1,4 @@
+export * from './block.service'
 export * from './follow.service'
 export * from './follow-requests.service'
 export * from './follow-stats.service'

@@ -15,9 +15,9 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
-  const queryKey = ['fetchUserById', userLoggedData?.user.id, userData.id]
+  const queryKey = ['fetchFollowStatusById', userLoggedData?.user.id, userData.id]
 
-  const fetchUser = async () => {
+  const fetchFollowStatus = async () => {
     const response = await FollowService.getFollowStatus(userData.id)
 
     return response.data
@@ -25,7 +25,7 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
 
   const { data: followData, isLoading } = useQuery<GetFollowStatusResponse, Error>({
     queryKey,
-    queryFn: fetchUser,
+    queryFn: fetchFollowStatus,
     retry: false,
     staleTime: 60 * 5
   })

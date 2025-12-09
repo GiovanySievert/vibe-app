@@ -28,6 +28,16 @@ export type ListFollowersResponse = {
   userId: string
 }
 
+export enum BlockStatus {
+  BLOCKED = 'blocked',
+  NONE = 'false'
+}
+
+export enum BlockAction {
+  BLOCK = 'block',
+  UNBLOCK = 'unblock'
+}
+
 export enum FollowStatus {
   FOLLOWING = 'following',
   PENDING = 'pending',
@@ -54,4 +64,8 @@ export enum FollowRequestStatus {
 export type GetFollowStatusResponse = {
   id: string
   status: FollowStatus
+}
+
+export type GetBlockStatusResponse = {
+  isBlocked: boolean
 }
