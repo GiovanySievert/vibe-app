@@ -6,6 +6,7 @@ import { Box, LoadingPage, ThemedText } from '@src/shared/components'
 import { PlacesModel } from '@src/shared/domain'
 import { PlacesService } from '@src/shared/services'
 
+import { useLastSearched } from '../hooks'
 import { SearchResultItems } from './search-result-item.component'
 
 type SearchPlacesProps = {
@@ -13,6 +14,8 @@ type SearchPlacesProps = {
 }
 
 export const SearchPlaces: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
+  const { saveSearch } = useLastSearched()
+
   const fetchPlacesByName = async () => {
     const response = await PlacesService.fetchPlaceByName(inputSearch)
 
@@ -26,6 +29,15 @@ export const SearchPlaces: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
     staleTime: 0,
     enabled: inputSearch.length >= 3
   })
+
+  const handleItemClick = (item: PlacesModel) => {
+    saveSearch({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      searchType: 'PLACES'
+    })
+  }
 
   if (isFetching) {
     return (
@@ -44,7 +56,7 @@ export const SearchPlaces: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
   }
   return (
     <Box mt={5}>
-      <SearchResultItems searchResultItemData={placeData!} searchType="PLACES" />
+      <SearchResultItems searchResultItemData={placeData!} searchType="PLACES" onItemClick={handleItemClick} />
     </Box>
   )
 }

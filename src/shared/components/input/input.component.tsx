@@ -99,8 +99,6 @@ export const Input = forwardRef<TextInput, InputProps>(
       onClear?.()
     }
 
-    const handleSecureTextEntryIconName = () => {}
-
     useEffect(() => {
       setLocalInputValue(rest.value || '')
     }, [rest.value])

@@ -11,20 +11,19 @@ enum SearchType {
   PLACES = 'PLACES'
 }
 
-type SearchResultItemProps =
-  | {
-      data: PlacesModel
-      searchType: 'PLACES'
-    }
-  | {
-      data: GetUserByUsername
-      searchType: 'USERS'
-    }
+type SearchResultItemProps = {
+  data: PlacesModel | GetUserByUsername
+  searchType: 'PLACES' | 'USERS'
+  onItemClick?: () => void
+}
 
-export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType }) => {
+export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType, onItemClick }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const handleNavigation = () => {
+    if (onItemClick) {
+      onItemClick()
+    }
     navigation.goBack()
     if (searchType === SearchType.PLACES) {
       return navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId: data.id } })
@@ -33,23 +32,31 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
     }
   }
 
+  const isPlace = searchType === SearchType.PLACES
+  const placeData = data as PlacesModel
+  const userData = data as GetUserByUsername
+
   return (
     <>
       <Box flexDirection="row" alignItems="center" gap={3}>
         <Avatar
           size="sm"
-          uri="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkB5zkX3mrbLiQ_WjvF-rWwWQJEJ3wK3oB-Q&s"
+          uri={
+            isPlace
+              ? placeData.image
+              : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkB5zkX3mrbLiQ_WjvF-rWwWQJEJ3wK3oB-Q&s'
+          }
         />
         <TouchableOpacity onPress={() => handleNavigation()}>
-          {searchType === SearchType.PLACES ? (
+          {isPlace ? (
             <>
-              <ThemedText>{data.name}</ThemedText>
+              <ThemedText>{placeData.name}</ThemedText>
               <ThemedText color="textSecondary" size="sm">
                 Bar
               </ThemedText>
             </>
           ) : (
-            <ThemedText>{data.username}</ThemedText>
+            <ThemedText>{userData.username}</ThemedText>
           )}
         </TouchableOpacity>
       </Box>

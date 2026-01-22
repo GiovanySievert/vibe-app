@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Box, LoadingPage, ThemedText } from '@src/shared/components'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 
+import { useLastSearched } from '../hooks'
 import { SearchService } from '../services'
 import { SearchResultItems } from './search-result-item.component'
 
@@ -13,6 +14,8 @@ type SearchPlacesProps = {
 }
 
 export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
+  const { saveSearch } = useLastSearched()
+
   const fetchPlacesByName = async () => {
     const response = await SearchService.fetchUsersByUsername(inputSearch)
 
@@ -26,6 +29,14 @@ export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
     staleTime: 0,
     enabled: inputSearch.length >= 3
   })
+
+  const handleItemClick = (item: GetUserByUsername) => {
+    saveSearch({
+      id: item.id,
+      username: item.username,
+      searchType: 'USERS'
+    })
+  }
 
   if (isLoading) {
     return (
@@ -45,7 +56,7 @@ export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
 
   return (
     <Box mt={5}>
-      <SearchResultItems searchResultItemData={usersData!} searchType="USERS" />
+      <SearchResultItems searchResultItemData={usersData!} searchType="USERS" onItemClick={handleItemClick} />
     </Box>
   )
 }
