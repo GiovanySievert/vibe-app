@@ -49,12 +49,14 @@ export const Input = forwardRef<TextInput, InputProps>(
       onFocusCallback,
       multiline,
       maxLength,
+      secureTextEntry,
       ...rest
     },
     ref
   ) => {
     const [localInputValue, setLocalInputValue] = useState('')
     const [isFocused, setIsFocused] = useState(false)
+    const [secureTextEntryisShowing, setSecureTextEntryisShowing] = useState<boolean>(!!secureTextEntry)
 
     const borderState = useSharedValue(0)
     const errorHeight = useSharedValue(0)
@@ -96,6 +98,8 @@ export const Input = forwardRef<TextInput, InputProps>(
       rest.onChangeText?.('')
       onClear?.()
     }
+
+    const handleSecureTextEntryIconName = () => {}
 
     useEffect(() => {
       setLocalInputValue(rest.value || '')
@@ -144,12 +148,27 @@ export const Input = forwardRef<TextInput, InputProps>(
             maxLength={maxLength || 72}
             multiline={multiline}
             testID="input-field"
+            secureTextEntry={secureTextEntry && secureTextEntryisShowing}
             {...rest}
           />
 
           {isClearable && localInputValue && !disabled && (
             <TouchableOpacity onPress={handleClear} hitSlop={HIT_SLOP} style={style.endIconContainer}>
               <ThemedIcon name={'X'} size={18} testID="clear-button--input" color="textPrimary" />
+            </TouchableOpacity>
+          )}
+
+          {!!localInputValue && !!secureTextEntry && (
+            <TouchableOpacity
+              onPress={() => setSecureTextEntryisShowing((prev) => !prev)}
+              style={style.endIconContainer}
+            >
+              <ThemedIcon
+                name={secureTextEntryisShowing ? 'Eye' : 'EyeClosed'}
+                size={18}
+                testID="clear-button--input"
+                color="textPrimary"
+              />
             </TouchableOpacity>
           )}
         </Box>

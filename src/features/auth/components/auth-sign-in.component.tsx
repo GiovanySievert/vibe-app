@@ -71,6 +71,14 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
       })
       return
     }
+
+    if (error?.status === 400) {
+      setFormError({
+        login: 'Email incorreto ou não existente',
+        password: 'Senha incorreta ou não existente'
+      })
+      return
+    }
   }
 
   const submitForm = async () => {
@@ -118,6 +126,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp, goToVerifyEm
             value={form.password}
             onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
             errorMessage={formError.password}
+            secureTextEntry
           />
           <Button onPress={() => submitForm()} loading={loading}>
             <ThemedText>SignIn</ThemedText>

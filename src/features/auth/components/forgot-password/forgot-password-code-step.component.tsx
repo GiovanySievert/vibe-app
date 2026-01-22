@@ -117,6 +117,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
           value={form.password}
           onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
           errorMessage={formError.password}
+          secureTextEntry
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
           <ThemedText>Send code</ThemedText>

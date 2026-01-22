@@ -51,6 +51,7 @@ export const DeleteAccount = () => {
         onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
         errorMessage={passwordError}
         autoFocus
+        secureTextEntry
       />
       <Button type="danger" loading={isLoading} onPress={() => submitFormMutation()}>
         <ThemedText weight="medium">Deletar conta</ThemedText>

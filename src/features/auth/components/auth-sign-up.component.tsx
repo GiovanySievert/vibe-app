@@ -143,6 +143,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ goToVerifyEmailStep, set
           value={form.password}
           onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
           errorMessage={formError.password}
+          secureTextEntry
         />
         <Button loading={isLoading} disabled={!!isSubmitAvailable()} onPress={() => submitFormMutation()}>
           <ThemedText>SignUp</ThemedText>
