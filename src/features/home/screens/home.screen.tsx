@@ -11,13 +11,11 @@ import { Box, FakeInput, ThemedText } from '@src/shared/components'
 import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
 import { PlacesModel } from '@src/shared/domain'
-import { useUserFavoritesPlaces } from '@src/shared/hooks/use-user-favorites-places.hook'
 import { PlacesService } from '@src/shared/services'
 import { locationStateAtom } from '@src/shared/state/location.state'
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
-  const { data: userFavoritesPlaces } = useUserFavoritesPlaces()
   const [authState] = useAtom(authStateAtom)
   const [locationState] = useAtom(locationStateAtom)
 
@@ -30,7 +28,7 @@ export const HomeScreen = () => {
 
     return response.data
   }
-  const { data, isPending } = useQuery<PlacesModel[], Error>({
+  const { data: placesData, isPending } = useQuery<PlacesModel[], Error>({
     queryKey: ['fetchPlaces'],
     queryFn: fetchPlaces,
     retry: false,
@@ -51,7 +49,7 @@ export const HomeScreen = () => {
           onPress={() => navigation.navigate('Modals', { screen: 'SearchScreen' })}
         />
       </Box>
-      <Box style={styles.card}>{<MapWithPins points={data} onPressPin={(p) => console.log('clicou', p)} />}</Box>
+      <Box style={styles.card}>{<MapWithPins points={placesData} onPressPin={(p) => console.log('clicou', p)} />}</Box>
     </Screen>
   )
 }

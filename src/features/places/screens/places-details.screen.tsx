@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
+import { useToast } from '@src/app/providers'
 import { Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
@@ -24,12 +25,19 @@ type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParam
 
 export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route, navigation }) => {
   const placeId = route.params?.placeId
+
+  const { showToast } = useToast()
+
   const fetchPlaces = async () => {
     const response = await PlacesService.fetchPlaceById(placeId)
     return response.data
   }
 
-  const { data: placeData, isLoading } = useQuery<PlacesByIdResponse, Error>({
+  const {
+    data: placeData,
+    isLoading,
+    error
+  } = useQuery<PlacesByIdResponse, Error>({
     queryKey: ['fetchPlacesById'],
     queryFn: fetchPlaces,
     retry: false,
@@ -38,13 +46,15 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
 
   if (isLoading) {
     return (
-      <Box bg="background">
+      <Box flex={1} bg="background">
         <ThemedText>CARREGANDO</ThemedText>
       </Box>
     )
   }
 
-  if (!placeData) {
+  if (!placeData || error) {
+    navigation.goBack()
+    showToast('Algo deu errado, tente novamente mais tarde!', 'error')
     return
   }
 

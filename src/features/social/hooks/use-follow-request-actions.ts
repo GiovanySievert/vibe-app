@@ -19,31 +19,29 @@ export const useFollowRequestActions = ({ type, queryKeySuffix = '' }: UseFollow
   const fullQueryKey = [queryKey, userLoggedData?.user.id, queryKeySuffix].filter(Boolean)
 
   const removeRequestFromCache = (requestFollowId: string) => {
-    queryClient.setQueryData<
-      ListUserAllFollowRequestsResponse[] | InfiniteData<InfinitePage>
-    >(fullQueryKey, (oldData) => {
-      if (!oldData) return oldData
+    queryClient.setQueryData<ListUserAllFollowRequestsResponse[] | InfiniteData<InfinitePage>>(
+      fullQueryKey,
+      (oldData) => {
+        if (!oldData) return oldData
 
-      if (queryKeySuffix === 'infinite') {
-        const infiniteData = oldData as InfiniteData<InfinitePage>
-        return {
-          ...infiniteData,
-          pages: infiniteData.pages.map((page) => ({
-            ...page,
-            data: page.data.filter((req) => req.id !== requestFollowId)
-          }))
+        if (queryKeySuffix === 'infinite') {
+          const infiniteData = oldData as InfiniteData<InfinitePage>
+          return {
+            ...infiniteData,
+            pages: infiniteData.pages.map((page) => ({
+              ...page,
+              data: page.data.filter((req) => req.id !== requestFollowId)
+            }))
+          }
         }
-      }
 
-      const arrayData = oldData as ListUserAllFollowRequestsResponse[]
-      return arrayData.filter((req) => req.id !== requestFollowId)
-    })
+        const arrayData = oldData as ListUserAllFollowRequestsResponse[]
+        return arrayData.filter((req) => req.id !== requestFollowId)
+      }
+    )
   }
 
-  const handleRequestAction = async (
-    requestFollowId: string,
-    action: (id: string) => Promise<unknown>
-  ) => {
+  const handleRequestAction = async (requestFollowId: string, action: (id: string) => Promise<unknown>) => {
     try {
       removeRequestFromCache(requestFollowId)
       await action(requestFollowId)
