@@ -32,7 +32,6 @@ export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActio
   })
 
   const cancelFollowRequestMutation = useMutation({
-    //dando erro pq teria que ser o follow request id
     mutationFn: () => FollowRequestsService.cancelRequestFollow(followRelation.userId),
     onSuccess: () => {
       setFollowStatus('none')

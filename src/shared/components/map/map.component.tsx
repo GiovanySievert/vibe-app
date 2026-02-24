@@ -9,9 +9,7 @@ import { locationStateAtom } from '@src/shared/state/location.state'
 
 import { MapPin } from '../map-pin'
 
-MapboxGL.setAccessToken(
-  'sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21mc2VxbDZrMGJoaDJrb2Z1OHFjb2FzMyJ9.NMRxNjZt9Zzn1_nL5uhO3w'
-)
+MapboxGL.setAccessToken('')
 
 type MapWithPinsProps = {
   points?: PlacesModel[]

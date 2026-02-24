@@ -50,12 +50,3 @@ export type AppNavigatorRootParamsList = {
   UnathenticatedStack: NavigatorScreenParams<UnathenticatedStackParamList>
   Modals: NavigatorScreenParams<ModalNavigatorParamsList>
 }
-
-// export type GlobalStackParamList = ModalNavigatorParamsList & {
-//   MainApp: NavigatorScreenParams<AppNavigatorRootParamsList>
-// }
-
-// export type GlobalNavigationProps<Screen extends keyof RootStackParamList> = {
-//   navigation: NavigationProp<RootStackParamList>
-//   route: RouteProp<RootStackParamList, Screen>
-// }
