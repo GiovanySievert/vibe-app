@@ -117,7 +117,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         onPressOut={handlePressOut}
         disabled={disabled || loading}
         testID={testID || 'button-container--button'}
-        style={[getButtonStyle(variant, type, disabled), pressed && { opacity: 0.7 }, flex !== undefined && { flex }, props.style]}
+        style={[getButtonStyle(variant, type, disabled), pressed && { opacity: 0.7 }, flex !== undefined && { flex }, props.style as ViewStyle]}
       >
         {props.startIconName && <ThemedIcon name={props.startIconName} />}
 

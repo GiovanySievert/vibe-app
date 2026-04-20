@@ -41,11 +41,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
       <Box flexDirection="row" alignItems="center" gap={3}>
         <Avatar
           size="sm"
-          uri={
-            isPlace
-              ? placeData.image
-              : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkB5zkX3mrbLiQ_WjvF-rWwWQJEJ3wK3oB-Q&s'
-          }
+          uri={isPlace ? placeData.image : (userData.image ?? undefined)}
         />
         <TouchableOpacity onPress={() => handleNavigation()}>
           {isPlace ? (

@@ -1,14 +1,16 @@
-import { api } from './core-api';
+import { InternalAxiosRequestConfig } from 'axios';
+
+import { coreApi } from './core-api';
 
 let interceptorId: number | null = null;
 
 const configureAxiosInterceptors = (token: string | null) => {
   if (interceptorId !== null) {
-    api.interceptors.request.eject(interceptorId);
+    coreApi.interceptors.request.eject(interceptorId);
   }
 
-  interceptorId = api.interceptors.request.use(
-    config => {
+  interceptorId = coreApi.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {
@@ -16,7 +18,7 @@ const configureAxiosInterceptors = (token: string | null) => {
       }
       return config;
     },
-    error => {
+    (error: unknown) => {
       return Promise.reject(error);
     }
   );

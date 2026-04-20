@@ -2,7 +2,7 @@ export type UserModel = {
   id: string
   name: string
   username: string
-  image: string
+  image: string | null
 }
 
 export type GetUsersById = {
@@ -12,4 +12,5 @@ export type GetUsersById = {
 export type GetUserByUsername = {
   id: string
   username: string
+  image: string | null
 }

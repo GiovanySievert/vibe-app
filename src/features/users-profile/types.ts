@@ -2,7 +2,7 @@ export type ListUserAllFollowRequestsResponse = {
   id: string
   userId: string
   username: string
-  avatar: string
+  avatar: string | null
   status: FollowRequestStatus
   createdAt: string
 }
@@ -18,13 +18,13 @@ export type ListFollowingsResponse = {
   id: string
   username: string
   userId: string
-  avatar: string
+  image: string | null
 }
 
 export type ListFollowersResponse = {
   id: string
   username: string
-  avatar: string
+  image: string | null
   userId: string
 }
 
@@ -74,6 +74,6 @@ export type ListBlockedUsersResponse = {
   id: string
   userId: string
   username: string
-  avatar: string
+  avatar: string | null
   blockedAt: string
 }

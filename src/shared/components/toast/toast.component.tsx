@@ -36,11 +36,11 @@ export const Toast = () => {
       text: theme.colors.primary
     },
     error: {
-      bg: theme.colors.surface,
-      border: theme.colors.surface,
+      bg: theme.colors.backgroundSecondary,
+      border: theme.colors.error,
       icon: 'X',
-      iconBg: theme.colors.surface,
-      text: theme.colors.surface
+      iconBg: theme.colors.error,
+      text: theme.colors.error
     },
     warning: {
       bg: theme.colors.warning,

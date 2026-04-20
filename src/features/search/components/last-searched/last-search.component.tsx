@@ -40,7 +40,13 @@ export const LastSearched: React.FC<LastSearchedProps> = () => {
             )
           }
 
-          return <SearchResultItem key={index} data={{ id: item.id, username: item.username }} searchType="USERS" />
+          return (
+            <SearchResultItem
+              key={index}
+              data={{ id: item.id, username: item.username, image: item.image ?? null }}
+              searchType="USERS"
+            />
+          )
         })}
       </Box>
     </Box>

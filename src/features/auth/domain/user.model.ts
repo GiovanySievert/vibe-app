@@ -5,6 +5,7 @@ export type UserData = {
   email: string
   emailVerified: boolean
   name: string
+  username?: string
   image?: string | null | undefined
 }
 

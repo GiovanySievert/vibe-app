@@ -21,5 +21,6 @@ export type SavedSearchItem =
   | {
       id: string
       username: string
+      image?: string | null
       searchType: 'USERS'
     }

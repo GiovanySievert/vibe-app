@@ -31,7 +31,7 @@ export const UsersProfileFollowListItem: React.FC<UsersProfileFollowListItem> = 
     <TouchableOpacity style={styles.userItem} onPress={() => handlePressUser(followRelation.id)}>
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <Box flexDirection="row" alignItems="center" gap={5}>
-          <Avatar size="sm" />
+          <Avatar size="sm" uri={followRelation.image} />
           <ThemedText variant="primary" weight="semibold">
             {followRelation.username}
           </ThemedText>

@@ -5,10 +5,11 @@ export function validationMapErrors<T extends Record<string, string>>(
   stateShape: T
 ): T {
   const { fieldErrors } = error.flatten();
+  const fieldErrorsMap = fieldErrors as Record<string, string[] | undefined>;
   const out: Record<string, string> = {};
 
   for (const key of Object.keys(stateShape)) {
-    out[key] = fieldErrors[key]?.[0] ?? '';
+    out[key] = fieldErrorsMap[key]?.[0] ?? '';
   }
 
   return out as T;

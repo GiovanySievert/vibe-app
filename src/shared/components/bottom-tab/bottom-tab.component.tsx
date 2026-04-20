@@ -54,11 +54,11 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
           const iconName = handleIconName(options.tabBarLabel!.toString())
 
           const opacity = useSharedValue(isFocused ? 1 : 0)
-          const textWidth = useSharedValue(isFocused ? getWidthValue(label) : 0)
+          const textWidth = useSharedValue(isFocused ? getWidthValue(label as string) : 0)
           const gap = useSharedValue(isFocused ? 10 : 0)
 
           useEffect(() => {
-            const widthValue = getWidthValue(label)
+            const widthValue = getWidthValue(label as string)
             opacity.value = withTiming(isFocused ? 1 : 0, { duration: ANIMATION_DURATION })
             textWidth.value = withTiming(isFocused ? widthValue : 0, { duration: ANIMATION_DURATION })
             gap.value = withTiming(isFocused ? 10 : 0, { duration: ANIMATION_DURATION })

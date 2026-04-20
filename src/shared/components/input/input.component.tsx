@@ -30,6 +30,7 @@ export interface InputProps extends TextInputProps {
   isClearable?: boolean
   onFocusCallback?: TextInputProps['onFocus']
   onBlurCallback?: TextInputProps['onBlur']
+  multilineHeight?: number
 }
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
@@ -48,6 +49,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       onBlurCallback,
       onFocusCallback,
       multiline,
+      multilineHeight = 100,
       maxLength,
       secureTextEntry,
       ...rest
@@ -134,9 +136,10 @@ export const Input = forwardRef<TextInput, InputProps>(
               style.input,
               borderStyle,
               startIconColor && style.hasStartIconInput,
-              isClearable && style.hasEndIcon
+              isClearable && style.hasEndIcon,
+              multiline && { height: multilineHeight, paddingVertical: 12 }
             ]}
-            placeholderTextColor={theme.colors.textPrimary}
+            placeholderTextColor={theme.colors.textSecondary}
             textAlign="left"
             textAlignVertical="top"
             editable={!disabled}
@@ -171,13 +174,23 @@ export const Input = forwardRef<TextInput, InputProps>(
           )}
         </Box>
 
-        <AnimatedBox isVisible={!!errorMessage}>
-          <Box mt={1}>
-            <ThemedText size="sm" weight="medium" color="error">
-              {errorMessage}
-            </ThemedText>
-          </Box>
-        </AnimatedBox>
+        <Box flexDirection="row" justifyContent="space-between">
+          <AnimatedBox isVisible={!!errorMessage}>
+            <Box mt={1}>
+              <ThemedText size="sm" weight="medium" color="error">
+                {errorMessage}
+              </ThemedText>
+            </Box>
+          </AnimatedBox>
+
+          {multiline && maxLength && (
+            <Box mt={1}>
+              <ThemedText size="xs" color="textTertiary">
+                {localInputValue.length}/{maxLength}
+              </ThemedText>
+            </Box>
+          )}
+        </Box>
       </Box>
     )
   }

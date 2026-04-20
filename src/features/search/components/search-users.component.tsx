@@ -34,6 +34,7 @@ export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
     saveSearch({
       id: item.id,
       username: item.username,
+      image: item.image,
       searchType: 'USERS'
     })
   }

@@ -17,8 +17,13 @@ export const useLogout = () => {
     setAuth({
       isAuthenticated: false,
       user: {
+        id: '',
+        createdAt: new Date(0),
+        updatedAt: new Date(0),
+        email: '',
+        emailVerified: false,
         name: '',
-        email: ''
+        image: null
       }
     })
 

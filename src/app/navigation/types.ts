@@ -43,6 +43,7 @@ export type ModalNavigatorParamsList = {
 export type AuthenticatedStackParamList = {
   Tabs: NavigatorScreenParams<TabsNavigatorParamsList>
   Modals: NavigatorScreenParams<ModalNavigatorParamsList>
+  SharedEventScreen: { token: string }
 }
 
 export type AppNavigatorRootParamsList = {
