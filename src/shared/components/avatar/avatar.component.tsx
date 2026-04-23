@@ -5,8 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { theme } from '@src/shared/constants/theme'
 
-type Size = 'sm' | 'md' | 'lg' | 'xl'
-const SIZES: Record<Size, number> = { sm: 44, md: 64, lg: 96, xl: 128 }
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+const SIZES: Record<Size, number> = { xs: 32, sm: 44, md: 64, lg: 96, xl: 128 }
 
 type GradientColors = Readonly<[ColorValue, ColorValue, ...ColorValue[]]>
 const DEFAULT_COLORS: GradientColors = [theme.colors.accentSecondary, theme.colors.primary] as const
@@ -35,7 +35,7 @@ function createStyles(outer: number, img: number, gap: number, gapColor: ColorVa
       width: img + 2 * gap,
       height: img + 2 * gap,
       borderRadius: (img + 2 * gap) / 2,
-      backgroundColor: gapColor,
+      backgroundColor: theme.colors.background,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -54,7 +54,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   uri,
   source,
   ring = 4,
-  gap = 4,
+  gap = 0,
   colors = DEFAULT_COLORS,
   gapColor = theme.colors.background
 }) => {

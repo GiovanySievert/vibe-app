@@ -45,5 +45,7 @@ export const EventService = {
   respondToInvitation: (
     id: string,
     status: EventParticipantStatus.ACCEPTED | EventParticipantStatus.DECLINED
-  ): Promise<AxiosResponse<EventResponse>> => coreApi.post(`/events/${id}/respond`, { status })
+  ): Promise<AxiosResponse<EventResponse>> => coreApi.post(`/events/${id}/respond`, { status }),
+
+  delete: (id: string): Promise<AxiosResponse<void>> => coreApi.delete(`/events/${id}`)
 }

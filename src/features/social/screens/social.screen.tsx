@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { UserFavoritesPlacesCards } from '@src/features/user-favorites-places/components'
 import { FollowRequestType } from '@src/features/users-profile/types'
-import { Box, Divider, ThemedText } from '@src/shared/components'
+import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -33,11 +33,8 @@ export const SocialScreen = () => {
             </TouchableOpacity>
           </Box>
           <Box gap={5}>
-            <MyEventsList />
             <UserFavoritesPlacesCards />
-            <Box pr={5} pl={5}>
-              <Divider />
-            </Box>
+            <MyEventsList />
             <EventInvitationsList />
             <FollowRequestsList type={FollowRequestType.RECEIVED} limit={3} />
             <FollowRequestsList type={FollowRequestType.SENT} limit={3} />

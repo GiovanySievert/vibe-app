@@ -1,13 +1,13 @@
 import React from 'react'
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
-
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
 import { useQuery } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Divider, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, Divider, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { formatEventDateTime } from '@src/shared/utils'
 
@@ -53,20 +53,37 @@ const EventInvitationItem = ({
 }) => {
   const navigation = useNavigation<Nav>()
   const invitationStatus =
-    item.participants.find((participant) => participant.userId === currentUserId)?.status ?? EventParticipantStatus.PENDING
+    item.participants.find((participant) => participant.userId === currentUserId)?.status ??
+    EventParticipantStatus.PENDING
   const statusMeta = STATUS_META[invitationStatus]
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('SharedEventScreen', { token: item.id })} activeOpacity={0.7}>
-    <Box mb={4}>
-      <Box flexDirection="row" alignItems="center" gap={3} mb={2}>
-        <Box style={styles.iconWrapper} alignItems="center" justifyContent="center">
-          <ThemedText>🎉</ThemedText>
+      <Box>
+        <Box flexDirection="row" alignItems="center" gap={3} mb={2}>
+          <Box flex={1}>
+            <ThemedText weight="semibold">{item.name}</ThemedText>
+            <ThemedText size="sm" color="textSecondary">
+              {formatEventDateTime(item.date, item.time)}
+            </ThemedText>
+          </Box>
         </Box>
-        <Box flex={1}>
-          <ThemedText weight="semibold">{item.name}</ThemedText>
-          <ThemedText size="sm" color="textSecondary">{formatEventDateTime(item.date, item.time)}</ThemedText>
-        </Box>
+
+        {item.participants.length > 0 && (
+          <Box flexDirection="row" alignItems="center" gap={2}>
+            <Box flexDirection="row">
+              {item.participants.slice(0, 3).map((p, i) => (
+                <Box key={p.id} style={[styles.avatarWrapper, { marginLeft: i > 0 ? -8 : 0 }]}>
+                  <Avatar size="xs" uri={p.avatar} />
+                </Box>
+              ))}
+            </Box>
+            <ThemedText size="xs" color="textSecondary">
+              {item.participants.length} participante{item.participants.length !== 1 ? 's' : ''}
+            </ThemedText>
+          </Box>
+        )}
+
         <Box
           style={[
             styles.badge,
@@ -77,34 +94,19 @@ const EventInvitationItem = ({
           ]}
           alignItems="center"
           justifyContent="center"
+          mt={3}
         >
           <ThemedText size="xs" color={statusMeta.color} weight="semibold">
             {statusMeta.label}
           </ThemedText>
         </Box>
-      </Box>
 
-      {item.participants.length > 0 && (
-        <Box flexDirection="row" alignItems="center" gap={2} ml={10}>
-          <Box flexDirection="row">
-            {item.participants.slice(0, 3).map((p, i) => (
-              <Box key={p.id} style={[styles.avatarWrapper, { marginLeft: i > 0 ? -8 : 0 }]}>
-                <Avatar size="sm" uri={p.avatar} />
-              </Box>
-            ))}
+        {index !== total - 1 && (
+          <Box mt={4}>
+            <Divider />
           </Box>
-          <ThemedText size="xs" color="textSecondary">
-            {item.participants.length} participante{item.participants.length !== 1 ? 's' : ''}
-          </ThemedText>
-        </Box>
-      )}
-
-      {index !== total - 1 && (
-        <Box mt={4}>
-          <Divider />
-        </Box>
-      )}
-    </Box>
+        )}
+      </Box>
     </TouchableOpacity>
   )
 }
@@ -124,34 +126,23 @@ export const EventInvitationsList = () => {
   const visible = invitations
 
   return (
-    <Box pl={5} pr={5} gap={3}>
+    <Box mr={5} ml={5} gap={3}>
       <ThemedText weight="semibold">Eventos convidados</ThemedText>
-      <FlatList
-        data={visible}
-        keyExtractor={(item) => item.id}
-        scrollEnabled={false}
-        renderItem={({ item, index }) => (
-          <EventInvitationItem
-            item={item}
-            index={index}
-            total={visible.length}
-            currentUserId={session?.user.id}
-          />
-        )}
-      />
+      <Card pr={5} pl={5} pt={5} pb={5}>
+        <FlatList
+          data={visible}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          renderItem={({ item, index }) => (
+            <EventInvitationItem item={item} index={index} total={visible.length} currentUserId={session?.user.id} />
+          )}
+        />
+      </Card>
     </Box>
   )
 }
 
 const styles = StyleSheet.create({
-  iconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderWidth: 1,
-    borderColor: theme.colors.border
-  },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 3,

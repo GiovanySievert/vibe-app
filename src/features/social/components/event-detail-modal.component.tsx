@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, ScrollView, Share, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Dimensions, ScrollView, Share, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Button, Card, Divider, Input, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Divider, Input, ThemedText } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -71,6 +71,28 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
     await Share.share({ message: `myapp://events/share/${event.id}` })
   }
 
+  const { mutate: deleteEvent } = useMutation({
+    mutationFn: () => EventService.delete(event!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myEvents'] })
+      onClose()
+    },
+    onError: () => {
+      showToast('Não foi possível excluir o evento.', 'error')
+    }
+  })
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Excluir evento',
+      'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Excluir', style: 'destructive', onPress: () => deleteEvent() }
+      ]
+    )
+  }
+
   return (
     <SwipeableModal visible={visible} onClose={onClose} height={MODAL_HEIGHT}>
       {event && (
@@ -88,10 +110,10 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
               <ThemedText weight="semibold" size="lg">
                 {event.name}
               </ThemedText>
-              <ThemedText color="textSecondary" size="sm">
-                {formatEventDateTime(event.date, event.time)}
-              </ThemedText>
             </Box>
+            <TouchableOpacity onPress={handleDelete} style={styles.iconButton}>
+              <ThemedIcon name="Trash2" size={20} color="error" />
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleShare} style={styles.iconButton}>
               <ThemedIcon name="Share2" size={20} color="primary" />
             </TouchableOpacity>
@@ -152,6 +174,16 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
               )}
             </Box>
 
+            <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
+              <ThemedText size="sm" color="textSecondary" weight="semibold">
+                Horário
+              </ThemedText>
+
+              <ThemedText color={description ? 'textPrimary' : 'textTertiary'}>
+                {formatEventDateTime(event.date, event.time)}
+              </ThemedText>
+            </Box>
+
             <Box gap={3}>
               <ThemedText size="sm" color="textSecondary" weight="semibold">
                 Participantes ({event.participants.length})
@@ -182,23 +214,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                 ))
               )}
             </Box>
-
-            <Card gap={2} style={styles.ownerCard}>
-              <Box flexDirection="row" alignItems="center" gap={2}>
-                <ThemedIcon name="Crown" size={16} color="primary" />
-                <ThemedText weight="semibold" size="sm">
-                  Você criou este evento
-                </ThemedText>
-              </Box>
-              <ThemedText color="textSecondary" size="sm">
-                Compartilhe o link com os participantes para que possam confirmar presença.
-              </ThemedText>
-              <Button onPress={handleShare}>
-                <ThemedText color="background" weight="semibold">
-                  Compartilhar convite
-                </ThemedText>
-              </Button>
-            </Card>
 
             {session?.user.id && (
               <Box mt={4}>

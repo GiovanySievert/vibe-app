@@ -26,12 +26,8 @@ const MyEventItem = ({
       <Box flexDirection="row" alignItems="center" justifyContent="space-between" gap={3}>
         <Box flex={1} gap={1}>
           <ThemedText weight="semibold">{item.name}</ThemedText>
-          <ThemedText size="sm" color="textSecondary">{formatEventDateTime(item.date, item.time)}</ThemedText>
-        </Box>
-
-        <Box style={styles.badge} alignItems="center" justifyContent="center">
-          <ThemedText size="xs" color="primary" weight="semibold">
-            {item.participants.length} participante{item.participants.length !== 1 ? 's' : ''}
+          <ThemedText size="sm" color="textSecondary">
+            {formatEventDateTime(item.date, item.time)}
           </ThemedText>
         </Box>
       </Box>
@@ -40,11 +36,8 @@ const MyEventItem = ({
         <Box mt={3} flexDirection="row" alignItems="center" gap={2}>
           <Box flexDirection="row">
             {item.participants.slice(0, 3).map((participant, participantIndex) => (
-              <Box
-                key={participant.id}
-                style={[styles.avatarWrapper, { marginLeft: participantIndex > 0 ? -8 : 0 }]}
-              >
-                <Avatar size="sm" uri={participant.avatar} />
+              <Box key={participant.id} style={[styles.avatarWrapper, { marginLeft: participantIndex > 0 ? -8 : 0 }]}>
+                <Avatar size="xs" uri={participant.avatar} />
               </Box>
             ))}
           </Box>
@@ -91,22 +84,13 @@ export const MyEventsList = () => {
             keyExtractor={(item) => item.id}
             scrollEnabled={false}
             renderItem={({ item, index }) => (
-              <MyEventItem
-                item={item}
-                index={index}
-                total={myEvents.length}
-                onPress={() => setSelectedEvent(item)}
-              />
+              <MyEventItem item={item} index={index} total={myEvents.length} onPress={() => setSelectedEvent(item)} />
             )}
           />
         </Card>
       </Box>
 
-      <EventDetailModal
-        event={selectedEvent}
-        visible={!!selectedEvent}
-        onClose={() => setSelectedEvent(null)}
-      />
+      <EventDetailModal event={selectedEvent} visible={!!selectedEvent} onClose={() => setSelectedEvent(null)} />
     </>
   )
 }
