@@ -47,6 +47,12 @@
         }
       ],
       [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Precisamos de acesso à câmera para tirar fotos do local."
+        }
+      ],
+      [
         "expo-font",
         {
           "android": {

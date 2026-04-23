@@ -79,7 +79,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
           </Box>
         </Tabs>
       </ScrollView>
-      <PlacesFlutuantButton />
+      <PlacesFlutuantButton placeId={placeId} />
     </Box>
   )
 }

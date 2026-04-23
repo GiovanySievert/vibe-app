@@ -38,6 +38,8 @@ export type ModalNavigatorParamsList = {
   UsersProfileScreen: { userId: string }
   SearchScreen: undefined
   LocationModal: undefined
+  PlaceReviewCameraScreen: { placeId: string }
+  PlaceReviewPostScreen: { placeId: string; photoUri: string }
 }
 
 export type AuthenticatedStackParamList = {

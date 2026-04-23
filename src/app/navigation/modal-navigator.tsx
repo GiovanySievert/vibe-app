@@ -2,6 +2,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { PlacesDetailsScreen } from '@src/features/places'
+import { PlaceReviewPostScreen } from '@src/features/places/screens'
 import { SearchScreen } from '@src/features/search/screens/search.screen'
 import { UsersProfileScreen } from '@src/features/users-profile'
 
@@ -15,6 +16,7 @@ export function ModalNavigator() {
       <ModalStack.Screen name="PlacesDetailsScreen" component={PlacesDetailsScreen} />
       <ModalStack.Screen name="UsersProfileScreen" component={UsersProfileScreen} />
       <ModalStack.Screen name="SearchScreen" component={SearchScreen} />
+      <ModalStack.Screen name="PlaceReviewPostScreen" component={PlaceReviewPostScreen} />
     </ModalStack.Navigator>
   )
 }
