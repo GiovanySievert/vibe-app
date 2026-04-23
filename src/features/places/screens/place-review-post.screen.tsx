@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Image, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
 import { useMutation } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { theme } from '@src/shared/constants/theme'
+
 import { PlaceReviewService } from '../services/place-review.service'
 
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'PlaceReviewPostScreen'>
@@ -33,7 +35,9 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <Box flex={1} bg="background">
         <Box p={5} flexDirection="row" alignItems="center" justifyContent="space-between">
-          <ThemedText weight="medium" size="lg">Nova review</ThemedText>
+          <ThemedText weight="medium" size="lg">
+            Nova review
+          </ThemedText>
           <Button variant="ghost" onPress={() => navigation.goBack()}>
             <ThemedIcon name="X" size={20} color="textSecondary" />
           </Button>
@@ -42,7 +46,9 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
         <Image source={{ uri: photoUri }} style={styles.image} resizeMode="cover" />
 
         <Box p={5} gap={4}>
-          <ThemedText weight="medium" size="md">Como estava o local?</ThemedText>
+          <ThemedText weight="medium" size="md">
+            Como estava o local?
+          </ThemedText>
           <Box flexDirection="row" gap={3}>
             <Box flex={1}>
               <Button

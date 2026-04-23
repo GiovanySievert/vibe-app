@@ -13,6 +13,7 @@ export const PlaceReviewCameraScreen: React.FC<Props> = ({ route, navigation }) 
 
   useEffect(() => {
     launchCamera()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const launchCamera = async () => {

@@ -35,7 +35,7 @@ function createStyles(outer: number, img: number, gap: number, gapColor: ColorVa
       width: img + 2 * gap,
       height: img + 2 * gap,
       borderRadius: (img + 2 * gap) / 2,
-      backgroundColor: theme.colors.background,
+      backgroundColor: gapColor as string,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -56,7 +56,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   ring = 4,
   gap = 0,
   colors = DEFAULT_COLORS,
-  gapColor = theme.colors.background
+  gapColor = theme.colors.background as ColorValue
 }) => {
   const img = SIZES[size]
   const outer = img + 2 * (gap + ring)

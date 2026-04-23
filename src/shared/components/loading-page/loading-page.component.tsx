@@ -4,9 +4,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTim
 
 import { Box } from '../box'
 
-interface LoadingPageProps {
-  //
-}
+type LoadingPageProps = Record<string, never>
 
 export const LoadingPage: React.FC<LoadingPageProps> = () => {
   const opacity = useSharedValue(1)

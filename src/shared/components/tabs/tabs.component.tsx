@@ -23,7 +23,7 @@ export const Tabs: React.FC<TabProps> = ({ titles, children, defaultIndex, onCha
 
   const handleTabPress = (index: number) => {
     setActiveIndex(index)
-    onChange && onChange(index)
+    if (onChange) onChange(index)
   }
 
   const renderContent = () => {

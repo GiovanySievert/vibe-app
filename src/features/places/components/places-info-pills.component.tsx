@@ -7,7 +7,8 @@ type PlacesInfoPillsProps = {
   place: PlacesByIdResponse
 }
 
-export const PlacesInfoPills: React.FC<PlacesInfoPillsProps> = ({ place }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const PlacesInfoPills: React.FC<PlacesInfoPillsProps> = ({ place: _place }) => {
   return (
     <Box flex={1}>
       <Box mb={2} gap={2} mt={2} flexDirection="row" scrollable pr={5} pl={2.5}>

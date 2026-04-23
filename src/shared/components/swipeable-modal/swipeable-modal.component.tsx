@@ -6,7 +6,6 @@ import Animated, { clamp, runOnJS, useAnimatedStyle, useSharedValue, withTiming 
 import { theme } from '@src/shared/constants/theme'
 
 const screenHeight = Dimensions.get('window').height
-const maxHeight = screenHeight * 0.9
 
 type SwipeableModalProps = {
   visible: boolean

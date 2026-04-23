@@ -25,7 +25,7 @@ export const UsersProfileFollowActions: React.FC<FollowListProps> = ({ userId, t
     return response.data
   }
 
-  const { data: followsList, isLoading } = useQuery<ListFollowersResponse[], Error>({
+  const { data: followsList } = useQuery<ListFollowersResponse[], Error>({
     queryKey: ['fetchFollow', userId],
     queryFn: fetchFollow,
     retry: false,
@@ -38,7 +38,7 @@ export const UsersProfileFollowActions: React.FC<FollowListProps> = ({ userId, t
 
   return (
     <SwipeableModal visible={true} onClose={() => {}}>
-      {followsList?.map((follow, index) => {
+      {followsList?.map((follow) => {
         return (
           <Box>
             <ThemedText>{follow.username}</ThemedText>

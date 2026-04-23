@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { FollowRequestsService } from '@src/features/users-profile/services'
 import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'

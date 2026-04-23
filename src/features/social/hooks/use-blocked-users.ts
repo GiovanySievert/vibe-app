@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { BlockService } from '@src/features/users-profile/services'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'

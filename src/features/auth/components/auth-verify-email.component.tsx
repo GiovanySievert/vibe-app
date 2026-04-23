@@ -105,6 +105,7 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
 
   useEffect(() => {
     handleSendVerificationEmail()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import { theme } from '@src/shared/constants/theme'
 
 export const UserEditProfile = () => {
   const [authState] = useAtom(authStateAtom)
-  const [form, setForm] = useState({
+  const [form] = useState({
     username: authState.user.username,
     email: authState.user.email,
     name: authState.user.name,
