@@ -66,6 +66,22 @@
                   { "path": "./assets/fonts/Poppins-SemiBold.ttf", "weight": 600 },
                   { "path": "./assets/fonts/Poppins-Bold.ttf", "weight": 700 }
                 ]
+              },
+              {
+                "fontFamily": "InterTight",
+                "fontDefinitions": [
+                  { "path": "./assets/fonts/InterTight-Regular.ttf", "weight": 400 },
+                  { "path": "./assets/fonts/InterTight-Medium.ttf", "weight": 500 },
+                  { "path": "./assets/fonts/InterTight-SemiBold.ttf", "weight": 600 },
+                  { "path": "./assets/fonts/InterTight-Bold.ttf", "weight": 700 }
+                ]
+              },
+              {
+                "fontFamily": "JetBrainsMono",
+                "fontDefinitions": [
+                  { "path": "./assets/fonts/JetBrainsMono-Regular.ttf", "weight": 400 },
+                  { "path": "./assets/fonts/JetBrainsMono-Medium.ttf", "weight": 500 }
+                ]
               }
             ]
           },
@@ -74,10 +90,17 @@
             "./assets/fonts/Poppins-Regular.ttf",
             "./assets/fonts/Poppins-Medium.ttf",
             "./assets/fonts/Poppins-SemiBold.ttf",
-            "./assets/fonts/Poppins-Bold.ttf"
+            "./assets/fonts/Poppins-Bold.ttf",
+            "./assets/fonts/InterTight-Regular.ttf",
+            "./assets/fonts/InterTight-Medium.ttf",
+            "./assets/fonts/InterTight-SemiBold.ttf",
+            "./assets/fonts/InterTight-Bold.ttf",
+            "./assets/fonts/JetBrainsMono-Regular.ttf",
+            "./assets/fonts/JetBrainsMono-Medium.ttf"
           ]
         }
-      ]
+      ],
+      "expo-notifications"
     ]
   },
   "ios": {
