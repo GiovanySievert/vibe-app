@@ -1,6 +1,7 @@
 import * as AuthFeatures from './auth'
+import * as FeedFeatures from './feed'
 import * as HomeFeatures from './home'
 import * as SocialFeatures from './social'
 import * as UserMenuFeatures from './user-menu'
 
-export { AuthFeatures, HomeFeatures, SocialFeatures, UserMenuFeatures }
+export { AuthFeatures, FeedFeatures, HomeFeatures, SocialFeatures, UserMenuFeatures }

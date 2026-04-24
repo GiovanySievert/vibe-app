@@ -2,8 +2,9 @@ import { NavigatorScreenParams } from '@react-navigation/native'
 
 export enum TabRoutesName {
   HOME = 'Home',
-  MENU = 'Perfil',
-  SOCIAL = 'Social'
+  FEED = 'Feed',
+  SOCIAL = 'Social',
+  MENU = 'Perfil'
 }
 
 export type UnathenticatedStackParamList = {
@@ -29,8 +30,9 @@ export type SocialStackParamList = {
 
 export type TabsNavigatorParamsList = {
   HomeScreen: undefined
-  UserMenuScreen: NavigatorScreenParams<UserMenuStackParamList>
+  FeedScreen: undefined
   SocialScreen: NavigatorScreenParams<SocialStackParamList>
+  UserMenuScreen: NavigatorScreenParams<UserMenuStackParamList>
 }
 
 export type ModalNavigatorParamsList = {

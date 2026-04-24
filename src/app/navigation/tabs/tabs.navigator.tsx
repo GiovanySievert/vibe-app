@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { HomeFeatures } from '@src/features'
+import { FeedFeatures, HomeFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
 
 import { SocialStackNavigator } from '../social/social-stack.navigator'
@@ -23,6 +23,14 @@ export function TabsNavigator() {
         component={HomeFeatures.HomeScreen}
         options={{
           tabBarLabel: TabRoutesName.HOME
+        }}
+      />
+
+      <Tab.Screen
+        name="FeedScreen"
+        component={FeedFeatures.FeedScreen}
+        options={{
+          tabBarLabel: TabRoutesName.FEED
         }}
       />
 
