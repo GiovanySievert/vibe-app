@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, type TextProps, type TextStyle } from 'react-native'
+import { StyleSheet, Text, type TextProps, type TextStyle, View, type ViewStyle } from 'react-native'
 
 import { AppTheme, theme } from '@src/shared/constants/theme'
 
@@ -7,7 +7,8 @@ export const TEXT_VARIANT = {
   primary: 'primary',
   secondary: 'secondary',
   title: 'title',
-  subtitle: 'subtitle'
+  subtitle: 'subtitle',
+  mono: 'mono'
 } as const
 
 export type TextVariant = (typeof TEXT_VARIANT)[keyof typeof TEXT_VARIANT]
@@ -17,6 +18,8 @@ export type ThemedTextProps = TextProps & {
   size?: keyof AppTheme['sizes']
   weight?: keyof AppTheme['weights']
   color?: keyof AppTheme['colors']
+  textDecorationLine?: TextStyle['textDecorationLine']
+  underlineOffset?: number
 }
 
 type TypographyValue = Partial<Pick<TextStyle, 'fontSize' | 'lineHeight' | 'letterSpacing'>>
@@ -25,11 +28,11 @@ type SizeValue = number | TypographyValue
 type WeightKey = keyof AppTheme['weights']
 
 const FONT_BY_WEIGHT: Partial<Record<WeightKey, TextStyle['fontFamily']>> = {
-  light: 'Poppins-Light',
-  regular: 'Poppins-Regular',
-  medium: 'Poppins-Medium',
-  semibold: 'Poppins-SemiBold',
-  bold: 'Poppins-Bold'
+  light: 'InterTight-Regular',
+  regular: 'InterTight-Regular',
+  medium: 'InterTight-Medium',
+  semibold: 'InterTight-SemiBold',
+  bold: 'InterTight-Bold'
 }
 
 function sizeToStyle(v?: SizeValue): Partial<TextStyle> {
@@ -55,12 +58,24 @@ function weightToStyleFromTheme(v?: WeightValue, key?: WeightKey): Partial<TextS
   return key && FONT_BY_WEIGHT[key] ? { fontFamily: FONT_BY_WEIGHT[key]! } : {}
 }
 
-export function ThemedText({ style, variant = TEXT_VARIANT.primary, size, weight, color, ...rest }: ThemedTextProps) {
+const UNDERLINE_VARIANTS: TextStyle['textDecorationLine'][] = ['underline', 'underline line-through']
+
+export function ThemedText({
+  style,
+  variant = TEXT_VARIANT.primary,
+  size,
+  weight,
+  color,
+  textDecorationLine,
+  underlineOffset = -5,
+  ...rest
+}: ThemedTextProps) {
   const baseByVariant: Record<TextVariant, TextStyle> = {
     [TEXT_VARIANT.primary]: styles.primary,
     [TEXT_VARIANT.secondary]: styles.secondary,
     [TEXT_VARIANT.title]: styles.title,
-    [TEXT_VARIANT.subtitle]: styles.subtitle
+    [TEXT_VARIANT.subtitle]: styles.subtitle,
+    [TEXT_VARIANT.mono]: styles.mono
   }
 
   const overrideColor: Partial<TextStyle> = color ? { color: theme.colors[color] } : {}
@@ -68,12 +83,48 @@ export function ThemedText({ style, variant = TEXT_VARIANT.primary, size, weight
   const themeWeight = weight ? (theme.weights[weight] as WeightValue) : undefined
   const overrideWeight = weight ? weightToStyleFromTheme(themeWeight, weight) : {}
 
-  return <Text style={[baseByVariant[variant], overrideColor, overrideSize, overrideWeight, style]} {...rest} />
+  const useManualUnderline = textDecorationLine != null && UNDERLINE_VARIANTS.includes(textDecorationLine)
+
+  if (useManualUnderline) {
+    const resolvedStyle = StyleSheet.flatten([
+      baseByVariant[variant],
+      overrideColor,
+      overrideSize,
+      overrideWeight,
+      style
+    ]) as TextStyle
+    const borderColor = resolvedStyle.color as string | undefined
+    const hasLineThrough = textDecorationLine === 'underline line-through'
+
+    const wrapperStyle: ViewStyle = {
+      alignSelf: 'flex-start',
+      paddingBottom: underlineOffset,
+      borderBottomWidth: 1,
+      borderBottomColor: borderColor
+    }
+    const lineThrough: TextStyle = hasLineThrough ? { textDecorationLine: 'line-through' } : {}
+
+    return (
+      <View style={wrapperStyle}>
+        <Text style={[resolvedStyle, lineThrough]} {...rest} />
+      </View>
+    )
+  }
+
+  const overrideDecoration: Partial<TextStyle> = textDecorationLine ? { textDecorationLine } : {}
+
+  return (
+    <Text
+      style={[baseByVariant[variant], overrideColor, overrideSize, overrideWeight, overrideDecoration, style]}
+      {...rest}
+    />
+  )
 }
 
 const styles = StyleSheet.create({
-  primary: { fontSize: 16, lineHeight: 24, fontFamily: 'Poppins-Regular', color: '#FAFAFA' },
-  secondary: { fontSize: 16, lineHeight: 24, color: '#B5B5B5', fontFamily: 'Poppins-Regular' },
-  title: { fontSize: 30, lineHeight: 32, color: '#FAFAFA', fontFamily: 'Poppins-Bold' },
-  subtitle: { lineHeight: 32, fontSize: 22, color: '#FAFAFA', fontFamily: 'Poppins-Bold' }
+  primary: { fontSize: 16, lineHeight: 24, fontFamily: 'InterTight-Regular', color: '#EDEAE4' },
+  secondary: { fontSize: 16, lineHeight: 24, color: '#8A8680', fontFamily: 'InterTight-Regular' },
+  title: { fontSize: 36, lineHeight: 38, color: '#EDEAE4', fontFamily: 'InterTight-Bold', letterSpacing: -1.44 },
+  subtitle: { lineHeight: 32, fontSize: 22, color: '#EDEAE4', fontFamily: 'InterTight-SemiBold', letterSpacing: -0.3 },
+  mono: { fontSize: 11, lineHeight: 16, color: '#8A8680', fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.2 }
 } as const)

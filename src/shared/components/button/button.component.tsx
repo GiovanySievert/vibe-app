@@ -68,7 +68,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
       }
 
       const base: ViewStyle = {
-        height: 44,
+        height: 52,
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -117,13 +117,16 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         onPressOut={handlePressOut}
         disabled={disabled || loading}
         testID={testID || 'button-container--button'}
-        style={[getButtonStyle(variant, type, disabled), pressed && { opacity: 0.7 }, flex !== undefined && { flex }, props.style as ViewStyle]}
+        style={[
+          getButtonStyle(variant, type, disabled),
+          pressed && { opacity: 0.7 },
+          flex !== undefined && { flex },
+          props.style as ViewStyle
+        ]}
       >
         {props.startIconName && <ThemedIcon name={props.startIconName} />}
 
-        <Animated.View style={[styles.viewContainer, animatedChildren]}>
-          {children}
-        </Animated.View>
+        <Animated.View style={[styles.viewContainer, animatedChildren]}>{children}</Animated.View>
 
         <Animated.View pointerEvents="none" style={[styles.loaderContainer, animatedLoader]}>
           <ActivityIndicator color={theme.colors.info} />

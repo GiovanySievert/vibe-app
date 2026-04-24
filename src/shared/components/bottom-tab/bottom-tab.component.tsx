@@ -19,6 +19,8 @@ const getWidthValue = (label: string) => {
   switch (label) {
     case TabRoutesName.HOME:
       return 48
+    case TabRoutesName.FEED:
+      return 40
     case TabRoutesName.SOCIAL:
       return 52
     case TabRoutesName.MENU:
@@ -32,8 +34,9 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
   const insets = useSafeAreaInsets()
 
   const handleIconName = (label: string) => {
-    if (label === 'Home') return 'MapPin'
-    if (label === 'Social') return 'Compass'
+    if (label === TabRoutesName.HOME) return 'MapPin'
+    if (label === TabRoutesName.FEED) return 'Rss'
+    if (label === TabRoutesName.SOCIAL) return 'Compass'
     return 'User'
   }
 

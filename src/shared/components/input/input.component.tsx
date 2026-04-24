@@ -108,8 +108,8 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <Box flexGrow={1}>
         {label && (
-          <Box mb={2}>
-            <ThemedText size="sm" weight="semibold" color={!disabled ? 'textPrimary' : 'textTertiary'}>
+          <Box>
+            <ThemedText size="sm" weight="semibold" color={!disabled ? 'textSecondary' : 'textTertiary'}>
               {label}
             </ThemedText>
           </Box>
@@ -198,14 +198,13 @@ export const Input = forwardRef<TextInput, InputProps>(
 
 const style = StyleSheet.create({
   input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 12,
+    borderBottomWidth: 1,
     paddingRight: 12,
     height: 44,
     color: theme.colors.textPrimary,
-    fontSize: 16,
-    fontFamily: 'Poppins-Regular'
+    fontSize: 18,
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '500'
   },
   hasStartIconInput: {
     paddingLeft: 40
