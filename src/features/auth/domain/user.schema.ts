@@ -1,9 +1,6 @@
 import { z, } from "zod";
 
-export const signUpSchema = z.object({
-  username: z.string()
-    .trim()
-    .min(2, "username muito curto"),
+export const signUpEmailSchema = z.object({
   email: z.string()
     .trim()
     .toLowerCase()
@@ -14,6 +11,17 @@ export const signUpSchema = z.object({
     .regex(/[a-z]/, "Precisa de 1 letra minúscula")
     .regex(/[0-9]/, "Precisa de 1 dígito"),
 });
+
+export const signUpProfileSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(2, "Nome muito curto"),
+  username: z.string()
+    .trim()
+    .min(2, "username muito curto"),
+});
+
+export const signUpSchema = signUpEmailSchema.merge(signUpProfileSchema);
 
 
 export const signInSchema = z.object({
@@ -48,6 +56,8 @@ export const forgotPasswordCodeStepSchema = z.object({
     .regex(/[0-9]/, "Precisa de 1 dígito"),
 });
 
+export type SignUpEmailForm = z.infer<typeof signUpEmailSchema>;
+export type SignUpProfileForm = z.infer<typeof signUpProfileSchema>;
 export type SignUpForm = z.infer<typeof signUpSchema>;
 export type SignInForm = z.infer<typeof signInSchema>;
 export type OtpForm = z.infer<typeof otpSchema>;

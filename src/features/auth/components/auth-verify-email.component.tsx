@@ -128,24 +128,29 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
   }, [isResendDisabled])
 
   return (
-    <Box p={4}>
-      <Box mt={3}>
-        <ThemedText>SignIn</ThemedText>
+    <Box gap={6}>
+      <Box gap={1}>
+        <ThemedText variant="title">confirme seu email</ThemedText>
+        <ThemedText variant="secondary">enviamos um código para {emailToBeVerified}.</ThemedText>
       </Box>
-      <Box gap={2}>
-        <Input
-          label="Codigo"
-          placeholder="Type here"
-          value={form.otp}
-          onChange={({ nativeEvent }) => handleChangeInputValue('otp', nativeEvent.text)}
-          errorMessage={formError.otp}
-          autoFocus
-        />
+
+      <Input
+        label="código"
+        value={form.otp}
+        onChange={({ nativeEvent }) => handleChangeInputValue('otp', nativeEvent.text)}
+        errorMessage={formError.otp}
+        keyboardType="numeric"
+        autoFocus
+      />
+
+      <Box mt={4} gap={4}>
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
-          <ThemedText>verificar email</ThemedText>
+          <ThemedText color="background" size="lg" weight="semibold">
+            pronto - entrar no vibes
+          </ThemedText>
         </Button>
         <Button variant="ghost" disabled={isResendDisabled} onPress={() => handleSendVerificationEmail()}>
-          <ThemedText>{isResendDisabled ? `Reenviar em ${countdown}s` : 'Reenviar código'}</ThemedText>
+          <ThemedText>{isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}</ThemedText>
         </Button>
       </Box>
     </Box>

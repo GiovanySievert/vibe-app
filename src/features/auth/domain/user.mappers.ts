@@ -19,6 +19,7 @@ export type UserSignInResponseBodyDTO = {
 }
 
 export type UserSignUpRequestDTO = {
+  name: string
   username: string
   email: string
   password: string

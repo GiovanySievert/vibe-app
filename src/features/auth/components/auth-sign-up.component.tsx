@@ -1,154 +1,204 @@
 import React, { useState } from 'react'
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { useMutation } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components'
-import { Card } from '@src/shared/components/card/card.component'
+import { Box, ThemedText } from '@src/shared/components'
+import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { signUpSchema, UserSignUpRequestDTO } from '../domain'
+import { SignUpEmailForm, signUpEmailSchema, SignUpForm, SignUpProfileForm, signUpProfileSchema } from '../domain'
 import { AuthService } from '../services'
+import { AuthEmailStep } from './auth-email-step.component'
+import { AuthProfileStep } from './auth-profile-step.component'
+import { AuthVerifyEmail } from './auth-verify-email.component'
 
-type AuthSignUpProps = {
-  goToVerifyEmailStep: () => void
-  setEmailToBeVerified: (email: string) => void
+enum SIGN_UP_STEPS {
+  PROFILE = 0,
+  EMAIL = 1,
+  VERIFY = 2
 }
 
-export const AuthSignUp: React.FC<AuthSignUpProps> = ({ goToVerifyEmailStep, setEmailToBeVerified }) => {
+const PROGRESS_STEPS = ['perfil', 'email', 'verificação']
+
+const screenWidth = Dimensions.get('window').width
+
+const EMPTY_FORM: SignUpForm = { name: '', username: '', email: '', password: '' }
+const EMPTY_ERRORS: SignUpForm = { name: '', username: '', email: '', password: '' }
+
+type AuthSignUpProps = {
+  onBack: () => void
+}
+
+export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const { showToast } = useToast()
-  const [form, setForm] = useState<UserSignUpRequestDTO>({
-    username: '',
-    email: '',
-    password: ''
-  })
 
-  const [formError, setFormError] = useState<UserSignUpRequestDTO>({
-    username: '',
-    email: '',
-    password: ''
-  })
+  const [currentStep, setCurrentStep] = useState<SIGN_UP_STEPS>(SIGN_UP_STEPS.PROFILE)
+  const [form, setForm] = useState<SignUpForm>(EMPTY_FORM)
+  const [formError, setFormError] = useState<SignUpForm>(EMPTY_ERRORS)
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null)
 
-  const validateIfUsernameIsAvailable = async () => {
-    const { data } = await AuthService.checkIfUsernameIsAvailable(form.username)
+  const animatedValue = useSharedValue(0)
 
-    if (!data.available) {
-      setFormError({
-        username: 'Esse username não está disponivel',
-        email: '',
-        password: ''
-      })
+  const goToStep = (step: SIGN_UP_STEPS) => {
+    animatedValue.value = withTiming(step, { duration: 300 })
+    setCurrentStep(step)
+  }
+
+  const handleBack = () => {
+    if (currentStep === SIGN_UP_STEPS.VERIFY) {
+      goToStep(SIGN_UP_STEPS.EMAIL)
+    } else if (currentStep === SIGN_UP_STEPS.EMAIL) {
+      goToStep(SIGN_UP_STEPS.PROFILE)
+    } else {
+      onBack()
+    }
+  }
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: animatedValue.value * -screenWidth }]
+  }))
+
+  const handleChangeForm = (key: keyof SignUpForm, value: string) => {
+    setFormError((prev) => ({ ...prev, [key]: '' }))
+    setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleContinueProfileStep = () => {
+    const result = signUpProfileSchema.safeParse({ name: form.name, username: form.username })
+    if (!result.success) {
+      setFormError((prev) => ({ ...prev, ...validationMapErrors(result.error, formError) }))
       return
     }
-
-    setFormError((prev) => ({
-      ...prev,
-      username: ''
-    }))
+    goToStep(SIGN_UP_STEPS.EMAIL)
   }
 
-  const handleChangeInputValue = (key: string, value: string) => {
-    setFormError({
-      username: '',
-      email: '',
-      password: ''
-    })
-    setForm((prevState) => ({
-      ...prevState,
-      [key]: value
-    }))
-  }
-
-  const validateSignUpSchema = () => {
-    const values = {
-      username: form.username,
-      email: form.email,
-      password: form.password
+  const handleUsernameBlur = async () => {
+    if (!form.username) return
+    const { data } = await AuthService.checkIfUsernameIsAvailable(form.username)
+    if (!data.available) {
+      setFormError((prev) => ({ ...prev, username: 'Esse username não está disponível' }))
+      setUsernameAvailable(false)
+      return
     }
+    setFormError((prev) => ({ ...prev, username: '' }))
+    setUsernameAvailable(true)
+  }
 
-    const result = signUpSchema.safeParse(values)
+  const submitSignUp = async () => {
+    const result = signUpEmailSchema.safeParse({ email: form.email, password: form.password })
     if (!result.success) {
-      setFormError(validationMapErrors(result.error, formError))
+      setFormError((prev) => ({ ...prev, ...validationMapErrors(result.error, formError) }))
       throw Error
     }
-  }
-
-  const handleErrorsInSignUp = (error: any) => {
-    if (error?.status === 422) {
-      showToast('Não foi possível criar a conta')
-      throw Error
-    }
-
-    showToast('Algo deu errado, tente novamente mais tarde')
-    throw Error
-  }
-
-  const submitForm = async () => {
-    setEmailToBeVerified(form.email)
-    validateSignUpSchema()
 
     const { error } = await authClient.signUp.email({
       email: form.email,
       password: form.password,
-      name: form.username,
+      name: form.name,
       username: form.username
     })
 
     if (error) {
-      handleErrorsInSignUp(error)
+      showToast(
+        error?.status === 422 ? 'Não foi possível criar a conta' : 'Algo deu errado, tente novamente mais tarde'
+      )
+      console.log(error)
+      throw Error
     }
   }
 
-  const { mutate: submitFormMutation, isPending: isLoading } = useMutation({
-    mutationFn: async () => submitForm(),
-    onSuccess: async () => {
-      goToVerifyEmailStep()
+  const { mutate: submitSignUpMutation, isPending: isSignUpLoading } = useMutation({
+    mutationFn: async () => submitSignUp(),
+    onSuccess: () => {
+      goToStep(SIGN_UP_STEPS.VERIFY)
     },
     onError: (error) => {
       console.error('todo - add logger', error)
     }
   })
 
-  const isSubmitAvailable = () => {
-    return formError.email || formError.password || formError.username
-  }
+  const profileForm: SignUpProfileForm = { name: form.name, username: form.username }
+  const profileFormError: SignUpProfileForm = { name: formError.name, username: formError.username }
+  const emailForm: SignUpEmailForm = { email: form.email, password: form.password }
+  const emailFormError: SignUpEmailForm = { email: formError.email, password: formError.password }
 
   return (
-    <Card pt={6} pb={6} pl={6} pr={6}>
-      <Box mt={3}>
-        <ThemedText>SignUp</ThemedText>
+    <Box flex={1} style={styles.container}>
+      <Box pl={6} pr={6} pt={2} pb={6} flexDirection="row" alignItems="center">
+        <TouchableOpacity onPress={handleBack} style={styles.goBackButton}>
+          <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
+        </TouchableOpacity>
+
+        <Box flex={1} flexDirection="row" gap={2} style={{ justifyContent: 'center' }}>
+          {PROGRESS_STEPS.map((_, i) => (
+            <Box key={i} style={[styles.progressBar, i <= currentStep && styles.progressBarActive]} />
+          ))}
+        </Box>
+
+        <ThemedText variant="mono" size="xs" color="textSecondary">
+          {currentStep + 1}/{PROGRESS_STEPS.length}
+        </ThemedText>
       </Box>
-      <Box gap={6}>
-        <Input
-          label="username"
-          placeholder="Type here"
-          value={form.username}
-          onChange={({ nativeEvent }) => handleChangeInputValue('username', nativeEvent.text)}
-          errorMessage={formError.username}
-          autoFocus
-          onBlur={() => validateIfUsernameIsAvailable()}
-        />
-        <Input
-          label="E-mail"
-          placeholder="Type here"
-          value={form.email}
-          onChange={({ nativeEvent }) => handleChangeInputValue('email', nativeEvent.text)}
-          errorMessage={formError.email}
-        />
-        <Input
-          label="Password"
-          placeholder="Type here"
-          value={form.password}
-          onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
-          errorMessage={formError.password}
-          secureTextEntry
-        />
-        <Button loading={isLoading} disabled={!!isSubmitAvailable()} onPress={() => submitFormMutation()}>
-          <ThemedText>SignUp</ThemedText>
-        </Button>
-      </Box>
-    </Card>
+
+      <Animated.View style={[styles.stepsRow, animatedStyle]}>
+        <Box p={6} style={styles.step}>
+          <AuthProfileStep
+            form={profileForm}
+            formError={profileFormError}
+            usernameAvailable={usernameAvailable}
+            onChangeForm={handleChangeForm}
+            onUsernameBlur={handleUsernameBlur}
+            onContinue={handleContinueProfileStep}
+            isLoading={false}
+          />
+        </Box>
+
+        <Box p={6} style={styles.step}>
+          <AuthEmailStep
+            form={emailForm}
+            formError={emailFormError}
+            onChangeForm={handleChangeForm}
+            onContinue={() => submitSignUpMutation()}
+            isLoading={isSignUpLoading}
+          />
+        </Box>
+
+        <Box p={6} style={styles.step}>
+          <AuthVerifyEmail emailToBeVerified={form.email} />
+        </Box>
+      </Animated.View>
+    </Box>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden'
+  },
+  stepsRow: {
+    flexDirection: 'row'
+  },
+  step: {
+    width: screenWidth
+  },
+  progressBar: {
+    width: 32,
+    height: 3,
+    borderRadius: 2,
+    backgroundColor: theme.colors.border
+  },
+  progressBarActive: {
+    backgroundColor: theme.colors.primary
+  },
+  goBackButton: {
+    borderWidth: 1,
+    borderRadius: 999,
+    borderColor: theme.colors.textTertiary,
+    padding: 6
+  }
+})

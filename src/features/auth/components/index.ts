@@ -1,3 +1,5 @@
+export * from './auth-email-step.component'
+export * from './auth-profile-step.component'
 export * from './auth-sign-in.component'
 export * from './auth-sign-up.component'
 export * from './auth-verify-email.component'
