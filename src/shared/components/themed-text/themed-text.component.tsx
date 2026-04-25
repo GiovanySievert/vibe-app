@@ -122,9 +122,9 @@ export function ThemedText({
 }
 
 const styles = StyleSheet.create({
-  primary: { fontSize: 16, lineHeight: 24, fontFamily: 'InterTight-Regular', color: '#EDEAE4' },
+  primary: { fontSize: 16, lineHeight: 24, fontFamily: 'InterTight-Regular', color: '#EDEAE4', letterSpacing: -0.5 },
   secondary: { fontSize: 16, lineHeight: 24, color: '#8A8680', fontFamily: 'InterTight-Regular' },
   title: { fontSize: 36, lineHeight: 38, color: '#EDEAE4', fontFamily: 'InterTight-Bold', letterSpacing: -1.44 },
   subtitle: { lineHeight: 32, fontSize: 22, color: '#EDEAE4', fontFamily: 'InterTight-SemiBold', letterSpacing: -0.3 },
-  mono: { fontSize: 11, lineHeight: 16, color: '#8A8680', fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.2 }
+  mono: { fontSize: 11, lineHeight: 16, color: '#8A8680', fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.9 }
 } as const)

@@ -77,7 +77,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       const color = interpolateColor(
         borderState.value,
         [0, 1, 2],
-        [theme.colors.primaryGlow, theme.colors.primary, theme.colors.error]
+        [theme.colors.primaryGlow, theme.colors.textPrimary, theme.colors.error]
       )
       return { borderColor: color }
     })
@@ -108,8 +108,8 @@ export const Input = forwardRef<TextInput, InputProps>(
     return (
       <Box flexGrow={1}>
         {label && (
-          <Box>
-            <ThemedText size="sm" weight="semibold" color={!disabled ? 'textSecondary' : 'textTertiary'}>
+          <Box mb={-1}>
+            <ThemedText size="sm" weight="medium" color={!disabled ? 'textSecondary' : 'textTertiary'}>
               {label}
             </ThemedText>
           </Box>
@@ -164,12 +164,9 @@ export const Input = forwardRef<TextInput, InputProps>(
               onPress={() => setSecureTextEntryisShowing((prev) => !prev)}
               style={style.endIconContainer}
             >
-              <ThemedIcon
-                name={secureTextEntryisShowing ? 'Eye' : 'EyeClosed'}
-                size={18}
-                testID="clear-button--input"
-                color="textPrimary"
-              />
+              <ThemedText size="xs" weight="medium" color="textSecondary" textDecorationLine="underline">
+                {secureTextEntryisShowing ? 'mostrar' : 'ocultar'}
+              </ThemedText>
             </TouchableOpacity>
           )}
         </Box>
@@ -184,8 +181,8 @@ export const Input = forwardRef<TextInput, InputProps>(
           </AnimatedBox>
 
           {multiline && maxLength && (
-            <Box mt={1}>
-              <ThemedText size="xs" color="textTertiary">
+            <Box mt={2}>
+              <ThemedText size="xs" variant="mono" color="textSecondary">
                 {localInputValue.length}/{maxLength}
               </ThemedText>
             </Box>
@@ -204,7 +201,8 @@ const style = StyleSheet.create({
     color: theme.colors.textPrimary,
     fontSize: 18,
     fontFamily: 'Poppins-Regular',
-    fontWeight: '500'
+    fontWeight: '500',
+    letterSpacing: -0.5
   },
   hasStartIconInput: {
     paddingLeft: 40
@@ -217,5 +215,5 @@ const style = StyleSheet.create({
     left: 16,
     zIndex: 10
   },
-  endIconContainer: { position: 'absolute', right: 16, zIndex: 10, color: '#fff' }
+  endIconContainer: { position: 'absolute', right: 0, zIndex: 10, color: '#fff', marginBottom: 4 }
 })

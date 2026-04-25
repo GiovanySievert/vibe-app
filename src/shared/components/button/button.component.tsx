@@ -68,8 +68,8 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
       }
 
       const base: ViewStyle = {
-        height: 52,
-        borderRadius: 8,
+        height: 58,
+        borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         opacity: disabled ? 0.5 : 1,
