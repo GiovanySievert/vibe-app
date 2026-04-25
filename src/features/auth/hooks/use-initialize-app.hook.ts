@@ -3,8 +3,9 @@ import { useEffect } from 'react'
 import { useSetAtom } from 'jotai'
 
 import { useUserLocation } from '@src/features/home/hooks/use-get-user-location.hook'
-import { getOnboardingComplete } from '@src/features/onboarding/storage/onboarding-storage'
+import { registerForPushNotificationsAsync } from '@src/features/notifications/services/push-notification.service'
 import { showOnboardingAtom } from '@src/features/onboarding/state/onboarding.state'
+import { getOnboardingComplete } from '@src/features/onboarding/storage/onboarding-storage'
 import { authClient } from '@src/services/api/auth-client'
 
 import { authStateAtom } from '../state'
@@ -26,6 +27,7 @@ export const useInitializeApp = () => {
           })
 
           saveAuthTokenInStorage(data.session.token)
+          await registerForPushNotificationsAsync()
 
           const onboardingDone = await getOnboardingComplete()
           if (!onboardingDone) {
