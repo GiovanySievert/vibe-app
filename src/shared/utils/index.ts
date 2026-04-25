@@ -1,4 +1,5 @@
 export * from './formater-address'
+export * from './password-strength'
 export * from './formater-currency'
 export * from './formater-date'
 export * from './formater-input-mask'

@@ -1,32 +1,29 @@
 export const colors = {
-  background: '#0A0A0F',
-  backgroundSecondary: '#13131A',
-  backgroundTertiary: '#1A1A24',
+  background: '#111111',
+  backgroundSecondary: '#1A1A1A',
+  backgroundTertiary: '#252522',
 
-  primary: '#4FAEA8',
-  primaryLight: '#6FCCC6',
-  primaryDark: '#3A8C87',
-  primaryGlow: 'rgba(79, 174, 168, 0.3)',
+  primary: '#6FE8A8',
+  primaryLight: '#3D7A52',
+  primaryDark: '#1E3D2A',
+  primaryGlow: 'rgba(45,90,61,0.25)',
 
-  accent: '#FF3B9A',
-  accentSecondary: '#8B5CF6',
-  accentTertiary: '#FFD600',
-  neonGreen: '#39FF14',
-  neonBlue: '#00F0FF',
+  accent: '#2D5A3D',
+  accentText: '#E0EDE5',
 
-  success: '#39FF14',
-  warning: '#FFD600',
-  error: '#FF3B9A',
-  info: '#00F0FF',
+  success: '#2D5A3D',
+  warning: '#C8A84B',
+  error: '#C0392B',
+  info: '#4A7C59',
 
-  textPrimary: '#F5F5F7',
-  textSecondary: '#A0A0AB',
-  textTertiary: '#6B6B76',
+  textPrimary: '#EDEAE4',
+  textSecondary: '#8a8680',
+  textTertiary: '#55524D',
 
-  border: '#2A2A38',
-  borderLight: '#353544',
-  borderFocus: '#4FAEA8',
-  borderAccent: '#FF3B9A'
+  border: 'rgba(255,255,255,0.08)',
+  borderLight: 'rgba(255,255,255,0.05)',
+  borderFocus: '#2D5A3D',
+  borderAccent: '#3D7A52'
 } as const
 
 export const typography = {
@@ -39,7 +36,9 @@ export const sizes = {
   md: 16,
   lg: 18,
   xl: 22,
-  '2xl': 28
+  '2xl': 28,
+  '3xl': 32,
+  '4xl': '36'
 }
 
 export const weights = {
