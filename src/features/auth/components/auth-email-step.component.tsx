@@ -1,10 +1,6 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 
-import { AnimatedBox, Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components'
-import { theme } from '@src/shared/constants/theme'
-import { getPasswordStrength } from '@src/shared/utils'
+import { AnimatedBox, Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
 
 import { SignUpEmailForm } from '../domain'
 
@@ -23,8 +19,6 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
   onContinue,
   isLoading
 }) => {
-  const strength = getPasswordStrength(form.password)
-
   return (
     <Box gap={6}>
       <Box gap={1} mb={6}>
@@ -49,24 +43,11 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
           </AnimatedBox>
         </Box>
 
-        <Box gap={3}>
-          <Input
-            label="senha"
-            value={form.password}
-            onChange={({ nativeEvent }) => onChangeForm('password', nativeEvent.text)}
-            errorMessage={formError.password}
-            secureTextEntry
-          />
-
-          <ThemedText variant="mono" size="sm" color="textSecondary">
-            mínimo 8 caracteres · uma letra maiscula e um número
-          </ThemedText>
-          <Box flexDirection="row" gap={1}>
-            {[0, 1, 2, 3].map((i) => (
-              <Box key={i} flex={1} style={[styles.strengthBar, i < strength && styles.strengthBarActive]} />
-            ))}
-          </Box>
-        </Box>
+        <PasswordInput
+          value={form.password}
+          onChange={(value) => onChangeForm('password', value)}
+          errorMessage={formError.password}
+        />
       </Box>
 
       <Box mt={4} gap={4}>
@@ -95,14 +76,3 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
     </Box>
   )
 }
-
-const styles = StyleSheet.create({
-  strengthBar: {
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: theme.colors.border
-  },
-  strengthBarActive: {
-    backgroundColor: theme.colors.primary
-  }
-})

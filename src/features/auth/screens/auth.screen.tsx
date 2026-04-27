@@ -31,7 +31,7 @@ export const AuthScreen = () => {
     <Screen gradient>
       <ScrollView>
         <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
-          <Box mt={20} p={6} style={{ width: screenWidth }}>
+          <Box style={{ width: screenWidth }}>
             {currentStep === AUTH_STEPS.SIGN_IN && <AuthSignIn goToSignUp={() => goToStep(AUTH_STEPS.SIGN_UP)} />}
           </Box>
 

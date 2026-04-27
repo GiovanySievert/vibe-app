@@ -5,9 +5,9 @@ import { useMutation } from '@tanstack/react-query'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
-import { Card } from '@src/shared/components/card/card.component'
+import { validationMapErrors } from '@src/shared/utils'
 
-import { forgotPasswordEmailStepSchema } from '../../domain'
+import { ForgotPasswordEmailStepForm, forgotPasswordEmailStepSchema } from '../../domain'
 
 type ForgotPasswordEmailStepProps = {
   typedEmail?: string
@@ -15,27 +15,30 @@ type ForgotPasswordEmailStepProps = {
   goToCodeStep: () => void
 }
 
+const EMPTY_ERRORS: ForgotPasswordEmailStepForm = { email: '' }
+
 export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = ({
   typedEmail,
   setTypedEmailFromEmailStep,
   goToCodeStep
 }) => {
-  const [email, setEmail] = useState<string>(typedEmail ? typedEmail : '')
-  const [emailError, setEmailError] = useState<string>('')
+  const [email, setEmail] = useState<string>(typedEmail ?? '')
+  const [formError, setFormError] = useState<ForgotPasswordEmailStepForm>(EMPTY_ERRORS)
 
-  const validateEmailSchema = async () => {
-    const result = forgotPasswordEmailStepSchema.safeParse({
-      email
-    })
+  const validateEmailSchema = (): boolean => {
+    const result = forgotPasswordEmailStepSchema.safeParse({ email })
 
     if (!result.success) {
-      setEmailError(result.error.message)
-      throw Error
+      setFormError(validationMapErrors(result.error, EMPTY_ERRORS))
+      return false
     }
+
+    setFormError(EMPTY_ERRORS)
+    return true
   }
 
   const submitForm = async () => {
-    validateEmailSchema()
+    if (!validateEmailSchema()) throw new Error('validation')
     const response = await authClient.forgetPassword.emailOtp({ email })
     return response
   }
@@ -46,29 +49,37 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
       goToCodeStep()
       setTypedEmailFromEmailStep(email)
     },
-    onError: (error) => {
-      console.error('todo - add logger', error)
+    onError: (error: Error) => {
+      if (error.message === 'validation') return
+      goToCodeStep()
+      setTypedEmailFromEmailStep(email)
     }
   })
 
   return (
-    <Card pt={6} pb={6} pl={6} pr={6}>
-      <Box mt={3} mb={3}>
-        <ThemedText>Forgot password?</ThemedText>
+    <>
+      <Box mb={4}>
+        <ThemedText variant="title" size="4xl" color="textPrimary">
+          esqueceu a senha?
+        </ThemedText>
+        <ThemedText variant="primary" color="textSecondary">
+          digite o email cadastrado que enviaremos um codigo.
+        </ThemedText>
       </Box>
       <Box gap={6}>
         <Input
-          label="Email"
-          placeholder="Type here"
+          label="email"
           value={email}
           onChange={({ nativeEvent }) => setEmail(nativeEvent.text)}
-          errorMessage={emailError}
+          errorMessage={formError.email}
           autoFocus
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
-          <ThemedText>Send code</ThemedText>
+          <ThemedText color="background" size="lg" weight="semibold">
+            continuar
+          </ThemedText>
         </Button>
       </Box>
-    </Card>
+    </>
   )
 }

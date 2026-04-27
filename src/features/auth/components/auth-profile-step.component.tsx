@@ -61,7 +61,7 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
 
       <Box mt={4}>
         <Button loading={isLoading} onPress={onContinue}>
-          <ThemedText color="background" weight="semibold">
+          <ThemedText color="background" size="lg" weight="semibold">
             continuar
           </ThemedText>
         </Button>

@@ -54,10 +54,10 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
 
   const handleVerifyEmailError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('Codigo invalido')
+      showToast('código inválido')
       return
     }
-    showToast('Algo deu errado, tente novamente mais tarde.')
+    showToast('algo deu errado, tente novamente mais tarde.')
     return
   }
 
@@ -150,7 +150,9 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
           </ThemedText>
         </Button>
         <Button variant="ghost" disabled={isResendDisabled} onPress={() => handleSendVerificationEmail()}>
-          <ThemedText>{isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}</ThemedText>
+          <ThemedText size="lg" weight="semibold">
+            {isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}
+          </ThemedText>
         </Button>
       </Box>
     </Box>

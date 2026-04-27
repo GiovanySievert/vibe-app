@@ -6,9 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components'
-import { Card } from '@src/shared/components/card/card.component'
+import { Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { forgotPasswordCodeStepSchema, UserResetPasswordRequestDTO } from '../../domain'
@@ -57,7 +55,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
 
   const handleSubmitForgotPasswordError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('Codigo invalido')
+      showToast('código inválido')
       throw Error
     }
 
@@ -78,7 +76,6 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
       otp: form.code,
       password: form.password
     })
-
     if (error) {
       handleSubmitForgotPasswordError(error)
     }
@@ -97,32 +94,35 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
   })
 
   return (
-    <Card pt={6} pb={6} pl={6} pr={6}>
-      <Box mt={3} mb={3}>
-        <ThemedText>Forgot password?</ThemedText>
-      </Box>
-      <Box gap={6}>
+    <Box mb={4}>
+      <ThemedText variant="title" size="4xl" color="textPrimary">
+        esqueceu a senha?
+      </ThemedText>
+      <ThemedText variant="primary" color="textSecondary">
+        digite o código que enviamos no seu email, se nāo recebeu nada, tente se cadastrar.
+      </ThemedText>
+
+      <Box mt={4} gap={6}>
         <Input
-          label="code"
-          placeholder="Type here"
+          label="código"
           value={form.code}
           onChange={({ nativeEvent }) => handleChangeInputValue('code', nativeEvent.text)}
           errorMessage={formError.code}
           autoFocus
         />
 
-        <Input
-          label="password"
-          placeholder="Type here"
+        <PasswordInput
+          label="nova senha"
           value={form.password}
-          onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
+          onChange={(value) => handleChangeInputValue('password', value)}
           errorMessage={formError.password}
-          secureTextEntry
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
-          <ThemedText>Send code</ThemedText>
+          <ThemedText color="background" size="lg" weight="semibold">
+            continuar
+          </ThemedText>
         </Button>
       </Box>
-    </Card>
+    </Box>
   )
 }

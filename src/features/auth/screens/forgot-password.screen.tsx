@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -8,6 +8,7 @@ import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { Box } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { theme } from '@src/shared/constants/theme'
 
 import { ForgotPasswordCodeStep, ForgotPasswordEmailStep } from '../components'
 
@@ -57,13 +58,16 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
   }
 
   return (
-    <Screen>
+    <Screen gradient>
       <ScrollView>
-        <TouchableOpacity onPress={() => handlePressGoBackButton()}>
-          <ThemedIcon name="ChevronLeft" color="primary" size={24} />
-        </TouchableOpacity>
+        <Box pl={6} pr={6} pt={2} pb={6} flexDirection="row" alignItems="center">
+          <TouchableOpacity onPress={() => handlePressGoBackButton()} style={styles.goBackButton}>
+            <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
+          </TouchableOpacity>
+        </Box>
+
         <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
-          <Box p={4} style={{ width: '100%' }}>
+          <Box p={6} style={{ width: '100%' }}>
             {currentStep === FORGET_PASSWORD_STEPS.TYPE_EMAIL_STEP && (
               <ForgotPasswordEmailStep
                 typedEmail={typedEmailFromParams}
@@ -72,7 +76,7 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
               />
             )}
           </Box>
-          <Box p={4} style={{ width: '100%' }}>
+          <Box mt={10} p={6} style={{ width: '100%' }}>
             {currentStep === FORGET_PASSWORD_STEPS.TYPE_CODE_STEP && (
               <ForgotPasswordCodeStep typedEmail={typedEmailFromParams || typedEmailFromEmailStep} />
             )}
@@ -82,3 +86,12 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
     </Screen>
   )
 }
+
+const styles = StyleSheet.create({
+  goBackButton: {
+    borderWidth: 1,
+    borderRadius: 999,
+    borderColor: theme.colors.textTertiary,
+    padding: 6
+  }
+})
