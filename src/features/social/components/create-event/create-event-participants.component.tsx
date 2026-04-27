@@ -47,7 +47,6 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
     >
       <Box gap={3}>
         <Input
-          placeholder="Buscar usuário"
           value={inputSearch}
           onChangeText={setInputSearch}
           isClearable

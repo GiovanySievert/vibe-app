@@ -12,7 +12,7 @@ export const PlacesMenu: React.FC<PlacesMenuProps> = ({ place }) => {
   if (place.brand.menus.length) {
     return (
       <Box flex={1} pr={5} pl={5} mt={3} mb={100} alignItems="center">
-        <ThemedText weight="light">Local nāo tem cardápio cadastrado :/</ThemedText>
+        <ThemedText weight="light">local não tem cardápio cadastrado :/</ThemedText>
       </Box>
     )
   }

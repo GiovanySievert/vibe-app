@@ -46,7 +46,6 @@ export const DeleteAccount = () => {
     <Box bg="background" gap={4}>
       <Input
         label="password"
-        placeholder="Type here"
         value={password}
         onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
         errorMessage={passwordError}

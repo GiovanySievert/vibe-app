@@ -42,8 +42,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
       <Box gap={4} pb={6}>
         <Input
-          label="Nome do evento"
-          placeholder="Ex: Meu aniversário"
+          label="nome do evento"
           value={formData.name}
           onChangeText={(value) => handleChange('name', value)}
           errorMessage={errors.name}
@@ -53,8 +52,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
         <Box flexDirection="row" gap={3}>
           <Box flex={1}>
             <Input
-              label="Data"
-              placeholder="00/00/0000"
+              label="data"
               value={formData.date}
               onChangeText={(value) => handleChange('date', applyDateMask(value))}
               errorMessage={errors.date}
@@ -64,8 +62,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
           </Box>
           <Box flex={1}>
             <Input
-              label="Hora"
-              placeholder="00:00"
+              label="hora"
               value={formData.time}
               onChangeText={(value) => handleChange('time', applyTimeMask(value))}
               errorMessage={errors.time}
@@ -76,8 +73,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
         </Box>
 
         <Input
-          label="Descrição"
-          placeholder="Descreva seu evento"
+          label="descrição"
           value={formData.description}
           onChangeText={(value) => handleChange('description', value)}
           errorMessage={errors.description}

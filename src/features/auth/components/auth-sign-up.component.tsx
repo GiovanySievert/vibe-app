@@ -81,7 +81,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     if (!form.username) return
     const { data } = await AuthService.checkIfUsernameIsAvailable(form.username)
     if (!data.available) {
-      setFormError((prev) => ({ ...prev, username: 'Esse username não está disponível' }))
+      setFormError((prev) => ({ ...prev, username: 'esse username não está disponível' }))
       setUsernameAvailable(false)
       return
     }
@@ -105,7 +105,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
 
     if (error) {
       showToast(
-        error?.status === 422 ? 'Não foi possível criar a conta' : 'Algo deu errado, tente novamente mais tarde'
+        error?.status === 422 ? 'não foi possível criar a conta' : 'algo deu errado, tente novamente mais tarde'
       )
       console.log(error)
       throw Error

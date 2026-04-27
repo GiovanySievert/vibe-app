@@ -62,7 +62,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
       if (context?.previous) {
         queryClient.setQueryData(['eventComments', eventId], context.previous)
       }
-      showToast('Não foi possível excluir o recado.', 'error')
+      showToast('não foi possível excluir o recado.', 'error')
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['eventComments', eventId] })
   })

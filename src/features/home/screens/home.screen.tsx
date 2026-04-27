@@ -45,7 +45,6 @@ export const HomeScreen = () => {
       <Box pl={6} pr={6} gap={3}>
         <ThemedText>Hello {authState.user?.name}</ThemedText>
         <FakeInput
-          placeholder="Procure lugares aqui"
           onPress={() => navigation.navigate('Modals', { screen: 'SearchScreen' })}
         />
       </Box>

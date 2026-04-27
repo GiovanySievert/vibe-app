@@ -57,7 +57,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
     },
     onError: () => {
       setIsEditing(true)
-      showToast('Não foi possível salvar a descrição.', 'error')
+      showToast('não foi possível salvar a descrição.', 'error')
     }
   })
 
@@ -78,7 +78,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
       onClose()
     },
     onError: () => {
-      showToast('Não foi possível excluir o evento.', 'error')
+      showToast('não foi possível excluir o evento.', 'error')
     }
   })
 
@@ -147,7 +147,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                     multiline
                     multilineHeight={100}
                     maxLength={300}
-                    placeholder="Descreva seu evento..."
                     autoFocus
                   />
                   <Box flexDirection="row" gap={3}>

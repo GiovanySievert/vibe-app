@@ -9,7 +9,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputS
   return (
     <Box>
       <Input
-        placeholder="Type here"
         value={inputSearch}
         onChange={({ nativeEvent }) => setInputSearch(nativeEvent.text)}
         autoFocus

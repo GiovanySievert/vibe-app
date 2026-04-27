@@ -61,7 +61,7 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
         queryClient.setQueryData(queryKey, value)
       })
 
-      showToast('Não foi possível atualizar sua reação.', 'error')
+      showToast('não foi possível atualizar sua reação.', 'error')
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['feed'] })

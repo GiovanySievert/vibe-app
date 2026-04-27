@@ -60,14 +60,14 @@ export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId,
       if (context?.previous) {
         queryClient.setQueryData(['eventComments', eventId], context.previous)
       }
-      showToast('Não foi possível postar o recado.', 'error')
+      showToast('não foi possível postar o recado.', 'error')
     }
   })
 
   return (
     <Box flexDirection="row" gap={2} alignItems="center">
       <Box flex={1}>
-        <Input placeholder="Deixe um recado..." value={content} onChangeText={setContent} maxLength={500} />
+        <Input value={content} onChangeText={setContent} maxLength={500} />
       </Box>
       <TouchableOpacity
         onPress={() => content.trim() && postComment()}

@@ -27,9 +27,9 @@ export const UserEditProfile = () => {
         </Box>
       </Box>
       <Card gap={6}>
-        <Input label="Username" value={form.username} disabled />
-        <Input label="Nome" value={form.name} />
-        <Input label="E-mail" value={form.email} />
+        <Input label="username" value={form.username} disabled />
+        <Input label="nome" value={form.name} />
+        <Input label="e-mail" value={form.email} />
 
         <Button>
           <ThemedText variant="primary" weight="semibold" size="lg">

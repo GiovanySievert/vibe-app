@@ -55,7 +55,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
     },
     onError: () => {
       goToStep(CREATE_EVENT_STEPS.CONFIRMATION)
-      showToast('Não foi possível criar o evento.', 'error')
+      showToast('não foi possível criar o evento.', 'error')
     }
   })
 

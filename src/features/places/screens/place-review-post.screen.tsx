@@ -83,13 +83,12 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
           </Box>
 
           <Input
-            label="Descrição (opcional)"
+            label="descrição (opcional)"
             multiline
             multilineHeight={100}
             maxLength={300}
             value={comment}
             onChangeText={setComment}
-            placeholder="Conta mais sobre o local..."
           />
 
           <Button onPress={() => mutate()} loading={isPending} disabled={!rating}>

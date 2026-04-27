@@ -95,7 +95,7 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
         queryClient.setQueryData(queryKey, value)
       })
 
-      showToast('Não foi possível comentar essa review.', 'error')
+      showToast('não foi possível comentar essa review.', 'error')
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['feedReviewComments', reviewId] })
@@ -116,7 +116,7 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
   return (
     <Box flexDirection="row" gap={2} alignItems="center" mb={4}>
       <Box flex={1}>
-        <Input placeholder="Escreva um comentário..." value={content} onChangeText={setContent} maxLength={500} />
+        <Input value={content} onChangeText={setContent} maxLength={500} />
       </Box>
       <TouchableOpacity
         onPress={handleCreateComment}

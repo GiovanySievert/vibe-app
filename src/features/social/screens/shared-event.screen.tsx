@@ -71,13 +71,13 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
         queryClient.invalidateQueries({ queryKey: ['eventInvitations'] }),
         queryClient.invalidateQueries({ queryKey: ['myEvents'] })
       ])
-      showToast('Resposta enviada com sucesso.')
+      showToast('resposta enviada com sucesso.')
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
         queryClient.setQueryData(['sharedEvent', token], context.previous)
       }
-      showToast('Não foi possível responder ao convite.', 'error')
+      showToast('não foi possível responder ao convite.', 'error')
     }
   })
 
