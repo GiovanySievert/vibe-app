@@ -13,6 +13,8 @@ export type UnathenticatedStackParamList = {
   ForgotPasswordScreen: {
     typedEmail?: string
   }
+  TermsScreen: undefined
+  PrivacyScreen: undefined
 }
 
 export type UserMenuStackParamList = {

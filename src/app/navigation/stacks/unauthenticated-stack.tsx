@@ -27,6 +27,18 @@ export const UnathenticatedStackScreen = () => {
           headerTransparent: false
         }}
       />
+
+      <UnathenticatedStack.Screen
+        name="TermsScreen"
+        component={AuthFeatures.AuthTermsScreen}
+        options={{ headerShown: false }}
+      />
+
+      <UnathenticatedStack.Screen
+        name="PrivacyScreen"
+        component={AuthFeatures.AuthPrivacyScreen}
+        options={{ headerShown: false }}
+      />
     </UnathenticatedStack.Navigator>
   )
 }
