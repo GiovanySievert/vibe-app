@@ -12,11 +12,7 @@ type CreateEventConfirmationProps = {
   onBack: () => void
 }
 
-export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = ({
-  payload,
-  onSave,
-  onBack
-}) => {
+export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = ({ payload, onSave, onBack }) => {
   return (
     <Box style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -56,7 +52,7 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
               Participantes ({payload.participants.length})
             </ThemedText>
             {payload.participants.length === 0 ? (
-              <ThemedText color="textTertiary" size="sm">
+              <ThemedText color="textSecondary" size="sm">
                 Nenhum participante selecionado
               </ThemedText>
             ) : (

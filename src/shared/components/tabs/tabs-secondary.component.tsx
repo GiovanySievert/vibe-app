@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 24,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderFocus
+    borderBottomColor: theme.colors.border
   },
   secondaryTab: {
     paddingVertical: 12,

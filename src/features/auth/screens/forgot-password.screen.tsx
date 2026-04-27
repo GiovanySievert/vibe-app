@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   goBackButton: {
     borderWidth: 1,
     borderRadius: 999,
-    borderColor: theme.colors.textTertiary,
+    borderColor: theme.colors.textSecondary,
     padding: 6
   }
 })

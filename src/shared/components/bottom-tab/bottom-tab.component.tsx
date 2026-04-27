@@ -74,7 +74,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
 
           const animatedButtonStyle = useAnimatedStyle(() => ({
             backgroundColor: withTiming(
-              isFocused ? theme.colors.backgroundSecondary : theme.colors.backgroundTertiary,
+              isFocused ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary,
               {
                 duration: ANIMATION_DURATION
               }

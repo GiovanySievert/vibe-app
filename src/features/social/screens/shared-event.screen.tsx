@@ -122,7 +122,15 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
 
   return (
     <Box style={styles.container}>
-      <Box style={styles.header} pl={5} pr={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
+      <Box
+        style={styles.header}
+        pl={5}
+        pr={5}
+        pb={4}
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Box flex={1} gap={1}>
           <ThemedText weight="semibold" size="lg">
             {event.name}
@@ -145,7 +153,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
           <ThemedText size="sm" color="textSecondary" weight="semibold">
             Descrição
           </ThemedText>
-          <ThemedText color={event.description ? 'textPrimary' : 'textTertiary'}>
+          <ThemedText color={event.description ? 'textPrimary' : 'textSecondary'}>
             {event.description || 'Sem descrição'}
           </ThemedText>
         </Box>
@@ -162,12 +170,18 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             Convidados ({event.participants.length})
           </ThemedText>
           <Box flexDirection="row" alignItems="center" gap={2}>
-            <Box style={[styles.avatarRow, { width: Math.min(event.participants.length, MAX_VISIBLE_AVATARS) * (AVATAR_SIZE - AVATAR_OVERLAP) + AVATAR_OVERLAP }]}>
+            <Box
+              style={[
+                styles.avatarRow,
+                {
+                  width:
+                    Math.min(event.participants.length, MAX_VISIBLE_AVATARS) * (AVATAR_SIZE - AVATAR_OVERLAP) +
+                    AVATAR_OVERLAP
+                }
+              ]}
+            >
               {event.participants.slice(0, MAX_VISIBLE_AVATARS).map((item, index) => (
-                <Box
-                  key={item.id}
-                  style={[styles.avatarWrapper, { left: index * (AVATAR_SIZE - AVATAR_OVERLAP) }]}
-                >
+                <Box key={item.id} style={[styles.avatarWrapper, { left: index * (AVATAR_SIZE - AVATAR_OVERLAP) }]}>
                   <Avatar size="sm" uri={item.avatar} />
                 </Box>
               ))}
@@ -239,7 +253,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
                 </ThemedText>
               </Box>
               <TouchableOpacity onPress={() => respondToInvitationMutation.mutate(EventParticipantStatus.DECLINED)}>
-                <ThemedText size="xs" color="textTertiary">
+                <ThemedText size="xs" color="textSecondary">
                   Recusar convite
                 </ThemedText>
               </TouchableOpacity>

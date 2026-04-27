@@ -114,7 +114,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
               {PROGRESS_STEPS.map((label, i) => (
                 <Box key={i} flex={1} gap={1}>
                   <Box style={[styles.progressBar, i <= progressIndex && styles.progressBarActive]} />
-                  <ThemedText size="xs" color={i <= progressIndex ? 'primary' : 'textTertiary'}>
+                  <ThemedText size="xs" color={i <= progressIndex ? 'primary' : 'textSecondary'}>
                     {label}
                   </ThemedText>
                 </Box>
@@ -159,11 +159,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
           </Box>
           <Box p={5} style={styles.step}>
             {currentStep === CREATE_EVENT_STEPS.SUCCESS && (
-              <CreateEventSuccess
-                eventName={formData.name}
-                eventLink={eventLink}
-                onClose={handleClose}
-              />
+              <CreateEventSuccess eventName={formData.name} eventLink={eventLink} onClose={handleClose} />
             )}
           </Box>
         </Animated.View>

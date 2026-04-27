@@ -17,7 +17,7 @@ export const PrimaryTabs: React.FC<PrimaryTabsProps> = ({ titles, activeIndex, o
       style={[
         styles.tabContainer,
         {
-          borderColor: theme.colors.borderFocus,
+          borderColor: theme.colors.border,
           backgroundColor: theme.colors.background,
           borderRadius: 8
         }
@@ -29,7 +29,7 @@ export const PrimaryTabs: React.FC<PrimaryTabsProps> = ({ titles, activeIndex, o
             style={[
               styles.tabTextContainer,
               {
-                backgroundColor: index === activeIndex ? theme.colors.backgroundTertiary : 'transparent'
+                backgroundColor: index === activeIndex ? theme.colors.backgroundSecondary : 'transparent'
               }
             ]}
           >

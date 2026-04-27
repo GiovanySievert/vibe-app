@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.border,
     position: 'relative',
-    backgroundColor: theme.colors.backgroundTertiary
+    backgroundColor: theme.colors.backgroundSecondary
   },
   photo: { width: '100%', height: '100%' },
   placeTag: {

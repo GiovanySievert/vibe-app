@@ -9,7 +9,7 @@ type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 const SIZES: Record<Size, number> = { xs: 32, sm: 44, md: 64, lg: 96, xl: 128 }
 
 type GradientColors = Readonly<[ColorValue, ColorValue, ...ColorValue[]]>
-const DEFAULT_COLORS: GradientColors = [theme.colors.primaryDark, theme.colors.primary] as const
+const DEFAULT_COLORS: GradientColors = [theme.colors.primary, theme.colors.primary] as const
 
 type AvatarProps = {
   size?: Size

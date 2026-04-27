@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: theme.colors.borderFocus
+    borderColor: theme.colors.border
   }
 })

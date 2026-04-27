@@ -87,7 +87,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
                   </ThemedText>
                 </Box>
               )}
-              <ThemedText size="xs" color="textTertiary">
+              <ThemedText size="xs" color="textSecondary">
                 {formatRelativeTime(item.createdAt)}
               </ThemedText>
             </Box>
@@ -98,7 +98,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
           {canDelete && (
             <Box>
               <TouchableOpacity onPress={() => deleteComment(item.id)} hitSlop={HIT_SLOP}>
-                <ThemedIcon name="Trash2" size={16} color="textTertiary" />
+                <ThemedIcon name="Trash2" size={16} color="textSecondary" />
               </TouchableOpacity>
             </Box>
           )}
@@ -109,7 +109,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
 
   if (!isLoading && comments.length === 0) {
     return (
-      <ThemedText size="sm" color="textTertiary">
+      <ThemedText size="sm" color="textSecondary">
         Nenhum recado ainda. Seja o primeiro!
       </ThemedText>
     )

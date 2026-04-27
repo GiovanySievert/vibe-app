@@ -29,13 +29,13 @@ const STATUS_META: Record<
   [EventParticipantStatus.ACCEPTED]: {
     label: 'Confirmado',
     color: 'success',
-    backgroundColor: theme.colors.backgroundTertiary,
+    backgroundColor: theme.colors.backgroundSecondary,
     borderColor: theme.colors.success
   },
   [EventParticipantStatus.DECLINED]: {
     label: 'Recusado',
     color: 'error',
-    backgroundColor: theme.colors.backgroundTertiary,
+    backgroundColor: theme.colors.backgroundSecondary,
     borderColor: theme.colors.error
   }
 }

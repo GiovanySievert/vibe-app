@@ -83,14 +83,10 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
   })
 
   const handleDelete = () => {
-    Alert.alert(
-      'Excluir evento',
-      'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Excluir', style: 'destructive', onPress: () => deleteEvent() }
-      ]
-    )
+    Alert.alert('Excluir evento', 'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Excluir', style: 'destructive', onPress: () => deleteEvent() }
+    ])
   }
 
   return (
@@ -167,7 +163,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                   </Box>
                 </Box>
               ) : (
-                <ThemedText color={description ? 'textPrimary' : 'textTertiary'}>
+                <ThemedText color={description ? 'textPrimary' : 'textSecondary'}>
                   {description || 'Sem descrição'}
                 </ThemedText>
               )}
@@ -178,7 +174,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                 Horário
               </ThemedText>
 
-              <ThemedText color={description ? 'textPrimary' : 'textTertiary'}>
+              <ThemedText color={description ? 'textPrimary' : 'textSecondary'}>
                 {formatEventDateTime(event.date, event.time)}
               </ThemedText>
             </Box>
@@ -189,7 +185,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
               </ThemedText>
 
               {event.participants.length === 0 ? (
-                <ThemedText color="textTertiary" size="sm">
+                <ThemedText color="textSecondary" size="sm">
                   Nenhum participante
                 </ThemedText>
               ) : (

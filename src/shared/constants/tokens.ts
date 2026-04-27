@@ -1,15 +1,9 @@
 export const colors = {
   background: '#111111',
   backgroundSecondary: '#1A1A1A',
-  backgroundTertiary: '#252522',
 
   primary: '#6FE8A8',
-  primaryLight: '#3D7A52',
-  primaryDark: '#1E3D2A',
   primaryGlow: 'rgba(45,90,61,0.25)',
-
-  accent: '#2D5A3D',
-  accentText: '#E0EDE5',
 
   success: '#2D5A3D',
   warning: '#C8A84B',
@@ -18,12 +12,8 @@ export const colors = {
 
   textPrimary: '#EDEAE4',
   textSecondary: '#8a8680',
-  textTertiary: '#55524D',
 
-  border: 'rgba(255,255,255,0.08)',
-  borderLight: 'rgba(255,255,255,0.05)',
-  borderFocus: '#2D5A3D',
-  borderAccent: '#3D7A52'
+  border: 'rgba(255,255,255,0.08)'
 } as const
 
 export const typography = {

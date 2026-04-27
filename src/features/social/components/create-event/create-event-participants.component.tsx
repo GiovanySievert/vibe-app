@@ -85,7 +85,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
 
         {!isLoading && debouncedSearch.length < 3 && (
           <Box mt={2}>
-            <ThemedText color="textTertiary" size="sm">
+            <ThemedText color="textSecondary" size="sm">
               Digite pelo menos 3 caracteres para buscar.
             </ThemedText>
           </Box>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: theme.colors.textTertiary
+    borderColor: theme.colors.textSecondary
   },
   checkboxChecked: {
     borderColor: theme.colors.primary,

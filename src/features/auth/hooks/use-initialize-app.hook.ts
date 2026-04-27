@@ -23,7 +23,8 @@ export const useInitializeApp = () => {
         if (data) {
           setAuthState({
             isAuthenticated: true,
-            user: data.user
+            user: data.user,
+            session: data.session
           })
 
           saveAuthTokenInStorage(data.session.token)

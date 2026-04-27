@@ -41,7 +41,7 @@ export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventNam
           </ThemedText>
           <Box flexDirection="row" alignItems="center" gap={3} style={styles.linkRow}>
             <ThemedText
-              color={eventLink ? 'primary' : 'textTertiary'}
+              color={eventLink ? 'primary' : 'textSecondary'}
               size="sm"
               style={styles.linkText}
               numberOfLines={1}
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border
   },
   linkRow: {
-    backgroundColor: theme.colors.backgroundTertiary,
+    backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: 8,
     padding: 10
   },

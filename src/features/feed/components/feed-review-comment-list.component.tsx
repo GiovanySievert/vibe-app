@@ -52,7 +52,7 @@ export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, onTo
       onEndReachedThreshold={0.3}
       ListEmptyComponent={
         <Box pt={6}>
-          <ThemedText size="sm" color="textTertiary">
+          <ThemedText size="sm" color="textSecondary">
             Nenhum comentário ainda.
           </ThemedText>
         </Box>

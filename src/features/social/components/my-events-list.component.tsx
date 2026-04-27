@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     borderWidth: 2,
-    borderColor: theme.colors.backgroundTertiary,
+    borderColor: theme.colors.backgroundSecondary,
     borderRadius: 999
   }
 })

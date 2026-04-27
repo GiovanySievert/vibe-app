@@ -42,6 +42,23 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const [formError, setFormError] = useState<SignUpForm>(EMPTY_ERRORS)
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null)
 
+  const { mutate: checkUsername, isPending: isCheckingUsername } = useMutation({
+    mutationFn: (username: string) => AuthService.checkIfUsernameIsAvailable(username),
+    onSuccess: ({ data }) => {
+      if (!data.available) {
+        setFormError((prev) => ({ ...prev, username: 'esse username não está disponível' }))
+        setUsernameAvailable(false)
+      } else {
+        setFormError((prev) => ({ ...prev, username: '' }))
+        setUsernameAvailable(true)
+      }
+    },
+    onError: () => {
+      setFormError((prev) => ({ ...prev, username: 'erro ao verificar username, tente novamente' }))
+      setUsernameAvailable(null)
+    }
+  })
+
   const animatedValue = useSharedValue(0)
 
   const goToStep = (step: SIGN_UP_STEPS) => {
@@ -77,16 +94,9 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     goToStep(SIGN_UP_STEPS.EMAIL)
   }
 
-  const handleUsernameBlur = async () => {
+  const handleUsernameBlur = () => {
     if (!form.username) return
-    const { data } = await AuthService.checkIfUsernameIsAvailable(form.username)
-    if (!data.available) {
-      setFormError((prev) => ({ ...prev, username: 'esse username não está disponível' }))
-      setUsernameAvailable(false)
-      return
-    }
-    setFormError((prev) => ({ ...prev, username: '' }))
-    setUsernameAvailable(true)
+    checkUsername(form.username)
   }
 
   const submitSignUp = async () => {
@@ -154,7 +164,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
             onChangeForm={handleChangeForm}
             onUsernameBlur={handleUsernameBlur}
             onContinue={handleContinueProfileStep}
-            isLoading={false}
+            isLoading={isCheckingUsername}
           />
         </Box>
 
@@ -198,7 +208,7 @@ const styles = StyleSheet.create({
   goBackButton: {
     borderWidth: 1,
     borderRadius: 999,
-    borderColor: theme.colors.textTertiary,
+    borderColor: theme.colors.textSecondary,
     padding: 6
   }
 })
