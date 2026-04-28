@@ -19,7 +19,7 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item }) => {
           <ThemedText size="sm" weight="semibold" color="textPrimary">
             {item.user.username}
           </ThemedText>
-          <ThemedText size="xs" color="textTertiary">
+          <ThemedText size="xs" color="textSecondary">
             {formatRelativeTime(item.createdAt)}
           </ThemedText>
         </Box>

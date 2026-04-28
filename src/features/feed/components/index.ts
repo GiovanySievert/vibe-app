@@ -1,3 +1,4 @@
+export * from './dual-photo.component'
 export * from './feed-review-card.component'
 export * from './feed-review-comment-create.component'
 export * from './feed-review-comment-item.component'

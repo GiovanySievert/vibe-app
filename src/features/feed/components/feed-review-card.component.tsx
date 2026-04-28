@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -13,6 +13,7 @@ import { formatRelativeTime } from '@src/shared/utils'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
 import { FeedService } from '../services'
+import { DualPhoto } from './dual-photo.component'
 import { FeedReviewCommentsModal } from './feed-review-comments-modal.component'
 
 type Props = {
@@ -87,14 +88,7 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
           </Box>
         </Box>
 
-        <Box style={styles.photoWrap}>
-          <Image source={{ uri: item?.imageUrl }} style={styles.photo} resizeMode="cover" />
-          <Box position="absolute" style={styles.placeTag}>
-            <ThemedText size="xs" weight="medium" color="textPrimary">
-              {item.place.name}
-            </ThemedText>
-          </Box>
-        </Box>
+        <DualPhoto placeImageUrl={item.placeImageUrl} selfieUrl={item.selfieUrl} placeName={item.place.name} />
 
         {item.comment && (
           <ThemedText size="sm" color="textPrimary" style={styles.caption}>
@@ -135,24 +129,6 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
 }
 
 const styles = StyleSheet.create({
-  photoWrap: {
-    aspectRatio: 4 / 5,
-    borderRadius: 10,
-    overflow: 'hidden',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border,
-    position: 'relative',
-    backgroundColor: theme.colors.backgroundSecondary
-  },
-  photo: { width: '100%', height: '100%' },
-  placeTag: {
-    top: 12,
-    left: 12,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    paddingHorizontal: 9,
-    paddingVertical: 5,
-    borderRadius: 6
-  },
   caption: {
     marginTop: 14,
     lineHeight: 20,

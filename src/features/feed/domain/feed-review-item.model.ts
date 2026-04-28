@@ -3,7 +3,8 @@ export type FeedReviewItem = {
   userId: string
   placeId: string
   rating: 'crowded' | 'dead'
-  imageUrl: string | null
+  placeImageUrl: string | null
+  selfieUrl: string | null
   comment: string | null
   createdAt: string
   updatedAt: string

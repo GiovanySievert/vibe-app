@@ -109,7 +109,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       <Box flexGrow={1}>
         {label && (
           <Box mb={-1}>
-            <ThemedText size="sm" weight="medium" color={!disabled ? 'textSecondary' : 'textTertiary'}>
+            <ThemedText size="sm" weight="medium" color={!disabled ? 'textSecondary' : 'textSecondary'}>
               {label}
             </ThemedText>
           </Box>
