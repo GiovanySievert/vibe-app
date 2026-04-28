@@ -1,20 +1,20 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
+import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
 
 type PinProps = {
   placeId: string
-  placeImage: string
   placeName?: string
   onPress?: () => void
 }
 
-export const MapPin: React.FC<PinProps> = ({ placeId, placeImage, placeName, onPress }) => {
+export const MapPin: React.FC<PinProps> = ({ placeId, placeName, onPress }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   return (
@@ -22,15 +22,12 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeImage, placeName, onP
       <TouchableOpacity
         onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
       >
-        <Box style={styles.pinContainer}>
-          <Image source={{ uri: placeImage }} style={styles.pinImage} resizeMode="cover" />
-        </Box>
-        <Box style={styles.pinStem} />
-        {!!placeName && (
-          <ThemedText style={styles.pinLabel} numberOfLines={1}>
+        <Box style={styles.pill}>
+          <ThemedText style={styles.pillText} numberOfLines={1}>
             {placeName}
           </ThemedText>
-        )}
+        </Box>
+        <Box style={styles.dot} />
       </TouchableOpacity>
     </Box>
   )
@@ -38,36 +35,23 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeImage, placeName, onP
 
 const styles = StyleSheet.create({
   wrapper: { alignItems: 'center' },
-  pinContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#111',
-    overflow: 'hidden',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3
+  pill: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 20
   },
-  pinImage: { width: '100%', height: '100%' },
-  pinStem: {
-    width: 2,
-    height: 12,
-    backgroundColor: '#111',
-    marginTop: 2,
-    borderRadius: 1
+  pillText: {
+    color: '#111',
+    fontSize: 12,
+    fontFamily: 'InterTight-SemiBold'
   },
-  pinLabel: {
-    marginTop: 2,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    color: '#fff',
-    fontSize: 11,
-    borderRadius: 6,
-    maxWidth: 120
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: theme.colors.primary,
+    alignSelf: 'center',
+    marginTop: 2
   }
 })

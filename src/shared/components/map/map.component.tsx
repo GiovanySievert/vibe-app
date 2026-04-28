@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
 import { useAtom } from 'jotai'
@@ -43,36 +43,37 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
   }, [bounds])
 
   return (
-    <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Dark}>
-      <MapboxGL.Camera
-        animationDuration={0}
-        animationMode="none"
-        centerCoordinate={[locationState.longitude, locationState.latitude]}
-        ref={cameraRef}
-        zoomLevel={14}
-      />
+    <View style={styles.container}>
+      <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Dark}>
+        <MapboxGL.Camera
+          animationDuration={0}
+          animationMode="none"
+          centerCoordinate={[locationState.longitude, locationState.latitude]}
+          ref={cameraRef}
+          zoomLevel={14}
+        />
 
-      {points?.map((p) => (
-        <MapboxGL.MarkerView
-          key={p.id}
-          id={p.id}
-          coordinate={[p.location.lon, p.location.lat]}
-          allowOverlap={true}
-          anchor={{ x: 0.5, y: 1.0 }}
-        >
-          <MapPin placeName={p.name} placeImage={p.image} placeId={p.id} onPress={() => onPressPin?.(p)} />
-        </MapboxGL.MarkerView>
-      ))}
-    </MapboxGL.MapView>
+        {points?.map((p) => (
+          <MapboxGL.MarkerView
+            key={p.id}
+            id={p.id}
+            coordinate={[p.location.lon, p.location.lat]}
+            allowOverlap={true}
+            anchor={{ x: 0.5, y: 1.0 }}
+          >
+            <MapPin placeName={p.name} placeId={p.id} onPress={() => onPressPin?.(p)} />
+          </MapboxGL.MarkerView>
+        ))}
+      </MapboxGL.MapView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  card: {
-    marginTop: 32,
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
+  container: {
+    flex: 1,
+    borderRadius: 14,
     overflow: 'hidden'
   },
-  map: { height: '100%', width: '100%' }
+  map: { flex: 1 }
 })

@@ -14,7 +14,7 @@ export type ScreenProps = {
 export const Screen: React.FC<ScreenProps> = ({ children, gradient }) => {
   if (gradient) {
     return (
-      <SafeAreaView style={styles.flex} edges={['right', 'left', 'top', 'bottom']}>
+      <SafeAreaView style={styles.flex} edges={['right', 'left', 'top']}>
         <LinearGradient
           colors={['#252525', 'transparent']}
           start={{ x: 1, y: 0 }}
