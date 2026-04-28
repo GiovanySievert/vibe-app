@@ -1,79 +1,59 @@
 import React from 'react'
-import { type ColorValue, Image, type ImageSourcePropType, StyleSheet, View } from 'react-native'
-
-import { LinearGradient } from 'expo-linear-gradient'
+import { Image, type ImageSourcePropType, StyleSheet, View } from 'react-native'
 
 import { theme } from '@src/shared/constants/theme'
 
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-const SIZES: Record<Size, number> = { xs: 32, sm: 44, md: 64, lg: 96, xl: 128 }
 
-type GradientColors = Readonly<[ColorValue, ColorValue, ...ColorValue[]]>
-const DEFAULT_COLORS: GradientColors = [theme.colors.primary, theme.colors.primary] as const
+const SIZES: Record<Size, number> = {
+  xs: 32,
+  sm: 44,
+  md: 64,
+  lg: 96,
+  xl: 128
+}
 
 type AvatarProps = {
   size?: Size
   uri?: string | null
   source?: ImageSourcePropType
-  ring?: number
-  gap?: number
-  colors?: GradientColors
-  gapColor?: ColorValue
+  square?: boolean
 }
 
-function createStyles(outer: number, img: number, gap: number, gapColor: ColorValue) {
+function createStyles(size: number, square = false) {
+  const borderRadius = square ? 8 : size / 2
+
   return StyleSheet.create({
-    root: { width: outer, height: outer },
-    ring: {
-      width: outer,
-      height: outer,
-      borderRadius: outer / 2,
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    gap: {
-      width: img + 2 * gap,
-      height: img + 2 * gap,
-      borderRadius: (img + 2 * gap) / 2,
-      backgroundColor: gapColor as string,
-      alignItems: 'center',
-      justifyContent: 'center'
+    root: {
+      width: size,
+      height: size
     },
     placeholder: {
-      width: img,
-      height: img,
-      borderRadius: img / 2,
-      backgroundColor: theme.colors.backgroundSecondary
+      width: size,
+      height: size,
+      borderRadius,
+      backgroundColor: theme.colors.textPrimary
     },
-    image: { width: img, height: img, borderRadius: img / 2 }
+    image: {
+      width: size,
+      height: size,
+      borderRadius
+    }
   })
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
-  size = 'md',
-  uri,
-  source,
-  ring = 4,
-  gap = 0,
-  colors = DEFAULT_COLORS,
-  gapColor = theme.colors.background as ColorValue
-}) => {
-  const img = SIZES[size]
-  const outer = img + 2 * (gap + ring)
+export const Avatar: React.FC<AvatarProps> = ({ size = 'md', uri, source, square = false }) => {
+  const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
-  const s = createStyles(outer, img, gap, gapColor)
+  const s = createStyles(avatarSize, square)
 
   return (
     <View style={s.root}>
-      <LinearGradient colors={colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={s.ring}>
-        <View style={s.gap}>
-          {imgSource ? (
-            <Image source={imgSource as ImageSourcePropType} resizeMode="cover" style={s.image} />
-          ) : (
-            <View style={s.placeholder} />
-          )}
-        </View>
-      </LinearGradient>
+      {imgSource ? (
+        <Image source={imgSource as ImageSourcePropType} resizeMode="cover" style={s.image} />
+      ) : (
+        <View style={s.placeholder} />
+      )}
     </View>
   )
 }

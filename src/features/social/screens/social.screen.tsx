@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import { UserFavoritesPlacesCards } from '@src/features/user-favorites-places/components'
 import { FollowRequestType } from '@src/features/users-profile/types'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -24,13 +24,27 @@ export const SocialScreen = () => {
       <ScrollView style={styles.scroll}>
         <Screen>
           <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" justifyContent="space-between" alignItems="center">
-            <ThemedText variant="subtitle">Social</ThemedText>
-            <TouchableOpacity onPress={() => setIsCreateEventVisible(true)} style={styles.createEventButton}>
-              <ThemedIcon name="CalendarPlus" size={18} color="primary" />
-              <ThemedText size="sm" color="primary" weight="semibold">
-                Crie seu evento
+            <Box>
+              <ThemedText variant="subtitle" weight="bold">
+                Social
               </ThemedText>
-            </TouchableOpacity>
+              <ThemedText variant="mono" size="xs">
+                amigos · eventos ·
+              </ThemedText>
+              <ThemedText variant="mono" size="xs">
+                favoritos
+              </ThemedText>
+            </Box>
+            <Box>
+              <Button onPress={() => setIsCreateEventVisible(true)} style={styles.createEventButton}>
+                <Box flexDirection="row" gap={2} alignItems="center">
+                  <ThemedIcon name="CalendarPlus" size={18} color="background" />
+                  <ThemedText size="sm" color="background" weight="semibold">
+                    Criar evento
+                  </ThemedText>
+                </Box>
+              </Button>
+            </Box>
           </Box>
           <Box gap={5}>
             <UserFavoritesPlacesCards />

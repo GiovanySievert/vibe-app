@@ -20,6 +20,7 @@ export type ThemedTextProps = TextProps & {
   color?: keyof AppTheme['colors']
   textDecorationLine?: TextStyle['textDecorationLine']
   underlineOffset?: number
+  textTransform?: TextStyle['textTransform']
 }
 
 type TypographyValue = Partial<Pick<TextStyle, 'fontSize' | 'lineHeight' | 'letterSpacing'>>
@@ -67,6 +68,7 @@ export function ThemedText({
   weight,
   color,
   textDecorationLine,
+  textTransform,
   underlineOffset = -5,
   ...rest
 }: ThemedTextProps) {
@@ -82,6 +84,7 @@ export function ThemedText({
   const overrideSize = size ? sizeToStyle(theme.sizes[size] as SizeValue) : {}
   const themeWeight = weight ? (theme.weights[weight] as WeightValue) : undefined
   const overrideWeight = weight ? weightToStyleFromTheme(themeWeight, weight) : {}
+  const overrideTextTransform: Partial<TextStyle> = textTransform ? { textTransform: textTransform } : {}
 
   const useManualUnderline = textDecorationLine != null && UNDERLINE_VARIANTS.includes(textDecorationLine)
 
@@ -91,6 +94,7 @@ export function ThemedText({
       overrideColor,
       overrideSize,
       overrideWeight,
+      overrideTextTransform,
       style
     ]) as TextStyle
     const borderColor = resolvedStyle.color as string | undefined
@@ -115,7 +119,15 @@ export function ThemedText({
 
   return (
     <Text
-      style={[baseByVariant[variant], overrideColor, overrideSize, overrideWeight, overrideDecoration, style]}
+      style={[
+        baseByVariant[variant],
+        overrideColor,
+        overrideSize,
+        overrideWeight,
+        overrideDecoration,
+        overrideTextTransform,
+        style
+      ]}
       {...rest}
     />
   )
