@@ -14,9 +14,10 @@ type UsersProfileOptionsModalProps = {
   userData: UserModel
   visible: boolean
   onClose: () => void
+  onOpenReport: () => void
 }
 
-export const UsersProfileOptionsModal: React.FC<UsersProfileOptionsModalProps> = ({ userData, visible, onClose }) => {
+export const UsersProfileOptionsModal: React.FC<UsersProfileOptionsModalProps> = ({ userData, visible, onClose, onOpenReport }) => {
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
@@ -55,6 +56,7 @@ export const UsersProfileOptionsModal: React.FC<UsersProfileOptionsModalProps> =
 
   const handleReport = () => {
     onClose()
+    onOpenReport()
   }
 
   return (

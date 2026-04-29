@@ -77,3 +77,25 @@ export type ListBlockedUsersResponse = {
   avatar: string | null
   blockedAt: string
 }
+
+export enum ReportReason {
+  SPAM = 'spam',
+  INAPPROPRIATE_CONTENT = 'inappropriate_content',
+  HARASSMENT = 'harassment',
+  FAKE_ACCOUNT = 'fake_account',
+  OTHER = 'other'
+}
+
+export type CreateReportPayload = {
+  reason: ReportReason
+  description?: string
+}
+
+export type CreateReportResponse = {
+  id: string
+  reporterId: string
+  reportedId: string
+  reason: ReportReason
+  description: string | null
+  createdAt: string
+}

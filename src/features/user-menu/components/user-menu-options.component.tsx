@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
@@ -5,8 +6,11 @@ import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { Box, Card, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { useLogout } from '@src/shared/hooks'
 
+import { UserMenuContactModal } from './user-menu-contact-modal.component'
+
 export const UserMenuOptions = () => {
   const navigation = useNavigation<NavigationProp<UserMenuStackParamList>>()
+  const [isContactModalVisible, setIsContactModalVisible] = useState(false)
 
   const { logout } = useLogout()
 
@@ -42,6 +46,15 @@ export const UserMenuOptions = () => {
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
         <Divider />
+        <Divider />
+        <TouchableOpacity style={styles.actionContainer} onPress={() => setIsContactModalVisible(true)}>
+          <Box flexDirection="row" gap={3} alignItems="center">
+            <ThemedIcon name="MessageCircle" color="textPrimary" size={16} />
+            <ThemedText weight="medium">Falar com a equipe</ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </TouchableOpacity>
+        <Divider />
         <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserDeleteAccountScreen')}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="Handshake" color="textPrimary" size={16} />
@@ -59,6 +72,11 @@ export const UserMenuOptions = () => {
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
       </Card>
+
+      <UserMenuContactModal
+        visible={isContactModalVisible}
+        onClose={() => setIsContactModalVisible(false)}
+      />
     </>
   )
 }

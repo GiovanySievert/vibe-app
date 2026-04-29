@@ -90,13 +90,21 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
         <ThemedText color="textPrimary" size="xl" weight="bold">
           {userData.username}
         </ThemedText>
-        <ThemedText size="sm" color="textPrimary" weight="medium">
-          jornalista. cinema, vinho natural e bar de esquina.
-        </ThemedText>
+        {userData.bio && (
+          <ThemedText size="sm" color="textPrimary" weight="medium">
+            {userData.bio}
+          </ThemedText>
+        )}
         <Box flexDirection="row" alignItems="center" gap={1} mt={1}>
-          <ThemedIcon name="MapPin" size={12} color="textSecondary" />
+          <ThemedIcon name="User" size={12} color="textSecondary" />
           <ThemedText size="xs" color="textSecondary" variant="mono">
-            são paulo
+            usuário beta
+          </ThemedText>
+        </Box>
+        <Box flexDirection="row" alignItems="center" gap={1} mt={-1}>
+          <ThemedIcon name="Crown" size={12} color="textSecondary" />
+          <ThemedText size="xs" color="textSecondary" variant="mono">
+            rei do janela
           </ThemedText>
         </Box>
       </Box>

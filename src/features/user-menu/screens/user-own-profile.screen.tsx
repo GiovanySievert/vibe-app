@@ -6,7 +6,11 @@ import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
 import { UserOwnProfileActions, UserOwnProfileTopBar } from '@src/features/user-menu/components'
-import { UserReviewsGrid, UsersProfileFollowList, UsersProfileHeaderScreen } from '@src/features/users-profile/components'
+import {
+  UserReviewsGrid,
+  UsersProfileFollowList,
+  UsersProfileHeaderScreen
+} from '@src/features/users-profile/components'
 import { UsersProfileService } from '@src/features/users-profile/services'
 import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
@@ -44,8 +48,14 @@ export const UserOwnProfileScreen = () => {
           <UserOwnProfileTopBar username={authState.user.username ?? ''} />
           <UsersProfileHeaderScreen
             userData={userData}
-            onOpenFollowers={() => { setModalType('followers'); setIsModalVisible(true) }}
-            onOpenFollowings={() => { setModalType('followings'); setIsModalVisible(true) }}
+            onOpenFollowers={() => {
+              setModalType('followers')
+              setIsModalVisible(true)
+            }}
+            onOpenFollowings={() => {
+              setModalType('followings')
+              setIsModalVisible(true)
+            }}
           />
           <UserOwnProfileActions />
           <UserReviewsGrid userId={userId} />
