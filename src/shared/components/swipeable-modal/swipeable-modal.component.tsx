@@ -52,8 +52,10 @@ export const SwipeableModal: React.FC<SwipeableModalProps> = ({
   }))
 
   const closeModal = () => {
-    runOnJS(onClose)()
-    translateY.value = withTiming(screenHeight, { duration: 300 })
+    overlayOpacity.value = withTiming(0, { duration: 300 })
+    translateY.value = withTiming(screenHeight, { duration: 300 }, () => {
+      runOnJS(onClose)()
+    })
   }
 
   const pan = Gesture.Pan()

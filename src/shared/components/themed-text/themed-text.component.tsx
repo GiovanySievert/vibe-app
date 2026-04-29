@@ -138,5 +138,5 @@ const styles = StyleSheet.create({
   secondary: { fontSize: 16, lineHeight: 24, color: '#8A8680', fontFamily: 'InterTight-Regular' },
   title: { fontSize: 36, lineHeight: 38, color: '#EDEAE4', fontFamily: 'InterTight-Bold', letterSpacing: -1.44 },
   subtitle: { lineHeight: 32, fontSize: 22, color: '#EDEAE4', fontFamily: 'InterTight-SemiBold', letterSpacing: -0.3 },
-  mono: { fontSize: 11, lineHeight: 16, color: '#8A8680', fontFamily: 'JetBrainsMono-Regular', letterSpacing: 0.9 }
+  mono: { color: '#8A8680', fontFamily: 'JetBrainsMono-Medium', letterSpacing: -0.07 }
 } as const)

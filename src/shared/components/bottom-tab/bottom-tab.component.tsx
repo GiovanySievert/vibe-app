@@ -75,7 +75,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
         if (route.name === 'PostScreen') {
           return (
             <TouchableOpacity style={styles.centerButton} key={route.key} onPress={onPress}>
-              <ThemedText size="sm" color="background" weight="medium" numberOfLines={1} ellipsizeMode="clip">
+              <ThemedText size="sm" color="background" weight="semibold" numberOfLines={1} ellipsizeMode="clip">
                 postar
               </ThemedText>
             </TouchableOpacity>
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 12,
     paddingRight: 12,
-    borderTopWidth: 0.3,
-    borderColor: theme.colors.textSecondary
+    borderTopWidth: 2,
+    borderColor: theme.colors.backgroundSecondary
   },
   pressable: {
     flexDirection: 'row',
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: theme.colors.primary,
     height: '80%',
-    marginTop: 5
+    marginTop: 5,
+    marginHorizontal: 12
   }
 })

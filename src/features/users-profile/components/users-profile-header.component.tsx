@@ -1,8 +1,9 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { Avatar, Box, Divider, ThemedText } from '@src/shared/components'
+import { useUserReviews } from '@src/features/users-profile/hooks/use-user-reviews.hook'
+import { Avatar, Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
 import { FollowStatsService } from '../services'
@@ -31,16 +32,15 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
     staleTime: 0
   })
 
+  const { data: reviews } = useUserReviews(userData.id)
+  const vibesCount = reviews?.length ?? 0
+
   const handleOpenFollowers = () => {
-    if (data && data.followersCount > 0) {
-      onOpenFollowers()
-    }
+    if (data && data.followersCount > 0) onOpenFollowers()
   }
 
   const handleOpenFollowings = () => {
-    if (data && data.followingCount > 0) {
-      onOpenFollowings()
-    }
+    if (data && data.followingCount > 0) onOpenFollowings()
   }
 
   if (isLoading) {
@@ -48,43 +48,58 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   }
 
   return (
-    <>
-      <Box flexDirection="row" justifyContent="space-around" alignItems="center" mt={3} mb={3}>
-        <Box flexDirection="row" alignItems="center" gap={3}>
-          <Avatar uri={userData.image} />
-          <ThemedText variant="primary" weight="semibold" size="lg">
-            {userData?.username}
-          </ThemedText>
-        </Box>
+    <Box pl={5} pr={5} pt={6} pb={4}>
+      <Box flexDirection="row" alignItems="center" justifyContent="space-between">
+        <Avatar size="lg" uri={userData.image} />
 
-        <Box flexDirection="row" gap={3} mt={6}>
-          <TouchableOpacity style={styles.centeredBox} onPress={handleOpenFollowings}>
-            <ThemedText variant="primary" weight="semibold">
-              {data?.followingCount || 0}
+        <Box flexDirection="row" gap={6}>
+          <Box alignItems="center" justifyContent="center">
+            <ThemedText weight="bold" size="lg" color="textPrimary">
+              {vibesCount}
             </ThemedText>
-            <ThemedText variant="secondary" size="sm">
-              Seguindo
+            <ThemedText variant="mono" size="xs" color="textSecondary">
+              vibes
             </ThemedText>
+          </Box>
+
+          <TouchableOpacity onPress={handleOpenFollowers}>
+            <Box alignItems="center">
+              <ThemedText weight="bold" size="lg" color="textPrimary">
+                {data?.followersCount ?? 0}
+              </ThemedText>
+              <ThemedText variant="mono" size="xs" color="textSecondary">
+                seguidores
+              </ThemedText>
+            </Box>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.centeredBox} onPress={handleOpenFollowers}>
-            <ThemedText variant="primary" weight="semibold">
-              {data?.followersCount || 0}
-            </ThemedText>
-            <ThemedText variant="secondary" size="sm">
-              Seguidores
-            </ThemedText>
+          <TouchableOpacity onPress={handleOpenFollowings}>
+            <Box alignItems="center">
+              <ThemedText weight="bold" size="lg" color="textPrimary">
+                {data?.followingCount ?? 0}
+              </ThemedText>
+              <ThemedText variant="mono" size="xs" color="textSecondary">
+                seguindo
+              </ThemedText>
+            </Box>
           </TouchableOpacity>
         </Box>
       </Box>
 
-      <Divider />
-    </>
+      <Box mt={4} gap={1}>
+        <ThemedText color="textPrimary" size="xl" weight="bold">
+          {userData.username}
+        </ThemedText>
+        <ThemedText size="sm" color="textPrimary" weight="medium">
+          jornalista. cinema, vinho natural e bar de esquina.
+        </ThemedText>
+        <Box flexDirection="row" alignItems="center" gap={1} mt={1}>
+          <ThemedIcon name="MapPin" size={12} color="textSecondary" />
+          <ThemedText size="xs" color="textSecondary" variant="mono">
+            são paulo
+          </ThemedText>
+        </Box>
+      </Box>
+    </Box>
   )
 }
-
-const styles = StyleSheet.create({
-  centeredBox: {
-    alignItems: 'center'
-  }
-})

@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
-import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { authStateAtom } from '@src/features/auth/state'
-import { UsersProfileFollowList, UsersProfileHeaderScreen } from '@src/features/users-profile/components'
+import { UserOwnProfileActions, UserOwnProfileTopBar } from '@src/features/user-menu/components'
+import { UserReviewsGrid, UsersProfileFollowList, UsersProfileHeaderScreen } from '@src/features/users-profile/components'
 import { UsersProfileService } from '@src/features/users-profile/services'
-import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
@@ -18,36 +16,16 @@ import { UserModel } from '@src/shared/domain/users.model'
 export const UserOwnProfileScreen = () => {
   const [authState] = useAtom(authStateAtom)
   const userId = authState.user.id
-  const navigation = useNavigation<NativeStackNavigationProp<UserMenuStackParamList>>()
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
 
-  const fetchUser = async () => {
-    const response = await UsersProfileService.fetchUserById(userId)
-    return response.data
-  }
-
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
     queryKey: ['fetchUserById', userId],
-    queryFn: fetchUser,
+    queryFn: async () => (await UsersProfileService.fetchUserById(userId)).data,
     retry: false,
     staleTime: 0
   })
-
-  const handleOpenFollowers = () => {
-    setModalType('followers')
-    setIsModalVisible(true)
-  }
-
-  const handleOpenFollowings = () => {
-    setModalType('followings')
-    setIsModalVisible(true)
-  }
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false)
-  }
 
   if (isLoading) {
     return (
@@ -57,24 +35,20 @@ export const UserOwnProfileScreen = () => {
     )
   }
 
-  if (!userData) {
-    return null
-  }
+  if (!userData) return null
 
   return (
     <>
       <ScrollView style={styles.scroll} overScrollMode="never">
         <Screen>
-          <Box flexDirection="row" justifyContent="flex-end" pt={2} pr={2}>
-            <TouchableOpacity onPress={() => navigation.navigate('UserMenuMain')}>
-              <ThemedIcon name="EllipsisVertical" color="textPrimary" size={22} />
-            </TouchableOpacity>
-          </Box>
+          <UserOwnProfileTopBar username={authState.user.username ?? ''} />
           <UsersProfileHeaderScreen
             userData={userData}
-            onOpenFollowers={handleOpenFollowers}
-            onOpenFollowings={handleOpenFollowings}
+            onOpenFollowers={() => { setModalType('followers'); setIsModalVisible(true) }}
+            onOpenFollowings={() => { setModalType('followings'); setIsModalVisible(true) }}
           />
+          <UserOwnProfileActions />
+          <UserReviewsGrid userId={userId} />
         </Screen>
       </ScrollView>
 
@@ -82,7 +56,7 @@ export const UserOwnProfileScreen = () => {
         userId={userData.id}
         type={modalType}
         visible={isModalVisible}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalVisible(false)}
         isUserLoggedProfile
       />
     </>

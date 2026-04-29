@@ -12,10 +12,12 @@ import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
 
 import {
-  UsersProfileBlock,
-  UsersProfileFollowActions,
+  UserReviewsGrid,
+  UsersProfileActions,
   UsersProfileFollowList,
-  UsersProfileHeaderScreen
+  UsersProfileHeaderScreen,
+  UsersProfileOptionsModal,
+  UsersProfileTopBar
 } from '../components'
 import { UsersProfileService } from '../services'
 
@@ -27,32 +29,15 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
+  const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false)
   const isUserLoggedProfile = userLoggedData?.user.id === userId
 
-  const fetchUser = async () => {
-    const response = await UsersProfileService.fetchUserById(userId)
-    return response.data
-  }
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
     queryKey: ['fetchUserById', userId],
-    queryFn: fetchUser,
+    queryFn: async () => (await UsersProfileService.fetchUserById(userId)).data,
     retry: false,
     staleTime: 0
   })
-
-  const handleOpenFollowers = () => {
-    setModalType('followers')
-    setIsModalVisible(true)
-  }
-
-  const handleOpenFollowings = () => {
-    setModalType('followings')
-    setIsModalVisible(true)
-  }
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false)
-  }
 
   if (isLoading) {
     return (
@@ -62,21 +47,26 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
     )
   }
 
-  if (!userData) {
-    return
-  }
+  if (!userData) return null
 
   return (
     <>
       <ScrollView style={styles.scroll} overScrollMode="never">
         <Screen>
+          <UsersProfileTopBar userData={userData} onOpenOptions={() => setIsOptionsModalVisible(true)} />
           <UsersProfileHeaderScreen
             userData={userData}
-            onOpenFollowers={handleOpenFollowers}
-            onOpenFollowings={handleOpenFollowings}
+            onOpenFollowers={() => {
+              setModalType('followers')
+              setIsModalVisible(true)
+            }}
+            onOpenFollowings={() => {
+              setModalType('followings')
+              setIsModalVisible(true)
+            }}
           />
-          {!isUserLoggedProfile && <UsersProfileFollowActions userData={userData} />}
-          {!isUserLoggedProfile && <UsersProfileBlock userData={userData} />}
+          <UsersProfileActions />
+          <UserReviewsGrid userId={userId} />
         </Screen>
       </ScrollView>
 
@@ -84,22 +74,21 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
         userId={userData.id}
         type={modalType}
         visible={isModalVisible}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalVisible(false)}
         isUserLoggedProfile={isUserLoggedProfile}
       />
+
+      {!isUserLoggedProfile && (
+        <UsersProfileOptionsModal
+          userData={userData}
+          visible={isOptionsModalVisible}
+          onClose={() => setIsOptionsModalVisible(false)}
+        />
+      )}
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  absoluteContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 24,
-    padding: 24
-  },
-  relativeContainer: {
-    flex: 1
-  },
   scroll: { flex: 1, backgroundColor: theme.colors.background }
 })

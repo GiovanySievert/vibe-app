@@ -1,3 +1,5 @@
 export * from './delete-account.component'
 export * from './user-menu-header.component'
 export * from './user-menu-options.component'
+export * from './user-own-profile-actions.component'
+export * from './user-own-profile-topbar.component'
