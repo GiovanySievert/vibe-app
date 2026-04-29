@@ -1,3 +1,5 @@
+import { BooleanLiteral } from 'typescript'
+
 export type PlacesModel = {
   id: string
   name: string
@@ -7,6 +9,7 @@ export type PlacesModel = {
     lat: number
     lon: number
   }
+  isHot: BooleanLiteral
 }
 
 export type Venue = {

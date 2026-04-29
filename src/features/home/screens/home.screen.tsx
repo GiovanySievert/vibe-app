@@ -22,6 +22,7 @@ export const HomeScreen = () => {
   const [locationState] = useAtom(locationStateAtom)
 
   const fetchPlaces = async () => {
+    if (!locationState) throw new Error('location not ready')
     const response = await PlacesService.fetchPlacesNearMe({
       lat: locationState.latitude,
       lon: locationState.longitude,
@@ -31,7 +32,7 @@ export const HomeScreen = () => {
   }
 
   const { data: placesData } = useQuery<PlacesModel[], Error>({
-    queryKey: ['fetchPlaces'],
+    queryKey: ['fetchPlaces', locationState?.latitude, locationState?.longitude],
     queryFn: fetchPlaces,
     retry: false,
     staleTime: 0,

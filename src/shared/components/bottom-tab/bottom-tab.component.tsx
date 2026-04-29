@@ -1,150 +1,125 @@
 import React, { useEffect } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { TabRoutesName } from '@src/app/navigation/types'
 import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
-import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
 
 type BottomTabProps = BottomTabBarProps
 
 const ANIMATION_DURATION = 400
 
-const getWidthValue = (label: string) => {
-  switch (label) {
-    case TabRoutesName.HOME:
-      return 48
-    case TabRoutesName.FEED:
-      return 40
-    case TabRoutesName.SOCIAL:
-      return 52
-    case TabRoutesName.MENU:
-      return 48
-    default:
-      return 60
-  }
-}
-
 export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, navigation }) => {
   const insets = useSafeAreaInsets()
+  const AnimatedThemedText = Animated.createAnimatedComponent(ThemedText)
 
-  const handleIconName = (label: string) => {
-    if (label === TabRoutesName.HOME) return 'MapPin'
-    if (label === TabRoutesName.FEED) return 'Rss'
-    if (label === TabRoutesName.SOCIAL) return 'Compass'
-    return 'User'
-  }
+  const routesWithCenterButton = [...state.routes]
+
+  routesWithCenterButton.splice(2, 0, {
+    key: 'center-button',
+    isCenterButton: true
+  })
 
   return (
-    <>
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        style={[
-          styles.containerTabs,
-          { paddingBottom: Math.max(insets.bottom - 4, 8), backgroundColor: theme.colors.background }
-        ]}
-      >
-        {state.routes.map((route: any, index: number) => {
-          const { options } = descriptors[route.key]
-          const label = options.tabBarLabel
-          const isFocused = state.index === index
-          const iconName = handleIconName(options.tabBarLabel!.toString())
-
-          const opacity = useSharedValue(isFocused ? 1 : 0)
-          const textWidth = useSharedValue(isFocused ? getWidthValue(label as string) : 0)
-          const gap = useSharedValue(isFocused ? 10 : 0)
-
-          useEffect(() => {
-            const widthValue = getWidthValue(label as string)
-            opacity.value = withTiming(isFocused ? 1 : 0, { duration: ANIMATION_DURATION })
-            textWidth.value = withTiming(isFocused ? widthValue : 0, { duration: ANIMATION_DURATION })
-            gap.value = withTiming(isFocused ? 10 : 0, { duration: ANIMATION_DURATION })
-          }, [isFocused, label, opacity, textWidth, gap])
-
-          const animatedTextStyle = useAnimatedStyle(() => ({
-            opacity: opacity.value,
-            width: textWidth.value
-          }))
-
-          const animatedButtonStyle = useAnimatedStyle(() => ({
-            backgroundColor: withTiming(
-              isFocused ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary,
-              {
-                duration: ANIMATION_DURATION
-              }
-            )
-          }))
-
-          const spacerStyle = useAnimatedStyle(() => ({
-            width: gap.value
-          }))
-
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true
-            })
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name)
-            }
-          }
-
+    <Box
+      flexDirection="row"
+      justifyContent="space-between"
+      style={[
+        styles.containerTabs,
+        {
+          paddingBottom: Math.max(insets.bottom - 4, 8),
+          backgroundColor: theme.colors.background
+        }
+      ]}
+    >
+      {routesWithCenterButton.map((route: any) => {
+        if (route.isCenterButton) {
           return (
-            <Animated.View key={route.key} style={[styles.button, animatedButtonStyle]}>
-              <Pressable onPress={onPress} testID="tab-item" style={styles.pressable}>
-                <ThemedIcon
-                  name={iconName}
-                  size={20}
-                  color="textPrimary"
-                  type={isFocused ? 'solid' : 'light'}
-                  testID="icon--tab-item"
-                />
-                <Animated.View style={[spacerStyle]} />
-                <Animated.View style={animatedTextStyle}>
-                  <ThemedText weight="semibold" numberOfLines={1} ellipsizeMode="clip">
-                    {label?.toString()}
-                  </ThemedText>
-                </Animated.View>
-              </Pressable>
-            </Animated.View>
+            <TouchableOpacity
+              style={styles.centerButton}
+              key={route.key}
+              onPress={() => {
+                console.log('ação botão central')
+              }}
+            >
+              <ThemedText size="sm" color="background" weight="medium" numberOfLines={1} ellipsizeMode="clip">
+                postar
+              </ThemedText>
+            </TouchableOpacity>
           )
-        })}
-      </Box>
-    </>
+        }
+
+        const originalIndex = state.routes.findIndex((item) => item.key === route.key)
+
+        const { options } = descriptors[route.key]
+        const label = options.tabBarLabel
+        const isFocused = state.index === originalIndex
+
+        const progress = useSharedValue(isFocused ? 1 : 0)
+
+        useEffect(() => {
+          progress.value = withTiming(isFocused ? 1 : 0, {
+            duration: ANIMATION_DURATION
+          })
+        }, [isFocused])
+
+        const animatedTextStyle = useAnimatedStyle(() => {
+          return {
+            color: interpolateColor(progress.value, [0, 1], [theme.colors.textTerciary, theme.colors.textPrimary])
+          }
+        })
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true
+          })
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name)
+          }
+        }
+
+        return (
+          <Pressable key={route.key} onPress={onPress} testID="tab-item" style={styles.pressable}>
+            <AnimatedThemedText weight="medium" numberOfLines={1} ellipsizeMode="clip" style={animatedTextStyle}>
+              {label?.toString()}
+            </AnimatedThemedText>
+          </Pressable>
+        )
+      })}
+    </Box>
   )
 }
 
 const styles = StyleSheet.create({
   containerTabs: {
-    shadowColor: 'rgba(0, 0, 0, 0.8)',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 40,
-    paddingTop: 12,
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingTop: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
     borderTopWidth: 0.3,
     borderColor: theme.colors.textSecondary
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 16
   },
   pressable: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent: 'center',
     paddingVertical: 8,
     paddingHorizontal: 16
+  },
+  centerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: theme.colors.primary,
+    height: '80%',
+    marginTop: 5
   }
 })

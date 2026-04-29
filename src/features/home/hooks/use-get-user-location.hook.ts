@@ -21,6 +21,14 @@ export function useUserLocation() {
           return
         }
 
+        const last = await Location.getLastKnownPositionAsync()
+        if (last) {
+          setLocation({
+            latitude: last.coords.latitude,
+            longitude: last.coords.longitude
+          })
+        }
+
         const loc = await Location.getCurrentPositionAsync({
           accuracy: Location.Accuracy.High
         })

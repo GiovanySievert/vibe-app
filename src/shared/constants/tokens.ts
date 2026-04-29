@@ -12,6 +12,7 @@ export const colors = {
 
   textPrimary: '#EDEAE4',
   textSecondary: '#8a8680',
+  textTerciary: '#55524d',
 
   border: 'rgba(255,255,255,0.08)'
 } as const

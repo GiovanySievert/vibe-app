@@ -16,7 +16,6 @@ type MapWithPinsProps = {
   style?: any
   onPressPin?: (point: PlacesModel) => void
 }
-
 export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) => {
   const cameraRef = useRef<MapboxGL.Camera>(null)
   const [locationState] = useAtom(locationStateAtom)
@@ -45,13 +44,15 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
   return (
     <View style={styles.container}>
       <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Dark}>
-        <MapboxGL.Camera
-          animationDuration={0}
-          animationMode="none"
-          centerCoordinate={[locationState.longitude, locationState.latitude]}
-          ref={cameraRef}
-          zoomLevel={14}
-        />
+        {locationState && (
+          <MapboxGL.Camera
+            animationDuration={0}
+            animationMode="none"
+            centerCoordinate={[locationState.longitude, locationState.latitude]}
+            ref={cameraRef}
+            zoomLevel={14}
+          />
+        )}
 
         {points?.map((p) => (
           <MapboxGL.MarkerView
@@ -61,7 +62,7 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) 
             allowOverlap={true}
             anchor={{ x: 0.5, y: 1.0 }}
           >
-            <MapPin placeName={p.name} placeId={p.id} onPress={() => onPressPin?.(p)} />
+            <MapPin placeName={p.name} placeId={p.id} placeIsHot={!!p.isHot} onPress={() => onPressPin?.(p)} />
           </MapboxGL.MarkerView>
         ))}
       </MapboxGL.MapView>
