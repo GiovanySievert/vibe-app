@@ -25,15 +25,9 @@ export const SocialScreen = () => {
         <Screen>
           <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" justifyContent="space-between" alignItems="center">
             <Box>
-              <ThemedText variant="subtitle" weight="bold">
-                Social
-              </ThemedText>
-              <ThemedText variant="mono" size="xs">
-                amigos · eventos ·
-              </ThemedText>
-              <ThemedText variant="mono" size="xs">
-                favoritos
-              </ThemedText>
+              <ThemedText variant="title">social</ThemedText>
+              <ThemedText variant="mono">amigos · eventos ·</ThemedText>
+              <ThemedText variant="mono">favoritos</ThemedText>
             </Box>
             <Box>
               <Button onPress={() => setIsCreateEventVisible(true)} style={styles.createEventButton}>
