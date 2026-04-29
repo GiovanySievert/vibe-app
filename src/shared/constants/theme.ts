@@ -1,4 +1,4 @@
-import { colors, sizes, spacing, typography, weights } from './tokens'
+import { colors, letterSpacings, sizes, spacing, typography, weights } from './tokens'
 
 export type Color = keyof typeof colors
 export type Spacing = keyof typeof spacing
@@ -15,6 +15,7 @@ export type AppTheme = {
   sizes: typeof sizes
   weights: typeof weights
   spacing: typeof spacing
+  letterSpacings: typeof letterSpacings
 }
 
 export const theme: AppTheme = {
@@ -22,5 +23,6 @@ export const theme: AppTheme = {
   sizes,
   typography,
   weights,
-  spacing
+  spacing,
+  letterSpacings
 }

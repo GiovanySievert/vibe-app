@@ -18,6 +18,7 @@ export type ThemedTextProps = TextProps & {
   size?: keyof AppTheme['sizes']
   weight?: keyof AppTheme['weights']
   color?: keyof AppTheme['colors']
+  letterSpacing?: keyof AppTheme['letterSpacings']
   textDecorationLine?: TextStyle['textDecorationLine']
   underlineOffset?: number
   textTransform?: TextStyle['textTransform']
@@ -67,6 +68,7 @@ export function ThemedText({
   size,
   weight,
   color,
+  letterSpacing,
   textDecorationLine,
   textTransform,
   underlineOffset = -5,
@@ -84,6 +86,7 @@ export function ThemedText({
   const overrideSize = size ? sizeToStyle(theme.sizes[size] as SizeValue) : {}
   const themeWeight = weight ? (theme.weights[weight] as WeightValue) : undefined
   const overrideWeight = weight ? weightToStyleFromTheme(themeWeight, weight) : {}
+  const overrideLetterSpacing: Partial<TextStyle> = letterSpacing !== undefined ? { letterSpacing: theme.letterSpacings[letterSpacing] } : {}
   const overrideTextTransform: Partial<TextStyle> = textTransform ? { textTransform: textTransform } : {}
 
   const useManualUnderline = textDecorationLine != null && UNDERLINE_VARIANTS.includes(textDecorationLine)
@@ -94,6 +97,7 @@ export function ThemedText({
       overrideColor,
       overrideSize,
       overrideWeight,
+      overrideLetterSpacing,
       overrideTextTransform,
       style
     ]) as TextStyle
@@ -124,6 +128,7 @@ export function ThemedText({
         overrideColor,
         overrideSize,
         overrideWeight,
+        overrideLetterSpacing,
         overrideDecoration,
         overrideTextTransform,
         style

@@ -33,6 +33,15 @@ export const sizes = {
   '4xl': '36'
 }
 
+export const letterSpacings = {
+  tighter: -1.5,
+  tight: -0.5,
+  normal: 0,
+  wide: 0.5,
+  wider: 1,
+  widest: 2
+} as const
+
 export const weights = {
   light: '300' as const,
   regular: '400' as const,
