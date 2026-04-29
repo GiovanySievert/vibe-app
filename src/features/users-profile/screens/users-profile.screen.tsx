@@ -17,6 +17,7 @@ import {
   UsersProfileFollowList,
   UsersProfileHeaderScreen,
   UsersProfileOptionsModal,
+  UsersProfileReportModal,
   UsersProfileTopBar
 } from '../components'
 import { UsersProfileService } from '../services'
@@ -30,6 +31,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false)
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false)
   const isUserLoggedProfile = userLoggedData?.user.id === userId
 
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
@@ -79,11 +81,19 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
       />
 
       {!isUserLoggedProfile && (
-        <UsersProfileOptionsModal
-          userData={userData}
-          visible={isOptionsModalVisible}
-          onClose={() => setIsOptionsModalVisible(false)}
-        />
+        <>
+          <UsersProfileOptionsModal
+            userData={userData}
+            visible={isOptionsModalVisible}
+            onClose={() => setIsOptionsModalVisible(false)}
+            onOpenReport={() => setIsReportModalVisible(true)}
+          />
+          <UsersProfileReportModal
+            userData={userData}
+            visible={isReportModalVisible}
+            onClose={() => setIsReportModalVisible(false)}
+          />
+        </>
       )}
     </>
   )
