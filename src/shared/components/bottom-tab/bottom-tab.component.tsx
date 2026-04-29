@@ -13,16 +13,35 @@ type BottomTabProps = BottomTabBarProps
 
 const ANIMATION_DURATION = 400
 
+type TabItemProps = {
+  label: string
+  isFocused: boolean
+  onPress: () => void
+}
+
+const TabItem: React.FC<TabItemProps> = ({ label, isFocused, onPress }) => {
+  const AnimatedThemedText = Animated.createAnimatedComponent(ThemedText)
+  const progress = useSharedValue(isFocused ? 1 : 0)
+
+  useEffect(() => {
+    progress.value = withTiming(isFocused ? 1 : 0, { duration: ANIMATION_DURATION })
+  }, [isFocused, progress])
+
+  const animatedTextStyle = useAnimatedStyle(() => ({
+    color: interpolateColor(progress.value, [0, 1], [theme.colors.textTerciary, theme.colors.textPrimary])
+  }))
+
+  return (
+    <Pressable onPress={onPress} testID="tab-item" style={styles.pressable}>
+      <AnimatedThemedText weight="medium" numberOfLines={1} ellipsizeMode="clip" style={animatedTextStyle}>
+        {label}
+      </AnimatedThemedText>
+    </Pressable>
+  )
+}
+
 export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, navigation }) => {
   const insets = useSafeAreaInsets()
-  const AnimatedThemedText = Animated.createAnimatedComponent(ThemedText)
-
-  const routesWithCenterButton = [...state.routes]
-
-  routesWithCenterButton.splice(2, 0, {
-    key: 'center-button',
-    isCenterButton: true
-  })
 
   return (
     <Box
@@ -36,42 +55,10 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
         }
       ]}
     >
-      {routesWithCenterButton.map((route: any) => {
-        if (route.isCenterButton) {
-          return (
-            <TouchableOpacity
-              style={styles.centerButton}
-              key={route.key}
-              onPress={() => {
-                console.log('ação botão central')
-              }}
-            >
-              <ThemedText size="sm" color="background" weight="medium" numberOfLines={1} ellipsizeMode="clip">
-                postar
-              </ThemedText>
-            </TouchableOpacity>
-          )
-        }
-
-        const originalIndex = state.routes.findIndex((item) => item.key === route.key)
-
+      {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
-        const label = options.tabBarLabel
-        const isFocused = state.index === originalIndex
-
-        const progress = useSharedValue(isFocused ? 1 : 0)
-
-        useEffect(() => {
-          progress.value = withTiming(isFocused ? 1 : 0, {
-            duration: ANIMATION_DURATION
-          })
-        }, [isFocused])
-
-        const animatedTextStyle = useAnimatedStyle(() => {
-          return {
-            color: interpolateColor(progress.value, [0, 1], [theme.colors.textTerciary, theme.colors.textPrimary])
-          }
-        })
+        const label = options.tabBarLabel?.toString() ?? route.name
+        const isFocused = state.index === index
 
         const onPress = () => {
           const event = navigation.emit({
@@ -85,13 +72,17 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
           }
         }
 
-        return (
-          <Pressable key={route.key} onPress={onPress} testID="tab-item" style={styles.pressable}>
-            <AnimatedThemedText weight="medium" numberOfLines={1} ellipsizeMode="clip" style={animatedTextStyle}>
-              {label?.toString()}
-            </AnimatedThemedText>
-          </Pressable>
-        )
+        if (route.name === 'PostScreen') {
+          return (
+            <TouchableOpacity style={styles.centerButton} key={route.key} onPress={onPress}>
+              <ThemedText size="sm" color="background" weight="medium" numberOfLines={1} ellipsizeMode="clip">
+                postar
+              </ThemedText>
+            </TouchableOpacity>
+          )
+        }
+
+        return <TabItem key={route.key} label={label} isFocused={isFocused} onPress={onPress} />
       })}
     </Box>
   )

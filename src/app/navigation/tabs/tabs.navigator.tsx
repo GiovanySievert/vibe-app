@@ -5,6 +5,7 @@ import { FeedFeatures, HomeFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
 
 import { SocialStackNavigator } from '../social/social-stack.navigator'
+import { PostStackNavigator } from '../stacks/post-stack'
 import { UserMenuNavigator } from '../stacks/user-menu-stack'
 import { TabRoutesName, TabsNavigatorParamsList } from '../types'
 
@@ -31,6 +32,14 @@ export function TabsNavigator() {
         component={FeedFeatures.FeedScreen}
         options={{
           tabBarLabel: TabRoutesName.FEED
+        }}
+      />
+
+      <Tab.Screen
+        name="PostScreen"
+        component={PostStackNavigator}
+        options={{
+          tabBarLabel: TabRoutesName.POST
         }}
       />
 

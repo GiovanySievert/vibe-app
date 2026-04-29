@@ -3,6 +3,7 @@ import { NavigatorScreenParams } from '@react-navigation/native'
 export enum TabRoutesName {
   HOME = 'mapa',
   FEED = 'feed',
+  POST = 'post',
   SOCIAL = 'social',
   MENU = 'você'
 }
@@ -18,10 +19,15 @@ export type UnathenticatedStackParamList = {
 }
 
 export type UserMenuStackParamList = {
+  UserProfileMain: undefined
   UserMenuMain: undefined
   UserEditProfile: undefined
   UserDeleteAccountScreen: undefined
   TermsOfUseScreen: undefined
+}
+
+export type PostStackParamList = {
+  PostMain: undefined
 }
 
 export type SocialStackParamList = {
@@ -33,6 +39,7 @@ export type SocialStackParamList = {
 export type TabsNavigatorParamsList = {
   HomeScreen: undefined
   FeedScreen: undefined
+  PostScreen: NavigatorScreenParams<PostStackParamList>
   SocialScreen: NavigatorScreenParams<SocialStackParamList>
   UserMenuScreen: NavigatorScreenParams<UserMenuStackParamList>
 }

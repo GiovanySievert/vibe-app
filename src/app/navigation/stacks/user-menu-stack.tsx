@@ -12,6 +12,11 @@ export function UserMenuNavigator() {
   return (
     <UserMenuStack.Navigator screenOptions={{ headerShown: false, header: (props) => <Header {...props} /> }}>
       <UserMenuStack.Screen
+        name="UserProfileMain"
+        component={UserMenuFeatures.UserOwnProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <UserMenuStack.Screen
         name="UserMenuMain"
         component={UserMenuFeatures.UserMenuScreen}
         options={{ headerShown: false }}
