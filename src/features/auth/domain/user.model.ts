@@ -7,6 +7,7 @@ export type UserData = {
   name: string
   username?: string
   image?: string | null | undefined
+  bio?: string | null | undefined
 }
 
 export type UserSession = {

@@ -3,6 +3,7 @@ export type UserModel = {
   name: string
   username: string
   image: string | null
+  bio: string | null
 }
 
 export type GetUsersById = {

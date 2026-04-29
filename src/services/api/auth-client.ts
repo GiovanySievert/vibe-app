@@ -17,7 +17,8 @@ export const authClient = createAuthClient({
     emailOTPClient(),
     inferAdditionalFields({
       user: {
-        username: { type: 'string' }
+        username: { type: 'string' },
+        bio: { type: 'string', required: false }
       }
     })
   ]
