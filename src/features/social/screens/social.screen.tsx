@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
+import { NotificationBell } from '@src/features/notifications/inbox'
 import { UserFavoritesPlacesCards } from '@src/features/user-favorites-places/components'
 import { FollowRequestType } from '@src/features/users-profile/types'
 import { Box, Button, ThemedText } from '@src/shared/components'
@@ -29,7 +30,8 @@ export const SocialScreen = () => {
               <ThemedText variant="mono">amigos · eventos ·</ThemedText>
               <ThemedText variant="mono">favoritos</ThemedText>
             </Box>
-            <Box>
+            <Box flexDirection="row" alignItems="center" gap={2}>
+              <NotificationBell />
               <Button onPress={() => setIsCreateEventVisible(true)} style={styles.createEventButton}>
                 <Box flexDirection="row" gap={2} alignItems="center">
                   <ThemedIcon name="CalendarPlus" size={18} color="background" />

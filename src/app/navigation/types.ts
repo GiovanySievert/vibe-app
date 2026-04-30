@@ -24,6 +24,7 @@ export type UserMenuStackParamList = {
   UserEditProfile: undefined
   UserDeleteAccountScreen: undefined
   TermsOfUseScreen: undefined
+  NotificationPreferencesScreen: undefined
 }
 
 export type PostStackParamList = {

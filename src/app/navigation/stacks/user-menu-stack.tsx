@@ -1,6 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
+import { NotificationPreferencesScreen } from '@src/features/notifications/preferences'
 import { UserMenuFeatures } from '@src/features'
 import { Header } from '@src/shared/components'
 
@@ -35,6 +36,11 @@ export function UserMenuNavigator() {
         name="TermsOfUseScreen"
         component={UserMenuFeatures.TermsOfUseScreen}
         options={{ headerShown: true, title: 'Termos de Uso' }}
+      />
+      <UserMenuStack.Screen
+        name="NotificationPreferencesScreen"
+        component={NotificationPreferencesScreen}
+        options={{ headerShown: true, title: 'Notificacoes' }}
       />
     </UserMenuStack.Navigator>
   )
