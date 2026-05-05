@@ -50,7 +50,7 @@ export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
   if (!usersData?.length && !isLoading && inputSearch.length > 0) {
     return (
       <Box mt={5}>
-        <ThemedText>No results found.</ThemedText>
+        <ThemedText>Nenhum usuário encontrado.</ThemedText>
       </Box>
     )
   }
