@@ -1,12 +1,13 @@
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
 
+import { getFollowStatusQueryKey, useFollowStatus } from '../hooks/use-follow-status.hook'
 import { FollowRequestsService, FollowService } from '../services'
 import { FollowAction, FollowStatus, GetFollowStatusResponse } from '../types'
 
@@ -19,19 +20,8 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
-  const queryKey = ['fetchFollowStatusById', userLoggedData?.user.id, userData.id]
-
-  const fetchFollowStatus = async () => {
-    const response = await FollowService.getFollowStatus(userData.id)
-    return response.data
-  }
-
-  const { data: followData, isLoading } = useQuery<GetFollowStatusResponse, Error>({
-    queryKey,
-    queryFn: fetchFollowStatus,
-    retry: false,
-    staleTime: 60 * 5
-  })
+  const queryKey = getFollowStatusQueryKey(userLoggedData?.user.id, userData.id)
+  const { data: followData, isLoading } = useFollowStatus(userData.id, !!userLoggedData?.user.id)
 
   const followMutation = useMutation({
     mutationFn: (action: FollowAction) => {

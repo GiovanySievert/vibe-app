@@ -13,12 +13,16 @@ import { UsersProfileHeaderLoading } from './users-profile-header-loading.compon
 
 type UsersProfileHeaderProps = {
   userData: UserModel
+  canViewReviews: boolean
+  isReviewAccessLoading?: boolean
   onOpenFollowers: () => void
   onOpenFollowings: () => void
 }
 
 export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   userData,
+  canViewReviews,
+  isReviewAccessLoading = false,
   onOpenFollowers,
   onOpenFollowings
 }) => {
@@ -33,7 +37,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
     staleTime: 0
   })
 
-  const { data: reviews } = useUserReviews(userData.id)
+  const { data: reviews } = useUserReviews(userData.id, canViewReviews)
   const vibesCount = reviews?.length ?? 0
 
   const { data: streakData } = useUserStreak(userData.id)
@@ -59,7 +63,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
         <Box flexDirection="row" gap={6}>
           <Box alignItems="center" justifyContent="center">
             <ThemedText weight="bold" size="lg" color="textPrimary">
-              {vibesCount}
+              {isReviewAccessLoading ? '...' : canViewReviews ? vibesCount : '--'}
             </ThemedText>
             <ThemedText variant="mono" size="xs" color="textSecondary">
               vibes

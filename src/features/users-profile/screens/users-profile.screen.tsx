@@ -20,7 +20,9 @@ import {
   UsersProfileReportModal,
   UsersProfileTopBar
 } from '../components'
+import { useFollowStatus } from '../hooks/use-follow-status.hook'
 import { UsersProfileService } from '../services'
+import { FollowStatus } from '../types'
 
 type UsersProfileScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'UsersProfileScreen'>
 
@@ -41,6 +43,10 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
     staleTime: 0
   })
 
+  const { data: followStatusData, isLoading: isFollowStatusLoading } = useFollowStatus(userId, !isUserLoggedProfile)
+
+  const canViewReviews = isUserLoggedProfile || followStatusData?.status === FollowStatus.FOLLOWING
+
   if (isLoading) {
     return (
       <Box bg="background">
@@ -58,6 +64,8 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
           <UsersProfileTopBar userData={userData} onOpenOptions={() => setIsOptionsModalVisible(true)} />
           <UsersProfileHeaderScreen
             userData={userData}
+            canViewReviews={canViewReviews}
+            isReviewAccessLoading={isFollowStatusLoading}
             onOpenFollowers={() => {
               setModalType('followers')
               setIsModalVisible(true)
@@ -68,7 +76,11 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
             }}
           />
           <UsersProfileActions />
-          <UserReviewsGrid userId={userId} />
+          <UserReviewsGrid
+            userId={userId}
+            canViewReviews={canViewReviews}
+            isReviewAccessLoading={isFollowStatusLoading}
+          />
         </Screen>
       </ScrollView>
 

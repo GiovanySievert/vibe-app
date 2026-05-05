@@ -14,6 +14,8 @@ import { useUserReviews } from '../hooks/use-user-reviews.hook'
 
 type UserReviewsGridProps = {
   userId: string
+  canViewReviews: boolean
+  isReviewAccessLoading?: boolean
 }
 
 const COLUMNS = 3
@@ -22,18 +24,38 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 const CELL_SIZE = (SCREEN_WIDTH - GAP * (COLUMNS - 1)) / COLUMNS
 const MODAL_HEIGHT = Dimensions.get('window').height * 0.9
 
-export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({ userId }) => {
-  const { data, isLoading } = useUserReviews(userId)
+export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
+  userId,
+  canViewReviews,
+  isReviewAccessLoading = false
+}) => {
+  const { data, isLoading } = useUserReviews(userId, canViewReviews)
   const { data: session } = authClient.useSession()
   const currentUserId = session?.user.id ?? ''
   const reviewCount = data?.length ?? 0
 
   const [selectedItem, setSelectedItem] = useState<FeedReviewItem | null>(null)
 
-  if (isLoading) {
+  if (isLoading || isReviewAccessLoading) {
     return (
       <Box>
         <ThemedText>carregando...</ThemedText>
+      </Box>
+    )
+  }
+
+  if (!canViewReviews) {
+    return (
+      <Box>
+        <Box justifyContent="center" alignItems="center" flexDirection="row" pb={4} pt={4}>
+          <ThemedText color="textPrimary" weight="bold">
+            vibes
+          </ThemedText>
+        </Box>
+        <Box style={styles.divider} />
+        <Box pt={4} pb={4} pl={5} pr={5}>
+          <ThemedText color="textSecondary">siga este usuário para ver as vibes dele.</ThemedText>
+        </Box>
       </Box>
     )
   }

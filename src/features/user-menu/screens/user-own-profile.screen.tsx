@@ -48,6 +48,7 @@ export const UserOwnProfileScreen = () => {
           <UserOwnProfileTopBar username={authState.user.username ?? ''} />
           <UsersProfileHeaderScreen
             userData={userData}
+            canViewReviews
             onOpenFollowers={() => {
               setModalType('followers')
               setIsModalVisible(true)
@@ -58,7 +59,7 @@ export const UserOwnProfileScreen = () => {
             }}
           />
           <UserOwnProfileActions />
-          <UserReviewsGrid userId={userId} />
+          <UserReviewsGrid userId={userId} canViewReviews />
         </Screen>
       </ScrollView>
 
