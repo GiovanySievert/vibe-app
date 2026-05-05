@@ -15,3 +15,17 @@ export type GetUserByUsername = {
   username: string
   image: string | null
 }
+
+export type UserSuggestion = {
+  id: string
+  username: string
+  image: string | null
+  mutualCount: number
+}
+
+export type TrendingUser = {
+  id: string
+  username: string
+  image: string | null
+  reviewsCount: number
+}

@@ -8,6 +8,9 @@ export const FeedService = {
   list: (page?: number): Promise<AxiosResponse<FeedReviewItem[]>> =>
     coreApi.get('/place-reviews/feed', { params: { page } }),
 
+  getById: (reviewId: string): Promise<AxiosResponse<FeedReviewItem>> =>
+    coreApi.get(`/place-reviews/${reviewId}`),
+
   listComments: (reviewId: string, page: number): Promise<AxiosResponse<ListFeedReviewCommentsResponse>> =>
     coreApi.get(`/place-reviews/${reviewId}/comments`, { params: { page } }),
 
@@ -18,5 +21,8 @@ export const FeedService = {
     coreApi.put(`/place-reviews/${reviewId}/reaction`, { type }),
 
   removeReaction: (reviewId: string): Promise<AxiosResponse<{ success: boolean }>> =>
-    coreApi.delete(`/place-reviews/${reviewId}/reaction`)
+    coreApi.delete(`/place-reviews/${reviewId}/reaction`),
+
+  deleteReview: (reviewId: string): Promise<AxiosResponse<void>> =>
+    coreApi.delete(`/place-reviews/${reviewId}`)
 }

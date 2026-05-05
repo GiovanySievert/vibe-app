@@ -9,7 +9,7 @@ import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
 import { useDebounce } from '@src/shared/hooks'
 
-import { LastSearched, SearchInput, SearchPlaces, SearchUsers } from '../components'
+import { HotPlaces, LastSearched, SearchInput, SearchPlaces, SearchUsers } from '../components'
 
 type SearchScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'SearchScreen'>
 
@@ -31,7 +31,10 @@ export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
                 <SearchUsers inputSearch={debouncedSearchTerm} />
               </Tabs>
             ) : (
-              <LastSearched />
+              <>
+                <LastSearched />
+                <HotPlaces />
+              </>
             )}
           </Box>
         </Screen>
