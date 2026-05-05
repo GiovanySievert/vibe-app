@@ -5,12 +5,14 @@ import { coreApi } from '@src/services/api'
 export type UpdateUserProfilePayload = {
   name: string
   bio?: string
+  image?: string
 }
 
 export type UpdateUserProfileResponse = {
   id: string
   name: string
   bio: string | null
+  image: string | null
   updatedAt: string
 }
 

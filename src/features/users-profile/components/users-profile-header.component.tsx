@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 
 import { useUserReviews } from '@src/features/users-profile/hooks/use-user-reviews.hook'
+import { useUserStreak } from '@src/features/users-profile/hooks/use-user-streak.hook'
 import { Avatar, Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
@@ -34,6 +35,9 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
 
   const { data: reviews } = useUserReviews(userData.id)
   const vibesCount = reviews?.length ?? 0
+
+  const { data: streakData } = useUserStreak(userData.id)
+  const currentStreak = streakData?.streak.currentStreak ?? 0
 
   const handleOpenFollowers = () => {
     if (data && data.followersCount > 0) onOpenFollowers()
@@ -105,6 +109,12 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
           <ThemedIcon name="Crown" size={12} color="textSecondary" />
           <ThemedText size="xs" color="textSecondary" variant="mono">
             rei do janela
+          </ThemedText>
+        </Box>
+        <Box flexDirection="row" alignItems="center" gap={1} mt={-1}>
+          <ThemedIcon name="Flame" size={12} color="textSecondary" />
+          <ThemedText size="xs" color="textSecondary" variant="mono">
+            {currentStreak} {currentStreak === 1 ? 'semana' : 'semanas'} em sequência
           </ThemedText>
         </Box>
       </Box>

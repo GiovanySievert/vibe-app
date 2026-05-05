@@ -99,3 +99,21 @@ export type CreateReportResponse = {
   description: string | null
   createdAt: string
 }
+
+export type WeeklyActivitySummary = {
+  isoYear: number
+  isoWeek: number
+  reviewCount: number
+  streakContributed: boolean
+}
+
+export type UserStreakResponse = {
+  streak: {
+    currentStreak: number
+    longestStreak: number
+    weeklyThreshold: number
+    lastActiveWeek: number | null
+    lastActiveYear: number | null
+  }
+  recentActivity: WeeklyActivitySummary[]
+}

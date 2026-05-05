@@ -21,6 +21,14 @@ export const FeedScreen = () => {
 
   const items = data?.pages.flatMap((page) => page) ?? []
 
+  if (isPending) {
+    return (
+      <Box flex={1} alignItems="center" justifyContent="center">
+        <ActivityIndicator color={theme.colors.primary} />
+      </Box>
+    )
+  }
+
   return (
     <Screen>
       <Box pl={4} pr={4} pt={5} pb={4}>
@@ -31,35 +39,33 @@ export const FeedScreen = () => {
         </ThemedText>
       </Box>
 
-      {isPending ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          <ActivityIndicator color={theme.colors.primary} />
-        </Box>
-      ) : (
-        <FlatList<FeedReviewItem>
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <FeedReviewCard item={item} currentUserId={authState.user.id} />}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: insets.bottom + 84 }}
-          refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor={theme.colors.primary} />
-          }
-          ItemSeparatorComponent={() => <Box style={styles.separator} ml={4} mr={4} mb={7} />}
-          onEndReached={() => { if (hasNextPage && !isFetchingNextPage) fetchNextPage() }}
-          onEndReachedThreshold={0.4}
-          ListFooterComponent={
-            isFetchingNextPage ? (
-              <Box alignItems="center" pt={4} pb={4}>
-                <ActivityIndicator color={theme.colors.primary} />
-              </Box>
-            ) : (
+      <FlatList<FeedReviewItem>
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <FeedReviewCard item={item} currentUserId={authState.user.id} />}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 84 }}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor={theme.colors.primary} />
+        }
+        ItemSeparatorComponent={() => <Box style={styles.separator} ml={4} mr={4} mb={7} />}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) fetchNextPage()
+        }}
+        onEndReachedThreshold={0.4}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <Box alignItems="center" pt={4} pb={4}>
+              <ActivityIndicator color={theme.colors.primary} />
+            </Box>
+          ) : (
+            <>
               <FeedTrending />
-            )
-          }
-          ListEmptyComponent={<FeedSuggestions />}
-        />
-      )}
+              <FeedSuggestions />
+            </>
+          )
+        }
+      />
     </Screen>
   )
 }
