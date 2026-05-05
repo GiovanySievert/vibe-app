@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { UserMenuStackParamList } from '@src/app/navigation/types'
-import { Box, Card, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { useLogout } from '@src/shared/hooks'
 
 import { UserMenuContactModal } from './user-menu-contact-modal.component'
@@ -19,20 +19,11 @@ export const UserMenuOptions = () => {
       <ThemedText size="lg" weight="semibold">
         Geral
       </ThemedText>
-      <Card bg="background" gap={4} mt={-3}>
+      <Box gap={4}>
         <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserEditProfile')}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="Pen" color="textPrimary" size={16} />
             <ThemedText weight="medium">Editar perfil</ThemedText>
-          </Box>
-          <ThemedIcon name="ChevronRight" color="textPrimary" />
-        </TouchableOpacity>
-        <Divider />
-
-        <TouchableOpacity style={styles.actionContainer}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="MapPin" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Localizaçāo</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
@@ -58,7 +49,6 @@ export const UserMenuOptions = () => {
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
         <Divider />
-        <Divider />
         <TouchableOpacity style={styles.actionContainer} onPress={() => setIsContactModalVisible(true)}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="MessageCircle" color="textPrimary" size={16} />
@@ -74,8 +64,8 @@ export const UserMenuOptions = () => {
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
-      </Card>
-      <Card bg="background" gap={4}>
+      </Box>
+      <Box gap={4}>
         <TouchableOpacity style={styles.actionContainer} onPress={() => logout()}>
           <Box flexDirection="row" gap={3} alignItems="center">
             <ThemedIcon name="LogOut" color="textPrimary" size={16} />
@@ -83,12 +73,9 @@ export const UserMenuOptions = () => {
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
-      </Card>
+      </Box>
 
-      <UserMenuContactModal
-        visible={isContactModalVisible}
-        onClose={() => setIsContactModalVisible(false)}
-      />
+      <UserMenuContactModal visible={isContactModalVisible} onClose={() => setIsContactModalVisible(false)} />
     </>
   )
 }

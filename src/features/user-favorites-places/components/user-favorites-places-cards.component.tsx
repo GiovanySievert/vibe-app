@@ -35,10 +35,10 @@ export const UserFavoritesPlacesCards = () => {
             }
           >
             <Box flexDirection="row" justifyContent="space-between" alignItems="center" gap={3}>
-              <Box flexDirection="row" gap={2} alignItems="center">
-                <Avatar square uri={item.avatar} size="sm" />
+              <Box flexDirection="row" gap={4} alignItems="center">
+                <Avatar square uri={item.avatar} />
                 <Box>
-                  <ThemedText color="textPrimary" weight="bold" size="sm" textTransform="lowercase">
+                  <ThemedText color="textPrimary" weight="bold" textTransform="lowercase">
                     {placeName}
                   </ThemedText>
                   {neighborhood && (
