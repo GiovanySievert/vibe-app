@@ -1,7 +1,12 @@
-import React from 'react'
-import { Dimensions, FlatList, Image, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { Dimensions, FlatList, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 
+import { FeedReviewCard } from '@src/features/feed/components/feed-review-card.component'
+import { FeedReviewCommentsContent } from '@src/features/feed/components/feed-review-comments-content.component'
+import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
+import { authClient } from '@src/services/api/auth-client'
 import { Box } from '@src/shared/components/box'
+import { SwipeableModal } from '@src/shared/components/swipeable-modal'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 
@@ -15,10 +20,15 @@ const COLUMNS = 3
 const GAP = 2
 const SCREEN_WIDTH = Dimensions.get('window').width
 const CELL_SIZE = (SCREEN_WIDTH - GAP * (COLUMNS - 1)) / COLUMNS
+const MODAL_HEIGHT = Dimensions.get('window').height * 0.9
 
 export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({ userId }) => {
   const { data, isLoading } = useUserReviews(userId)
+  const { data: session } = authClient.useSession()
+  const currentUserId = session?.user.id ?? ''
   const reviewCount = data?.length ?? 0
+
+  const [selectedItem, setSelectedItem] = useState<FeedReviewItem | null>(null)
 
   if (isLoading) {
     return (
@@ -58,18 +68,35 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({ userId }) => {
             const col = index % COLUMNS
 
             return (
-              <Box bg="backgroundSecondary" position="relative" style={[styles.cell, col !== 0 && styles.cellGap]}>
-                <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
-                <Box position="absolute" style={styles.labelContainer}>
-                  <ThemedText variant="mono" color="primary" size="xxs" numberOfLines={1}>
-                    {item.place.name}
-                  </ThemedText>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => setSelectedItem(item)}>
+                <Box bg="backgroundSecondary" position="relative" style={[styles.cell, col !== 0 && styles.cellGap]}>
+                  {imageUri && <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />}
+                  <Box position="absolute" style={styles.labelContainer}>
+                    <ThemedText variant="mono" color="primary" size="xxs" numberOfLines={1}>
+                      {item.place.name}
+                    </ThemedText>
+                  </Box>
                 </Box>
-              </Box>
+              </TouchableOpacity>
             )
           }}
         />
       )}
+
+      <SwipeableModal
+        visible={selectedItem !== null}
+        height={MODAL_HEIGHT}
+        onClose={() => setSelectedItem(null)}
+      >
+        {selectedItem && (
+          <KeyboardAvoidingView style={styles.modalContent} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+              <FeedReviewCard item={selectedItem} currentUserId={currentUserId} hideComments />
+            </ScrollView>
+            <FeedReviewCommentsContent reviewId={selectedItem.id} visible={true} />
+          </KeyboardAvoidingView>
+        )}
+      </SwipeableModal>
     </Box>
   )
 }
@@ -101,5 +128,8 @@ const styles = StyleSheet.create({
     borderTopColor: theme.colors.textPrimary,
     borderRadius: 12,
     marginBottom: GAP
+  },
+  modalContent: {
+    flex: 1
   }
 })

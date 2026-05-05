@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Share, StyleSheet, TouchableOpacity } from 'react-native'
+
+import * as ExpoLinking from 'expo-linking'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -18,13 +20,16 @@ import { FeedReviewCommentsModal } from './feed-review-comments-modal.component'
 
 type Props = {
   item: FeedReviewItem
+  currentUserId: string
+  hideComments?: boolean
 }
 
-export const FeedReviewCard: React.FC<Props> = ({ item }) => {
+export const FeedReviewCard: React.FC<Props> = ({ item, currentUserId, hideComments = false }) => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const [isCommentsVisible, setIsCommentsVisible] = useState(false)
   const relativeTime = formatRelativeTime(item.createdAt)
+  const isOwner = item.userId === currentUserId
 
   const { mutate: submitReaction } = useMutation({
     mutationFn: (nextReaction: 'on' | 'off' | null) => {
@@ -36,24 +41,26 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
     },
     onMutate: async (nextReaction) => {
       await queryClient.cancelQueries({ queryKey: ['feed'] })
-      const previousFeed = queryClient.getQueriesData<FeedReviewItem[]>({ queryKey: ['feed'] })
+      const previousFeed = queryClient.getQueriesData<{ pages: FeedReviewItem[][] }>({ queryKey: ['feed'] })
 
-      queryClient.setQueriesData<FeedReviewItem[]>({ queryKey: ['feed'] }, (old) =>
-        old?.map((review) => {
-          if (review.id !== item.id) {
-            return review
-          }
-
-          const previousReaction = review.viewerReaction
-
-          return {
-            ...review,
-            viewerReaction: nextReaction,
-            onCount: review.onCount + (nextReaction === 'on' ? 1 : 0) - (previousReaction === 'on' ? 1 : 0),
-            offCount: review.offCount + (nextReaction === 'off' ? 1 : 0) - (previousReaction === 'off' ? 1 : 0)
-          }
-        })
-      )
+      queryClient.setQueriesData<{ pages: FeedReviewItem[][] }>({ queryKey: ['feed'] }, (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          pages: old.pages.map((page) =>
+            page.map((review) => {
+              if (review.id !== item.id) return review
+              const previousReaction = review.viewerReaction
+              return {
+                ...review,
+                viewerReaction: nextReaction,
+                onCount: review.onCount + (nextReaction === 'on' ? 1 : 0) - (previousReaction === 'on' ? 1 : 0),
+                offCount: review.offCount + (nextReaction === 'off' ? 1 : 0) - (previousReaction === 'off' ? 1 : 0)
+              }
+            })
+          )
+        }
+      })
 
       return { previousFeed }
     },
@@ -69,8 +76,38 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
     }
   })
 
+  const { mutate: deleteReview } = useMutation({
+    mutationFn: () => FeedService.deleteReview(item.id),
+    onSuccess: () => {
+      queryClient.setQueriesData<{ pages: FeedReviewItem[][] }>({ queryKey: ['feed'] }, (old) => {
+        if (!old) return old
+        return { ...old, pages: old.pages.map((page) => page.filter((r) => r.id !== item.id)) }
+      })
+      showToast('review excluída.', 'success')
+    },
+    onError: () => {
+      showToast('não foi possível excluir a review.', 'error')
+    }
+  })
+
   const handleReactionPress = (type: 'on' | 'off') => {
     submitReaction(item.viewerReaction === type ? null : type)
+  }
+
+  const handleShare = () => {
+    const url = ExpoLinking.createURL(`reviews/share/${item.id}`)
+    Share.share({ message: `${item.user.username} avaliou ${item.place.name} no vibes\n${url}` })
+  }
+
+  const handleMenuPress = () => {
+    Alert.alert('', '', [
+      {
+        text: 'Excluir review',
+        style: 'destructive',
+        onPress: () => deleteReview()
+      },
+      { text: 'Cancelar', style: 'cancel' }
+    ])
   }
 
   return (
@@ -78,14 +115,28 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
       <Box pl={4} pr={4} pb={7}>
         <Box flexDirection="row" alignItems="center" gap={3} mb={3}>
           <Avatar size="xs" uri={item.user.image} />
-          <Box flex={1}>
+          <Box flexDirection="row" alignItems="center" gap={2} flex={1}>
             <ThemedText weight="semibold" size="sm" color="textPrimary">
               {item.user.username}
             </ThemedText>
+            {isOwner && (
+              <Box style={styles.ownerBadge}>
+                <ThemedText size="xs" color="textSecondary" style={styles.ownerBadgeText}>
+                  você
+                </ThemedText>
+              </Box>
+            )}
+          </Box>
+          <Box flex={1}>
             <ThemedText variant="mono">
               {relativeTime} · {item.place.name}
             </ThemedText>
           </Box>
+          {isOwner && (
+            <TouchableOpacity activeOpacity={0.7} onPress={handleMenuPress} style={styles.menuBtn}>
+              <ThemedIcon name="Ellipsis" size={18} color="textSecondary" />
+            </TouchableOpacity>
+          )}
         </Box>
 
         <DualPhoto placeImageUrl={item.placeImageUrl} selfieUrl={item.selfieUrl} placeName={item.place.name} />
@@ -111,19 +162,27 @@ export const FeedReviewCard: React.FC<Props> = ({ item }) => {
             </ThemedText>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.actionBtn} onPress={() => setIsCommentsVisible(true)}>
-            <ThemedIcon name="MessageCircle" size={16} color="textSecondary" />
-            <ThemedText size="xs" weight="medium" color="textSecondary">
-              comentários · {item.commentsCount}
-            </ThemedText>
+          {!hideComments && (
+            <TouchableOpacity activeOpacity={0.7} style={styles.actionBtn} onPress={() => setIsCommentsVisible(true)}>
+              <ThemedIcon name="MessageCircle" size={16} color="textSecondary" />
+              <ThemedText size="xs" weight="medium" color="textSecondary">
+                comentários · {item.commentsCount}
+              </ThemedText>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity activeOpacity={0.7} style={styles.actionBtn} onPress={handleShare}>
+            <ThemedIcon name="Share2" size={16} color="textSecondary" />
           </TouchableOpacity>
         </Box>
       </Box>
-      <FeedReviewCommentsModal
-        reviewId={item.id}
-        visible={isCommentsVisible}
-        onClose={() => setIsCommentsVisible(false)}
-      />
+      {!hideComments && (
+        <FeedReviewCommentsModal
+          reviewId={item.id}
+          visible={isCommentsVisible}
+          onClose={() => setIsCommentsVisible(false)}
+        />
+      )}
     </>
   )
 }
@@ -160,5 +219,17 @@ const styles = StyleSheet.create({
   },
   dotInactive: {
     borderColor: theme.colors.border
+  },
+  ownerBadge: {
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    backgroundColor: theme.colors.backgroundSecondary
+  },
+  ownerBadgeText: {
+    lineHeight: 14
+  },
+  menuBtn: {
+    padding: 4
   }
 })
