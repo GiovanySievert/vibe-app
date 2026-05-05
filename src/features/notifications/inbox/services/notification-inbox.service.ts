@@ -2,7 +2,13 @@ import { AxiosResponse } from 'axios'
 
 import { coreApi } from '@src/services/api'
 
-export type NotificationType = 'event_invitation' | 'follow_request_created'
+export type NotificationType =
+  | 'event_invitation'
+  | 'follow_request_created'
+  | 'follow_request_accepted'
+  | 'event_comment_created'
+  | 'place_review_comment'
+  | 'place_review_reaction'
 
 export type NotificationItem = {
   id: string

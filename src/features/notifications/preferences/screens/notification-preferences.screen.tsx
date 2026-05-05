@@ -19,6 +19,22 @@ const TYPE_LABELS: Record<NotificationType, { title: string; description: string
   follow_request_created: {
     title: 'Solicitacoes de seguir',
     description: 'Quando alguem pede pra te seguir.'
+  },
+  follow_request_accepted: {
+    title: 'Solicitacao aceita',
+    description: 'Quando alguem aceita seu pedido de seguir.'
+  },
+  event_comment_created: {
+    title: 'Comentarios no evento',
+    description: 'Quando alguem comenta no seu evento.'
+  },
+  place_review_comment: {
+    title: 'Comentarios no post',
+    description: 'Quando alguem comenta no seu post.'
+  },
+  place_review_reaction: {
+    title: 'Reacoes no post',
+    description: 'Quando alguem reage no seu post.'
   }
 }
 

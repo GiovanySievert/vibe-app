@@ -1,14 +1,17 @@
 import React, { useMemo } from 'react'
-import { ActivityIndicator, FlatList, Linking, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { BellOff } from 'lucide-react-native'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Box, SwipeableModal, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 import { useMarkAllAsRead, useMarkAsRead } from '../hooks/use-mark-as-read.hook'
 import { useNotifications } from '../hooks/use-notifications.hook'
 import { NotificationItem } from '../services/notification-inbox.service'
+import { navigateFromNotification } from '../utils/navigate-from-notification'
 import { NotificationItemRow } from './notification-item.component'
 import { NotificationSkeleton } from './notification-skeleton.component'
 
@@ -18,34 +21,24 @@ type Props = {
 }
 
 export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
-  const {
-    data,
-    isLoading,
-    refetch,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage
-  } = useNotifications({ enabled: visible })
+  const { data, isLoading, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useNotifications({
+    enabled: visible
+  })
   const markAsRead = useMarkAsRead()
   const markAllAsRead = useMarkAllAsRead()
 
-  const items = useMemo<NotificationItem[]>(
-    () => data?.pages.flatMap((page) => page.items) ?? [],
-    [data]
-  )
+  const items = useMemo<NotificationItem[]>(() => data?.pages.flatMap((page) => page.items) ?? [], [data])
   const hasUnread = items.some((item) => item.readAt === null)
   const isInitialLoading = isLoading && items.length === 0
 
-  const handlePress = async (item: NotificationItem) => {
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+
+  const handlePress = (item: NotificationItem) => {
     if (item.readAt === null) {
       markAsRead.mutate(item.id)
     }
     onClose()
-    const url = typeof item.data?.url === 'string' ? item.data.url : null
-    if (url) {
-      await Linking.openURL(url)
-    }
+    navigateFromNotification(item, navigation)
   }
 
   const handleEndReached = () => {
@@ -60,10 +53,7 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
         <ThemedText variant="title" size="lg">
           Notificacoes
         </ThemedText>
-        <TouchableOpacity
-          onPress={() => markAllAsRead.mutate()}
-          disabled={!hasUnread || markAllAsRead.isPending}
-        >
+        <TouchableOpacity onPress={() => markAllAsRead.mutate()} disabled={!hasUnread || markAllAsRead.isPending}>
           <ThemedText size="sm" color={hasUnread ? 'primary' : 'textSecondary'}>
             Marcar todas
           </ThemedText>
@@ -92,11 +82,7 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.4}
           renderItem={({ item, index }) => (
-            <NotificationItemRow
-              item={item}
-              isLast={index === items.length - 1}
-              onPress={() => handlePress(item)}
-            />
+            <NotificationItemRow item={item} isLast={index === items.length - 1} onPress={() => handlePress(item)} />
           )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListFooterComponent={

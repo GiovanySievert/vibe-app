@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
-import { Bell, CalendarPlus, UserPlus } from 'lucide-react-native'
+import { Bell, CalendarPlus, MessageCircle, ThumbsUp, UserCheck, UserPlus } from 'lucide-react-native'
 
 import { Box, Divider, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
@@ -23,6 +23,10 @@ const formatRelative = (iso: string) => {
 const iconForType = (type: string) => {
   if (type === 'event_invitation') return CalendarPlus
   if (type === 'follow_request_created') return UserPlus
+  if (type === 'follow_request_accepted') return UserCheck
+  if (type === 'event_comment_created') return MessageCircle
+  if (type === 'place_review_comment') return MessageCircle
+  if (type === 'place_review_reaction') return ThumbsUp
   return Bell
 }
 
