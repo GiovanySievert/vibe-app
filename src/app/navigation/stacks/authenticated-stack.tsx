@@ -1,6 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
+import { SharedReviewScreen } from '@src/features/feed/screens'
 import { SharedEventScreen } from '@src/features/social/screens'
 
 import { ModalNavigator } from '../modal-navigator'
@@ -21,6 +22,11 @@ export function AuthenticatedNavigator() {
       <AuthenticatedStack.Screen
         name="SharedEventScreen"
         component={SharedEventScreen}
+        options={{ presentation: 'modal', headerShown: false }}
+      />
+      <AuthenticatedStack.Screen
+        name="SharedReviewScreen"
+        component={SharedReviewScreen}
         options={{ presentation: 'modal', headerShown: false }}
       />
     </AuthenticatedStack.Navigator>

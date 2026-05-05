@@ -42,7 +42,13 @@ export const linking: LinkingOptions<AppNavigatorRootParamsList> = {
               }
             }
           },
-          SharedEventScreen: 'events/share/:token'
+          SharedEventScreen: 'events/share/:token',
+          SharedReviewScreen: 'reviews/share/:reviewId'
+        }
+      },
+      Modals: {
+        screens: {
+          UsersProfileScreen: 'social/profile/:userId'
         }
       }
     }
