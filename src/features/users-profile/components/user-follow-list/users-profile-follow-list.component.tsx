@@ -47,11 +47,11 @@ export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({
     enabled: visible
   })
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
-  }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const renderItem = useCallback(
     ({ item }: { item: ListFollowersResponse }) => (
@@ -79,17 +79,17 @@ export const UsersProfileFollowList: React.FC<UsersProfileFollowListProps> = ({
         renderItem={renderItem}
         contentContainerStyle={styles.listContent}
         style={styles.flatList}
-        ListFooterComponent={
-          hasNextPage ? (
-            <Box mt={4} mb={4}>
-              <Button variant="soft" onPress={handleLoadMore} loading={isFetchingNextPage}>
-                <ThemedText variant="primary" weight="medium" size="md">
-                  Carregar mais
-                </ThemedText>
-              </Button>
-            </Box>
-          ) : null
-        }
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={isFetchingNextPage ? (
+          <Box mt={4} mb={4} alignItems="center">
+            <Button variant="soft" loading>
+              <ThemedText variant="primary" weight="medium" size="md">
+                Carregando...
+              </ThemedText>
+            </Button>
+          </Box>
+        ) : null}
       />
     )
   }
