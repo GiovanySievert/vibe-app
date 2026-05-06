@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "myApp",
-    "slug": "myApp",
+    "name": "vibes",
+    "slug": "vibes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "myapp",
+    "scheme": "vibes",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.myApp"
+      "bundleIdentifier": "com.anonymous.vibes"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +24,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.myApp"
+      "package": "com.anonymous.vibes"
     },
     "plugins": [
       [

@@ -10,7 +10,7 @@ import {
 import { AppNavigatorRootParamsList } from './types'
 
 export const linking: LinkingOptions<AppNavigatorRootParamsList> = {
-  prefixes: [ExpoLinking.createURL('/'), 'myapp://'],
+  prefixes: [ExpoLinking.createURL('/'), 'vibes://'],
   async getInitialURL() {
     const url = await ExpoLinking.getInitialURL()
 
