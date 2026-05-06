@@ -22,15 +22,15 @@ export const typography = {
 }
 
 export const sizes = {
-  xxs: 10,
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 18,
-  xl: 22,
-  '2xl': 28,
-  '3xl': 32,
-  '4xl': '36'
+  xxs: 12,
+  xs: 14,
+  sm: 16,
+  md: 18,
+  lg: 20,
+  xl: 24,
+  '2xl': 32,
+  '3xl': 36,
+  '4xl': 40
 }
 
 export const letterSpacings = {

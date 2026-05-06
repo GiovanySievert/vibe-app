@@ -68,7 +68,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
 
   const handleShare = async () => {
     if (!event) return
-    await Share.share({ message: `myapp://events/share/${event.id}` })
+    await Share.share({ message: `vibes://events/share/${event.id}` })
   }
 
   const { mutate: deleteEvent } = useMutation({
