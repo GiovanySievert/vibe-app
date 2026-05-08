@@ -1,6 +1,8 @@
 import React from 'react'
 import { Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
+import { LinearGradient } from 'expo-linear-gradient'
+
 import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
@@ -23,11 +25,11 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
     <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(item)}>
       <Box bg="backgroundSecondary" position="relative" style={[styles.cell, col !== 0 && styles.cellGap]}>
         {imageUri && <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />}
-        <Box position="absolute" style={styles.labelContainer}>
-          <ThemedText variant="mono" color="primary" size="xxs" numberOfLines={1}>
+        <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={styles.labelContainer}>
+          <ThemedText variant="mono" color="textPrimary" size="xxs" numberOfLines={1}>
             {item.placeName}
           </ThemedText>
-        </Box>
+        </LinearGradient>
       </Box>
     </TouchableOpacity>
   )
@@ -47,8 +49,12 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   labelContainer: {
-    bottom: 6,
-    left: 6,
-    right: 6
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 6,
+    paddingTop: 18,
+    paddingBottom: 6
   }
 })

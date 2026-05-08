@@ -13,7 +13,6 @@ import { UserModel } from '@src/shared/domain/users.model'
 
 import {
   UserReviewsGrid,
-  UsersProfileActions,
   UsersProfileBlockedState,
   UsersProfileFollowList,
   UsersProfileHeaderScreen,
@@ -90,7 +89,6 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
               setIsModalVisible(true)
             }}
           />
-          <UsersProfileActions />
           <UserReviewsGrid
             userId={userId}
             canViewReviews={canViewReviews}
