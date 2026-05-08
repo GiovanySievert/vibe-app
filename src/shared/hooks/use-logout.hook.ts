@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
@@ -8,6 +9,7 @@ import configureAxiosInterceptors from '@src/services/api/interceptor'
 
 export const useLogout = () => {
   const setAuth = useSetAtom(authStateAtom)
+  const queryClient = useQueryClient()
 
   const logout = async () => {
     await unregisterPushNotificationsAsync()
@@ -31,6 +33,7 @@ export const useLogout = () => {
             }
           })
 
+          queryClient.clear()
           configureAxiosInterceptors(null)
         }
       }
