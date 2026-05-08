@@ -22,12 +22,12 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, onP
       <TouchableOpacity
         onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
       >
-        <Box style={[styles.pill, placeIsHot && styles.pillHot]}>
-          <ThemedText style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>
+        <Box style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}>
+          <ThemedText weight="semibold" style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>
             {placeName}
           </ThemedText>
         </Box>
-        <Box style={[styles.dot, placeIsHot && styles.dotHot]} />
+        <Box style={[styles.dot, placeIsHot ? styles.dotHot : styles.dotInactive]} />
       </TouchableOpacity>
     </Box>
   )
@@ -36,29 +36,35 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, onP
 const styles = StyleSheet.create({
   wrapper: { alignItems: 'center' },
   pill: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: theme.colors.background,
-    borderRadius: 20
+    paddingHorizontal: 8,
+    borderRadius: 7,
+    marginBottom: 4,
+    zIndex: 5
+  },
+  pillInactive: {
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 1,
+    borderColor: theme.colors.textTerciary
   },
   pillHot: {
     backgroundColor: theme.colors.primary
   },
   pillText: {
     color: theme.colors.textPrimary,
-    fontSize: 12,
-    fontFamily: 'InterTight-SemiBold'
+    fontSize: 13
   },
   pillTextHot: {
     color: theme.colors.background
   },
   dot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: theme.colors.background,
-    alignSelf: 'center',
-    marginTop: 2
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    alignSelf: 'center'
+  },
+  dotInactive: {
+    backgroundColor: '#55524D',
+    zIndex: 3
   },
   dotHot: {
     backgroundColor: theme.colors.primary

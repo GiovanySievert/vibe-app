@@ -2,8 +2,6 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { useQuery } from '@tanstack/react-query'
-import { useAtom } from 'jotai'
 import { Search } from 'lucide-react-native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
@@ -11,33 +9,13 @@ import { Box, ThemedText } from '@src/shared/components'
 import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
-import { PlacesModel } from '@src/shared/domain'
-import { PlacesService } from '@src/shared/services'
-import { locationStateAtom } from '@src/shared/state/location.state'
 
 import { NearbyPlacesScroll } from '../components'
+import { usePlacesNearMe } from '../hooks/use-places-near-me.hook'
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
-  const [locationState] = useAtom(locationStateAtom)
-
-  const fetchPlaces = async () => {
-    if (!locationState) throw new Error('location not ready')
-    const response = await PlacesService.fetchPlacesNearMe({
-      lat: locationState.latitude,
-      lon: locationState.longitude,
-      radius: '2km'
-    })
-    return response.data
-  }
-
-  const { data: placesData } = useQuery<PlacesModel[], Error>({
-    queryKey: ['fetchPlaces', locationState?.latitude, locationState?.longitude],
-    queryFn: fetchPlaces,
-    retry: false,
-    staleTime: 0,
-    enabled: !!locationState
-  })
+  const { places, setSearchCoords } = usePlacesNearMe()
 
   return (
     <Screen gradient>
@@ -57,10 +35,10 @@ export const HomeScreen = () => {
       </Box>
 
       <Box pl={4} pr={4} style={styles.mapContainer}>
-        <MapWithPins points={placesData} onPressPin={(p) => console.log('clicou', p)} />
+        <MapWithPins points={places} onPressPin={(p) => console.log('clicou', p)} onRegionMoved={setSearchCoords} />
       </Box>
 
-      {!!placesData?.length && <NearbyPlacesScroll places={placesData} />}
+      {!!places.length && <NearbyPlacesScroll places={places} />}
     </Screen>
   )
 }
@@ -75,11 +53,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
-    borderColor: theme.colors.border
+    borderColor: theme.colors.border,
   },
   mapContainer: {
     flex: 1,
-
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 })

@@ -1,71 +1,96 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
 import { useAtom } from 'jotai'
 
+import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
 import { locationStateAtom } from '@src/shared/state/location.state'
+import { calculateDistance } from '@src/shared/utils'
 
 import { MapPin } from '../map-pin'
+import { ThemedText } from '../themed-text'
+import { vibesMapStyle } from './map.style'
 
 MapboxGL.setAccessToken('')
 
+type Coords = { latitude: number; longitude: number }
+
 type MapWithPinsProps = {
   points?: PlacesModel[]
-  style?: any
   onPressPin?: (point: PlacesModel) => void
+  onRegionMoved?: (coords: Coords) => void
 }
-export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin }) => {
-  const cameraRef = useRef<MapboxGL.Camera>(null)
+
+const THRESHOLD_KM = 1
+
+export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin, onRegionMoved }) => {
   const [locationState] = useAtom(locationStateAtom)
+  const lastSearchCoords = useRef<Coords>({ latitude: locationState!.latitude, longitude: locationState!.longitude })
+  const [showSearchButton, setShowSearchButton] = useState(false)
+  const pendingCenter = useRef<Coords | null>(null)
 
-  const bounds = useMemo(() => {
-    if (!points?.length) return null
-    let minLat = +Infinity,
-      maxLat = -Infinity,
-      minLon = +Infinity,
-      maxLon = -Infinity
-    for (const p of points) {
-      if (p.location.lat < minLat) minLat = p.location.lat
-      if (p.location.lat > maxLat) maxLat = p.location.lat
-      if (p.location.lon < minLon) minLon = p.location.lon
-      if (p.location.lon > maxLon) maxLon = p.location.lon
-    }
-    return { minLat, maxLat, minLon, maxLon }
-  }, [points])
+  const handleCameraChanged = (
+    state: Parameters<NonNullable<React.ComponentProps<typeof MapboxGL.MapView>['onCameraChanged']>>[0]
+  ) => {
+    const [lon, lat] = state.properties.center
+    pendingCenter.current = { latitude: lat, longitude: lon }
+    const dist = calculateDistance(lastSearchCoords.current.latitude, lastSearchCoords.current.longitude, lat, lon)
+    setShowSearchButton(dist >= THRESHOLD_KM)
+  }
 
-  useEffect(() => {
-    if (bounds && cameraRef.current) {
-      cameraRef.current.fitBounds([bounds.minLon, bounds.minLat], [bounds.maxLon, bounds.maxLat], 50, 500)
-    }
-  }, [bounds])
+  const handleSearchHere = () => {
+    if (!pendingCenter.current) return
+    lastSearchCoords.current = pendingCenter.current
+    setShowSearchButton(false)
+    onRegionMoved?.(pendingCenter.current)
+  }
 
   return (
     <View style={styles.container}>
-      <MapboxGL.MapView style={styles.map} styleURL={MapboxGL.StyleURL.Dark}>
-        {locationState && (
-          <MapboxGL.Camera
-            animationDuration={0}
-            animationMode="none"
-            centerCoordinate={[locationState.longitude, locationState.latitude]}
-            ref={cameraRef}
-            zoomLevel={14}
-          />
-        )}
+      <MapboxGL.MapView style={styles.map} styleJSON={vibesMapStyle} onCameraChanged={handleCameraChanged}>
+        <MapboxGL.Camera
+          centerCoordinate={[locationState!.longitude, locationState!.latitude]}
+          zoomLevel={14}
+          animationDuration={0}
+          animationMode="none"
+        />
 
-        {points?.map((p) => (
-          <MapboxGL.MarkerView
-            key={p.id}
-            id={p.id}
-            coordinate={[p.location.lon, p.location.lat]}
-            allowOverlap={true}
-            anchor={{ x: 0.5, y: 1.0 }}
-          >
-            <MapPin placeName={p.name} placeId={p.id} placeIsHot={!!p.isHot} onPress={() => onPressPin?.(p)} />
-          </MapboxGL.MarkerView>
-        ))}
+        {points
+          ?.slice()
+          .sort((a, b) => b.location.lat - a.location.lat)
+          .map((p) => (
+            <MapboxGL.MarkerView
+              key={p.id}
+              id={p.id}
+              coordinate={[p.location.lon, p.location.lat]}
+              allowOverlap={true}
+              anchor={{ x: 0.5, y: 1.0 }}
+            >
+              <MapPin placeName={p.name} placeId={p.id} placeIsHot={!!p.isHot} onPress={() => onPressPin?.(p)} />
+            </MapboxGL.MarkerView>
+          ))}
+
+        <MapboxGL.MarkerView
+          id="user-location"
+          coordinate={[locationState!.longitude, locationState!.latitude]}
+          allowOverlap={true}
+          anchor={{ x: 0.5, y: 0.5 }}
+        >
+          <View style={styles.userDotOuter}>
+            <View style={styles.userDotInner} />
+          </View>
+        </MapboxGL.MarkerView>
       </MapboxGL.MapView>
+
+      {showSearchButton && (
+        <View style={styles.searchButtonContainer}>
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearchHere}>
+            <ThemedText style={styles.searchButtonText}>Buscar nesta área</ThemedText>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   )
 }
@@ -74,7 +99,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 14,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderWidth: 0.3,
+    borderColor: theme.colors.textTerciary
   },
-  map: { flex: 1 }
+  map: { flex: 1 },
+  userDotOuter: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    backgroundColor: theme.colors.textPrimary,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  userDotInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: theme.colors.textPrimary,
+    borderWidth: 2.5,
+    borderColor: theme.colors.background
+  },
+  searchButtonContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 0,
+    right: 0,
+    alignItems: 'center'
+  },
+  searchButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 0.5,
+    borderColor: theme.colors.border
+  },
+  searchButtonText: {
+    fontSize: 13,
+    fontFamily: 'InterTight-SemiBold'
+  }
 })

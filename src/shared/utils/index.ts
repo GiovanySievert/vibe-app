@@ -1,3 +1,4 @@
+export * from './calculate-distance'
 export * from './formater-address'
 export * from './formater-currency'
 export * from './formater-date'
