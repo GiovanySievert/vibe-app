@@ -10,8 +10,8 @@ export const authClient = createAuthClient({
   },
   plugins: [
     expoClient({
-      scheme: 'myapp',
-      storagePrefix: 'myapp',
+      scheme: 'vibes',
+      storagePrefix: 'vibes',
       storage: SecureStore
     }),
     emailOTPClient(),
