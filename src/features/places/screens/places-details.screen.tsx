@@ -1,13 +1,12 @@
 import React from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers'
-import { Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
-import { Tabs } from '@src/shared/components/tabs/tabs.component'
+import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
 import { PlacesService } from '@src/shared/services'
@@ -18,14 +17,13 @@ import {
   PlacesFlutuantButton,
   PlacesInfoHeader,
   PlacesInfoPills,
-  PlacesMenu
+  PlacesReviews
 } from '../components'
 
 type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'PlacesDetailsScreen'>
 
 export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route, navigation }) => {
   const placeId = route.params?.placeId
-
   const { showToast } = useToast()
 
   const fetchPlaces = async () => {
@@ -46,53 +44,48 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
 
   if (isLoading) {
     return (
-      <Box flex={1} bg="background">
-        <ThemedText>CARREGANDO</ThemedText>
+      <Box flex={1} bg="background" alignItems="center" justifyContent="center">
+        <ThemedText variant="mono">carregando...</ThemedText>
       </Box>
     )
   }
 
   if (!placeData || error) {
     navigation.goBack()
-    showToast('Algo deu errado, tente novamente mais tarde!', 'error')
-    return
+    showToast('algo deu errado, tente novamente mais tarde!', 'error')
+    return null
   }
 
   return (
-    <Box flex={1}>
-      <ScrollView style={styles.scroll} overScrollMode="never">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Box justifyContent="flex-end" alignItems="flex-end" pr={5} pt={5}>
-            <ThemedIcon name="X" color="textSecondary" size={22} />
+    <Box flex={1} bg="background">
+      <ScrollView style={styles.scroll} overScrollMode="never" showsVerticalScrollIndicator={false}>
+        <PlacesInfoHeader place={placeData} onBack={() => navigation.goBack()} />
+        <PlacesInfoPills place={placeData} />
+        {placeData.about ? (
+          <Box pl={6} pr={6} mt={5} pb={1}>
+            <ThemedText>{placeData.about}</ThemedText>
           </Box>
-        </TouchableOpacity>
-        <PlacesInfoHeader place={placeData} />
-        <Tabs titles={['Info', 'Cardápio']} defaultIndex={0}>
-          <>
-            <PlacesInfoPills place={placeData} />
-            <PlacesCardInfo place={placeData} />
-            <PlacesAddress place={placeData} />
-          </>
-          <PlacesMenu place={placeData} />
-          <Box mb={14}>
-            <Divider />
-          </Box>
-        </Tabs>
+        ) : null}
+        <PlacesCardInfo place={placeData} />
+        <PlacesAddress place={placeData} />
+        <PlacesReviews placeId={placeId} />
+        <Box h={14} />
       </ScrollView>
-      <PlacesFlutuantButton placeId={placeId} />
+
+      <PlacesFlutuantButton placeId={placeId} placeName={placeData.name} />
     </Box>
   )
 }
 
 const styles = StyleSheet.create({
-  absoluteContainer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 24,
-    padding: 24
-  },
-  relativeContainer: {
+  scroll: {
     flex: 1
   },
-  scroll: { flex: 1, backgroundColor: theme.colors.background }
+  sectionHeader: {
+    paddingTop: 28,
+    paddingBottom: 14,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    marginTop: 8
+  }
 })

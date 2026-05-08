@@ -8,14 +8,14 @@ import { Box, Button, ThemedText } from '@src/shared/components'
 
 type Nav = NativeStackNavigationProp<ModalNavigatorParamsList>
 
-export const PlacesFlutuantButton = ({ placeId }: { placeId: string }) => {
+export const PlacesFlutuantButton = ({ placeId, placeName }: { placeId: string; placeName: string }) => {
   const navigation = useNavigation<Nav>()
 
   return (
-    <Box style={styles.absoluteContainer}>
-      <Button onPress={() => navigation.navigate('PlaceReviewPostScreen', { placeId, photoUri: 'hhtt' })}>
-        <ThemedText weight="medium" size="lg">
-          Mandar foto do local
+    <Box m={5} alignItems="center" justifyContent="center" bg="primary">
+      <Button style={styles.button} onPress={() => navigation.navigate('PlaceReviewPostScreen', { placeId, placeName })}>
+        <ThemedText color="background" size="lg" weight="semibold">
+          postar vibe daqui
         </ThemedText>
       </Button>
     </Box>
@@ -23,10 +23,9 @@ export const PlacesFlutuantButton = ({ placeId }: { placeId: string }) => {
 }
 
 const styles = StyleSheet.create({
-  absoluteContainer: {
-    width: '100%',
+  button: {
     position: 'absolute',
     bottom: 24,
-    padding: 24
+    width: '100%'
   }
 })
