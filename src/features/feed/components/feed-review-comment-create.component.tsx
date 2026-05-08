@@ -8,7 +8,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, ThemedIcon } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
-import { FeedReviewComment, FeedReviewItem, ListFeedReviewCommentsResponse } from '../domain'
+import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
 import { FeedService } from '../services'
 
 type Props = {
@@ -33,8 +33,6 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
         'feedReviewComments',
         reviewId
       ])
-      const previousFeed = queryClient.getQueriesData<FeedReviewItem[]>({ queryKey: ['feed'] })
-
       const optimisticComment: FeedReviewComment = {
         id: `temp-${Date.now()}`,
         reviewId,
@@ -74,15 +72,7 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
         }
       )
 
-      queryClient.setQueriesData<FeedReviewItem[]>({ queryKey: ['feed'] }, (old) =>
-        old?.map((item) =>
-          item.id === reviewId
-            ? { ...item, commentsCount: item.commentsCount + 1 }
-            : item
-        )
-      )
-
-      return { previousComments, previousFeed }
+      return { previousComments }
     },
     onError: (_error, _variables, context) => {
       if (context?.previousComments) {
@@ -90,10 +80,6 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
       } else {
         queryClient.removeQueries({ queryKey: ['feedReviewComments', reviewId], exact: true })
       }
-
-      context?.previousFeed?.forEach(([queryKey, value]) => {
-        queryClient.setQueryData(queryKey, value)
-      })
 
       showToast('não foi possível comentar essa review.', 'error')
     },

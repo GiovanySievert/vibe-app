@@ -12,7 +12,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 
-import { FeedReviewCard } from '../components'
+import { ReviewCard } from '../components'
 import { FeedService } from '../services'
 
 type Props = NativeStackScreenProps<AuthenticatedStackParamList, 'SharedReviewScreen'>
@@ -49,7 +49,7 @@ export const SharedReviewScreen: React.FC<Props> = ({ route, navigation }) => {
           </ThemedText>
         </Box>
       ) : (
-        <FeedReviewCard item={review} currentUserId={session?.user.id ?? ''} />
+        <ReviewCard review={review} currentUserId={session?.user.id ?? ''} />
       )}
     </Box>
   )

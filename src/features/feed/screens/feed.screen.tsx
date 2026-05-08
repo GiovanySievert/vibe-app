@@ -10,7 +10,7 @@ import { Screen } from '@src/shared/components/screen'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 
-import { FeedReviewCard, FeedSuggestions, FeedTrending } from '../components'
+import { FeedSuggestions, FeedTrending, ReviewCard } from '../components'
 import { FeedReviewItem } from '../domain/feed-review-item.model'
 import { useFeed } from '../hooks'
 
@@ -42,7 +42,7 @@ export const FeedScreen = () => {
       <FlatList<FeedReviewItem>
         data={items}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <FeedReviewCard item={item} currentUserId={authState.user.id} />}
+        renderItem={({ item }) => <ReviewCard review={item} currentUserId={authState.user.id} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 84 }}
         refreshControl={

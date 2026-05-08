@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import { coreApi } from '@src/services/api'
 
-import { FeedReviewComment, FeedReviewItem, FeedReviewReactionType, ListFeedReviewCommentsResponse } from '../domain'
+import { FeedReviewComment, FeedReviewItem, FeedReviewReactionType, ListFeedReviewCommentsResponse, ReviewCounts } from '../domain'
 
 export const FeedService = {
   list: (page?: number): Promise<AxiosResponse<FeedReviewItem[]>> =>
@@ -10,6 +10,9 @@ export const FeedService = {
 
   getById: (reviewId: string): Promise<AxiosResponse<FeedReviewItem>> =>
     coreApi.get(`/place-reviews/${reviewId}`),
+
+  getCounts: (reviewId: string): Promise<AxiosResponse<ReviewCounts>> =>
+    coreApi.get(`/place-reviews/${reviewId}/counts`),
 
   listComments: (reviewId: string, page: number): Promise<AxiosResponse<ListFeedReviewCommentsResponse>> =>
     coreApi.get(`/place-reviews/${reviewId}/comments`, { params: { page } }),

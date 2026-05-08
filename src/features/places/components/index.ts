@@ -1,4 +1,3 @@
-export * from './place-review-card.component'
 export * from './places-address.component'
 export * from './places-card-info.component'
 export * from './places-flutuant-button.component'

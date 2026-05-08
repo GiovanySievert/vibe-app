@@ -2,6 +2,7 @@ export type FeedReviewItem = {
   id: string
   userId: string
   placeId: string
+  placeName: string
   rating: 'crowded' | 'dead'
   placeImageUrl: string | null
   selfieUrl: string | null
@@ -13,10 +14,10 @@ export type FeedReviewItem = {
     username: string
     image: string | null
   }
-  place: {
-    id: string
-    name: string
-  }
+}
+
+export type ReviewCounts = {
+  reviewId: string
   commentsCount: number
   onCount: number
   offCount: number
