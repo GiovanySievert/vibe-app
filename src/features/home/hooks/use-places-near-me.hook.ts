@@ -23,13 +23,13 @@ export const usePlacesNearMe = () => {
       const response = await PlacesService.fetchPlacesNearMe({
         lat: coords.latitude,
         lon: coords.longitude,
-        radius: '2km',
+        radius: '1km'
       })
       return response.data
     },
     retry: false,
     staleTime: 0,
-    enabled: !!coords,
+    enabled: !!coords
   })
 
   if (fetchedPlaces) {

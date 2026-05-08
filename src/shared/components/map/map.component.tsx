@@ -9,9 +9,11 @@ import { PlacesModel } from '@src/shared/domain'
 import { locationStateAtom } from '@src/shared/state/location.state'
 import { calculateDistance } from '@src/shared/utils'
 
+import { Box } from '../box'
 import { MapPin } from '../map-pin'
 import { ThemedText } from '../themed-text'
 import { vibesMapStyle } from './map.style'
+import { UserLocationPin } from './user-location-pin.component'
 
 MapboxGL.setAccessToken('')
 
@@ -19,13 +21,14 @@ type Coords = { latitude: number; longitude: number }
 
 type MapWithPinsProps = {
   points?: PlacesModel[]
+  isSearching?: boolean
   onPressPin?: (point: PlacesModel) => void
   onRegionMoved?: (coords: Coords) => void
 }
 
 const THRESHOLD_KM = 1
 
-export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin, onRegionMoved }) => {
+export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onPressPin, onRegionMoved }) => {
   const [locationState] = useAtom(locationStateAtom)
   const lastSearchCoords = useRef<Coords>({ latitude: locationState!.latitude, longitude: locationState!.longitude })
   const [showSearchButton, setShowSearchButton] = useState(false)
@@ -61,35 +64,27 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, onPressPin, on
           ?.slice()
           .sort((a, b) => b.location.lat - a.location.lat)
           .map((p) => (
-            <MapboxGL.MarkerView
+            <MapPin
               key={p.id}
-              id={p.id}
+              placeId={p.id}
+              placeName={p.name}
+              placeIsHot={!!p.isHot}
               coordinate={[p.location.lon, p.location.lat]}
-              allowOverlap={true}
-              anchor={{ x: 0.5, y: 1.0 }}
-            >
-              <MapPin placeName={p.name} placeId={p.id} placeIsHot={!!p.isHot} onPress={() => onPressPin?.(p)} />
-            </MapboxGL.MarkerView>
+              onPress={() => onPressPin?.(p)}
+            />
           ))}
 
-        <MapboxGL.MarkerView
-          id="user-location"
-          coordinate={[locationState!.longitude, locationState!.latitude]}
-          allowOverlap={true}
-          anchor={{ x: 0.5, y: 0.5 }}
-        >
-          <View style={styles.userDotOuter}>
-            <View style={styles.userDotInner} />
-          </View>
-        </MapboxGL.MarkerView>
+        <UserLocationPin coordinate={[locationState!.longitude, locationState!.latitude]} />
       </MapboxGL.MapView>
 
-      {showSearchButton && (
-        <View style={styles.searchButtonContainer}>
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearchHere}>
-            <ThemedText style={styles.searchButtonText}>Buscar nesta área</ThemedText>
+      {(showSearchButton || isSearching) && (
+        <Box style={styles.searchButtonContainer}>
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearchHere} disabled={isSearching}>
+            <ThemedText size="xs" weight="semibold">
+              {isSearching ? 'Carregando...' : 'Buscar nesta área'}
+            </ThemedText>
           </TouchableOpacity>
-        </View>
+        </Box>
       )}
     </View>
   )
@@ -104,22 +99,6 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.textTerciary
   },
   map: { flex: 1 },
-  userDotOuter: {
-    width: 15,
-    height: 15,
-    borderRadius: 7.5,
-    backgroundColor: theme.colors.textPrimary,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  userDotInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: theme.colors.textPrimary,
-    borderWidth: 2.5,
-    borderColor: theme.colors.background
-  },
   searchButtonContainer: {
     position: 'absolute',
     bottom: 16,
@@ -134,9 +113,5 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.backgroundSecondary,
     borderWidth: 0.5,
     borderColor: theme.colors.border
-  },
-  searchButtonText: {
-    fontSize: 13,
-    fontFamily: 'InterTight-SemiBold'
   }
 })

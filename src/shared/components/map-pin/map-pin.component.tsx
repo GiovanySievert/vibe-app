@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
+import MapboxGL from '@rnmapbox/maps'
+
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { theme } from '@src/shared/constants/theme'
 
@@ -12,24 +14,32 @@ type PinProps = {
   placeId: string
   placeName?: string
   placeIsHot: boolean
+  coordinate: [number, number]
   onPress?: () => void
 }
 
-export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, onPress }) => {
+export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coordinate, onPress }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   return (
-    <Box style={styles.wrapper} onTouchEnd={onPress}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
-      >
-        <Box style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}>
-          <ThemedText weight="semibold" style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>
-            {placeName}
-          </ThemedText>
-        </Box>
-        <Box style={[styles.dot, placeIsHot ? styles.dotHot : styles.dotInactive]} />
-      </TouchableOpacity>
-    </Box>
+    <MapboxGL.MarkerView
+      id={placeId}
+      coordinate={coordinate}
+      allowOverlap={true}
+      anchor={{ x: 0.5, y: 1.0 }}
+    >
+      <Box style={styles.wrapper} onTouchEnd={onPress}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
+        >
+          <Box style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}>
+            <ThemedText weight="semibold" style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>
+              {placeName}
+            </ThemedText>
+          </Box>
+          <Box style={[styles.dot, placeIsHot ? styles.dotHot : styles.dotInactive]} />
+        </TouchableOpacity>
+      </Box>
+    </MapboxGL.MarkerView>
   )
 }
 

@@ -15,7 +15,7 @@ import { usePlacesNearMe } from '../hooks/use-places-near-me.hook'
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
-  const { places, setSearchCoords } = usePlacesNearMe()
+  const { places, isFetching, setSearchCoords } = usePlacesNearMe()
 
   return (
     <Screen gradient>
@@ -35,7 +35,7 @@ export const HomeScreen = () => {
       </Box>
 
       <Box pl={4} pr={4} style={styles.mapContainer}>
-        <MapWithPins points={places} onPressPin={(p) => console.log('clicou', p)} onRegionMoved={setSearchCoords} />
+        <MapWithPins points={places} isSearching={isFetching} onPressPin={(p) => console.log('clicou', p)} onRegionMoved={setSearchCoords} />
       </Box>
 
       {!!places.length && <NearbyPlacesScroll places={places} />}

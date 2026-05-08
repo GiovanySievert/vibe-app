@@ -1,3 +1,4 @@
+export * from './hot-places/hot-places.component'
 export * from './last-searched/last-search.component'
 export * from './search-input.component'
 export * from './search-places.component'
