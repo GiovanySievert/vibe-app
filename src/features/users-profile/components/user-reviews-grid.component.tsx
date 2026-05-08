@@ -40,14 +40,6 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
     )
   }
 
-  if (!isLoading && reviewCount === 0) {
-    return (
-      <Box>
-        <ThemedText>nenhuma vibe ainda</ThemedText>
-      </Box>
-    )
-  }
-
   if (!canViewReviews) {
     return (
       <Box>
@@ -57,9 +49,21 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
           </ThemedText>
         </Box>
         <Box style={styles.divider} />
-        <Box pt={4} pb={4} pl={5} pr={5}>
-          <ThemedText color="textSecondary">siga este usuário para ver as vibes dele.</ThemedText>
+        <Box pt={4} pb={4} pl={5} pr={5} justifyContent="center" alignItems="center">
+          <ThemedText variant="mono" color="textSecondary">
+            siga este usuário para ver as vibes dele.
+          </ThemedText>
         </Box>
+      </Box>
+    )
+  }
+
+  if (!isLoading && reviewCount === 0) {
+    return (
+      <Box pt={4} pb={4} pl={5} pr={5} justifyContent="center" alignItems="center">
+        <ThemedText variant="mono" color="textSecondary">
+          nenhuma vibe ainda
+        </ThemedText>
       </Box>
     )
   }
