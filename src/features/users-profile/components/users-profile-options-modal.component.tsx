@@ -1,14 +1,12 @@
-import { TouchableOpacity } from 'react-native'
+import { Alert, TouchableOpacity } from 'react-native'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-
-import { authClient } from '@src/services/api/auth-client'
 import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal/swipeable-modal.component'
 import { UserModel } from '@src/shared/domain/users.model'
 
-import { BlockService } from '../services'
-import { BlockAction, GetBlockStatusResponse } from '../types'
+import { useBlockMutation } from '../hooks/use-block-mutation.hook'
+import { useBlockStatus } from '../hooks/use-block-status.hook'
+import { BlockAction } from '../types'
 
 type UsersProfileOptionsModalProps = {
   userData: UserModel
@@ -18,40 +16,30 @@ type UsersProfileOptionsModalProps = {
 }
 
 export const UsersProfileOptionsModal: React.FC<UsersProfileOptionsModalProps> = ({ userData, visible, onClose, onOpenReport }) => {
-  const { data: userLoggedData } = authClient.useSession()
-  const queryClient = useQueryClient()
-
-  const queryKey = ['fetchBlockStatusById', userLoggedData?.user.id, userData.id]
-
-  const { data: blockData } = useQuery<GetBlockStatusResponse, Error>({
-    queryKey,
-    queryFn: async () => (await BlockService.fetchBlockStatus(userData.id)).data,
-    retry: false,
-    staleTime: 60 * 5
-  })
-
-  const blockMutation = useMutation({
-    mutationFn: (action: BlockAction) => {
-      if (action === BlockAction.BLOCK) return BlockService.block(userData.id)
-      return BlockService.unblock(userData.id)
-    },
-    onMutate: async (action) => {
-      await queryClient.cancelQueries({ queryKey })
-      const previousData = queryClient.getQueryData<GetBlockStatusResponse>(queryKey)
-      queryClient.setQueryData<GetBlockStatusResponse>(queryKey, { isBlocked: action === BlockAction.BLOCK })
-      return { previousData }
-    },
-    onError: (_err, _variables, context) => {
-      if (context?.previousData) queryClient.setQueryData(queryKey, context.previousData)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey })
-    }
-  })
+  const { data: blockData } = useBlockStatus(userData.id)
+  const blockMutation = useBlockMutation(userData.id)
 
   const handleBlock = () => {
-    blockMutation.mutate(blockData?.isBlocked ? BlockAction.UNBLOCK : BlockAction.BLOCK)
-    onClose()
+    const isBlocked = blockData?.isBlocked
+    const username = userData.username
+
+    Alert.alert(
+      isBlocked ? `Desbloquear @${username}?` : `Bloquear @${username}?`,
+      isBlocked
+        ? 'Ele poderá voltar a ver seu perfil e seus posts.'
+        : 'Ele não poderá ver seu perfil nem seus posts.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: isBlocked ? 'Desbloquear' : 'Bloquear',
+          style: isBlocked ? 'default' : 'destructive',
+          onPress: () => {
+            blockMutation.mutate(isBlocked ? BlockAction.UNBLOCK : BlockAction.BLOCK)
+            onClose()
+          }
+        }
+      ]
+    )
   }
 
   const handleReport = () => {

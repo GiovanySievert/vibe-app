@@ -14,12 +14,14 @@ import { UserModel } from '@src/shared/domain/users.model'
 import {
   UserReviewsGrid,
   UsersProfileActions,
+  UsersProfileBlockedState,
   UsersProfileFollowList,
   UsersProfileHeaderScreen,
   UsersProfileOptionsModal,
   UsersProfileReportModal,
   UsersProfileTopBar
 } from '../components'
+import { useBlockStatus } from '../hooks/use-block-status.hook'
 import { useFollowStatus } from '../hooks/use-follow-status.hook'
 import { UsersProfileService } from '../services'
 import { FollowStatus } from '../types'
@@ -45,6 +47,9 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
 
   const { data: followStatusData, isLoading: isFollowStatusLoading } = useFollowStatus(userId, !isUserLoggedProfile)
 
+  const { data: blockData } = useBlockStatus(userId, !isUserLoggedProfile)
+
+  const isBlocked = !isUserLoggedProfile && (blockData?.isBlocked ?? false)
   const canViewReviews = isUserLoggedProfile || followStatusData?.status === FollowStatus.FOLLOWING
 
   if (isLoading) {
@@ -56,6 +61,16 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
   }
 
   if (!userData) return null
+
+  if (isBlocked) {
+    return (
+      <>
+        <Screen>
+          <UsersProfileBlockedState userData={userData} />
+        </Screen>
+      </>
+    )
+  }
 
   return (
     <>

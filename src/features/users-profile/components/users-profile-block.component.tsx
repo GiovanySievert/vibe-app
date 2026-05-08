@@ -1,34 +1,33 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
+import { getBlockStatusQueryKey, useBlockStatus } from '../hooks/use-block-status.hook'
 import { BlockService } from '../services'
 import { BlockAction, GetBlockStatusResponse } from '../types'
 
 type UsersProfileBlockProps = {
   userData: UserModel
+  onBlockChange?: (isBlocked: boolean) => void
 }
 
-export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData }) => {
+export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData, onBlockChange }) => {
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
-  const queryKey = ['fetchBlockStatusById', userLoggedData?.user.id, userData.id]
+  const queryKey = getBlockStatusQueryKey(userLoggedData?.user.id, userData.id)
 
-  const fetchBlockStatus = async () => {
-    const response = await BlockService.fetchBlockStatus(userData.id)
+  const { data: blockData, isLoading } = useBlockStatus(userData.id)
 
-    return response.data
-  }
-
-  const { data: blockData, isLoading } = useQuery<GetBlockStatusResponse, Error>({
-    queryKey,
-    queryFn: fetchBlockStatus,
-    retry: false,
-    staleTime: 60 * 5
-  })
+  useEffect(() => {
+    if (blockData !== undefined) {
+      onBlockChange?.(blockData.isBlocked)
+    }
+  }, [blockData, onBlockChange])
 
   const blockMutation = useMutation({
     mutationFn: (action: BlockAction) => {
@@ -41,6 +40,7 @@ export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData }
       const previousData = queryClient.getQueryData<GetBlockStatusResponse>(queryKey)
 
       const isBlocked = action === BlockAction.BLOCK
+      onBlockChange?.(isBlocked)
 
       queryClient.setQueryData<GetBlockStatusResponse>(queryKey, { isBlocked })
 
@@ -49,6 +49,7 @@ export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData }
     onError: (_err, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(queryKey, context.previousData)
+        onBlockChange?.(context.previousData.isBlocked)
       }
     },
     onSettled: () => {
