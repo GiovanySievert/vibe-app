@@ -58,7 +58,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   return (
     <Box pl={5} pr={5} pt={6} pb={4}>
       <Box flexDirection="row" alignItems="center" justifyContent="space-between">
-        <Avatar size="lg" uri={userData.image} />
+        <Avatar size="lg" uri={userData.image} pressable />
 
         <Box flexDirection="row" gap={6}>
           <Box alignItems="center" justifyContent="center">
