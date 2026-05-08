@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 
 import { useMutation } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 
+import { useToast } from '@src/app/providers'
 import { Box, Button, Input, SwipeableModal, ThemedText } from '@src/shared/components'
 import { RadioButton } from '@src/shared/components/radio-button/radio-button.component'
 import { UserModel } from '@src/shared/domain/users.model'
@@ -26,6 +28,12 @@ const REPORT_REASON_OPTIONS = [
 export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = ({ userData, visible, onClose }) => {
   const [selectedReason, setSelectedReason] = useState<ReportReason | null>(null)
   const [description, setDescription] = useState('')
+  const { showToast } = useToast()
+
+  const reset = () => {
+    setSelectedReason(null)
+    setDescription('')
+  }
 
   const reportMutation = useMutation({
     mutationFn: () =>
@@ -34,15 +42,23 @@ export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = (
         description: description.trim() || undefined
       }),
     onSuccess: () => {
-      setSelectedReason(null)
-      setDescription('')
+      reset()
       onClose()
+      showToast('denúncia enviada com sucesso.')
+    },
+    onError: (error) => {
+      reset()
+      onClose()
+      if (isAxiosError(error) && error.response?.status === 409) {
+        showToast('você já reportou esse usuário.')
+      } else {
+        showToast('erro ao enviar denúncia. tente novamente mais tarde.', 'error')
+      }
     }
   })
 
   const handleClose = () => {
-    setSelectedReason(null)
-    setDescription('')
+    reset()
     onClose()
   }
 

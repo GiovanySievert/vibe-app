@@ -33,7 +33,7 @@ export const Toast = () => {
       border: theme.colors.primary,
       icon: 'Check',
       iconBg: theme.colors.primary,
-      text: theme.colors.primary
+      text: theme.colors.background
     },
     error: {
       bg: theme.colors.backgroundSecondary,
