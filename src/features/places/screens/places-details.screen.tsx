@@ -72,7 +72,14 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
         <Box h={14} />
       </ScrollView>
 
-      <PlacesFlutuantButton placeId={placeId} placeName={placeData.name} />
+      <PlacesFlutuantButton
+        place={{
+          id: placeId,
+          name: placeData.name,
+          lat: placeData.location.lat,
+          lng: placeData.location.lng
+        }}
+      />
     </Box>
   )
 }

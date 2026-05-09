@@ -1,0 +1,2 @@
+export const PLACE_REVIEW_MAX_DISTANCE_M = 2000
+export const PLACE_REVIEW_COOLDOWN_HOURS = 1 / 60

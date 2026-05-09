@@ -50,8 +50,8 @@ export type ModalNavigatorParamsList = {
   UsersProfileScreen: { userId: string }
   SearchScreen: undefined
   LocationModal: undefined
-  PlaceReviewCameraScreen: { placeId: string; placeName: string }
-  PlaceReviewPostScreen: { placeId: string; placeName: string }
+  PlaceReviewCameraScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
+  PlaceReviewPostScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
 }
 
 export type AuthenticatedStackParamList = {

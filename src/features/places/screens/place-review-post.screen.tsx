@@ -4,13 +4,22 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useMutation } from '@tanstack/react-query'
 import * as ImagePicker from 'expo-image-picker'
+import { useAtomValue } from 'jotai'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
+import { useToast } from '@src/app/providers'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
+import { locationStateAtom } from '@src/shared/state/location.state'
+import { getDevMockPhotoUriIfSimulator, isSimulatorDev } from '@src/shared/utils'
 
+import {
+  PlaceReviewApiErrorBody,
+  PlaceReviewErrorCode,
+  placeReviewErrorMessage
+} from '../domain/place-review-error.model'
 import { PlaceReviewService } from '../services/place-review.service'
 
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'PlaceReviewPostScreen'>
@@ -18,14 +27,32 @@ type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'PlaceReviewPostSc
 type Rating = 'crowded' | 'dead'
 
 export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { placeId, placeName } = route.params
+  const { placeId, placeName, placeLat, placeLng } = route.params
+  const { showToast } = useToast()
+  const userLocation = useAtomValue(locationStateAtom)
+
   const [rating, setRating] = useState<Rating | null>(null)
   const [comment, setComment] = useState('')
   const [placePhotoUri, setPlacePhotoUri] = useState<string | null>(null)
   const [selfieUri, setSelfieUri] = useState<string | null>(null)
   const [selfieFriendsOnly, setSelfieFriendsOnly] = useState(false)
+  const [submitAttempted, setSubmitAttempted] = useState(false)
 
   const launchCamera = async (type: 'place' | 'selfie') => {
+    if (type === 'place') {
+      const mock = getDevMockPhotoUriIfSimulator()
+      if (mock) {
+        setPlacePhotoUri(mock)
+        return
+      }
+    } else if (isSimulatorDev()) {
+      const mock = getDevMockPhotoUriIfSimulator()
+      if (mock) {
+        setSelfieUri(mock)
+        return
+      }
+    }
+
     await ImagePicker.requestCameraPermissionsAsync()
     try {
       const result = await ImagePicker.launchCameraAsync({
@@ -49,8 +76,19 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
+      if (!placePhotoUri) {
+        throw Object.assign(new Error('Foto do local obrigatória'), {
+          response: { data: { code: PlaceReviewErrorCode.PHOTO_REQUIRED } }
+        })
+      }
+      if (!userLocation) {
+        throw Object.assign(new Error('Localização indisponível'), {
+          response: { data: { code: PlaceReviewErrorCode.OUT_OF_RANGE } }
+        })
+      }
+
       const [placeImageUrl, selfieUrl] = await Promise.all([
-        placePhotoUri ? upload(placePhotoUri, 'reviews') : Promise.resolve(undefined),
+        upload(placePhotoUri, 'reviews'),
         selfieUri ? upload(selfieUri, 'reviews') : Promise.resolve(undefined)
       ])
 
@@ -59,13 +97,33 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
         placeName,
         rating: rating!,
         placeImageUrl,
+        userLat: userLocation.latitude,
+        userLng: userLocation.longitude,
+        placeLat,
+        placeLng,
         selfieUrl,
         selfieFriendsOnly: selfieUri ? selfieFriendsOnly : false,
         comment: comment.trim() || undefined
       })
     },
-    onSuccess: () => navigation.goBack()
+    onSuccess: () => navigation.goBack(),
+    onError: (error: { response?: { data?: PlaceReviewApiErrorBody } }) => {
+      const code = error.response?.data?.code
+      showToast(placeReviewErrorMessage(code), 'error')
+      if (code === PlaceReviewErrorCode.RATE_LIMITED) {
+        navigation.goBack()
+      }
+    }
   })
+
+  const handleSubmit = () => {
+    setSubmitAttempted(true)
+    if (!rating || !placePhotoUri || !userLocation) return
+    mutate()
+  }
+
+  const photoMissingError = submitAttempted && !placePhotoUri
+  const submitDisabled = !rating || !placePhotoUri || isPending || uploading
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -79,7 +137,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
           </Button>
         </Box>
 
-        <Box flexDirection="row" gap={2} pl={5} pr={5} mb={4}>
+        <Box flexDirection="row" gap={2} pl={5} pr={5} mb={photoMissingError ? 1 : 4}>
           <Box flex={1}>
             <Button variant="outline" type="secondary" onPress={() => launchCamera('place')}>
               {placePhotoUri ? (
@@ -88,7 +146,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
                 <>
                   <ThemedIcon name="Camera" size={20} color="textSecondary" />
                   <ThemedText size="sm" color="textSecondary">
-                    Foto do local
+                    Foto do local *
                   </ThemedText>
                 </>
               )}
@@ -109,6 +167,14 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
             </Button>
           </Box>
         </Box>
+
+        {photoMissingError ? (
+          <Box pl={5} pr={5} mb={3}>
+            <ThemedText size="xs" style={styles.errorText}>
+              a foto do local é obrigatória
+            </ThemedText>
+          </Box>
+        ) : null}
 
         <Box pl={5} pr={5} mb={2}>
           <Box style={styles.privacyCard}>
@@ -178,7 +244,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
             onChangeText={setComment}
           />
 
-          <Button onPress={() => mutate()} loading={isPending || uploading} disabled={!rating}>
+          <Button onPress={handleSubmit} loading={isPending || uploading} disabled={submitDisabled}>
             <ThemedText weight="medium" size="lg" style={{ color: '#FFFFFF' }}>
               Postar
             </ThemedText>
@@ -208,5 +274,8 @@ const styles = StyleSheet.create({
   privacyDescription: {
     marginTop: 4,
     lineHeight: 18
+  },
+  errorText: {
+    color: '#D9534F'
   }
 })

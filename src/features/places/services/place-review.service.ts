@@ -1,21 +1,35 @@
 import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
 import { coreApi } from '@src/services/api'
 
+export type PlaceReviewEligibility = {
+  canReview: boolean
+  cooldown: {
+    active: boolean
+    lastReviewAt: string | null
+    nextAllowedAt: string | null
+    cooldownHours: number
+  }
+  reason: 'cooldown' | null
+}
+
 export const PlaceReviewService = {
   create: (payload: {
     placeId: string
     placeName: string
     rating: 'crowded' | 'dead'
-    placeImageUrl?: string
+    placeImageUrl: string
+    userLat: number
+    userLng: number
+    placeLat: number
+    placeLng: number
     selfieUrl?: string
     selfieFriendsOnly?: boolean
     comment?: string
-  }) =>
-    coreApi.post('/place-reviews', payload),
-  getFeed: (page?: number) =>
-    coreApi.get<FeedReviewItem[]>('/place-reviews/feed', { params: { page } }),
-  listByPlace: (placeId: string) =>
-    coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}`),
+  }) => coreApi.post('/place-reviews', payload),
+  getFeed: (page?: number) => coreApi.get<FeedReviewItem[]>('/place-reviews/feed', { params: { page } }),
+  listByPlace: (placeId: string) => coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}`),
   listByUser: (userId: string, page?: number) =>
-    coreApi.get<FeedReviewItem[]>(`/place-reviews/user/${userId}`, { params: { page } })
+    coreApi.get<FeedReviewItem[]>(`/place-reviews/user/${userId}`, { params: { page } }),
+  eligibility: (placeId: string) =>
+    coreApi.get<PlaceReviewEligibility>(`/place-reviews/place/${placeId}/eligibility`)
 }

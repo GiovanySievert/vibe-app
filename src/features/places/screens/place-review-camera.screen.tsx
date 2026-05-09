@@ -9,7 +9,7 @@ import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'PlaceReviewCameraScreen'>
 
 export const PlaceReviewCameraScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { placeId, placeName } = route.params
+  const { placeId, placeName, placeLat, placeLng } = route.params
 
   useEffect(() => {
     launchCamera()
@@ -26,7 +26,7 @@ export const PlaceReviewCameraScreen: React.FC<Props> = ({ route, navigation }) 
       })
 
       if (!result.canceled && result.assets[0]) {
-        navigation.replace('PlaceReviewPostScreen', { placeId, placeName })
+        navigation.replace('PlaceReviewPostScreen', { placeId, placeName, placeLat, placeLng })
       }
     } catch (error) {
       console.log(error)
