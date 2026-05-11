@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, StyleSheet, Switch } from 'react-native'
 
-import { Box, Card, Divider, ThemedText } from '@src/shared/components'
+import { Box, Card, Divider, GoBackButton, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 
@@ -45,11 +45,12 @@ export const NotificationPreferencesScreen = () => {
   return (
     <Screen>
       <ScrollView>
-        <Box pl={5} pr={5} pt={5} pb={5}>
-          <ThemedText variant="title">Notificacoes</ThemedText>
-          <ThemedText variant="mono" color="textSecondary">
-            controle como cada tipo te alcanca
-          </ThemedText>
+        <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
+          <GoBackButton />
+          <Box>
+            <ThemedText variant="title">notificacoes</ThemedText>
+            <ThemedText variant="mono">controle como cada tipo te alcanca</ThemedText>
+          </Box>
         </Box>
 
         <Box pl={5} pr={5}>

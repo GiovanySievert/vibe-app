@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
-import { Box, Button, Input, ThemedText } from '@src/shared/components'
+import { Box, Button, GoBackButton, Input, ThemedText } from '@src/shared/components'
+import { Screen } from '@src/shared/components/screen'
+import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
 
 import { EditableAvatar } from '../components'
@@ -47,33 +50,49 @@ export const UserEditProfile = () => {
     name.trim() !== authState.user.name || bio.trim() !== (authState.user.bio ?? '') || avatarUri !== null
 
   return (
-    <Box flex={1} bg="background" gap={6} p={6}>
-      <Box justifyContent="center" alignItems="center">
-        <EditableAvatar currentUri={authState.user.image} onAvatarChange={setAvatarUri} />
-      </Box>
-      <Input label="username" value={authState.user.username ?? ''} disabled />
-      <Input label="nome" value={name} onChangeText={setName} maxLength={100} autoCapitalize="words" />
-      <Input
-        label="bio"
-        value={bio}
-        onChangeText={setBio}
-        placeholder="..."
-        multiline
-        multilineHeight={80}
-        maxLength={300}
-        autoCapitalize="sentences"
-        autoCorrect
-      />
+    <ScrollView style={styles.scroll}>
+      <Screen>
+        <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
+          <GoBackButton />
+          <Box>
+            <ThemedText variant="title">editar perfil</ThemedText>
+            <ThemedText variant="mono">avatar · nome · bio</ThemedText>
+          </Box>
+        </Box>
 
-      <Button
-        disabled={!hasChanges || !name.trim() || updateMutation.isPending || uploading}
-        loading={updateMutation.isPending || uploading}
-        onPress={() => updateMutation.mutate()}
-      >
-        <ThemedText color="background" weight="semibold" size="lg">
-          Salvar
-        </ThemedText>
-      </Button>
-    </Box>
+        <Box gap={6} pl={6} pr={6} pb={6}>
+          <Box justifyContent="center" alignItems="center">
+            <EditableAvatar currentUri={authState.user.image} onAvatarChange={setAvatarUri} />
+          </Box>
+          <Input label="username" value={authState.user.username ?? ''} disabled />
+          <Input label="nome" value={name} onChangeText={setName} maxLength={100} autoCapitalize="words" />
+          <Input
+            label="bio"
+            value={bio}
+            onChangeText={setBio}
+            placeholder="..."
+            multiline
+            multilineHeight={80}
+            maxLength={300}
+            autoCapitalize="sentences"
+            autoCorrect
+          />
+
+          <Button
+            disabled={!hasChanges || !name.trim() || updateMutation.isPending || uploading}
+            loading={updateMutation.isPending || uploading}
+            onPress={() => updateMutation.mutate()}
+          >
+            <ThemedText color="background" weight="semibold" size="lg">
+              Salvar
+            </ThemedText>
+          </Button>
+        </Box>
+      </Screen>
+    </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  scroll: { flex: 1, backgroundColor: theme.colors.background }
+})
