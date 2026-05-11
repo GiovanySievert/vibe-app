@@ -25,22 +25,27 @@ export function UserMenuNavigator() {
       <UserMenuStack.Screen
         name="UserEditProfile"
         component={UserMenuFeatures.UserEditProfile}
-        options={{ headerShown: true, title: 'Editar Perfil' }}
+        options={{ headerShown: false }}
       />
       <UserMenuStack.Screen
         name="UserDeleteAccountScreen"
         component={UserMenuFeatures.UserDeleteAccountScreen}
-        options={{ headerShown: true, title: 'Deletar Conta' }}
+        options={{ headerShown: false }}
       />
       <UserMenuStack.Screen
         name="TermsOfUseScreen"
         component={UserMenuFeatures.TermsOfUseScreen}
-        options={{ headerShown: true, title: 'Termos de Uso' }}
+        options={{ headerShown: false }}
       />
       <UserMenuStack.Screen
         name="NotificationPreferencesScreen"
         component={NotificationPreferencesScreen}
-        options={{ headerShown: true, title: 'Notificacoes' }}
+        options={{ headerShown: false }}
+      />
+      <UserMenuStack.Screen
+        name="UserPrivacyScreen"
+        component={UserMenuFeatures.UserPrivacyScreen}
+        options={{ headerShown: false }}
       />
     </UserMenuStack.Navigator>
   )

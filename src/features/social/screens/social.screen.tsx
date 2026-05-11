@@ -9,13 +9,7 @@ import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 
-import {
-  BlockedUsersList,
-  CreateEventModal,
-  EventInvitationsList,
-  FollowRequestsList,
-  MyEventsList
-} from '../components'
+import { CreateEventModal, EventInvitationsList, FollowRequestsList, MyEventsList } from '../components'
 
 export const SocialScreen = () => {
   const [isCreateEventVisible, setIsCreateEventVisible] = useState(false)
@@ -48,7 +42,6 @@ export const SocialScreen = () => {
             <EventInvitationsList />
             <FollowRequestsList type={FollowRequestType.RECEIVED} limit={3} />
             <FollowRequestsList type={FollowRequestType.SENT} limit={3} />
-            <BlockedUsersList limit={3} />
           </Box>
         </Screen>
       </ScrollView>

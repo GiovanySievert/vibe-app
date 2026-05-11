@@ -25,6 +25,7 @@ export type UserMenuStackParamList = {
   UserDeleteAccountScreen: undefined
   TermsOfUseScreen: undefined
   NotificationPreferencesScreen: undefined
+  UserPrivacyScreen: undefined
 }
 
 export type PostStackParamList = {
@@ -34,7 +35,6 @@ export type PostStackParamList = {
 export type SocialStackParamList = {
   SocialMain: undefined
   FollowRequestsScreen: { type: 'received' | 'sent' }
-  BlockedUsersScreen: undefined
 }
 
 export type TabsNavigatorParamsList = {
