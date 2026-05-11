@@ -8,7 +8,7 @@ export const Divider: React.FC = () => <View style={styles.divider} />
 const styles = StyleSheet.create({
   divider: {
     height: 0.3,
-    backgroundColor: theme.colors.textSecondary,
+    backgroundColor: theme.colors.textTerciary,
     width: '100%'
   }
 })

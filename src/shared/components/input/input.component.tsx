@@ -135,11 +135,11 @@ export const Input = forwardRef<TextInput, InputProps>(
             style={[
               style.input,
               borderStyle,
-              startIconColor && style.hasStartIconInput,
+              startIconName && style.hasStartIconInput,
               isClearable && style.hasEndIcon,
               multiline && { height: multilineHeight, paddingVertical: 12 }
             ]}
-            placeholderTextColor={theme.colors.textSecondary}
+            placeholderTextColor={theme.colors.textTerciary}
             textAlign="left"
             textAlignVertical="top"
             editable={!disabled}
@@ -202,17 +202,16 @@ const style = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Poppins-Regular',
     fontWeight: '500',
-    letterSpacing: -0.5
+    letterSpacing: -0.8
   },
   hasStartIconInput: {
-    paddingLeft: 40
+    paddingLeft: 28
   },
   hasEndIcon: {
     paddingRight: 40
   },
   startIconContainer: {
     position: 'absolute',
-    left: 16,
     zIndex: 10
   },
   endIconContainer: { position: 'absolute', right: 0, zIndex: 10, color: '#fff', marginBottom: 4 }

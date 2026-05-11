@@ -2,16 +2,29 @@ import React, { useState } from 'react'
 import { Dimensions, Image, type ImageSourcePropType, Modal, Pressable, StyleSheet, View } from 'react-native'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
+import { icons } from 'lucide-react-native'
+
 import { theme } from '@src/shared/constants/theme'
 
+import { ThemedIcon } from '../themed-icon/themed-icon.component'
+
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type IconName = keyof typeof icons
 
 const SIZES: Record<Size, number> = {
   xs: 32,
-  sm: 44,
+  sm: 52,
   md: 64,
   lg: 96,
   xl: 128
+}
+
+const ICON_SIZES: Record<Size, number> = {
+  xs: 16,
+  sm: 20,
+  md: 24,
+  lg: 36,
+  xl: 48
 }
 
 type AvatarProps = {
@@ -20,9 +33,10 @@ type AvatarProps = {
   source?: ImageSourcePropType
   square?: boolean
   pressable?: boolean
+  placeholderIcon?: IconName
 }
 
-function createStyles(size: number, square = false) {
+function createStyles(size: number, square = false, hasIcon = false) {
   const borderRadius = square ? 8 : size / 2
 
   return StyleSheet.create({
@@ -34,7 +48,9 @@ function createStyles(size: number, square = false) {
       width: size,
       height: size,
       borderRadius,
-      backgroundColor: theme.colors.textPrimary
+      backgroundColor: hasIcon ? theme.colors.backgroundSecondary : theme.colors.textPrimary,
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     image: {
       width: size,
@@ -61,10 +77,17 @@ const modalStyles = StyleSheet.create({
   }
 })
 
-export const Avatar: React.FC<AvatarProps> = ({ size = 'md', uri, source, square = false, pressable = false }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+  size = 'md',
+  uri,
+  source,
+  square = false,
+  pressable = false,
+  placeholderIcon
+}) => {
   const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
-  const s = createStyles(avatarSize, square)
+  const s = createStyles(avatarSize, square, !!placeholderIcon)
 
   const [visible, setVisible] = useState(false)
   const scale = useSharedValue(0.3)
@@ -91,7 +114,9 @@ export const Avatar: React.FC<AvatarProps> = ({ size = 'md', uri, source, square
   const imageEl = imgSource ? (
     <Image source={imgSource as ImageSourcePropType} resizeMode="cover" style={s.image} />
   ) : (
-    <View style={s.placeholder} />
+    <View style={s.placeholder}>
+      {placeholderIcon && <ThemedIcon name={placeholderIcon} size={ICON_SIZES[size]} color="textSecondary" />}
+    </View>
   )
 
   return (
