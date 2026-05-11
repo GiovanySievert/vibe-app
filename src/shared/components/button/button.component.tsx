@@ -18,12 +18,19 @@ import { ThemedIcon } from '../themed-icon'
 
 type ButtonVariant = 'solid' | 'soft' | 'outline' | 'outline-strong' | 'ghost' | 'text' | 'icon'
 type ButtonType = 'primary' | 'secondary' | 'danger' | 'warning'
+type ButtonSize = 'sm' | 'md'
 type IconName = keyof typeof icons
+
+const SIZE_STYLES: Record<ButtonSize, Pick<ViewStyle, 'height' | 'borderRadius' | 'paddingHorizontal'>> = {
+  sm: { height: 40, borderRadius: 10, paddingHorizontal: 14 },
+  md: { height: 58, borderRadius: 12, paddingHorizontal: 16 }
+}
 
 type ButtonProps = {
   children: ReactNode
   variant?: ButtonVariant
   type?: ButtonType
+  size?: ButtonSize
   loading?: boolean
   disabled?: boolean
   startIconName?: IconName
@@ -32,7 +39,7 @@ type ButtonProps = {
 } & PressableProps
 
 export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
-  ({ children, variant = 'solid', type = 'primary', testID, loading, disabled, flex, ...props }, ref) => {
+  ({ children, variant = 'solid', type = 'primary', size = 'md', testID, loading, disabled, flex, ...props }, ref) => {
     const [pressed, setPressed] = useState(false)
 
     const childrenOpacity = useSharedValue(loading ? 0 : 1)
@@ -58,7 +65,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
       props.onPressOut?.(event)
     }
 
-    const getButtonStyle = (variant: ButtonVariant, type: ButtonType, disabled?: boolean): ViewStyle => {
+    const getButtonStyle = (variant: ButtonVariant, type: ButtonType, size: ButtonSize, disabled?: boolean): ViewStyle => {
       const colors = theme.colors
       const typeColors: Record<ButtonType, string> = {
         primary: colors.primary,
@@ -67,13 +74,13 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         warning: colors.warning
       }
 
+      const sizeStyle = SIZE_STYLES[size]
+
       const base: ViewStyle = {
-        height: 58,
-        borderRadius: 12,
+        ...sizeStyle,
         justifyContent: 'center',
         alignItems: 'center',
         opacity: disabled ? 0.5 : 1,
-        paddingHorizontal: 16,
         flexDirection: 'row'
       }
 
@@ -118,7 +125,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         disabled={disabled || loading}
         testID={testID || 'button-container--button'}
         style={[
-          getButtonStyle(variant, type, disabled),
+          getButtonStyle(variant, type, size, disabled),
           pressed && { opacity: 0.7 },
           flex !== undefined && { flex },
           props.style as ViewStyle
