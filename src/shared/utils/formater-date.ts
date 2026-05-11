@@ -3,21 +3,30 @@ const MONTHS_PT = [
   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
 ]
 
-export function formatEventDateTime(date: string, time: string): string {
-  let day: number, month: number, year: number
+const MONTHS_SHORT_PT = [
+  'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+  'jul', 'ago', 'set', 'out', 'nov', 'dez'
+]
 
+function parseEventDate(date: string): { day: number; month: number; year: number } {
   if (date.includes('-')) {
     const [y, m, d] = date.split('-').map(Number)
-    year = y; month = m; day = d
-  } else {
-    const [d, m, y] = date.split('/').map(Number)
-    day = d; month = m; year = y
+    return { day: d, month: m, year: y }
   }
+  const [d, m, y] = date.split('/').map(Number)
+  return { day: d, month: m, year: y }
+}
 
+export function formatEventDateTime(date: string, time: string): string {
+  const { day, month, year } = parseEventDate(date)
   const monthName = MONTHS_PT[month - 1]
   const timeFormatted = time.substring(0, 5)
-
   return `${day} de ${monthName} de ${year} às ${timeFormatted}`
+}
+
+export function formatShortEventDateTime(date: string, time: string): string {
+  const { day, month } = parseEventDate(date)
+  return `${day} ${MONTHS_SHORT_PT[month - 1]} · ${time.substring(0, 5)}`
 }
 
 export const formatRelativeTime = (iso: string): string => {
