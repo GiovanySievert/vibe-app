@@ -50,7 +50,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
       goToStep(CREATE_EVENT_STEPS.SUCCESS)
     },
     onSuccess: ({ data }) => {
-      setEventLink(`myapp://events/share/${data.id}`)
+      setEventLink(`vibes://events/share/${data.id}`)
       queryClient.invalidateQueries({ queryKey: ['myEvents'] })
     },
     onError: () => {

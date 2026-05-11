@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FollowRequestType } from '@src/features/users-profile/types'
-import { Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText } from '@src/shared/components'
 
 interface FollowRequestActionsProps {
   type: FollowRequestType
@@ -14,26 +14,25 @@ interface FollowRequestActionsProps {
 export const FollowRequestActions = ({ type, requestId, onAccept, onReject, onCancel }: FollowRequestActionsProps) => {
   if (type === FollowRequestType.RECEIVED) {
     return (
-      <>
-        <Button onPress={() => onAccept(requestId)} flex={1}>
-          <ThemedText variant="primary" weight="medium" size="lg">
-            Aceitar
+      <Box flexDirection="row" gap={2}>
+        <Button size="sm" onPress={() => onAccept(requestId)}>
+          <ThemedText color="background" weight="bold" size="xs">
+            aceitar
           </ThemedText>
         </Button>
-
-        <Button onPress={() => onReject(requestId)} type="secondary" flex={1}>
-          <ThemedText variant="primary" weight="medium" size="lg">
-            Rejeitar
+        <Button size="sm" variant="outline" type="secondary" onPress={() => onReject(requestId)}>
+          <ThemedText color="textPrimary" weight="bold" size="xs">
+            ignorar
           </ThemedText>
         </Button>
-      </>
+      </Box>
     )
   }
 
   return (
-    <Button onPress={() => onCancel(requestId)} type="secondary" variant="outline" flex={1}>
-      <ThemedText variant="primary" weight="medium" size="lg">
-        Cancelar
+    <Button size="sm" variant="outline" type="secondary" onPress={() => onCancel(requestId)}>
+      <ThemedText color="textPrimary" weight="bold" size="xs">
+        cancelar
       </ThemedText>
     </Button>
   )

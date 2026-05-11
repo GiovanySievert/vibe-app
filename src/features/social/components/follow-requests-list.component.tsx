@@ -1,11 +1,8 @@
 import React from 'react'
-import { FlatList } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { Pressable } from 'react-native'
 
-import { SocialStackParamList } from '@src/app/navigation/types'
 import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'
-import { Box, Button, ThemedText } from '@src/shared/components'
+import { Box, ThemedText } from '@src/shared/components'
 
 import { useFollowRequestActions } from '../hooks/use-follow-request-actions'
 import { useFollowRequests } from '../hooks/use-follow-requests'
@@ -14,63 +11,54 @@ import { FollowRequestItem } from './follow-request-item.component'
 interface FollowRequestsListProps {
   type: FollowRequestType
   limit?: number
+  onSeeAll?: (type: FollowRequestType) => void
 }
 
-export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<SocialStackParamList>>()
+export const FollowRequestsList = ({ type, limit, onSeeAll }: FollowRequestsListProps) => {
   const { acceptFollowRequest, rejectFollowRequest, cancelFollowRequest } = useFollowRequestActions({ type })
   const { data: followRequestsData, isLoading } = useFollowRequests({ type })
 
   if (!followRequestsData?.length || isLoading) {
-    return
+    return null
   }
 
-  const title = type === FollowRequestType.RECEIVED ? 'Solicitações' : 'Solicitações Enviadas'
+  const title = type === FollowRequestType.RECEIVED ? 'solicitações' : 'solicitações enviadas'
+  const total = followRequestsData.length
   const displayedRequests = limit ? followRequestsData.slice(0, limit) : followRequestsData
-  const hasMore = limit && followRequestsData.length > limit
-
-  const handleSeeMore = () => {
-    navigation.navigate('FollowRequestsScreen', {
-      type: type === FollowRequestType.RECEIVED ? 'received' : 'sent'
-    })
-  }
-
-  const renderItem = ({ item, index }: { item: ListUserAllFollowRequestsResponse; index: number }) => (
-    <FollowRequestItem
-      item={item}
-      type={type}
-      index={index}
-      totalItems={displayedRequests.length}
-      onAccept={acceptFollowRequest}
-      onReject={rejectFollowRequest}
-      onCancel={cancelFollowRequest}
-    />
-  )
-
-  const renderFooter = () => {
-    if (!hasMore) return null
-
-    return (
-      <Box mt={3}>
-        <Button onPress={handleSeeMore} type="secondary">
-          <ThemedText variant="primary" weight="medium" size="lg">
-            Ver mais
-          </ThemedText>
-        </Button>
-      </Box>
-    )
-  }
+  const hasMore = !!limit && total > limit
+  const count = total.toString().padStart(2, '0')
 
   return (
     <Box mr={5} ml={5} gap={3}>
-      <ThemedText>{title}</ThemedText>
-      <FlatList
-        data={displayedRequests}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        scrollEnabled={false}
-        ListFooterComponent={renderFooter}
-      />
+      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+        <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
+          {title}
+        </ThemedText>
+        <ThemedText variant="mono" size="xs" letterSpacing="wider">
+          {count}
+        </ThemedText>
+      </Box>
+
+      <Box gap={3}>
+        {displayedRequests.map((item: ListUserAllFollowRequestsResponse) => (
+          <FollowRequestItem
+            key={item.id}
+            item={item}
+            type={type}
+            onAccept={acceptFollowRequest}
+            onReject={rejectFollowRequest}
+            onCancel={cancelFollowRequest}
+          />
+        ))}
+      </Box>
+
+      {hasMore && onSeeAll && (
+        <Pressable onPress={() => onSeeAll(type)}>
+          <ThemedText variant="mono" size="xs" color="textSecondary">
+            ver todas ({count})
+          </ThemedText>
+        </Pressable>
+      )}
     </Box>
   )
 }

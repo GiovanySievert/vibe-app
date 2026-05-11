@@ -1,113 +1,117 @@
 import React from 'react'
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Card, Divider, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Card, Divider, ThemedText } from '@src/shared/components'
+import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
-import { formatEventDateTime } from '@src/shared/utils'
+import { formatShortEventDateTime } from '@src/shared/utils'
 
 import { EventParticipantStatus } from '../domain/event.model'
 import { EventResponse, EventService } from '../services/event.service'
 
 type Nav = NativeStackNavigationProp<AuthenticatedStackParamList>
 
-const STATUS_META: Record<
-  EventParticipantStatus,
-  { label: string; color: keyof typeof theme.colors; backgroundColor: string; borderColor: string }
-> = {
-  [EventParticipantStatus.PENDING]: {
-    label: 'Pendente',
-    color: 'primary',
-    backgroundColor: theme.colors.primaryGlow,
-    borderColor: theme.colors.primary
-  },
-  [EventParticipantStatus.ACCEPTED]: {
-    label: 'Confirmado',
-    color: 'success',
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderColor: theme.colors.success
-  },
-  [EventParticipantStatus.DECLINED]: {
-    label: 'Recusado',
-    color: 'error',
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderColor: theme.colors.error
-  }
-}
-
 const EventInvitationItem = ({
   item,
-  index,
-  total,
   currentUserId
 }: {
   item: EventResponse
-  index: number
-  total: number
   currentUserId?: string
 }) => {
   const navigation = useNavigation<Nav>()
+  const queryClient = useQueryClient()
+
   const invitationStatus =
     item.participants.find((participant) => participant.userId === currentUserId)?.status ??
     EventParticipantStatus.PENDING
-  const statusMeta = STATUS_META[invitationStatus]
+
+  const respond = useMutation({
+    mutationFn: (status: EventParticipantStatus.ACCEPTED | EventParticipantStatus.DECLINED) =>
+      EventService.respondToInvitation(item.id, status),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['eventInvitations'] })
+  })
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('SharedEventScreen', { token: item.id })} activeOpacity={0.7}>
-      <Box>
-        <Box flexDirection="row" alignItems="center" gap={3} mb={2}>
-          <Box flex={1}>
-            <ThemedText weight="semibold">{item.name}</ThemedText>
-            <ThemedText size="sm" color="textSecondary">
-              {formatEventDateTime(item.date, item.time)}
-            </ThemedText>
-          </Box>
-        </Box>
-
-        {item.participants.length > 0 && (
-          <Box flexDirection="row" alignItems="center" gap={2}>
-            <Box flexDirection="row">
-              {item.participants.slice(0, 3).map((p, i) => (
-                <Box key={p.id} style={[styles.avatarWrapper, { marginLeft: i > 0 ? -8 : 0 }]}>
-                  <Avatar size="xs" uri={p.avatar} />
-                </Box>
-              ))}
-            </Box>
-            <ThemedText size="xs" color="textSecondary">
-              {item.participants.length} participante{item.participants.length !== 1 ? 's' : ''}
-            </ThemedText>
-          </Box>
-        )}
-
-        <Box
-          style={[
-            styles.badge,
-            {
-              backgroundColor: statusMeta.backgroundColor,
-              borderColor: statusMeta.borderColor
-            }
-          ]}
-          alignItems="center"
-          justifyContent="center"
-          mt={3}
-        >
-          <ThemedText size="xs" color={statusMeta.color} weight="semibold">
-            {statusMeta.label}
+    <Card pr={4} pl={4} pt={4} pb={4} gap={3}>
+      <TouchableOpacity onPress={() => navigation.navigate('SharedEventScreen', { token: item.id })} activeOpacity={0.7}>
+        <Box gap={1}>
+          <ThemedText weight="bold" size="md">
+            {item.name}
+          </ThemedText>
+          <ThemedText variant="mono" size="xs">
+            {formatShortEventDateTime(item.date, item.time)}
           </ThemedText>
         </Box>
+      </TouchableOpacity>
 
-        {index !== total - 1 && (
-          <Box mt={4}>
-            <Divider />
+      {item.participants.length > 0 && (
+        <Box flexDirection="row" alignItems="center" gap={2}>
+          <Box flexDirection="row">
+            {item.participants.slice(0, 3).map((p, i) => (
+              <Box key={p.id} style={[styles.avatarWrapper, { marginLeft: i > 0 ? -8 : 0 }]}>
+                <Avatar size="xs" uri={p.avatar} />
+              </Box>
+            ))}
           </Box>
-        )}
-      </Box>
-    </TouchableOpacity>
+          <ThemedText variant="mono" size="xs">
+            {item.participants.length} pessoa{item.participants.length !== 1 ? 's' : ''}
+          </ThemedText>
+        </Box>
+      )}
+
+      <Divider />
+
+      {invitationStatus === EventParticipantStatus.ACCEPTED && (
+        <Box flexDirection="row" alignItems="center" gap={2}>
+          <ThemedIcon name="CircleCheck" size={18} color="primary" />
+          <ThemedText color="primary" weight="semibold">
+            confirmado
+          </ThemedText>
+        </Box>
+      )}
+
+      {invitationStatus === EventParticipantStatus.DECLINED && (
+        <Box flexDirection="row" alignItems="center" gap={2}>
+          <ThemedIcon name="CircleX" size={18} color="error" />
+          <ThemedText color="error" weight="semibold">
+            recusado
+          </ThemedText>
+        </Box>
+      )}
+
+      {invitationStatus === EventParticipantStatus.PENDING && (
+        <Box flexDirection="row" gap={3}>
+          <Button
+            flex={1}
+            size="sm"
+            loading={respond.isPending}
+            onPress={() => respond.mutate(EventParticipantStatus.ACCEPTED)}
+          >
+            <ThemedText color="background" weight="bold">
+              vou
+            </ThemedText>
+          </Button>
+          <Button
+            flex={1}
+            size="sm"
+            variant="outline"
+            type="secondary"
+            loading={respond.isPending}
+            onPress={() => respond.mutate(EventParticipantStatus.DECLINED)}
+          >
+            <ThemedText color="textPrimary" weight="bold">
+              não vou
+            </ThemedText>
+          </Button>
+        </Box>
+      )}
+    </Card>
   )
 }
 
@@ -123,37 +127,32 @@ export const EventInvitationsList = () => {
 
   if (!invitations?.length) return null
 
-  const visible = invitations
+  const count = invitations.length.toString().padStart(2, '0')
 
   return (
     <Box mr={5} ml={5} gap={3}>
-      <ThemedText weight="semibold">Eventos convidados</ThemedText>
-      <Card pr={5} pl={5} pt={5} pb={5}>
-        <FlatList
-          data={visible}
-          keyExtractor={(item) => item.id}
-          scrollEnabled={false}
-          renderItem={({ item, index }) => (
-            <EventInvitationItem item={item} index={index} total={visible.length} currentUserId={session?.user.id} />
-          )}
-        />
-      </Card>
+      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+        <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
+          convidado em
+        </ThemedText>
+        <ThemedText variant="mono" size="xs" letterSpacing="wider">
+          {count}
+        </ThemedText>
+      </Box>
+
+      <Box gap={3}>
+        {invitations.map((item) => (
+          <EventInvitationItem key={item.id} item={item} currentUserId={session?.user.id} />
+        ))}
+      </Box>
     </Box>
   )
 }
 
 const styles = StyleSheet.create({
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 12,
-    backgroundColor: theme.colors.primaryGlow,
-    borderWidth: 1,
-    borderColor: theme.colors.primary
-  },
   avatarWrapper: {
     borderWidth: 2,
-    borderColor: theme.colors.background,
+    borderColor: theme.colors.backgroundSecondary,
     borderRadius: 999
   }
 })
