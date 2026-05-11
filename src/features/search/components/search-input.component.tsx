@@ -14,6 +14,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputS
         autoFocus
         isClearable
         onClear={() => setInputSearch('')}
+        placeholder="buscar lugares e pessoas"
+        startIconName="Search"
+        startIconColor="textPrimary"
       />
     </Box>
   )

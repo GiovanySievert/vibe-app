@@ -27,3 +27,19 @@ export async function getLastSearched(): Promise<SavedSearchItem[] | null> {
 export async function removeLastSearched() {
   await SecureStore.deleteItemAsync(LAST_SEARCHED_KEY)
 }
+
+export async function removeLastSearchedItem(id: string) {
+  const existingData = await getLastSearched()
+  if (!existingData) {
+    return
+  }
+
+  const newList = existingData.filter((item) => item.id !== id)
+
+  if (newList.length === 0) {
+    await SecureStore.deleteItemAsync(LAST_SEARCHED_KEY)
+    return
+  }
+
+  await SecureStore.setItemAsync(LAST_SEARCHED_KEY, JSON.stringify(newList))
+}

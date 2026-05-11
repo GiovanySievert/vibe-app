@@ -7,7 +7,7 @@ export type PlaceReviewEligibility = {
     active: boolean
     lastReviewAt: string | null
     nextAllowedAt: string | null
-    cooldownHours: number
+    cooldownMinutes: number
   }
   reason: 'cooldown' | null
 }

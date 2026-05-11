@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { SavedSearchItem } from '../domain'
-import { getLastSearched, removeLastSearched, saveLastSearched } from '../storage/last-searched.storage'
+import { getLastSearched, removeLastSearched, removeLastSearchedItem, saveLastSearched } from '../storage/last-searched.storage'
 
 export const useLastSearched = () => {
   const [lastSearched, setLastSearched] = useState<SavedSearchItem[] | null>(null)
@@ -24,6 +24,11 @@ export const useLastSearched = () => {
     setLastSearched(null)
   }
 
+  const removeSearchItem = useCallback(async (id: string) => {
+    await removeLastSearchedItem(id)
+    await loadLastSearched()
+  }, [])
+
   useEffect(() => {
     loadLastSearched()
   }, [])
@@ -33,6 +38,7 @@ export const useLastSearched = () => {
     isLoading,
     saveSearch,
     clearLastSearched,
+    removeSearchItem,
     refreshLastSearched: loadLastSearched
   }
 }

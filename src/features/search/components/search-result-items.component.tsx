@@ -1,8 +1,8 @@
-import { TouchableOpacity } from 'react-native'
+import { Pressable, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Avatar, Box, Divider, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { PlacesModel } from '@src/shared/domain'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 
@@ -15,9 +15,10 @@ type SearchResultItemProps = {
   data: PlacesModel | GetUserByUsername
   searchType: 'PLACES' | 'USERS'
   onItemClick?: () => void
+  onRemove?: () => void
 }
 
-export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType, onItemClick }) => {
+export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType, onItemClick, onRemove }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const handleNavigation = () => {
@@ -38,23 +39,38 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
 
   return (
     <>
-      <Box flexDirection="row" alignItems="center" gap={3}>
+      <Box flexDirection="row" alignItems="center" gap={4}>
         <Avatar
           size="sm"
+          square={isPlace ? true : false}
           uri={isPlace ? placeData.image : (userData.image ?? undefined)}
         />
-        <TouchableOpacity onPress={() => handleNavigation()}>
+        <TouchableOpacity onPress={() => handleNavigation()} style={{ flex: 1 }}>
           {isPlace ? (
             <>
-              <ThemedText>{placeData.name}</ThemedText>
-              <ThemedText color="textSecondary" size="sm">
+              <ThemedText color="textPrimary" weight="medium" size="lg">
+                {placeData.name}
+              </ThemedText>
+              <ThemedText color="textSecondary" variant="mono" weight="medium" size="xs" letterSpacing="wider">
                 Bar
               </ThemedText>
             </>
           ) : (
-            <ThemedText>{userData.username}</ThemedText>
+            <>
+              <ThemedText color="textPrimary" weight="medium" size="lg">
+                {userData.username}
+              </ThemedText>
+              <ThemedText color="textSecondary" variant="mono" weight="medium" size="xs" letterSpacing="wider">
+                @{userData.username}
+              </ThemedText>
+            </>
           )}
         </TouchableOpacity>
+        {onRemove && (
+          <Pressable onPress={onRemove} hitSlop={8}>
+            <ThemedIcon name="X" size={18} color="textSecondary" />
+          </Pressable>
+        )}
       </Box>
       <Divider />
     </>
