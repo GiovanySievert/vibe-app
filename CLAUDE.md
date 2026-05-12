@@ -1,3 +1,89 @@
+# myApp
+
+Vibes mobile app — Expo + React Native + TypeScript.
+
+## Stack
+
+- **Runtime**: Expo 54, React 19, React Native 0.81, Yarn 1.22.
+- **State**: Jotai (atoms) — do NOT use Redux / Zustand / Context for global state.
+- **HTTP**: Axios + React Query (cache, retry, invalidation).
+- **Navigation**: React Navigation + Bottom Tabs.
+- **Maps**: Mapbox.
+- **Animation**: Reanimated 3.
+- **Icons**: lucide-react-native (via the `ThemedIcon` component).
+- **Notifications & Location**: native, via Expo.
+
+## Structure
+
+```
+src/
+├── app/          # entrypoints, root navigation
+├── features/     # feature-folders (each feature isolated)
+├── services/     # axios, react-query setup, integrations
+└── shared/
+    ├── components/   # design system (18 components — REUSE before creating new)
+    ├── constants/    # tokens, theme
+    ├── hooks/
+    └── utils/
+```
+
+## Design System (CRITICAL)
+
+**Tokens**: [src/shared/constants/tokens.ts](src/shared/constants/tokens.ts)
+**Theme**: [src/shared/constants/theme.ts](src/shared/constants/theme.ts)
+
+### Palette (dark)
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `theme.colors.background` | `#111111` | Main bg |
+| `theme.colors.backgroundSecondary` | `#1A1A1A` | Cards, surfaces |
+| `theme.colors.primary` | `#6FE8A8` | Mint — primary CTA |
+| `theme.colors.success` | `#2D5A3D` | Forest green (BeReal rebrand) |
+| `theme.colors.warning` | `#C8A84B` | Gold |
+| `theme.colors.error` | `#C0392B` | Red |
+| `theme.colors.info` | `#4A7C59` | Info green |
+| `theme.colors.textPrimary` | `#EDEAE4` | Primary text |
+| `theme.colors.textSecondary` | `#8a8680` | Secondary text |
+| `theme.colors.textTerciary` | `#55524d` | Tertiary text |
+| `theme.colors.border` | `rgba(255,255,255,0.08)` | Subtle borders |
+
+### Typography
+
+- **Default**: `Poppins` (loaded in `app.json`).
+- **Display**: `InterTight`.
+- **Mono**: `JetBrainsMono`.
+- Sizes: `theme.sizes.{xxs,xs,sm,md,lg,xl,2xl,3xl,4xl}` (12 to 40px).
+- Weights: `theme.weights.{light,regular,medium,semibold,bold}` (300–700).
+
+### Spacing
+
+`theme.spacing.{0,1,2,3,4,5,6,7,8,10,12,16}` — multiples of 4 (0px to 64px). NEVER use a raw literal in `padding`/`margin`.
+
+### Components ready in `src/shared/components/`
+
+`animated-box`, `avatar`, `bottom-tab`, `box`, `button`, `card`, `divider`, `fake-input`, `go-back-button`, `header`, `input`, `loading-application`, `loading-page`, `password-input`, `pill`, `swipeable-modal`, `themed-icon`, `themed-text`.
+
+**RULE**: before creating a new component, list this folder and look for a partial match. If something matches, reuse / extend (e.g. new icon button → use `Button variant="icon"`, do not create another).
+
+### New-component convention
+
+- `kebab-case/` folder inside `src/shared/components/` (or `features/<feat>/components/` if feature-specific).
+- File `<name>.component.tsx` + `index.ts` (re-export).
+- Explicitly typed props, variants following the `Button` pattern ([reference](src/shared/components/button/button.component.tsx)).
+- Accessibility: `accessibilityRole`, `accessibilityLabel` on interactive elements.
+
+## Useful scripts
+
+```bash
+yarn start        # Expo dev
+yarn ios          # iOS build
+yarn android      # Android build
+yarn web          # web build
+```
+
+---
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
@@ -100,8 +186,11 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 
 <!-- gitnexus:end -->
 
-## UI / Styling Rules
+## UI / Styling Rules (enforced)
 
-- NEVER use inline `style={{}}` directly in JSX — always use `StyleSheet.create` for styles
-- NEVER hardcode color values (e.g. `'#6FE8A8'`) — always reference colors via the theme (e.g. `theme.colors.primary`)
-- ALWAYS use `Box` with spacing/layout props instead of `View` with manual styles
+- NEVER use inline `style={{...}}` in JSX — ALWAYS `StyleSheet.create`.
+- NEVER hardcode colors (`'#abc'`, `'rgb(...)'`) — ALWAYS `theme.colors.*`.
+- NEVER hardcode spacing — ALWAYS `theme.spacing.*` (multiples of 4).
+- NEVER use `fontFamily` outside `Poppins | InterTight | JetBrainsMono`.
+- ALWAYS prefer `<Box>` with spacing/layout props over `<View>` with manual styles.
+- ALWAYS use `<ThemedText>` instead of raw `<Text>` (inherits theme family/color).
