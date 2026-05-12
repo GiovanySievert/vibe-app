@@ -15,6 +15,7 @@ import { UsersProfileHeaderLoading } from './users-profile-header-loading.compon
 type UsersProfileHeaderProps = {
   userData: UserModel
   canViewReviews: boolean
+  canViewFollowList: boolean
   isReviewAccessLoading?: boolean
   onOpenFollowers: () => void
   onOpenFollowings: () => void
@@ -23,6 +24,7 @@ type UsersProfileHeaderProps = {
 export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   userData,
   canViewReviews,
+  canViewFollowList,
   isReviewAccessLoading = false,
   onOpenFollowers,
   onOpenFollowings
@@ -42,11 +44,11 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   const vibesCount = reviews?.length ?? 0
 
   const handleOpenFollowers = () => {
-    if (data && data.followersCount > 0) onOpenFollowers()
+    if (canViewFollowList && data && data.followersCount > 0) onOpenFollowers()
   }
 
   const handleOpenFollowings = () => {
-    if (data && data.followingCount > 0) onOpenFollowings()
+    if (canViewFollowList && data && data.followingCount > 0) onOpenFollowings()
   }
 
   if (isLoading) {

@@ -47,9 +47,10 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
 
   const isBlocked = !isUserLoggedProfile && (blockData?.isBlocked ?? false)
   const canViewReviews = isUserLoggedProfile || followStatusData?.status === FollowStatus.FOLLOWING
+  const canViewFollowList = isUserLoggedProfile || followStatusData?.status === FollowStatus.FOLLOWING
 
   const openFollowList = (initialTab: 'followers' | 'followings') => {
-    if (!userData) return
+    if (!userData || !canViewFollowList) return
     navigation.navigate('FollowListScreen', {
       userId: userData.id,
       username: userData.username,
@@ -85,6 +86,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
           <UsersProfileHeaderScreen
             userData={userData}
             canViewReviews={canViewReviews}
+            canViewFollowList={canViewFollowList}
             isReviewAccessLoading={isFollowStatusLoading}
             onOpenFollowers={() => openFollowList('followers')}
             onOpenFollowings={() => openFollowList('followings')}

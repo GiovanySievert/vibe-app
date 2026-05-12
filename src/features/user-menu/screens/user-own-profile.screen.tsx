@@ -51,6 +51,7 @@ export const UserOwnProfileScreen = () => {
         <UsersProfileHeaderScreen
           userData={userData}
           canViewReviews
+          canViewFollowList
           onOpenFollowers={() => openFollowList('followers')}
           onOpenFollowings={() => openFollowList('followings')}
         />
