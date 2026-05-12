@@ -7,14 +7,14 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, ThemedText } from '@src/shared/components'
-import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { Screen } from '@src/shared/components/screen'
+import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 
-import { FollowService } from '../services/follow.service'
-import { FollowStatsService } from '../services'
-import { ListFollowersResponse } from '../types'
 import { UsersProfileFollowListItem } from '../components/user-follow-list/users-profile-follow-list-item.component'
+import { FollowStatsService } from '../services'
+import { FollowService } from '../services/follow.service'
+import { ListFollowersResponse } from '../types'
 
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'FollowListScreen'>
 
@@ -44,14 +44,16 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const fetchList = async ({ pageParam = 1 }) => {
     if (isSearching) {
-      const res = activeTab === 'followers'
-        ? await FollowService.searchFollowers(userId, debouncedQuery, pageParam)
-        : await FollowService.searchFollowings(userId, debouncedQuery, pageParam)
+      const res =
+        activeTab === 'followers'
+          ? await FollowService.searchFollowers(userId, debouncedQuery, pageParam)
+          : await FollowService.searchFollowings(userId, debouncedQuery, pageParam)
       return res.data
     }
-    const res = activeTab === 'followers'
-      ? await FollowService.listFollowers(userId, pageParam)
-      : await FollowService.listFollowings(userId, pageParam)
+    const res =
+      activeTab === 'followers'
+        ? await FollowService.listFollowers(userId, pageParam)
+        : await FollowService.listFollowings(userId, pageParam)
     return res.data
   }
 
@@ -59,7 +61,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
     queryKey: ['followList', userId, activeTab, debouncedQuery],
     queryFn: fetchList,
     getNextPageParam: (lastPage, allPages) => {
-      if (!lastPage || lastPage.length < 10) return undefined
+      if (!lastPage || lastPage.length < 20) return undefined
       return allPages.length + 1
     },
     initialPageParam: 1,
