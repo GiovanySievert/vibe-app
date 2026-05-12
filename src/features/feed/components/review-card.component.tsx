@@ -77,7 +77,12 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
     <>
       <Box pl={4} pr={4} pb={7}>
         <Box flexDirection="row" alignItems="center" gap={3} mb={3}>
-          <Avatar size="xs" uri={review.user.image} placeholderIcon="User" />
+          <Avatar
+            size="xs"
+            uri={review.user.image}
+            placeholderIcon="User"
+            onPress={() => navigateToProfile(review.user.id)}
+          />
           <Box flexDirection="row" alignItems="center" gap={2} flex={1}>
             <ThemedText weight="semibold" size="sm" color="textPrimary">
               {review.user.username}
