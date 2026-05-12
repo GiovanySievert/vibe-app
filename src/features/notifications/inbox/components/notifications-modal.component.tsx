@@ -5,6 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { BellOff } from 'lucide-react-native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
+import { authClient } from '@src/services/api/auth-client'
 import { Box, SwipeableModal, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
@@ -32,13 +33,14 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
   const isInitialLoading = isLoading && items.length === 0
 
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const { data: session } = authClient.useSession()
 
   const handlePress = (item: NotificationItem) => {
     if (item.readAt === null) {
       markAsRead.mutate(item.id)
     }
     onClose()
-    navigateFromNotification(item, navigation)
+    navigateFromNotification(item, navigation, session?.user.id)
   }
 
   const handleEndReached = () => {

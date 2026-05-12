@@ -1,9 +1,8 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { useNavigateToProfile } from '@src/shared/hooks'
 import { formatRelativeTime } from '@src/shared/utils'
 
 import { FeedReviewComment } from '../domain'
@@ -13,7 +12,7 @@ type Props = {
 }
 
 export const FeedReviewCommentItem: React.FC<Props> = ({ item }) => {
-  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const navigateToProfile = useNavigateToProfile()
 
   return (
     <Box flexDirection="row" gap={3} mb={4}>
@@ -21,9 +20,7 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item }) => {
         size="xs"
         uri={item.user.image}
         placeholderIcon="User"
-        onPress={() =>
-          navigation.navigate('Modals', { screen: 'UsersProfileScreen', params: { userId: item.user.id } })
-        }
+        onPress={() => navigateToProfile(item.user.id)}
       />
       <Box flex={1} gap={1}>
         <Box flexDirection="row" alignItems="center" gap={2} style={styles.commentMeta}>

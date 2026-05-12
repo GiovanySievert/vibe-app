@@ -5,6 +5,7 @@ import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { PlacesModel } from '@src/shared/domain'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
+import { useNavigateToProfile } from '@src/shared/hooks'
 
 enum SearchType {
   USERS = 'USERS',
@@ -20,6 +21,7 @@ type SearchResultItemProps = {
 
 export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType, onItemClick, onRemove }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const navigateToProfile = useNavigateToProfile()
 
   const handleNavigation = () => {
     if (onItemClick) {
@@ -29,7 +31,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
     if (searchType === SearchType.PLACES) {
       return navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId: data.id } })
     } else {
-      navigation.navigate('Modals', { screen: 'UsersProfileScreen', params: { userId: data.id } })
+      navigateToProfile(data.id)
     }
   }
 

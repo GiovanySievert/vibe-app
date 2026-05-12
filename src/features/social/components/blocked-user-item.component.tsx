@@ -1,10 +1,9 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
 import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
+import { useNavigateToProfile } from '@src/shared/hooks'
 
 import { BlockedUserActions } from './blocked-user-actions.component'
 
@@ -14,13 +13,9 @@ interface BlockedUserItemProps {
 }
 
 export const BlockedUserItem = ({ item, onUnblock }: BlockedUserItemProps) => {
-  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const navigateToProfile = useNavigateToProfile()
 
-  const handlePress = () =>
-    navigation.navigate('Modals', {
-      screen: 'UsersProfileScreen',
-      params: { userId: item.userId }
-    })
+  const handlePress = () => navigateToProfile(item.userId)
 
   return (
     <Card pr={3} pl={3} pt={3} pb={3}>

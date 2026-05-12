@@ -1,9 +1,8 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { useNavigateToProfile } from '@src/shared/hooks'
 
 import { ListFollowersResponse } from '../../types'
 import { UsersProfileFollowListActions } from './users-profile-follow-list-actions.component'
@@ -12,29 +11,18 @@ type UsersProfileFollowListItem = {
   followRelation: ListFollowersResponse
   type: string
   isUserLoggedProfile: boolean
-  onClose: () => void
 }
 
 export const UsersProfileFollowListItem: React.FC<UsersProfileFollowListItem> = ({
   followRelation,
   type,
-  isUserLoggedProfile,
-  onClose
+  isUserLoggedProfile
 }) => {
-  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
-
-  const handlePressUser = (userItemId: string) => {
-    onClose()
-    navigation.navigate('Modals', { screen: 'UsersProfileScreen', params: { userId: userItemId } })
-  }
+  const navigateToProfile = useNavigateToProfile()
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => handlePressUser(followRelation.id)}>
-      <Avatar
-        size="sm"
-        uri={followRelation.image}
-        fallbackLetter={followRelation.name || followRelation.username}
-      />
+    <TouchableOpacity style={styles.container} onPress={() => navigateToProfile(followRelation.userId)}>
+      <Avatar size="sm" uri={followRelation.image} fallbackLetter={followRelation.name || followRelation.username} />
       <Box flex={1} gap={1}>
         <ThemedText weight="semibold" size="sm" color="textPrimary">
           {followRelation.name || followRelation.username}

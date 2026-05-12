@@ -79,11 +79,10 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
       <UsersProfileFollowListItem
         followRelation={item}
         type={activeTab}
-        onClose={() => navigation.goBack()}
         isUserLoggedProfile={isUserLoggedProfile}
       />
     ),
-    [activeTab, isUserLoggedProfile, navigation]
+    [activeTab, isUserLoggedProfile]
   )
 
   return (

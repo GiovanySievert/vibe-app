@@ -11,6 +11,7 @@ import { useToast } from '@src/app/providers'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { theme } from '@src/shared/constants/theme'
+import { colors } from '@src/shared/constants/tokens'
 import { useUploadImage } from '@src/shared/hooks'
 import { locationStateAtom } from '@src/shared/state/location.state'
 import { getDevMockPhotoUriIfSimulator, isSimulatorDev } from '@src/shared/utils'
@@ -212,7 +213,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
                 <ThemedText
                   weight="medium"
                   size="md"
-                  style={{ color: rating === 'crowded' ? '#FFFFFF' : theme.colors.textPrimary }}
+                  style={{ color: rating === 'crowded' ? colors.background : theme.colors.textPrimary }}
                 >
                   Lotado
                 </ThemedText>
@@ -245,7 +246,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
           />
 
           <Button onPress={handleSubmit} loading={isPending || uploading} disabled={submitDisabled}>
-            <ThemedText weight="medium" size="lg" style={{ color: '#FFFFFF' }}>
+            <ThemedText weight="medium" size="lg" color="background">
               Postar
             </ThemedText>
           </Button>
