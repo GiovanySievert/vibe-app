@@ -11,10 +11,7 @@ const str = (value: unknown): string | null =>
 
 const handlers: Partial<Record<NotificationType, (item: NotificationItem, nav: Nav) => void>> = {
   follow_request_created: (_item, nav) =>
-    nav.navigate('Tabs', {
-      screen: 'SocialScreen',
-      params: { screen: 'FollowRequestsScreen', params: { type: 'received' } }
-    }),
+    nav.navigate('Modals', { screen: 'FollowRequestsScreen', params: { type: 'received' } }),
 
   follow_request_accepted: (item, nav) => {
     const userId = str(item.data?.userId)

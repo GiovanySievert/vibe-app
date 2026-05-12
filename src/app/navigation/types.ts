@@ -34,7 +34,6 @@ export type PostStackParamList = {
 
 export type SocialStackParamList = {
   SocialMain: undefined
-  FollowRequestsScreen: { type: 'received' | 'sent' }
 }
 
 export type TabsNavigatorParamsList = {
@@ -52,6 +51,9 @@ export type ModalNavigatorParamsList = {
   LocationModal: undefined
   PlaceReviewCameraScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
   PlaceReviewPostScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
+  FollowRequestsScreen: { type: 'received' | 'sent' }
+  BlockedUsersScreen: undefined
+  FollowListScreen: { userId: string; username: string; initialTab: 'followers' | 'followings' }
 }
 
 export type AuthenticatedStackParamList = {

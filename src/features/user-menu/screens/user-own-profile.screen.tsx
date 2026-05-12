@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authStateAtom } from '@src/features/auth/state'
 import { UserOwnProfileActions, UserOwnProfileTopBar } from '@src/features/user-menu/components'
-import {
-  UserReviewsGrid,
-  UsersProfileFollowList,
-  UsersProfileHeaderScreen
-} from '@src/features/users-profile/components'
+import { UserReviewsGrid, UsersProfileHeaderScreen } from '@src/features/users-profile/components'
 import { UsersProfileService } from '@src/features/users-profile/services'
 import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
@@ -20,9 +18,7 @@ import { UserModel } from '@src/shared/domain/users.model'
 export const UserOwnProfileScreen = () => {
   const [authState] = useAtom(authStateAtom)
   const userId = authState.user.id
-
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
     queryKey: ['fetchUserById', userId],
@@ -41,36 +37,27 @@ export const UserOwnProfileScreen = () => {
 
   if (!userData) return null
 
-  return (
-    <>
-      <ScrollView style={styles.scroll} overScrollMode="never">
-        <Screen>
-          <UserOwnProfileTopBar username={authState.user.username ?? ''} />
-          <UsersProfileHeaderScreen
-            userData={userData}
-            canViewReviews
-            onOpenFollowers={() => {
-              setModalType('followers')
-              setIsModalVisible(true)
-            }}
-            onOpenFollowings={() => {
-              setModalType('followings')
-              setIsModalVisible(true)
-            }}
-          />
-          <UserOwnProfileActions />
-          <UserReviewsGrid userId={userId} canViewReviews />
-        </Screen>
-      </ScrollView>
+  const openFollowList = (initialTab: 'followers' | 'followings') => {
+    navigation.navigate('Modals', {
+      screen: 'FollowListScreen',
+      params: { userId: userData.id, username: userData.username, initialTab }
+    })
+  }
 
-      <UsersProfileFollowList
-        userId={userData.id}
-        type={modalType}
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        isUserLoggedProfile
-      />
-    </>
+  return (
+    <ScrollView style={styles.scroll} overScrollMode="never">
+      <Screen>
+        <UserOwnProfileTopBar username={authState.user.username ?? ''} />
+        <UsersProfileHeaderScreen
+          userData={userData}
+          canViewReviews
+          onOpenFollowers={() => openFollowList('followers')}
+          onOpenFollowings={() => openFollowList('followings')}
+        />
+        <UserOwnProfileActions />
+        <UserReviewsGrid userId={userId} canViewReviews />
+      </Screen>
+    </ScrollView>
   )
 }
 

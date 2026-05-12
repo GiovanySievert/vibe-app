@@ -19,5 +19,19 @@ export const FollowService = {
     userId: string,
     page: number = 1,
     limit: number = 10
-  ): Promise<AxiosResponse<ListFollowersResponse[]>> => coreApi.get(`followers/${userId}?page=${page}&limit=${limit}`)
+  ): Promise<AxiosResponse<ListFollowersResponse[]>> => coreApi.get(`followers/${userId}?page=${page}&limit=${limit}`),
+  searchFollowers: (
+    userId: string,
+    query: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<AxiosResponse<ListFollowersResponse[]>> =>
+    coreApi.get(`followers/${userId}/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`),
+  searchFollowings: (
+    userId: string,
+    query: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<AxiosResponse<ListFollowingsResponse[]>> =>
+    coreApi.get(`followers/following/${userId}/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
 }

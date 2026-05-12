@@ -40,8 +40,8 @@ export const SocialScreen = () => {
             <UserFavoritesPlacesCards />
             <MyEventsList />
             <EventInvitationsList />
-            <FollowRequestsList type={FollowRequestType.RECEIVED} limit={3} />
-            <FollowRequestsList type={FollowRequestType.SENT} limit={3} />
+            <FollowRequestsList type={FollowRequestType.RECEIVED} limit={1} />
+            <FollowRequestsList type={FollowRequestType.SENT} limit={1} />
           </Box>
         </Screen>
       </ScrollView>

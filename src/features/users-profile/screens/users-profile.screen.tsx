@@ -14,7 +14,6 @@ import { UserModel } from '@src/shared/domain/users.model'
 import {
   UserReviewsGrid,
   UsersProfileBlockedState,
-  UsersProfileFollowList,
   UsersProfileHeaderScreen,
   UsersProfileOptionsModal,
   UsersProfileReportModal,
@@ -27,12 +26,10 @@ import { FollowStatus } from '../types'
 
 type UsersProfileScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'UsersProfileScreen'>
 
-export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ route }) => {
+export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ route, navigation }) => {
   const userId = route.params?.userId
   const { data: userLoggedData } = authClient.useSession()
 
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [modalType, setModalType] = useState<'followers' | 'followings'>('followers')
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false)
   const [isReportModalVisible, setIsReportModalVisible] = useState(false)
   const isUserLoggedProfile = userLoggedData?.user.id === userId
@@ -50,6 +47,15 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
 
   const isBlocked = !isUserLoggedProfile && (blockData?.isBlocked ?? false)
   const canViewReviews = isUserLoggedProfile || followStatusData?.status === FollowStatus.FOLLOWING
+
+  const openFollowList = (initialTab: 'followers' | 'followings') => {
+    if (!userData) return
+    navigation.navigate('FollowListScreen', {
+      userId: userData.id,
+      username: userData.username,
+      initialTab
+    })
+  }
 
   if (isLoading) {
     return (
@@ -80,14 +86,8 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
             userData={userData}
             canViewReviews={canViewReviews}
             isReviewAccessLoading={isFollowStatusLoading}
-            onOpenFollowers={() => {
-              setModalType('followers')
-              setIsModalVisible(true)
-            }}
-            onOpenFollowings={() => {
-              setModalType('followings')
-              setIsModalVisible(true)
-            }}
+            onOpenFollowers={() => openFollowList('followers')}
+            onOpenFollowings={() => openFollowList('followings')}
           />
           <UserReviewsGrid
             userId={userId}
@@ -96,14 +96,6 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
           />
         </Screen>
       </ScrollView>
-
-      <UsersProfileFollowList
-        userId={userData.id}
-        type={modalType}
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        isUserLoggedProfile={isUserLoggedProfile}
-      />
 
       {!isUserLoggedProfile && (
         <>

@@ -35,11 +35,6 @@ export const linking: LinkingOptions<AppNavigatorRootParamsList> = {
         screens: {
           Tabs: {
             screens: {
-              SocialScreen: {
-                screens: {
-                  FollowRequestsScreen: 'social/follow-requests/:type'
-                }
-              }
             }
           },
           SharedEventScreen: 'events/share/:token',
@@ -48,7 +43,9 @@ export const linking: LinkingOptions<AppNavigatorRootParamsList> = {
       },
       Modals: {
         screens: {
-          UsersProfileScreen: 'social/profile/:userId'
+          UsersProfileScreen: 'social/profile/:userId',
+          FollowRequestsScreen: 'social/follow-requests/:type',
+          BlockedUsersScreen: 'social/blocked'
         }
       }
     }
