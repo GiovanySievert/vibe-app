@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers'
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar } from '@src/shared/components/avatar'
 import { Box } from '@src/shared/components/box'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
@@ -25,6 +27,7 @@ type Props = {
 export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   const [isCommentsVisible, setIsCommentsVisible] = useState(false)
   const [counts, setCounts] = useState<ReviewCounts | null>(null)
   const relativeTime = formatRelativeTime(review.createdAt)
@@ -75,7 +78,12 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
     <>
       <Box pl={4} pr={4} pb={7}>
         <Box flexDirection="row" alignItems="center" gap={3} mb={3}>
-          <Avatar size="xs" uri={review.user.image} />
+          <Avatar
+            size="xs"
+            uri={review.user.image}
+            placeholderIcon="User"
+            onPress={() => navigation.navigate('Modals', { screen: 'UsersProfileScreen', params: { userId: review.user.id } })}
+          />
           <Box flexDirection="row" alignItems="center" gap={2} flex={1}>
             <ThemedText weight="semibold" size="sm" color="textPrimary">
               {review.user.username}

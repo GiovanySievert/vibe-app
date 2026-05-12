@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, Image, type ImageSourcePropType, Modal, Pressable, StyleSheet, View } from 'react-native'
+import { Dimensions, Image, type ImageSourcePropType, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { icons } from 'lucide-react-native'
@@ -27,6 +27,14 @@ const ICON_SIZES: Record<Size, number> = {
   xl: 48
 }
 
+const LETTER_SIZES: Record<Size, number> = {
+  xs: 13,
+  sm: 18,
+  md: 22,
+  lg: 34,
+  xl: 46
+}
+
 type AvatarProps = {
   size?: Size
   uri?: string | null
@@ -34,9 +42,11 @@ type AvatarProps = {
   square?: boolean
   pressable?: boolean
   placeholderIcon?: IconName
+  fallbackLetter?: string
+  onPress?: () => void
 }
 
-function createStyles(size: number, square = false, hasIcon = false) {
+function createStyles(size: number, square = false, hasPlaceholder = false) {
   const borderRadius = square ? 8 : size / 2
 
   return StyleSheet.create({
@@ -48,7 +58,7 @@ function createStyles(size: number, square = false, hasIcon = false) {
       width: size,
       height: size,
       borderRadius,
-      backgroundColor: hasIcon ? theme.colors.backgroundSecondary : theme.colors.textPrimary,
+      backgroundColor: hasPlaceholder ? theme.colors.backgroundSecondary : theme.colors.textPrimary,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -83,11 +93,14 @@ export const Avatar: React.FC<AvatarProps> = ({
   source,
   square = false,
   pressable = false,
-  placeholderIcon
+  placeholderIcon,
+  fallbackLetter,
+  onPress
 }) => {
   const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
-  const s = createStyles(avatarSize, square, !!placeholderIcon)
+  const hasPlaceholder = !!(placeholderIcon || fallbackLetter)
+  const s = createStyles(avatarSize, square, hasPlaceholder)
 
   const [visible, setVisible] = useState(false)
   const scale = useSharedValue(0.3)
@@ -111,22 +124,38 @@ export const Avatar: React.FC<AvatarProps> = ({
     })
   }
 
+  const letter = fallbackLetter?.charAt(0).toUpperCase()
+
   const imageEl = imgSource ? (
     <Image source={imgSource as ImageSourcePropType} resizeMode="cover" style={s.image} />
   ) : (
     <View style={s.placeholder}>
-      {placeholderIcon && <ThemedIcon name={placeholderIcon} size={ICON_SIZES[size]} color="textSecondary" />}
+      {letter ? (
+        <Text style={{ color: theme.colors.textPrimary, fontSize: LETTER_SIZES[size], fontWeight: '600' }}>
+          {letter}
+        </Text>
+      ) : placeholderIcon ? (
+        <ThemedIcon name={placeholderIcon} size={ICON_SIZES[size]} color="textSecondary" />
+      ) : null}
     </View>
+  )
+
+  const content = pressable && imgSource ? (
+    <Pressable onPress={openModal} style={s.root}>
+      {imageEl}
+    </Pressable>
+  ) : (
+    <View style={s.root}>{imageEl}</View>
   )
 
   return (
     <>
-      {pressable && imgSource ? (
-        <Pressable onPress={openModal} style={s.root}>
-          {imageEl}
-        </Pressable>
+      {onPress ? (
+        <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+          {content}
+        </TouchableOpacity>
       ) : (
-        <View style={s.root}>{imageEl}</View>
+        content
       )}
 
       <Modal visible={visible} transparent animationType="none" statusBarTranslucent onRequestClose={closeModal}>

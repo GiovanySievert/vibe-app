@@ -47,7 +47,7 @@ export const UserOwnProfileScreen = () => {
   return (
     <ScrollView style={styles.scroll} overScrollMode="never">
       <Screen>
-        <UserOwnProfileTopBar username={authState.user.username ?? ''} />
+        <UserOwnProfileTopBar username={authState.user.username} />
         <UsersProfileHeaderScreen
           userData={userData}
           canViewReviews

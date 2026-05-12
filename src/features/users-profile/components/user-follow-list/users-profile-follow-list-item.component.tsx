@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, ThemedText } from '@src/shared/components'
 
 import { ListFollowersResponse } from '../../types'
@@ -20,28 +21,38 @@ export const UsersProfileFollowListItem: React.FC<UsersProfileFollowListItem> = 
   isUserLoggedProfile,
   onClose
 }) => {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const handlePressUser = (userItemId: string) => {
     onClose()
-    navigation.navigate('UsersProfileScreen', { userId: userItemId })
+    navigation.navigate('Modals', { screen: 'UsersProfileScreen', params: { userId: userItemId } })
   }
 
   return (
-    <TouchableOpacity style={styles.userItem} onPress={() => handlePressUser(followRelation.id)}>
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Box flexDirection="row" alignItems="center" gap={5}>
-          <Avatar size="sm" uri={followRelation.image} />
-          <ThemedText variant="primary" weight="semibold">
-            {followRelation.username}
-          </ThemedText>
-        </Box>
-        {isUserLoggedProfile && <UsersProfileFollowListActions followRelation={followRelation} type={type} />}
+    <TouchableOpacity style={styles.container} onPress={() => handlePressUser(followRelation.id)}>
+      <Avatar
+        size="sm"
+        uri={followRelation.image}
+        fallbackLetter={followRelation.name || followRelation.username}
+      />
+      <Box flex={1} gap={1}>
+        <ThemedText weight="semibold" size="sm" color="textPrimary">
+          {followRelation.name || followRelation.username}
+        </ThemedText>
+        <ThemedText size="xs" color="textSecondary">
+          @{followRelation.username}
+        </ThemedText>
       </Box>
+      {isUserLoggedProfile && <UsersProfileFollowListActions followRelation={followRelation} type={type} />}
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  userItem: {}
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 10
+  }
 })

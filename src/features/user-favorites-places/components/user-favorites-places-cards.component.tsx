@@ -36,7 +36,7 @@ export const UserFavoritesPlacesCards = () => {
           >
             <Box flexDirection="row" justifyContent="space-between" alignItems="center" gap={3}>
               <Box flexDirection="row" gap={4} alignItems="center">
-                <Avatar square uri={item.avatar} />
+                <Avatar square uri={item.avatar} placeholderIcon="MapPin" />
                 <Box>
                   <ThemedText color="textPrimary" weight="bold" textTransform="lowercase">
                     {placeName}

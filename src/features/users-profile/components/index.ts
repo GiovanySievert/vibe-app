@@ -1,7 +1,5 @@
-export * from './user-follow-list/users-profile-follow-list.component'
 export * from './user-follow-list/users-profile-follow-list-actions.component'
 export * from './user-follow-list/users-profile-follow-list-item.component'
-export * from './user-follow-list/users-profile-follow-list-loading.component'
 export * from './user-review-detail-modal.component'
 export * from './user-reviews-grid.component'
 export * from './user-reviews-grid-item.component'

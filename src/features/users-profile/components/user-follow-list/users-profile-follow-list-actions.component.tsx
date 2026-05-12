@@ -62,33 +62,37 @@ export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActio
   if (type === 'followers') {
     return (
       <Button
-        variant="soft"
-        type="danger"
+        variant="outline"
+        type="secondary"
+        size="sm"
         onPress={handleRemoveFollower}
         loading={removeFollowerMutation.isPending}
         disabled={isRemoved}
       >
-        <ThemedText variant="primary" weight="medium">
-          {isRemoved ? 'Removido' : 'Remover'}
+        <ThemedText size="sm" weight="medium" color="textSecondary">
+          {isRemoved ? 'removido' : 'remover'}
         </ThemedText>
       </Button>
     )
   }
 
-  const getFollowButtonText = () => {
-    if (followStatus === 'following') return 'Seguindo'
-    if (followStatus === 'pending') return 'Aguardando Solicitação'
-    return 'Seguir'
-  }
+  const isFollowing = followStatus === 'following'
+  const isPending = followStatus === 'pending'
 
   return (
     <Button
-      variant="soft"
+      variant={isFollowing || isPending ? 'outline' : 'solid'}
+      type={isFollowing || isPending ? 'secondary' : 'primary'}
+      size="sm"
       onPress={handleToggleFollow}
       loading={unfollowMutation.isPending || followMutation.isPending || cancelFollowRequestMutation.isPending}
     >
-      <ThemedText variant="primary" weight="medium">
-        {getFollowButtonText()}
+      <ThemedText
+        size="sm"
+        weight="medium"
+        color={isFollowing || isPending ? 'textSecondary' : 'textPrimary'}
+      >
+        {isFollowing ? 'seguindo' : isPending ? 'pendente' : 'seguir'}
       </ThemedText>
     </Button>
   )

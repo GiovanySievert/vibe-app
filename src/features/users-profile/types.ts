@@ -17,6 +17,7 @@ export type UserFollowStatsResponse = {
 export type ListFollowingsResponse = {
   id: string
   username: string
+  name: string
   userId: string
   image: string | null
 }
@@ -24,6 +25,7 @@ export type ListFollowingsResponse = {
 export type ListFollowersResponse = {
   id: string
   username: string
+  name: string
   image: string | null
   userId: string
 }

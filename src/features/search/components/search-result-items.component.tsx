@@ -44,6 +44,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
           size="sm"
           square={isPlace ? true : false}
           uri={isPlace ? placeData.image : (userData.image ?? undefined)}
+          placeholderIcon={isPlace ? 'MapPin' : 'User'}
         />
         <TouchableOpacity onPress={() => handleNavigation()} style={{ flex: 1 }}>
           {isPlace ? (
