@@ -99,3 +99,9 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
+
+## UI / Styling Rules
+
+- NEVER use inline `style={{}}` directly in JSX — always use `StyleSheet.create` for styles
+- NEVER hardcode color values (e.g. `'#6FE8A8'`) — always reference colors via the theme (e.g. `theme.colors.primary`)
+- ALWAYS use `Box` with spacing/layout props instead of `View` with manual styles
