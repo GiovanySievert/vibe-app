@@ -16,69 +16,70 @@ export const UserMenuOptions = () => {
 
   return (
     <>
-      <ThemedText size="lg" weight="semibold">
-        Geral
+      <ThemedText size="xs" weight="semibold" variant="secondary" style={styles.sectionLabel}>
+        conta
       </ThemedText>
       <Box gap={4}>
         <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserEditProfile')}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="Pen" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Editar perfil</ThemedText>
-          </Box>
-          <ThemedIcon name="ChevronRight" color="textPrimary" />
-        </TouchableOpacity>
-        <Divider />
-
-        <TouchableOpacity
-          style={styles.actionContainer}
-          onPress={() => navigation.navigate('NotificationPreferencesScreen')}
-        >
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="Bell" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Notificacoes</ThemedText>
+          <Box>
+            <ThemedText weight="medium">editar perfil</ThemedText>
+            <ThemedText size="sm" variant="secondary">nome, bio, foto</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
         <Divider />
 
         <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserPrivacyScreen')}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="Lock" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Privacidade</ThemedText>
+          <Box>
+            <ThemedText weight="medium">privacidade</ThemedText>
+            <ThemedText size="sm" variant="secondary">perfil público</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
         <Divider />
 
         <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('TermsOfUseScreen')}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="Book" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Termos de uso</ThemedText>
-          </Box>
-          <ThemedIcon name="ChevronRight" color="textPrimary" />
-        </TouchableOpacity>
-        <Divider />
-        <TouchableOpacity style={styles.actionContainer} onPress={() => setIsContactModalVisible(true)}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="MessageCircle" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Falar com a equipe</ThemedText>
-          </Box>
-          <ThemedIcon name="ChevronRight" color="textPrimary" />
-        </TouchableOpacity>
-        <Divider />
-        <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserDeleteAccountScreen')}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="Handshake" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Deletar conta</ThemedText>
+          <Box>
+            <ThemedText weight="medium">termos de uso</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
       </Box>
+
+      <ThemedText size="xs" weight="semibold" variant="secondary" style={styles.sectionLabel}>
+        no app
+      </ThemedText>
       <Box gap={4}>
+        <TouchableOpacity
+          style={styles.actionContainer}
+          onPress={() => navigation.navigate('NotificationPreferencesScreen')}
+        >
+          <Box>
+            <ThemedText weight="medium">notificações</ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </TouchableOpacity>
+        <Divider />
+
+        <TouchableOpacity style={styles.actionContainer} onPress={() => setIsContactModalVisible(true)}>
+          <Box>
+            <ThemedText weight="medium">falar com a equipe</ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </TouchableOpacity>
+        <Divider />
+
+        <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserDeleteAccountScreen')}>
+          <Box>
+            <ThemedText weight="medium">deletar conta</ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </TouchableOpacity>
+        <Divider />
+
         <TouchableOpacity style={styles.actionContainer} onPress={() => logout()}>
-          <Box flexDirection="row" gap={3} alignItems="center">
-            <ThemedIcon name="LogOut" color="textPrimary" size={16} />
-            <ThemedText weight="medium">Deslogar</ThemedText>
+          <Box>
+            <ThemedText weight="medium">deslogar</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
@@ -92,7 +93,11 @@ export const UserMenuOptions = () => {
 const styles = StyleSheet.create({
   actionContainer: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  sectionLabel: {
+    textTransform: 'uppercase',
+    letterSpacing: 1
   }
 })
