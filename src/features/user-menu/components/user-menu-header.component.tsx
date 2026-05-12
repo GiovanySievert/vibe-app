@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { AuthenticatedStackParamList } from '@src/app/navigation/types'
+import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { UserData } from '@src/features/auth/domain'
 import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
@@ -11,7 +11,7 @@ type userMenuHeaderProps = {
 }
 
 export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
-  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const navigation = useNavigation<NavigationProp<UserMenuStackParamList>>()
 
   return (
     <Card bg="background" gap={4} p={4}>
@@ -33,10 +33,7 @@ export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
             <TouchableOpacity
               style={styles.profileButton}
               onPress={() =>
-                navigation.navigate('Modals', {
-                  screen: 'UsersProfileScreen',
-                  params: { userId: userData.id }
-                })
+                navigation.navigate('UserProfileMain')
               }
             >
               <ThemedText size="sm" weight="medium" style={styles.profileButtonText}>
