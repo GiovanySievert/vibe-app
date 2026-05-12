@@ -1,6 +1,9 @@
 import React from 'react'
 import { Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'
 import { Box, ThemedText } from '@src/shared/components'
 
@@ -11,10 +14,10 @@ import { FollowRequestItem } from './follow-request-item.component'
 interface FollowRequestsListProps {
   type: FollowRequestType
   limit?: number
-  onSeeAll?: (type: FollowRequestType) => void
 }
 
-export const FollowRequestsList = ({ type, limit, onSeeAll }: FollowRequestsListProps) => {
+export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<AuthenticatedStackParamList>>()
   const { acceptFollowRequest, rejectFollowRequest, cancelFollowRequest } = useFollowRequestActions({ type })
   const { data: followRequestsData, isLoading } = useFollowRequests({ type })
 
@@ -27,6 +30,12 @@ export const FollowRequestsList = ({ type, limit, onSeeAll }: FollowRequestsList
   const displayedRequests = limit ? followRequestsData.slice(0, limit) : followRequestsData
   const hasMore = !!limit && total > limit
   const count = total.toString().padStart(2, '0')
+
+  const openModal = () =>
+    navigation.navigate('Modals', {
+      screen: 'FollowRequestsScreen',
+      params: { type: type === FollowRequestType.RECEIVED ? 'received' : 'sent' }
+    })
 
   return (
     <Box mr={5} ml={5} gap={3}>
@@ -52,8 +61,8 @@ export const FollowRequestsList = ({ type, limit, onSeeAll }: FollowRequestsList
         ))}
       </Box>
 
-      {hasMore && onSeeAll && (
-        <Pressable onPress={() => onSeeAll(type)}>
+      {hasMore && (
+        <Pressable onPress={openModal}>
           <ThemedText variant="mono" size="xs" color="textSecondary">
             ver todas ({count})
           </ThemedText>

@@ -4,18 +4,12 @@ import { BlockService } from '@src/features/users-profile/services'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
 import { authClient } from '@src/services/api/auth-client'
 
-export interface InfiniteBlockedPage {
-  data: ListBlockedUsersResponse[]
-  nextPage: number
-  hasMore: boolean
-}
+const PAGE_SIZE = 10
 
-const getQueryKey = (userId: string | undefined) => {
-  return ['blockedUsers', userId]
-}
+const getQueryKey = (userId: string | undefined) => ['blockedUsers', userId]
 
-const fetchBlockedUsers = async () => {
-  const response = await BlockService.listBlockedUsers()
+const fetchPage = async (page: number, limit: number) => {
+  const response = await BlockService.listBlockedUsers(page, limit)
   return response.data
 }
 
@@ -24,7 +18,7 @@ export const useBlockedUsers = () => {
 
   return useQuery<ListBlockedUsersResponse[], Error>({
     queryKey: getQueryKey(userLoggedData?.user.id),
-    queryFn: fetchBlockedUsers,
+    queryFn: () => fetchPage(1, PAGE_SIZE),
     retry: false,
     staleTime: 60 * 5
   })
@@ -32,22 +26,13 @@ export const useBlockedUsers = () => {
 
 export const useInfiniteBlockedUsers = () => {
   const { data: userLoggedData } = authClient.useSession()
+  const queryKey = [...getQueryKey(userLoggedData?.user.id), 'infinite']
 
-  const fetchInfiniteBlockedUsers = async ({ pageParam = 1 }: { pageParam: number }) => {
-    const response = await BlockService.listBlockedUsers()
-    return {
-      data: response.data,
-      nextPage: pageParam + 1,
-      hasMore: false
-    } as InfiniteBlockedPage
-  }
-
-  const queryKey = getQueryKey(userLoggedData?.user.id)
-
-  return useInfiniteQuery({
-    queryKey: [...queryKey, 'infinite'],
-    queryFn: fetchInfiniteBlockedUsers,
-    getNextPageParam: (lastPage: InfiniteBlockedPage) => (lastPage.hasMore ? lastPage.nextPage : undefined),
-    initialPageParam: 1
+  return useInfiniteQuery<ListBlockedUsersResponse[]>({
+    queryKey,
+    queryFn: ({ pageParam = 1 }) => fetchPage(pageParam as number, PAGE_SIZE),
+    getNextPageParam: (lastPage, allPages) => (lastPage.length === PAGE_SIZE ? allPages.length + 1 : undefined),
+    initialPageParam: 1,
+    retry: false
   })
 }

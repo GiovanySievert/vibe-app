@@ -4,8 +4,6 @@ import { BlockService } from '@src/features/users-profile/services'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
 import { authClient } from '@src/services/api/auth-client'
 
-import { InfiniteBlockedPage } from './use-blocked-users'
-
 interface UseBlockActionsProps {
   queryKeySuffix?: string
 }
@@ -15,21 +13,19 @@ export const useBlockActions = ({ queryKeySuffix = '' }: UseBlockActionsProps = 
   const queryClient = useQueryClient()
 
   const fullQueryKey = ['blockedUsers', userLoggedData?.user.id, queryKeySuffix].filter(Boolean)
+  const isInfinite = queryKeySuffix === 'infinite'
 
   const removeUserFromCache = (userId: string) => {
-    queryClient.setQueryData<ListBlockedUsersResponse[] | InfiniteData<InfiniteBlockedPage>>(
+    queryClient.setQueryData<ListBlockedUsersResponse[] | InfiniteData<ListBlockedUsersResponse[]>>(
       fullQueryKey,
       (oldData) => {
         if (!oldData) return oldData
 
-        if (queryKeySuffix === 'infinite') {
-          const infiniteData = oldData as InfiniteData<InfiniteBlockedPage>
+        if (isInfinite) {
+          const infiniteData = oldData as InfiniteData<ListBlockedUsersResponse[]>
           return {
             ...infiniteData,
-            pages: infiniteData.pages.map((page) => ({
-              ...page,
-              data: page.data.filter((user) => user.userId !== userId)
-            }))
+            pages: infiniteData.pages.map((page) => page.filter((user) => user.userId !== userId))
           }
         }
 

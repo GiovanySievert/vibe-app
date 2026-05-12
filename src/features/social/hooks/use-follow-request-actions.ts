@@ -4,8 +4,6 @@ import { FollowRequestsService } from '@src/features/users-profile/services'
 import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'
 import { authClient } from '@src/services/api/auth-client'
 
-import { InfinitePage } from './use-follow-requests'
-
 interface UseFollowRequestActionsProps {
   type: FollowRequestType
   queryKeySuffix?: string
@@ -15,30 +13,27 @@ export const useFollowRequestActions = ({ type, queryKeySuffix = '' }: UseFollow
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
-  const queryKey = type === FollowRequestType.RECEIVED ? 'receivedFollowRequests' : 'sentFollowRequests'
-  const fullQueryKey = [queryKey, userLoggedData?.user.id, queryKeySuffix].filter(Boolean)
+  const baseKey = type === FollowRequestType.RECEIVED ? 'receivedFollowRequests' : 'sentFollowRequests'
+  const fullQueryKey = [baseKey, userLoggedData?.user.id, queryKeySuffix].filter(Boolean)
+  const isInfinite = queryKeySuffix === 'infinite'
 
   const removeRequestFromCache = (requestFollowId: string) => {
-    queryClient.setQueryData<ListUserAllFollowRequestsResponse[] | InfiniteData<InfinitePage>>(
-      fullQueryKey,
-      (oldData) => {
-        if (!oldData) return oldData
+    queryClient.setQueryData<
+      ListUserAllFollowRequestsResponse[] | InfiniteData<ListUserAllFollowRequestsResponse[]>
+    >(fullQueryKey, (oldData) => {
+      if (!oldData) return oldData
 
-        if (queryKeySuffix === 'infinite') {
-          const infiniteData = oldData as InfiniteData<InfinitePage>
-          return {
-            ...infiniteData,
-            pages: infiniteData.pages.map((page) => ({
-              ...page,
-              data: page.data.filter((req) => req.id !== requestFollowId)
-            }))
-          }
+      if (isInfinite) {
+        const infiniteData = oldData as InfiniteData<ListUserAllFollowRequestsResponse[]>
+        return {
+          ...infiniteData,
+          pages: infiniteData.pages.map((page) => page.filter((req) => req.id !== requestFollowId))
         }
-
-        const arrayData = oldData as ListUserAllFollowRequestsResponse[]
-        return arrayData.filter((req) => req.id !== requestFollowId)
       }
-    )
+
+      const arrayData = oldData as ListUserAllFollowRequestsResponse[]
+      return arrayData.filter((req) => req.id !== requestFollowId)
+    })
   }
 
   const handleRequestAction = async (requestFollowId: string, action: (id: string) => Promise<unknown>) => {
