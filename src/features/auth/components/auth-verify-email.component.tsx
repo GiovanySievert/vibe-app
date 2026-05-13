@@ -14,9 +14,10 @@ import { authStateAtom } from '../state'
 
 type AuthVerifyEmailProps = {
   emailToBeVerified: string
+  hideTitle?: boolean
 }
 
-export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerified }) => {
+export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerified, hideTitle }) => {
   const setAuthState = useSetAtom(authStateAtom)
   const { showToast } = useToast()
 
@@ -130,7 +131,7 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
   return (
     <Box gap={6}>
       <Box gap={1}>
-        <ThemedText variant="title">confirme seu email</ThemedText>
+        {!hideTitle && <ThemedText variant="title">confirme seu email</ThemedText>}
         <ThemedText variant="secondary">enviamos um código para {emailToBeVerified}.</ThemedText>
       </Box>
 

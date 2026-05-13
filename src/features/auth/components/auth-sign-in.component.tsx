@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
@@ -9,6 +9,8 @@ import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
+import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { signInSchema, UserSignInRequestDTO } from '../domain'
@@ -105,94 +107,120 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
   }
 
   return (
-    <Animated.View style={[{ flexDirection: 'row', overflow: 'hidden' }, animatedStyle]}>
-      <Box mt={20} p={6} style={{ width: screenWidth }}>
-        <Box mb={4}>
-          <ThemedText variant="title" size="4xl" color="textPrimary">
-            vibes
-          </ThemedText>
-          <ThemedText variant="primary" color="textSecondary">
-            onde seus amigos estāo agora.
-          </ThemedText>
-        </Box>
-        <Box gap={6}>
-          <Input
-            label="email"
-            value={form.login}
-            onChange={({ nativeEvent }) => handleChangeInputValue('login', nativeEvent.text)}
-            errorMessage={formError.login}
-          />
-          <Input
-            label="senha"
-            value={form.password}
-            onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
-            errorMessage={formError.password}
-            secureTextEntry
-          />
+    <Box flex={1} style={styles.container}>
+      <Animated.View style={[styles.stepsRow, animatedStyle]}>
+        <Box mt={20} p={6} style={styles.step}>
+          <Box mb={4}>
+            <ThemedText variant="title" size="4xl" color="textPrimary">
+              vibes
+            </ThemedText>
+            <ThemedText variant="primary" color="textSecondary">
+              onde seus amigos estāo agora.
+            </ThemedText>
+          </Box>
+          <Box gap={6}>
+            <Input
+              label="email"
+              value={form.login}
+              onChange={({ nativeEvent }) => handleChangeInputValue('login', nativeEvent.text)}
+              errorMessage={formError.login}
+            />
+            <Input
+              label="senha"
+              value={form.password}
+              onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
+              errorMessage={formError.password}
+              secureTextEntry
+            />
 
-          <Box mt={2} alignItems="flex-end">
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}>
-              <ThemedText size="sm" color="textSecondary" textDecorationLine="underline">
-                esqueci a senha
+            <Box mt={2} alignItems="flex-end">
+              <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}>
+                <ThemedText size="sm" color="textSecondary" textDecorationLine="underline">
+                  esqueci a senha
+                </ThemedText>
+              </TouchableOpacity>
+            </Box>
+            <Box gap={3}>
+              <Button onPress={() => submitForm()} loading={loading}>
+                <ThemedText color="background" size="lg" weight="semibold">
+                  entrar
+                </ThemedText>
+              </Button>
+
+              <Button variant="outline" onPress={() => submitForm()} loading={loading}>
+                <ThemedText color="textPrimary" size="lg" weight="semibold">
+                  entrar com apple
+                </ThemedText>
+              </Button>
+            </Box>
+          </Box>
+          <TouchableOpacity onPress={() => goToSignUp()}>
+            <Box mt={6} justifyContent="center" flexDirection="row" alignItems="center">
+              <ThemedText color="textSecondary">primeira vez? </ThemedText>
+              <ThemedText weight="semibold" textDecorationLine="underline">
+                criar conta
+              </ThemedText>
+            </Box>
+          </TouchableOpacity>
+
+          <Box justifyContent="center" flexDirection="row" alignItems="center">
+            <ThemedText variant="mono" color="textSecondary">
+              ao continuar voce aceita
+            </ThemedText>
+          </Box>
+
+          <Box justifyContent="center" flexDirection="row" alignItems="center">
+            <ThemedText variant="mono" color="textSecondary">
+              os{' '}
+            </ThemedText>
+
+            <TouchableOpacity onPress={() => navigation.navigate('TermsScreen')}>
+              <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
+                termos
+              </ThemedText>
+            </TouchableOpacity>
+
+            <ThemedText variant="mono" color="textSecondary">
+              {' '}
+              e a{' '}
+            </ThemedText>
+
+            <TouchableOpacity onPress={() => navigation.navigate('PrivacyScreen')}>
+              <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
+                privacidade
               </ThemedText>
             </TouchableOpacity>
           </Box>
-          <Box gap={3}>
-            <Button onPress={() => submitForm()} loading={loading}>
-              <ThemedText color="background" size="lg" weight="semibold">
-                entrar
-              </ThemedText>
-            </Button>
+        </Box>
 
-            <Button variant="outline" onPress={() => submitForm()} loading={loading}>
-              <ThemedText color="textPrimary" size="lg" weight="semibold">
-                entrar com apple
-              </ThemedText>
-            </Button>
+        <Box p={6} style={styles.step}>
+          <Box mb={6} flexDirection="row" alignItems="center" gap={3}>
+            <TouchableOpacity onPress={() => goToStep(SIGN_IN_STEPS.FORM)} style={styles.goBackButton}>
+              <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
+            </TouchableOpacity>
+            <ThemedText variant="title">confirme seu email</ThemedText>
           </Box>
+          <AuthVerifyEmail emailToBeVerified={form.login} hideTitle />
         </Box>
-        <TouchableOpacity onPress={() => goToSignUp()}>
-          <Box mt={6} justifyContent="center" flexDirection="row" alignItems="center">
-            <ThemedText color="textSecondary">primeira vez? </ThemedText>
-            <ThemedText weight="semibold" textDecorationLine="underline">
-              criar conta
-            </ThemedText>
-          </Box>
-        </TouchableOpacity>
-
-        <Box justifyContent="center" flexDirection="row" alignItems="center">
-          <ThemedText variant="mono" color="textSecondary">
-            ao continuar voce aceita
-          </ThemedText>
-        </Box>
-
-        <Box justifyContent="center" flexDirection="row" alignItems="center">
-          <ThemedText variant="mono" color="textSecondary">
-            os{' '}
-          </ThemedText>
-
-          <TouchableOpacity onPress={() => navigation.navigate('TermsScreen')}>
-            <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-              termos
-            </ThemedText>
-          </TouchableOpacity>
-
-          <ThemedText variant="mono" color="textSecondary">
-            {' '}
-            e a{' '}
-          </ThemedText>
-
-          <TouchableOpacity onPress={() => navigation.navigate('PrivacyScreen')}>
-            <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-              privacidade
-            </ThemedText>
-          </TouchableOpacity>
-        </Box>
-      </Box>
-
-      <Box p={6} style={{ width: screenWidth }}>
-        <AuthVerifyEmail emailToBeVerified={form.login} />
-      </Box>
-    </Animated.View>
+      </Animated.View>
+    </Box>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden'
+  },
+  stepsRow: {
+    flexDirection: 'row'
+  },
+  step: {
+    width: screenWidth
+  },
+  goBackButton: {
+    borderWidth: 1,
+    borderRadius: 999,
+    borderColor: theme.colors.textSecondary,
+    padding: 6
+  }
+})
