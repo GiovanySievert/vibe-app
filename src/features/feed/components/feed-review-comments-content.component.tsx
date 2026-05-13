@@ -9,9 +9,12 @@ import { FeedReviewCommentList } from './feed-review-comment-list.component'
 type Props = {
   reviewId: string
   visible: boolean
+  commentsCount?: number
+  currentUserId: string
+  reviewOwnerId: string
 }
 
-export const FeedReviewCommentsContent: React.FC<Props> = ({ reviewId, visible }) => {
+export const FeedReviewCommentsContent: React.FC<Props> = ({ reviewId, visible, commentsCount, currentUserId, reviewOwnerId }) => {
   const [total, setTotal] = useState(0)
 
   return (
@@ -25,7 +28,7 @@ export const FeedReviewCommentsContent: React.FC<Props> = ({ reviewId, visible }
         </ThemedText>
       </Box>
       <FeedReviewCommentCreate reviewId={reviewId} />
-      <FeedReviewCommentList reviewId={reviewId} visible={visible} onTotalChange={setTotal} />
+      <FeedReviewCommentList reviewId={reviewId} visible={visible} commentsCount={commentsCount ?? -1} currentUserId={currentUserId} reviewOwnerId={reviewOwnerId} onTotalChange={setTotal} />
     </Box>
   )
 }

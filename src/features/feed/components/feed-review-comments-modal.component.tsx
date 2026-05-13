@@ -8,14 +8,17 @@ import { FeedReviewCommentsContent } from './feed-review-comments-content.compon
 type Props = {
   reviewId: string
   visible: boolean
+  commentsCount: number
+  currentUserId: string
+  reviewOwnerId: string
   onClose: () => void
 }
 
-export const FeedReviewCommentsModal: React.FC<Props> = ({ reviewId, visible, onClose }) => {
+export const FeedReviewCommentsModal: React.FC<Props> = ({ reviewId, visible, commentsCount, currentUserId, reviewOwnerId, onClose }) => {
   return (
     <SwipeableModal visible={visible} onClose={onClose} height={620}>
       <KeyboardAvoidingView style={styles.keyboardWrap} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <FeedReviewCommentsContent reviewId={reviewId} visible={visible} />
+        <FeedReviewCommentsContent reviewId={reviewId} visible={visible} commentsCount={commentsCount} currentUserId={currentUserId} reviewOwnerId={reviewOwnerId} />
       </KeyboardAvoidingView>
     </SwipeableModal>
   )

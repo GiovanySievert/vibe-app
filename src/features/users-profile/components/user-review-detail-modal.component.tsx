@@ -22,7 +22,7 @@ export const UserReviewDetailModal: React.FC<Props> = ({ item, currentUserId, on
           <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
             <ReviewCard review={item} currentUserId={currentUserId} />
           </ScrollView>
-          <FeedReviewCommentsContent reviewId={item.id} visible={true} />
+          <FeedReviewCommentsContent reviewId={item.id} visible={true} currentUserId={currentUserId} reviewOwnerId={item.userId} />
         </KeyboardAvoidingView>
       )}
     </SwipeableModal>

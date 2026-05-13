@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import { coreApi } from '@src/services/api'
 
-import { FeedReviewComment, FeedReviewItem, FeedReviewReactionType, ListFeedReviewCommentsResponse, ReviewCounts } from '../domain'
+import { FeedReviewComment, FeedReviewItem, FeedReviewReactionType, ListFeedReviewCommentsResponse, ReviewCounts, ReviewInteractionCount, ReviewInteractionUser } from '../domain'
 
 export const FeedService = {
   list: (page?: number): Promise<AxiosResponse<FeedReviewItem[]>> =>
@@ -27,5 +27,14 @@ export const FeedService = {
     coreApi.delete(`/place-reviews/${reviewId}/reaction`),
 
   deleteReview: (reviewId: string): Promise<AxiosResponse<void>> =>
-    coreApi.delete(`/place-reviews/${reviewId}`)
+    coreApi.delete(`/place-reviews/${reviewId}`),
+
+  getInteractionCount: (reviewId: string): Promise<AxiosResponse<ReviewInteractionCount>> =>
+    coreApi.get(`/place-reviews/${reviewId}/interactions/count`),
+
+  listInteractions: (reviewId: string, type: 'on' | 'off', page?: number): Promise<AxiosResponse<ReviewInteractionUser[]>> =>
+    coreApi.get(`/place-reviews/${reviewId}/interactions`, { params: { type, page } }),
+
+  deleteComment: (reviewId: string, commentId: string): Promise<AxiosResponse<void>> =>
+    coreApi.delete(`/place-reviews/${reviewId}/comments/${commentId}`)
 }

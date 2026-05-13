@@ -17,6 +17,7 @@ import { FeedService } from '../services'
 import { DualPhoto } from './dual-photo.component'
 import { FeedReviewCommentsModal } from './feed-review-comments-modal.component'
 import { ReviewCardMenu } from './review-card-menu.component'
+import { ReviewInteractionsModal } from './review-interactions-modal.component'
 
 type Props = {
   review: FeedReviewItem
@@ -28,6 +29,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
   const { showToast } = useToast()
   const navigateToProfile = useNavigateToProfile()
   const [isCommentsVisible, setIsCommentsVisible] = useState(false)
+  const [isInteractionsVisible, setIsInteractionsVisible] = useState(false)
   const [counts, setCounts] = useState<ReviewCounts | null>(null)
   const relativeTime = formatRelativeTime(review.createdAt)
   const isOwner = review.userId === currentUserId
@@ -72,6 +74,8 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
   const handleReactionPress = (type: 'on' | 'off') => {
     submitReaction(counts?.viewerReaction === type ? null : type)
   }
+
+  const totalComments = (counts?.onCount ?? 0) + (counts?.offCount ?? 0)
 
   return (
     <>
@@ -137,13 +141,44 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
             </ThemedText>
           </TouchableOpacity>
         </Box>
+
+        {isOwner && totalComments > 0 ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setIsInteractionsVisible(true)}
+            style={styles.interactionsBtn}
+          >
+            <ThemedText size="xs" color="primary">
+              ver {totalComments} interações
+            </ThemedText>
+          </TouchableOpacity>
+        ) : (
+          <Box style={styles.interactionsBtn}>
+            <ThemedText size="xs" color="textSecondary">
+              sem interações
+            </ThemedText>
+          </Box>
+        )}
       </Box>
 
       <FeedReviewCommentsModal
         reviewId={review.id}
         visible={isCommentsVisible}
+        commentsCount={counts?.commentsCount ?? 0}
+        currentUserId={currentUserId}
+        reviewOwnerId={review.userId}
         onClose={() => setIsCommentsVisible(false)}
       />
+
+      {isOwner && (
+        <ReviewInteractionsModal
+          reviewId={review.id}
+          onCount={counts?.onCount ?? 0}
+          offCount={counts?.offCount ?? 0}
+          visible={isInteractionsVisible}
+          onClose={() => setIsInteractionsVisible(false)}
+        />
+      )}
     </>
   )
 }
@@ -189,5 +224,9 @@ const styles = StyleSheet.create({
   },
   ownerBadgeText: {
     lineHeight: 14
+  },
+  interactionsBtn: {
+    marginTop: 10,
+    alignSelf: 'flex-start'
   }
 })

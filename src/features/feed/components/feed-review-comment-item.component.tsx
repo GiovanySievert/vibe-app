@@ -1,18 +1,62 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
+
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { useNavigateToProfile } from '@src/shared/hooks'
 import { formatRelativeTime } from '@src/shared/utils'
 
-import { FeedReviewComment } from '../domain'
+import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
+import { FeedService } from '../services'
 
 type Props = {
   item: FeedReviewComment
+  currentUserId: string
+  reviewOwnerId: string
 }
 
-export const FeedReviewCommentItem: React.FC<Props> = ({ item }) => {
+type CommentsCache = InfiniteData<ListFeedReviewCommentsResponse>
+
+export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, reviewOwnerId }) => {
   const navigateToProfile = useNavigateToProfile()
+  const queryClient = useQueryClient()
+  const canDelete = item.userId === currentUserId || reviewOwnerId === currentUserId
+  const queryKey = ['feedReviewComments', item.reviewId]
+
+  const { mutate: deleteComment } = useMutation({
+    mutationFn: () => FeedService.deleteComment(item.reviewId, item.id),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey })
+      const previous = queryClient.getQueryData<CommentsCache>(queryKey)
+      queryClient.setQueryData<CommentsCache>(queryKey, (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            data: page.data.filter((c) => c.id !== item.id),
+            total: page.total - 1
+          }))
+        }
+      })
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(queryKey, context.previous)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey })
+    }
+  })
+
+  const handleDelete = () => {
+    Alert.alert('Excluir comentário', 'Tem certeza?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Excluir', style: 'destructive', onPress: () => deleteComment() }
+    ])
+  }
 
   return (
     <Box flexDirection="row" gap={3} mb={4}>
@@ -35,6 +79,11 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item }) => {
           {item.content}
         </ThemedText>
       </Box>
+      {canDelete && (
+        <TouchableOpacity onPress={handleDelete} hitSlop={8}>
+          <ThemedIcon name="Trash2" size={14} color="textSecondary" />
+        </TouchableOpacity>
+      )}
     </Box>
   )
 }

@@ -12,10 +12,13 @@ import { FeedReviewCommentItem } from './feed-review-comment-item.component'
 type Props = {
   reviewId: string
   visible: boolean
+  commentsCount: number
+  currentUserId: string
+  reviewOwnerId: string
   onTotalChange: (total: number) => void
 }
 
-export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, onTotalChange }) => {
+export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, commentsCount, currentUserId, reviewOwnerId, onTotalChange }) => {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['feedReviewComments', reviewId],
     queryFn: async ({ pageParam = 1 }) => {
@@ -24,7 +27,7 @@ export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, onTo
     },
     getNextPageParam: (lastPage, pages) => (lastPage.hasMore ? pages.length + 1 : undefined),
     initialPageParam: 1,
-    enabled: visible
+    enabled: visible && (commentsCount === -1 || commentsCount > 0)
   })
 
   const comments = data?.pages.flatMap((page) => page.data) ?? []
@@ -46,7 +49,7 @@ export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, onTo
     <FlatList
       data={comments}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <FeedReviewCommentItem item={item} />}
+      renderItem={({ item }) => <FeedReviewCommentItem item={item} currentUserId={currentUserId} reviewOwnerId={reviewOwnerId} />}
       showsVerticalScrollIndicator={false}
       onEndReached={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
       onEndReachedThreshold={0.3}
