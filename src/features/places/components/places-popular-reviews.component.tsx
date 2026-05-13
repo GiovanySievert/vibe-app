@@ -8,19 +8,16 @@ import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 
-import { usePlaceReviews } from '../hooks/use-place-reviews.hook'
-import { PlacesPopularReviews } from './places-popular-reviews.component'
+import { usePlacePopularReviews } from '../hooks/use-place-reviews.hook'
 
-type PlacesReviewsProps = {
+type PlacesPopularReviewsProps = {
   placeId: string
 }
 
-export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
-  const { data, isLoading } = usePlaceReviews(placeId)
+export const PlacesPopularReviews: React.FC<PlacesPopularReviewsProps> = ({ placeId }) => {
+  const { data, isLoading } = usePlacePopularReviews(placeId, true)
   const { data: session } = authClient.useSession()
   const currentUserId = session?.user.id ?? ''
-
-  const hasNoRecent = !isLoading && data?.length === 0
 
   if (isLoading) {
     return (
@@ -30,15 +27,8 @@ export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
     )
   }
 
-  if (hasNoRecent) {
-    return (
-      <Box>
-        <Box pl={6} pr={6} style={styles.sectionHeader}>
-          <ThemedText>nenhuma vibe nas últimas 24h</ThemedText>
-        </Box>
-        <PlacesPopularReviews placeId={placeId} />
-      </Box>
-    )
+  if (!data || data.length === 0) {
+    return null
   }
 
   return (
@@ -48,7 +38,7 @@ export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
       scrollEnabled={false}
       ListHeaderComponent={
         <Box pl={6} pr={6} style={styles.sectionHeader}>
-          <ThemedText>vibes daqui · últimas 24h</ThemedText>
+          <ThemedText>vibes populares · 3 meses</ThemedText>
         </Box>
       }
       renderItem={({ item }) => <ReviewCard review={item} currentUserId={currentUserId} />}

@@ -31,5 +31,7 @@ export const PlaceReviewService = {
   listByUser: (userId: string, page?: number) =>
     coreApi.get<FeedReviewItem[]>(`/place-reviews/user/${userId}`, { params: { page } }),
   eligibility: (placeId: string) =>
-    coreApi.get<PlaceReviewEligibility>(`/place-reviews/place/${placeId}/eligibility`)
+    coreApi.get<PlaceReviewEligibility>(`/place-reviews/place/${placeId}/eligibility`),
+  listPopularByPlace: (placeId: string) =>
+    coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}/popular`)
 }

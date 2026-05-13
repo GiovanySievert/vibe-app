@@ -9,3 +9,12 @@ export const usePlaceReviews = (placeId: string) =>
     staleTime: 0,
     retry: false
   })
+
+export const usePlacePopularReviews = (placeId: string, enabled: boolean) =>
+  useQuery({
+    queryKey: ['placePopularReviews', placeId],
+    queryFn: () => PlaceReviewService.listPopularByPlace(placeId).then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+    enabled
+  })
