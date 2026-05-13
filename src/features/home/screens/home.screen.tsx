@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
+import { useAtomValue } from 'jotai'
 import { Search } from 'lucide-react-native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
@@ -9,6 +10,7 @@ import { Box, ThemedText } from '@src/shared/components'
 import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { locationStateAtom } from '@src/shared/state/location.state'
 
 import { NearbyPlacesScroll } from '../components'
 import { usePlacesNearMe } from '../hooks/use-places-near-me.hook'
@@ -16,6 +18,8 @@ import { usePlacesNearMe } from '../hooks/use-places-near-me.hook'
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   const { places, isFetching, setSearchCoords } = usePlacesNearMe()
+  const location = useAtomValue(locationStateAtom)
+  const neighborhoodLabel = location?.neighborhood?.toLowerCase() ?? 'sua região'
 
   return (
     <Screen gradient>
@@ -23,7 +27,7 @@ export const HomeScreen = () => {
         <Box>
           <ThemedText variant="title">agora</ThemedText>
           <ThemedText variant="mono" style={styles.subtitle}>
-            vila madalena · últimos 60 minutos
+            {neighborhoodLabel} · últimas 24h
           </ThemedText>
         </Box>
         <TouchableOpacity
@@ -35,7 +39,12 @@ export const HomeScreen = () => {
       </Box>
 
       <Box pl={4} pr={4} style={styles.mapContainer}>
-        <MapWithPins points={places} isSearching={isFetching} onPressPin={(p) => console.log('clicou', p)} onRegionMoved={setSearchCoords} />
+        <MapWithPins
+          points={places}
+          isSearching={isFetching}
+          onPressPin={(p) => console.log('clicou', p)}
+          onRegionMoved={setSearchCoords}
+        />
       </Box>
 
       {!!places.length && <NearbyPlacesScroll places={places} />}
@@ -53,10 +62,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
-    borderColor: theme.colors.border,
+    borderColor: theme.colors.border
   },
   mapContainer: {
     flex: 1,
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 })

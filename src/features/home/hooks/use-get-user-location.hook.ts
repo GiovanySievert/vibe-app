@@ -25,7 +25,8 @@ export function useUserLocation() {
         if (last) {
           setLocation({
             latitude: last.coords.latitude,
-            longitude: last.coords.longitude
+            longitude: last.coords.longitude,
+            neighborhood: null
           })
         }
 
@@ -33,9 +34,17 @@ export function useUserLocation() {
           accuracy: Location.Accuracy.High
         })
 
-        setLocation({
+        const [place] = await Location.reverseGeocodeAsync({
           latitude: loc.coords.latitude,
           longitude: loc.coords.longitude
+        })
+
+        const neighborhood = place?.district ?? place?.subregion ?? place?.city ?? null
+
+        setLocation({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          neighborhood
         })
       } catch (error) {
         console.error('todo -- add logger', error)
