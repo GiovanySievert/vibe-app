@@ -1,16 +1,14 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 
-import { useMutation } from '@tanstack/react-query'
-
-import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
-import { useLogout } from '@src/shared/hooks'
+import { useDeleteAccount } from '@src/shared/hooks'
 
 import { deleteAccountSchema } from '../domain'
 
 export const DeleteAccount = () => {
-  const { logout } = useLogout()
+  const { mutate: deleteAccount, isPending: isLoading } = useDeleteAccount()
 
   const [password, setPassword] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
@@ -19,41 +17,43 @@ export const DeleteAccount = () => {
     const result = deleteAccountSchema.safeParse({ password })
     if (!result.success) {
       setPasswordError(result.error.message)
-      throw Error
+      return false
     }
+    setPasswordError('')
+    return true
   }
 
-  const submitForm = async () => {
-    validateDeleteAccountSchema()
+  const handleDeletePress = () => {
+    if (!validateDeleteAccountSchema()) return
 
-    const response = await authClient.deleteUser({
-      password
-    })
-    return response
+    Alert.alert(
+      'deletar conta',
+      'tem certeza que deseja deletar sua conta? essa ação é permanente e não pode ser desfeita.',
+      [
+        { text: 'cancelar', style: 'cancel' },
+        { text: 'deletar', style: 'destructive', onPress: () => deleteAccount({ password }) }
+      ]
+    )
   }
-
-  const { mutate: submitFormMutation, isPending: isLoading } = useMutation({
-    mutationFn: async () => submitForm(),
-    onSuccess: async () => {
-      logout()
-    },
-    onError: (error) => {
-      console.log('todo - add logger', error)
-    }
-  })
 
   return (
-    <Box bg="background" gap={4}>
+    <Box gap={5}>
+      <ThemedText size="sm" color="textSecondary">
+        ao deletar sua conta, todos os seus dados, posts e interações serão removidos permanentemente. confirme sua
+        senha para continuar.
+      </ThemedText>
+
       <Input
-        label="password"
+        label="senha"
         value={password}
         onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
         errorMessage={passwordError}
         autoFocus
         secureTextEntry
       />
-      <Button type="danger" loading={isLoading} onPress={() => submitFormMutation()}>
-        <ThemedText weight="medium">Deletar conta</ThemedText>
+
+      <Button type="danger" loading={isLoading} onPress={handleDeletePress}>
+        <ThemedText weight="medium">deletar conta</ThemedText>
       </Button>
     </Box>
   )

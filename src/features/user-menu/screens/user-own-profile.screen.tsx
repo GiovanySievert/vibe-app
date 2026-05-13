@@ -55,7 +55,7 @@ export const UserOwnProfileScreen = () => {
           onOpenFollowers={() => openFollowList('followers')}
           onOpenFollowings={() => openFollowList('followings')}
         />
-        <UserOwnProfileActions />
+        <UserOwnProfileActions user={userData} />
         <UserReviewsGrid userId={userId} canViewReviews />
       </Screen>
     </ScrollView>
