@@ -1,3 +1,4 @@
+export * from './profile-qr-modal'
 export * from './user-follow-list/users-profile-follow-list-actions.component'
 export * from './user-follow-list/users-profile-follow-list-item.component'
 export * from './user-review-detail-modal.component'
