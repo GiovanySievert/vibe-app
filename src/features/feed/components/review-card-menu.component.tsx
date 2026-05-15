@@ -4,7 +4,7 @@ import { Alert, Share, StyleSheet, TouchableOpacity } from 'react-native'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as ExpoLinking from 'expo-linking'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'

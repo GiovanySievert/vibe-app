@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Card, Divider, LoadingPage, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'

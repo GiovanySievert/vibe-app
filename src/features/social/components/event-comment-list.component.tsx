@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { Avatar, Box, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'

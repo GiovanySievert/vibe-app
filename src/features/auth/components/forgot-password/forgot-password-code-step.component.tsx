@@ -4,7 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
 
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
 import { validationMapErrors } from '@src/shared/utils'

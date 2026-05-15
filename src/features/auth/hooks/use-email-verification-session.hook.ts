@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 
 import { AuthSessionPayload, useAuthSession } from './use-auth-session.hook'

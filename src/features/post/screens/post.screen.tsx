@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { useAtomValue } from 'jotai'
 
 import { PostPreselectedPlace, PostStackParamList, TabsNavigatorParamsList } from '@src/app/navigation/types'
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { usePlacesNearMe } from '@src/features/home/hooks/use-places-near-me.hook'
 import {
   PlaceReviewApiErrorBody,

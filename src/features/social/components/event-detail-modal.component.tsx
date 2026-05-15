@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Divider, FakeInput, Input, ThemedText } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'

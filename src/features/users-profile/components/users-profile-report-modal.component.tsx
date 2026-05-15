@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { Box, Button, Input, SwipeableModal, ThemedText } from '@src/shared/components'
 import { RadioButton } from '@src/shared/components/radio-button/radio-button.component'
 import { UserModel } from '@src/shared/domain/users.model'

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { icons } from 'lucide-react-native'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'

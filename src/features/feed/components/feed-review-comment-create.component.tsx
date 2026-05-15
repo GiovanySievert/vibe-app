@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, ThemedIcon } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'

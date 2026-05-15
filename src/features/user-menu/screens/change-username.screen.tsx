@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { UsernameField } from '@src/features/auth/components'
 import { signUpProfileSchema } from '@src/features/auth/domain'
 import { AuthService } from '@src/features/auth/services'

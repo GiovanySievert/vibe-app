@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useMutation } from '@tanstack/react-query'
 
-import { useToast } from '@src/app/providers'
+import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, OtpInput, ThemedText } from '@src/shared/components'
 import { validationMapErrors } from '@src/shared/utils'
