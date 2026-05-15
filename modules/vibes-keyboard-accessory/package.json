@@ -1,0 +1,8 @@
+{
+  "name": "vibes-keyboard-accessory",
+  "version": "1.0.0",
+  "description": "Native keyboard accessory for vibes",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true
+}
