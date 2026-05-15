@@ -8,10 +8,12 @@ import { useDeleteAccount } from '@src/shared/hooks'
 import { deleteAccountSchema } from '../domain'
 
 export const DeleteAccount = () => {
-  const { mutate: deleteAccount, isPending: isLoading } = useDeleteAccount()
-
   const [password, setPassword] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
+
+  const { mutate: deleteAccount, isPending: isLoading } = useDeleteAccount({
+    onError: (error) => setPasswordError(error.message)
+  })
 
   const validateDeleteAccountSchema = () => {
     const result = deleteAccountSchema.safeParse({ password })

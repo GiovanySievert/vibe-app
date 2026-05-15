@@ -8,16 +8,25 @@ type DeleteAccountInput = {
   password: string
 }
 
-export const useDeleteAccount = () => {
+type UseDeleteAccountOptions = {
+  onError?: (error: Error) => void
+}
+
+export const useDeleteAccount = ({ onError }: UseDeleteAccountOptions = {}) => {
   const { clearAuthSession } = useAuthSession()
 
   return useMutation({
     mutationFn: async ({ password }: DeleteAccountInput) => {
-      return authClient.deleteUser({ password })
+      const result = await authClient.deleteUser({ password })
+      if (result.error) {
+        throw new Error(result.error.message ?? 'Failed to delete account')
+      }
+      return result.data
     },
     onSuccess: async () => {
       await unregisterPushNotificationsAsync()
       await clearAuthSession()
-    }
+    },
+    onError
   })
 }
