@@ -1,8 +1,8 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { NotificationPreferencesScreen } from '@src/features/notifications/preferences'
 import { UserMenuFeatures } from '@src/features'
+import { NotificationPreferencesScreen } from '@src/features/notifications/preferences'
 import { Header } from '@src/shared/components'
 
 import { UserMenuStackParamList } from '../types'
@@ -25,6 +25,16 @@ export function UserMenuNavigator() {
       <UserMenuStack.Screen
         name="UserEditProfile"
         component={UserMenuFeatures.UserEditProfile}
+        options={{ headerShown: false }}
+      />
+      <UserMenuStack.Screen
+        name="ChangeUsernameScreen"
+        component={UserMenuFeatures.ChangeUsernameScreen}
+        options={{ headerShown: false }}
+      />
+      <UserMenuStack.Screen
+        name="UserBadgesScreen"
+        component={UserMenuFeatures.UserBadgesScreen}
         options={{ headerShown: false }}
       />
       <UserMenuStack.Screen

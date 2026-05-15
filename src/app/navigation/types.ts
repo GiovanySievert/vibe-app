@@ -22,6 +22,8 @@ export type UserMenuStackParamList = {
   UserProfileMain: undefined
   UserMenuMain: undefined
   UserEditProfile: undefined
+  ChangeUsernameScreen: undefined
+  UserBadgesScreen: undefined
   UserDeleteAccountScreen: undefined
   TermsOfUseScreen: undefined
   NotificationPreferencesScreen: undefined

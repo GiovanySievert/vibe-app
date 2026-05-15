@@ -61,10 +61,10 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
 
   const handleVerifyEmailError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('código inválido')
+      showToast('código inválido', 'error')
       return
     }
-    showToast('algo deu errado, tente novamente mais tarde.')
+    showToast('algo deu errado, tente novamente mais tarde.', 'error')
     return
   }
 

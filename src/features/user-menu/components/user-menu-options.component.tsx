@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
+import { useAtomValue } from 'jotai'
+
 import { UserMenuStackParamList } from '@src/app/navigation/types'
+import { authStateAtom } from '@src/features/auth/state'
 import { Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
 import { useLogout } from '@src/shared/hooks'
 
@@ -11,6 +14,7 @@ import { UserMenuContactModal } from './user-menu-contact-modal.component'
 export const UserMenuOptions = () => {
   const navigation = useNavigation<NavigationProp<UserMenuStackParamList>>()
   const [isContactModalVisible, setIsContactModalVisible] = useState(false)
+  const authState = useAtomValue(authStateAtom)
 
   const { logout } = useLogout()
 
@@ -24,6 +28,30 @@ export const UserMenuOptions = () => {
           <Box>
             <ThemedText weight="medium">editar perfil</ThemedText>
             <ThemedText size="sm" variant="secondary">nome, bio, foto</ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </TouchableOpacity>
+        <Divider />
+
+        <TouchableOpacity
+          style={styles.actionContainer}
+          onPress={() => navigation.navigate('ChangeUsernameScreen')}
+        >
+          <Box>
+            <ThemedText weight="medium">usuário</ThemedText>
+            <ThemedText size="sm" variant="secondary">@{authState.user.username}</ThemedText>
+          </Box>
+          <Box flexDirection="row" alignItems="center" gap={2}>
+            <ThemedText size="sm" variant="secondary">mudar</ThemedText>
+            <ThemedIcon name="ChevronRight" color="textPrimary" />
+          </Box>
+        </TouchableOpacity>
+        <Divider />
+
+        <TouchableOpacity style={styles.actionContainer} onPress={() => navigation.navigate('UserBadgesScreen')}>
+          <Box>
+            <ThemedText weight="medium">badges</ThemedText>
+            <ThemedText size="sm" variant="secondary">conquistas no perfil</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </TouchableOpacity>
