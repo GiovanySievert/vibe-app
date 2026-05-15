@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { TextInput } from 'react-native'
 
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
@@ -13,6 +14,7 @@ type AuthProfileStepProps = {
   onUsernameBlur: () => void
   onContinue: () => void
   isLoading: boolean
+  isActive: boolean
 }
 
 export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
@@ -22,8 +24,21 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
   onChangeForm,
   onUsernameBlur,
   onContinue,
-  isLoading
+  isLoading,
+  isActive
 }) => {
+  const nameInputRef = useRef<TextInput>(null)
+
+  useEffect(() => {
+    if (!isActive) return
+
+    const timeoutId = setTimeout(() => {
+      nameInputRef.current?.focus()
+    }, 350)
+
+    return () => clearTimeout(timeoutId)
+  }, [isActive])
+
   return (
     <Box gap={6}>
       <Box gap={1}>
@@ -33,11 +48,15 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
 
       <Box gap={4}>
         <Input
+          ref={nameInputRef}
           label="nome"
           value={form.name}
           onChange={({ nativeEvent }) => onChangeForm('name', nativeEvent.text)}
           errorMessage={formError.name}
-          autoFocus
+          keyboardType="default"
+          autoCapitalize="words"
+          autoComplete="name"
+          textContentType="name"
         />
 
         <Box gap={2}>
@@ -46,7 +65,10 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
             value={form.username}
             onChange={({ nativeEvent }) => onChangeForm('username', nativeEvent.text)}
             errorMessage={formError.username}
+            keyboardType="default"
             autoCapitalize="none"
+            autoComplete="username"
+            textContentType="username"
             onBlur={onUsernameBlur}
             endIconName={usernameAvailable === true ? 'Check' : undefined}
             maxLength={20}

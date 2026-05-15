@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { TextInput } from 'react-native'
 
 import { AnimatedBox, Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
 
@@ -10,6 +11,7 @@ type AuthEmailStepProps = {
   onChangeForm: (key: keyof SignUpEmailForm, value: string) => void
   onContinue: () => void
   isLoading?: boolean
+  isActive: boolean
 }
 
 export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
@@ -17,8 +19,21 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
   formError,
   onChangeForm,
   onContinue,
-  isLoading
+  isLoading,
+  isActive
 }) => {
+  const emailInputRef = useRef<TextInput>(null)
+
+  useEffect(() => {
+    if (!isActive) return
+
+    const timeoutId = setTimeout(() => {
+      emailInputRef.current?.focus()
+    }, 350)
+
+    return () => clearTimeout(timeoutId)
+  }, [isActive])
+
   return (
     <Box gap={6}>
       <Box gap={1} mb={6}>
@@ -29,12 +44,16 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
       <Box gap={6}>
         <Box gap={2}>
           <Input
+            ref={emailInputRef}
             label="email"
             value={form.email}
             onChange={({ nativeEvent }) => onChangeForm('email', nativeEvent.text)}
             errorMessage={formError.email}
             keyboardType="email-address"
+            inputMode="email"
+            autoComplete="email"
             autoCapitalize="none"
+            textContentType="emailAddress"
           />
           <AnimatedBox isVisible={form.email.length > 10}>
             <ThemedText variant="mono" size="sm" color="textSecondary">
@@ -47,6 +66,9 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
           value={form.password}
           onChange={(value) => onChangeForm('password', value)}
           errorMessage={formError.password}
+          keyboardType="default"
+          autoComplete="off"
+          textContentType="none"
         />
       </Box>
 

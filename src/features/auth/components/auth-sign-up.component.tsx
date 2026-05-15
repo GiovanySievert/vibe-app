@@ -136,6 +136,9 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const profileFormError: SignUpProfileForm = { name: formError.name, username: formError.username }
   const emailForm: SignUpEmailForm = { email: form.email, password: form.password }
   const emailFormError: SignUpEmailForm = { email: formError.email, password: formError.password }
+  const isProfileStepActive = currentStep === SIGN_UP_STEPS.PROFILE
+  const isEmailStepActive = currentStep === SIGN_UP_STEPS.EMAIL
+  const isVerifyStepActive = currentStep === SIGN_UP_STEPS.VERIFY
 
   return (
     <Box flex={1} style={styles.container}>
@@ -156,7 +159,13 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
       </Box>
 
       <Animated.View style={[styles.stepsRow, animatedStyle]}>
-        <Box p={6} style={styles.step}>
+        <Box
+          p={6}
+          style={styles.step}
+          pointerEvents={isProfileStepActive ? 'auto' : 'none'}
+          accessibilityElementsHidden={!isProfileStepActive}
+          importantForAccessibility={isProfileStepActive ? 'auto' : 'no-hide-descendants'}
+        >
           <AuthProfileStep
             form={profileForm}
             formError={profileFormError}
@@ -165,21 +174,40 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
             onUsernameBlur={handleUsernameBlur}
             onContinue={handleContinueProfileStep}
             isLoading={isCheckingUsername}
+            isActive={isProfileStepActive}
           />
         </Box>
 
-        <Box p={6} style={styles.step}>
+        <Box
+          p={6}
+          style={styles.step}
+          pointerEvents={isEmailStepActive ? 'auto' : 'none'}
+          accessibilityElementsHidden={!isEmailStepActive}
+          importantForAccessibility={isEmailStepActive ? 'auto' : 'no-hide-descendants'}
+        >
           <AuthEmailStep
             form={emailForm}
             formError={emailFormError}
             onChangeForm={handleChangeForm}
             onContinue={() => submitSignUpMutation()}
             isLoading={isSignUpLoading}
+            isActive={isEmailStepActive}
           />
         </Box>
 
-        <Box p={6} style={styles.step}>
-          <AuthVerifyEmail emailToBeVerified={form.email} />
+        <Box
+          p={6}
+          style={styles.step}
+          pointerEvents={isVerifyStepActive ? 'auto' : 'none'}
+          accessibilityElementsHidden={!isVerifyStepActive}
+          importantForAccessibility={isVerifyStepActive ? 'auto' : 'no-hide-descendants'}
+        >
+          <AuthVerifyEmail
+            emailToBeVerified={form.email}
+            passwordToSignIn={form.password}
+            isActive={isVerifyStepActive}
+            sendCodeOnActive={false}
+          />
         </Box>
       </Animated.View>
     </Box>

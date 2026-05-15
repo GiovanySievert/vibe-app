@@ -56,6 +56,8 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
   const goToStep = (step: FORGET_PASSWORD_STEPS) => {
     setCurrentStep(step)
   }
+  const isEmailStepActive = currentStep === FORGET_PASSWORD_STEPS.TYPE_EMAIL_STEP
+  const isCodeStepActive = currentStep === FORGET_PASSWORD_STEPS.TYPE_CODE_STEP
 
   return (
     <Screen gradient>
@@ -67,19 +69,29 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
         </Box>
 
         <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>
-          <Box p={6} style={{ width: '100%' }}>
-            {currentStep === FORGET_PASSWORD_STEPS.TYPE_EMAIL_STEP && (
-              <ForgotPasswordEmailStep
-                typedEmail={typedEmailFromParams}
-                goToCodeStep={() => goToStep(FORGET_PASSWORD_STEPS.TYPE_CODE_STEP)}
-                setTypedEmailFromEmailStep={setTypedEmailFromEmailStep}
-              />
-            )}
+          <Box
+            p={6}
+            style={{ width: screenWidth }}
+            pointerEvents={isEmailStepActive ? 'auto' : 'none'}
+            accessibilityElementsHidden={!isEmailStepActive}
+            importantForAccessibility={isEmailStepActive ? 'auto' : 'no-hide-descendants'}
+          >
+            <ForgotPasswordEmailStep
+              typedEmail={typedEmailFromParams}
+              goToCodeStep={() => goToStep(FORGET_PASSWORD_STEPS.TYPE_CODE_STEP)}
+              setTypedEmailFromEmailStep={setTypedEmailFromEmailStep}
+              isActive={isEmailStepActive}
+            />
           </Box>
-          <Box mt={10} p={6} style={{ width: '100%' }}>
-            {currentStep === FORGET_PASSWORD_STEPS.TYPE_CODE_STEP && (
-              <ForgotPasswordCodeStep typedEmail={typedEmailFromParams || typedEmailFromEmailStep} />
-            )}
+          <Box
+            mt={10}
+            p={6}
+            style={{ width: screenWidth }}
+            pointerEvents={isCodeStepActive ? 'auto' : 'none'}
+            accessibilityElementsHidden={!isCodeStepActive}
+            importantForAccessibility={isCodeStepActive ? 'auto' : 'no-hide-descendants'}
+          >
+            <ForgotPasswordCodeStep typedEmail={typedEmailFromParams || typedEmailFromEmailStep} isActive={isCodeStepActive} />
           </Box>
         </Animated.View>
       </ScrollView>

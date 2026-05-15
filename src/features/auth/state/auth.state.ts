@@ -11,6 +11,7 @@ const initialAuthState: UserAuthenticated = {
     email: '',
     emailVerified: false,
     name: '',
+    username: '',
     image: null
   },
   session: {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { TextInput } from 'react-native'
 
 import { useMutation } from '@tanstack/react-query'
 
@@ -13,6 +14,7 @@ type ForgotPasswordEmailStepProps = {
   typedEmail?: string
   setTypedEmailFromEmailStep: (email: string) => void
   goToCodeStep: () => void
+  isActive: boolean
 }
 
 const EMPTY_ERRORS: ForgotPasswordEmailStepForm = { email: '' }
@@ -20,10 +22,22 @@ const EMPTY_ERRORS: ForgotPasswordEmailStepForm = { email: '' }
 export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = ({
   typedEmail,
   setTypedEmailFromEmailStep,
-  goToCodeStep
+  goToCodeStep,
+  isActive
 }) => {
+  const emailInputRef = useRef<TextInput>(null)
   const [email, setEmail] = useState<string>(typedEmail ?? '')
   const [formError, setFormError] = useState<ForgotPasswordEmailStepForm>(EMPTY_ERRORS)
+
+  useEffect(() => {
+    if (!isActive) return
+
+    const timeoutId = setTimeout(() => {
+      emailInputRef.current?.focus()
+    }, 350)
+
+    return () => clearTimeout(timeoutId)
+  }, [isActive])
 
   const validateEmailSchema = (): boolean => {
     const result = forgotPasswordEmailStepSchema.safeParse({ email })
@@ -68,11 +82,16 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
       </Box>
       <Box gap={6}>
         <Input
+          ref={emailInputRef}
           label="email"
           value={email}
           onChange={({ nativeEvent }) => setEmail(nativeEvent.text)}
           errorMessage={formError.email}
-          autoFocus
+          keyboardType="email-address"
+          inputMode="email"
+          autoComplete="email"
+          textContentType="emailAddress"
+          autoCapitalize="none"
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
           <ThemedText color="background" size="lg" weight="semibold">
