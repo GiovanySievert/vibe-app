@@ -4,6 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
+import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
@@ -12,7 +13,13 @@ import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { signInSchema, UserSignInRequestDTO } from '../domain'
-import { useAuthSession } from '../hooks'
+import {
+  AppleSignInMessage,
+  GoogleSignInMessage,
+  useAppleSignIn,
+  useAuthSession,
+  useGoogleSignIn
+} from '../hooks'
 import { AuthVerifyEmail } from './auth-verify-email.component'
 
 enum SIGN_IN_STEPS {
@@ -29,6 +36,9 @@ type AuthSignInProps = {
 export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
   const navigation = useNavigation<NavigationProp<UnathenticatedStackParamList>>()
   const { persistAuthSession } = useAuthSession()
+  const { showToast } = useToast()
+  const { isAvailable: isAppleAvailable, loading: appleLoading, signIn: signInWithApple } = useAppleSignIn()
+  const { isAvailable: isGoogleAvailable, loading: googleLoading, signIn: signInWithGoogle } = useGoogleSignIn()
 
   const animatedValue = useSharedValue(0)
   const [currentStep, setCurrentStep] = useState<SIGN_IN_STEPS>(SIGN_IN_STEPS.FORM)
@@ -79,6 +89,18 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
       login: '',
       password: 'email ou senha inválidos'
     })
+  }
+
+  const handleAppleSignIn = async () => {
+    const result = await signInWithApple()
+    if (result.success || result.cancelled) return
+    showToast(result.errorMessage ?? AppleSignInMessage.authFailed, 'error')
+  }
+
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle()
+    if (result.success || result.cancelled) return
+    showToast(result.errorMessage ?? GoogleSignInMessage.authFailed, 'error')
   }
 
   const submitForm = async () => {
@@ -162,11 +184,21 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
                 </ThemedText>
               </Button>
 
-              <Button variant="outline" onPress={() => submitForm()} loading={loading}>
-                <ThemedText color="textPrimary" size="lg" weight="semibold">
-                  entrar com apple
-                </ThemedText>
-              </Button>
+              {isAppleAvailable && (
+                <Button variant="outline" onPress={handleAppleSignIn} loading={appleLoading}>
+                  <ThemedText color="textPrimary" size="lg" weight="semibold">
+                    entrar com apple
+                  </ThemedText>
+                </Button>
+              )}
+
+              {isGoogleAvailable && (
+                <Button variant="outline" onPress={handleGoogleSignIn} loading={googleLoading}>
+                  <ThemedText color="textPrimary" size="lg" weight="semibold">
+                    entrar com google
+                  </ThemedText>
+                </Button>
+              )}
             </Box>
           </Box>
           <TouchableOpacity onPress={() => goToSignUp()}>

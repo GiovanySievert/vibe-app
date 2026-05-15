@@ -5,6 +5,7 @@ import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
 
 import { SignUpProfileForm } from '../domain'
+import { UsernameField } from './username-field'
 
 type AuthProfileStepProps = {
   form: SignUpProfileForm
@@ -13,6 +14,12 @@ type AuthProfileStepProps = {
   onChangeForm: (key: keyof SignUpProfileForm, value: string) => void
   onUsernameBlur: () => void
   onContinue: () => void
+  onAppleSignIn?: () => void
+  showAppleButton?: boolean
+  appleLoading?: boolean
+  onGoogleSignIn?: () => void
+  showGoogleButton?: boolean
+  googleLoading?: boolean
   isLoading: boolean
   isActive: boolean
 }
@@ -24,6 +31,12 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
   onChangeForm,
   onUsernameBlur,
   onContinue,
+  onAppleSignIn,
+  showAppleButton,
+  appleLoading,
+  onGoogleSignIn,
+  showGoogleButton,
+  googleLoading,
   isLoading,
   isActive
 }) => {
@@ -59,34 +72,37 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
           textContentType="name"
         />
 
-        <Box gap={2}>
-          <Input
-            label="usuário"
-            value={form.username}
-            onChange={({ nativeEvent }) => onChangeForm('username', nativeEvent.text)}
-            errorMessage={formError.username}
-            keyboardType="default"
-            autoCapitalize="none"
-            autoComplete="username"
-            textContentType="username"
-            onBlur={onUsernameBlur}
-            endIconName={usernameAvailable === true ? 'Check' : undefined}
-            maxLength={20}
-          />
-          {usernameAvailable === true && (
-            <ThemedText variant="mono" size="sm" color="textSecondary">
-              vibes.app/{form.username} · disponível
-            </ThemedText>
-          )}
-        </Box>
+        <UsernameField
+          value={form.username}
+          onChangeText={(text) => onChangeForm('username', text)}
+          onBlur={onUsernameBlur}
+          available={usernameAvailable}
+          errorMessage={formError.username}
+        />
       </Box>
 
-      <Box mt={4}>
+      <Box mt={4} gap={3}>
         <Button loading={isLoading} onPress={onContinue}>
           <ThemedText color="background" size="lg" weight="semibold">
             continuar
           </ThemedText>
         </Button>
+
+        {showAppleButton && onAppleSignIn && (
+          <Button variant="outline" onPress={onAppleSignIn} loading={appleLoading}>
+            <ThemedText color="textPrimary" size="lg" weight="semibold">
+              cadastrar com apple
+            </ThemedText>
+          </Button>
+        )}
+
+        {showGoogleButton && onGoogleSignIn && (
+          <Button variant="outline" onPress={onGoogleSignIn} loading={googleLoading}>
+            <ThemedText color="textPrimary" size="lg" weight="semibold">
+              cadastrar com google
+            </ThemedText>
+          </Button>
+        )}
       </Box>
     </Box>
   )

@@ -12,6 +12,7 @@ import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { SignUpEmailForm, signUpEmailSchema, SignUpForm, SignUpProfileForm, signUpProfileSchema } from '../domain'
+import { AppleSignInMessage, GoogleSignInMessage, useAppleSignIn, useGoogleSignIn } from '../hooks'
 import { AuthService } from '../services'
 import { AuthEmailStep } from './auth-email-step.component'
 import { AuthProfileStep } from './auth-profile-step.component'
@@ -36,6 +37,8 @@ type AuthSignUpProps = {
 
 export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const { showToast } = useToast()
+  const { isAvailable: isAppleAvailable, loading: appleLoading, signIn: signInWithApple } = useAppleSignIn()
+  const { isAvailable: isGoogleAvailable, loading: googleLoading, signIn: signInWithGoogle } = useGoogleSignIn()
 
   const [currentStep, setCurrentStep] = useState<SIGN_UP_STEPS>(SIGN_UP_STEPS.PROFILE)
   const [form, setForm] = useState<SignUpForm>(EMPTY_FORM)
@@ -99,6 +102,18 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     checkUsername(form.username)
   }
 
+  const handleAppleSignIn = async () => {
+    const result = await signInWithApple()
+    if (result.success || result.cancelled) return
+    showToast(result.errorMessage ?? AppleSignInMessage.authFailed, 'error')
+  }
+
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle()
+    if (result.success || result.cancelled) return
+    showToast(result.errorMessage ?? GoogleSignInMessage.authFailed, 'error')
+  }
+
   const submitSignUp = async () => {
     const result = signUpEmailSchema.safeParse({ email: form.email, password: form.password })
     if (!result.success) {
@@ -115,7 +130,8 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
 
     if (error) {
       showToast(
-        error?.status === 422 ? 'não foi possível criar a conta' : 'algo deu errado, tente novamente mais tarde'
+        error?.status === 422 ? 'não foi possível criar a conta' : 'algo deu errado, tente novamente mais tarde',
+        'error'
       )
       console.log(error)
       throw Error
@@ -173,6 +189,12 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
             onChangeForm={handleChangeForm}
             onUsernameBlur={handleUsernameBlur}
             onContinue={handleContinueProfileStep}
+            onAppleSignIn={handleAppleSignIn}
+            showAppleButton={isAppleAvailable}
+            appleLoading={appleLoading}
+            onGoogleSignIn={handleGoogleSignIn}
+            showGoogleButton={isGoogleAvailable}
+            googleLoading={googleLoading}
             isLoading={isCheckingUsername}
             isActive={isProfileStepActive}
           />

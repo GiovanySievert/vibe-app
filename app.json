@@ -15,7 +15,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.vibes"
+      "bundleIdentifier": "com.anonymous.vibes",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -100,7 +101,9 @@
           ]
         }
       ],
-      "expo-notifications"
+      "expo-notifications",
+      "expo-apple-authentication",
+      "@react-native-google-signin/google-signin"
     ]
   },
   "ios": {
