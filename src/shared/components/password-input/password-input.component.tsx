@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TextInputProps } from 'react-native'
 
 import { theme } from '@src/shared/constants/theme'
 import { getPasswordStrength } from '@src/shared/utils'
@@ -13,9 +13,19 @@ type PasswordInputProps = {
   onChange: (value: string) => void
   errorMessage?: string
   label?: string
-}
+} & Pick<TextInputProps, 'autoComplete' | 'textContentType' | 'keyboardType' | 'inputMode' | 'autoFocus'>
 
-export const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange, errorMessage, label = 'senha' }) => {
+export const PasswordInput: React.FC<PasswordInputProps> = ({
+  value,
+  onChange,
+  errorMessage,
+  label = 'senha',
+  keyboardType = 'default',
+  autoComplete = 'off',
+  textContentType = 'none',
+  inputMode,
+  autoFocus
+}) => {
   const strength = getPasswordStrength(value)
 
   return (
@@ -26,6 +36,11 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange, e
         onChange={({ nativeEvent }) => onChange(nativeEvent.text)}
         errorMessage={errorMessage}
         secureTextEntry
+        keyboardType={keyboardType}
+        inputMode={inputMode}
+        autoComplete={autoComplete}
+        textContentType={textContentType}
+        autoFocus={autoFocus}
       />
       <ThemedText variant="mono" size="sm" color="textSecondary">
         mínimo 8 caracteres · uma letra maiúscula e um número

@@ -36,6 +36,7 @@ export const useDeleteAccount = () => {
           email: '',
           emailVerified: false,
           name: '',
+          username: '',
           image: null
         }
       })

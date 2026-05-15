@@ -10,6 +10,8 @@ export type PlacesModel = {
     lon: number
   }
   isHot: BooleanLiteral
+  type?: string
+  neighborhood?: string
 }
 
 export type Venue = {

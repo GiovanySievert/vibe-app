@@ -29,6 +29,7 @@ export const useLogout = () => {
               email: '',
               emailVerified: false,
               name: '',
+              username: '',
               image: null
             }
           })
