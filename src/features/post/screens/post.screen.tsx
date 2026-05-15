@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View
 import { NavigationProp } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as ImagePicker from 'expo-image-picker'
 import { useAtomValue } from 'jotai'
 
@@ -17,6 +17,7 @@ import {
 } from '@src/features/places/domain/place-review-error.model'
 import { PlaceReviewService } from '@src/features/places/services/place-review.service'
 import { PostPhotoStep, PostPhotoType, PostPlaceStep, PostRating, PostReviewStep } from '@src/features/post/components'
+import { MY_BADGE_PROGRESS_QUERY_KEY, MY_BADGES_QUERY_KEY, USER_BADGES_QUERY_KEY } from '@src/features/users-profile/services'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
@@ -37,6 +38,7 @@ const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spa
 
 export function PostScreen({ navigation, route }: Props) {
   const { showToast } = useToast()
+  const queryClient = useQueryClient()
   const tabsNavigation = navigation.getParent<NavigationProp<TabsNavigatorParamsList>>()
   const userLocation = useAtomValue(locationStateAtom)
   const { places, isFetching } = usePlacesNearMe()
@@ -151,6 +153,9 @@ export function PostScreen({ navigation, route }: Props) {
     onSuccess: () => {
       if (!selectedPlace) return
 
+      queryClient.invalidateQueries({ queryKey: MY_BADGES_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: MY_BADGE_PROGRESS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: USER_BADGES_QUERY_KEY })
       triggerSuccessHaptic()
       showToast('review publicada.')
       navigation.replace('PostReviewSuccess', {
