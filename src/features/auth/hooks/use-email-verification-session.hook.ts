@@ -28,7 +28,7 @@ export const useEmailVerificationSession = () => {
       })
 
       if (error || !data?.token) {
-        showToast('email confirmado. entre novamente para continuar.')
+        showToast('email confirmado. entre novamente para continuar.', 'info')
         return null
       }
 

@@ -56,11 +56,11 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
 
   const handleSubmitForgotPasswordError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('código inválido')
+      showToast('código inválido', 'error')
       throw Error
     }
 
-    showToast('algo deu errado, tente novamente mais tarde')
+    showToast('algo deu errado, tente novamente mais tarde', 'error')
     throw Error
   }
 
