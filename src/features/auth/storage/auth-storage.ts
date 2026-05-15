@@ -28,8 +28,8 @@ export async function getUserDataFromStorage() {
 export async function saveAuthTokenInStorage(token: string) {
   const oldToken = await SecureStore.getItemAsync(VIBE_APP_KEYS_STORAGE.TOKEN)
   if (oldToken) {
-    removeAuthTokenFromStorage()
-    removeUserDataFromStorage()
+    await removeAuthTokenFromStorage()
+    await removeUserDataFromStorage()
   }
 
   await SecureStore.setItemAsync(VIBE_APP_KEYS_STORAGE.TOKEN, token)

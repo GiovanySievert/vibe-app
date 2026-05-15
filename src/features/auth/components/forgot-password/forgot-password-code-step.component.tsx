@@ -13,9 +13,10 @@ import { forgotPasswordCodeStepSchema, UserResetPasswordRequestDTO } from '../..
 
 type ForgotPasswordCodeStepProps = {
   typedEmail: string
+  isActive: boolean
 }
 
-export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ typedEmail }) => {
+export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ typedEmail, isActive }) => {
   const navigation = useNavigation<NavigationProp<UnathenticatedStackParamList>>()
 
   const { showToast } = useToast()
@@ -108,7 +109,11 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
           value={form.code}
           onChange={({ nativeEvent }) => handleChangeInputValue('code', nativeEvent.text)}
           errorMessage={formError.code}
-          autoFocus
+          autoFocus={isActive}
+          keyboardType="number-pad"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          textContentType="oneTimeCode"
         />
 
         <PasswordInput
@@ -116,6 +121,9 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
           value={form.password}
           onChange={(value) => handleChangeInputValue('password', value)}
           errorMessage={formError.password}
+          keyboardType="default"
+          autoComplete="off"
+          textContentType="none"
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
           <ThemedText color="background" size="lg" weight="semibold">

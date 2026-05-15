@@ -1,5 +1,12 @@
 import { UserData } from './user.model'
 
+type AuthUserResponse = Omit<UserData, 'username'> & Partial<Pick<UserData, 'username' | 'bio'>>
+
+export const mapUserData = (user: AuthUserResponse): UserData => ({
+  ...user,
+  username: user.username ?? ''
+})
+
 export type UserSignInRequestDTO = {
   login: string
   password: string

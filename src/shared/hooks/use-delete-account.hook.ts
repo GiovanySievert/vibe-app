@@ -1,19 +1,15 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSetAtom } from 'jotai'
+import { useMutation } from '@tanstack/react-query'
 
-import { authStateAtom } from '@src/features/auth/state'
-import { removeAuthTokenFromStorage, removeUserDataFromStorage } from '@src/features/auth/storage/auth-storage'
+import { useAuthSession } from '@src/features/auth/hooks'
 import { unregisterPushNotificationsAsync } from '@src/features/notifications/services/push-notification.service'
 import { authClient } from '@src/services/api/auth-client'
-import configureAxiosInterceptors from '@src/services/api/interceptor'
 
 type DeleteAccountInput = {
   password: string
 }
 
 export const useDeleteAccount = () => {
-  const setAuth = useSetAtom(authStateAtom)
-  const queryClient = useQueryClient()
+  const { clearAuthSession } = useAuthSession()
 
   return useMutation({
     mutationFn: async ({ password }: DeleteAccountInput) => {
@@ -21,25 +17,7 @@ export const useDeleteAccount = () => {
     },
     onSuccess: async () => {
       await unregisterPushNotificationsAsync()
-      await removeAuthTokenFromStorage()
-      await removeUserDataFromStorage()
-
-      queryClient.clear()
-      configureAxiosInterceptors(null)
-
-      setAuth({
-        isAuthenticated: false,
-        user: {
-          id: '',
-          createdAt: new Date(0),
-          updatedAt: new Date(0),
-          email: '',
-          emailVerified: false,
-          name: '',
-          username: '',
-          image: null
-        }
-      })
+      await clearAuthSession()
     }
   })
 }

@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useMutation } from '@tanstack/react-query'
-import { useSetAtom } from 'jotai'
 
 import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Button, ThemedText } from '@src/shared/components'
-import { Input } from '@src/shared/components'
+import { Box, Button, OtpInput, ThemedText } from '@src/shared/components'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { otpSchema, SendVerificationEmailForm } from '../domain'
-import { authStateAtom } from '../state'
+import { useEmailVerificationSession } from '../hooks'
 
 type AuthVerifyEmailProps = {
   emailToBeVerified: string
+  passwordToSignIn?: string
   hideTitle?: boolean
+  isActive?: boolean
+  sendCodeOnActive?: boolean
 }
 
-export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerified, hideTitle }) => {
-  const setAuthState = useSetAtom(authStateAtom)
+export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
+  emailToBeVerified,
+  passwordToSignIn,
+  hideTitle,
+  isActive = true,
+  sendCodeOnActive = true
+}) => {
   const { showToast } = useToast()
+  const { resolveEmailVerificationSession } = useEmailVerificationSession()
+  const automaticallySentEmailRef = useRef<string | null>(null)
 
-  const [isResendDisabled, setIsResendDisabled] = useState(true)
+  const [isResendDisabled, setIsResendDisabled] = useState(false)
   const [countdown, setCountdown] = useState(30)
   const [form, setForm] = useState<SendVerificationEmailForm>({
     otp: ''
@@ -31,19 +39,17 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
     otp: ''
   })
 
-  const handleChangeInputValue = (key: string, value: string) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [key]: value
-    }))
+  const handleChangeInputValue = (value: string) => {
+    setFormError({ otp: '' })
+    setForm({ otp: value })
   }
 
-  const validateVerifyEmailSchema = () => {
+  const validateVerifyEmailSchema = (otp: string) => {
     setFormError({
       otp: ''
     })
     const values = {
-      otp: form.otp
+      otp
     }
 
     const result = otpSchema.safeParse(values)
@@ -62,11 +68,11 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
     return
   }
 
-  const submitForm = async () => {
-    validateVerifyEmailSchema()
+  const submitForm = async (otp: string) => {
+    validateVerifyEmailSchema(otp)
 
     const { data, error } = await authClient.emailOtp.verifyEmail({
-      otp: form.otp,
+      otp,
       email: emailToBeVerified
     })
 
@@ -78,36 +84,44 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
   }
 
   const { mutate: submitFormMutation, isPending: isLoading } = useMutation({
-    mutationFn: async () => submitForm(),
+    mutationFn: async (otp: string) => submitForm(otp),
     onSuccess: async (data) => {
-      if (data)
-        setAuthState({
-          isAuthenticated: true,
-          user: data.user
+      if (data) {
+        await resolveEmailVerificationSession({
+          email: emailToBeVerified,
+          password: passwordToSignIn,
+          session: data.token ? { token: data.token, user: data.user } : null
         })
+      }
     },
     onError: (error) => {
       console.error('todo - add logger', error)
     }
   })
 
-  const handleSendVerificationEmail = async () => {
+  const handleSendVerificationEmail = useCallback(async () => {
+    if (!emailToBeVerified) return
+
     try {
       await authClient.emailOtp.sendVerificationOtp({
         email: emailToBeVerified,
         type: 'email-verification'
       })
 
+      setCountdown(30)
       setIsResendDisabled(true)
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [emailToBeVerified])
 
   useEffect(() => {
+    if (!sendCodeOnActive || !isActive || !emailToBeVerified) return
+    if (automaticallySentEmailRef.current === emailToBeVerified) return
+
+    automaticallySentEmailRef.current = emailToBeVerified
     handleSendVerificationEmail()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [emailToBeVerified, handleSendVerificationEmail, isActive, sendCodeOnActive])
 
   useEffect(() => {
     if (!isResendDisabled) {
@@ -135,24 +149,19 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({ emailToBeVerif
         <ThemedText variant="secondary">enviamos um código para {emailToBeVerified}.</ThemedText>
       </Box>
 
-      <Input
-        label="código"
+      <OtpInput
         value={form.otp}
-        onChange={({ nativeEvent }) => handleChangeInputValue('otp', nativeEvent.text)}
+        onChangeText={handleChangeInputValue}
         errorMessage={formError.otp}
-        keyboardType="numeric"
-        autoFocus
+        autoFocus={isActive}
+        disabled={isLoading || !isActive}
+        onComplete={(otp) => submitFormMutation(otp)}
       />
 
       <Box mt={4} gap={4}>
-        <Button loading={isLoading} onPress={() => submitFormMutation()}>
-          <ThemedText color="background" size="lg" weight="semibold">
-            pronto - entrar no vibes
-          </ThemedText>
-        </Button>
-        <Button variant="ghost" disabled={isResendDisabled} onPress={() => handleSendVerificationEmail()}>
+        <Button variant="ghost" disabled={isResendDisabled || isLoading} onPress={() => handleSendVerificationEmail()}>
           <ThemedText size="lg" weight="semibold">
-            {isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}
+            {isLoading ? 'verificando...' : isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}
           </ThemedText>
         </Button>
       </Box>

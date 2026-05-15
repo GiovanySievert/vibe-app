@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { createAuthClient } from 'better-auth/react'
 import { useSetAtom } from 'jotai'
 
+import { mapUserData } from '@src/features/auth/domain'
 import { authStateAtom } from '@src/features/auth/state'
 
 const { useSession } = createAuthClient()
@@ -17,7 +18,7 @@ export const useUserData = () => {
       if (session) {
         setAuth({
           isAuthenticated: true,
-          user: session?.user,
+          user: mapUserData(session.user),
           session: session.session
         })
       }

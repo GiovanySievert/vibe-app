@@ -3,8 +3,6 @@ import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
-import { useSetAtom } from 'jotai'
-
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
@@ -14,7 +12,7 @@ import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
 
 import { signInSchema, UserSignInRequestDTO } from '../domain'
-import { authStateAtom } from '../state'
+import { useAuthSession } from '../hooks'
 import { AuthVerifyEmail } from './auth-verify-email.component'
 
 enum SIGN_IN_STEPS {
@@ -29,10 +27,11 @@ type AuthSignInProps = {
 }
 
 export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
-  const setAuthState = useSetAtom(authStateAtom)
   const navigation = useNavigation<NavigationProp<UnathenticatedStackParamList>>()
+  const { persistAuthSession } = useAuthSession()
 
   const animatedValue = useSharedValue(0)
+  const [currentStep, setCurrentStep] = useState<SIGN_IN_STEPS>(SIGN_IN_STEPS.FORM)
 
   const [form, setForm] = useState<UserSignInRequestDTO>({
     login: '',
@@ -47,6 +46,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
 
   const goToStep = (step: SIGN_IN_STEPS) => {
     animatedValue.value = withTiming(step, { duration: 300 })
+    setCurrentStep(step)
   }
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -94,10 +94,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
       if (error) handleErrorsInSignIn(error)
 
       if (data) {
-        setAuthState({
-          isAuthenticated: true,
-          user: data.user
-        })
+        await persistAuthSession({ token: data.token, user: data.user })
       }
     } catch (error) {
       console.error('todo -- add loger', error)
@@ -106,10 +103,20 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
     }
   }
 
+  const isFormStepActive = currentStep === SIGN_IN_STEPS.FORM
+  const isVerifyStepActive = currentStep === SIGN_IN_STEPS.VERIFY
+
   return (
     <Box flex={1} style={styles.container}>
       <Animated.View style={[styles.stepsRow, animatedStyle]}>
-        <Box mt={20} p={6} style={styles.step}>
+        <Box
+          mt={20}
+          p={6}
+          style={styles.step}
+          pointerEvents={isFormStepActive ? 'auto' : 'none'}
+          accessibilityElementsHidden={!isFormStepActive}
+          importantForAccessibility={isFormStepActive ? 'auto' : 'no-hide-descendants'}
+        >
           <Box mb={4}>
             <ThemedText variant="title" size="4xl" color="textPrimary">
               vibes
@@ -124,6 +131,11 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               value={form.login}
               onChange={({ nativeEvent }) => handleChangeInputValue('login', nativeEvent.text)}
               errorMessage={formError.login}
+              keyboardType="email-address"
+              inputMode="email"
+              autoComplete="email"
+              textContentType="emailAddress"
+              autoCapitalize="none"
             />
             <Input
               label="senha"
@@ -131,6 +143,9 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
               errorMessage={formError.password}
               secureTextEntry
+              keyboardType="default"
+              autoComplete="off"
+              textContentType="none"
             />
 
             <Box mt={2} alignItems="flex-end">
@@ -193,14 +208,25 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
           </Box>
         </Box>
 
-        <Box p={6} style={styles.step}>
+        <Box
+          p={6}
+          style={styles.step}
+          pointerEvents={isVerifyStepActive ? 'auto' : 'none'}
+          accessibilityElementsHidden={!isVerifyStepActive}
+          importantForAccessibility={isVerifyStepActive ? 'auto' : 'no-hide-descendants'}
+        >
           <Box mb={6} flexDirection="row" alignItems="center" gap={3}>
             <TouchableOpacity onPress={() => goToStep(SIGN_IN_STEPS.FORM)} style={styles.goBackButton}>
               <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
             </TouchableOpacity>
             <ThemedText variant="title">confirme seu email</ThemedText>
           </Box>
-          <AuthVerifyEmail emailToBeVerified={form.login} hideTitle />
+          <AuthVerifyEmail
+            emailToBeVerified={form.login}
+            passwordToSignIn={form.password}
+            hideTitle
+            isActive={isVerifyStepActive}
+          />
         </Box>
       </Animated.View>
     </Box>

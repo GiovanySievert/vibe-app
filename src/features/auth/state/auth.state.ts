@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 
 import { UserAuthenticated } from '../domain'
 
-const initialAuthState: UserAuthenticated = {
+export const getUnauthenticatedAuthState = (): UserAuthenticated => ({
   isAuthenticated: false,
   user: {
     id: '',
@@ -24,6 +24,6 @@ const initialAuthState: UserAuthenticated = {
     ipAddress: '',
     userAgent: ''
   }
-}
+})
 
-export const authStateAtom = atom<UserAuthenticated>(initialAuthState)
+export const authStateAtom = atom<UserAuthenticated>(getUnauthenticatedAuthState())
