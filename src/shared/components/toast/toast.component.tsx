@@ -1,118 +1,151 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { icons } from 'lucide-react-native'
 
 import { useToast } from '@src/app/providers'
 import { theme } from '@src/shared/constants/theme'
 
+import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
 
 type ToastLevel = 'success' | 'error' | 'info' | 'warning'
 type IconName = keyof typeof icons
 
-export const Toast = () => {
-  const { toast } = useToast()
+type LevelPalette = {
+  bg: keyof typeof theme.colors
+  border: keyof typeof theme.colors
+  icon: IconName
+  iconColor: keyof typeof theme.colors
+}
 
-  const top = useSharedValue(-100)
-
-  const paletteByLevel: Record<
-    ToastLevel,
-    {
-      bg: string
-      border: string
-      icon: IconName
-      iconBg: string
-      text: string
-    }
-  > = {
-    success: {
-      bg: theme.colors.primary,
-      border: theme.colors.primary,
-      icon: 'Check',
-      iconBg: theme.colors.primary,
-      text: theme.colors.background
-    },
-    error: {
-      bg: theme.colors.backgroundSecondary,
-      border: theme.colors.error,
-      icon: 'X',
-      iconBg: theme.colors.error,
-      text: theme.colors.error
-    },
-    warning: {
-      bg: theme.colors.warning,
-      border: theme.colors.warning,
-      icon: 'OctagonX',
-      iconBg: theme.colors.warning,
-      text: theme.colors.warning
-    },
-    info: {
-      bg: theme.colors.textSecondary,
-      border: theme.colors.textSecondary,
-      icon: 'Info',
-      iconBg: theme.colors.textSecondary,
-      text: theme.colors.textSecondary
-    }
+const PALETTE_BY_LEVEL: Record<ToastLevel, LevelPalette> = {
+  success: {
+    bg: 'backgroundSecondary',
+    border: 'primary',
+    icon: 'Check',
+    iconColor: 'primary'
+  },
+  error: {
+    bg: 'backgroundSecondary',
+    border: 'error',
+    icon: 'X',
+    iconColor: 'error'
+  },
+  warning: {
+    bg: 'backgroundSecondary',
+    border: 'warning',
+    icon: 'OctagonAlert',
+    iconColor: 'warning'
+  },
+  info: {
+    bg: 'backgroundSecondary',
+    border: 'border',
+    icon: 'Info',
+    iconColor: 'textSecondary'
   }
+}
+
+export const Toast = () => {
+  const { toast, hideToast } = useToast()
+  const insets = useSafeAreaInsets()
+
+  const translateY = useSharedValue(-100)
+  const opacity = useSharedValue(0)
 
   useEffect(() => {
     if (toast) {
-      top.value = withTiming(100, { duration: 500, easing: Easing.out(Easing.exp) })
+      translateY.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.exp) })
+      opacity.value = withTiming(1, { duration: 300 })
     } else {
-      top.value = withTiming(-100, { duration: 500, easing: Easing.in(Easing.exp) })
+      translateY.value = withTiming(-100, { duration: 300, easing: Easing.in(Easing.exp) })
+      opacity.value = withTiming(0, { duration: 200 })
     }
-  }, [toast, top])
+  }, [toast, translateY, opacity])
 
-  const animatedStyle = useAnimatedStyle(() => ({ top: top.value }))
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value
+  }))
 
   if (!toast) return null
 
-  const palette = paletteByLevel[toast.level]
+  const palette = PALETTE_BY_LEVEL[toast.level]
 
   return (
     <Animated.View
-      style={[styles.container, animatedStyle, { backgroundColor: palette.bg, borderColor: palette.border }]}
+      pointerEvents="box-none"
+      style={[styles.wrapper, animatedStyle, { top: insets.top + 12 }]}
     >
-      <View style={[styles.iconWrap, { backgroundColor: palette.iconBg }]}>
-        <ThemedIcon name={palette.icon} color="white" size={14} />
-      </View>
-      <ThemedText>{toast.message}</ThemedText>
+      <Box
+        flexDirection="row"
+        alignItems="flex-start"
+        gap={3}
+        p={3}
+        bg={palette.bg}
+        style={[styles.card, { borderColor: theme.colors[palette.border] }]}
+      >
+        <Box
+          h={6}
+          w={6}
+          alignItems="center"
+          justifyContent="center"
+          style={[styles.iconWrap, { borderColor: theme.colors[palette.iconColor] }]}
+        >
+          <ThemedIcon name={palette.icon} color={palette.iconColor} size={14} />
+        </Box>
+
+        <Box flex={1}>
+          <ThemedText color="textPrimary" size="xs" weight="medium">
+            {toast.message}
+          </ThemedText>
+        </Box>
+
+        <Pressable
+          onPress={hideToast}
+          accessibilityRole="button"
+          accessibilityLabel="Fechar notificação"
+          hitSlop={8}
+          style={styles.dismiss}
+        >
+          <ThemedIcon name="X" color="textTerciary" size={16} />
+        </Pressable>
+      </Box>
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     position: 'absolute',
-    left: 2,
-    right: 2,
-    margin: 16,
-    padding: 12,
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    shadowColor: 'rgba(0,0,0,0.8)',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 4,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+    alignItems: 'center',
     zIndex: 99999
   },
-  iconWrap: {
-    height: 24,
-    width: 24,
+  card: {
+    minWidth: 280,
+    maxWidth: 340,
     borderRadius: 12,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 24,
+    elevation: 8
+  },
+  iconWrap: {
+    borderRadius: 11,
+    borderWidth: 1.5
+  },
+  dismiss: {
+    width: 20,
+    height: 20,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  text: {
-    marginLeft: 12,
-    lineHeight: 20,
-    color: '#333',
-    fontWeight: '600'
   }
 })
