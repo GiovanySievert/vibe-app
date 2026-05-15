@@ -6,6 +6,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
+import { triggerLightHaptic } from '@src/shared/utils'
 
 import { getFollowStatusQueryKey, useFollowStatus } from '../hooks/use-follow-status.hook'
 import { FollowRequestsService, FollowService } from '../services'
@@ -51,9 +52,14 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   })
 
   const handlePress = () => {
-    if (followData?.status === FollowStatus.FOLLOWING) followMutation.mutate(FollowAction.UNFOLLOW)
-    else if (followData?.status === FollowStatus.NONE) followMutation.mutate(FollowAction.FOLLOW)
-    else if (followData?.status === FollowStatus.PENDING) followMutation.mutate(FollowAction.CANCEL)
+    if (followData?.status === FollowStatus.FOLLOWING) {
+      followMutation.mutate(FollowAction.UNFOLLOW)
+    } else if (followData?.status === FollowStatus.NONE) {
+      followMutation.mutate(FollowAction.FOLLOW)
+    } else if (followData?.status === FollowStatus.PENDING) {
+      followMutation.mutate(FollowAction.CANCEL)
+    }
+    triggerLightHaptic()
   }
 
   const followLabel = () => {

@@ -9,7 +9,7 @@ import { Box, ThemedIcon } from '@src/shared/components'
 import { PlacesByIdResponse } from '@src/shared/domain'
 import { useUserFavoritesPlaces } from '@src/shared/hooks/use-user-favorites-places.hook'
 import { userFavoritesPlacesAtom } from '@src/shared/state'
-import { HIT_SLOP } from '@src/shared/utils'
+import { HIT_SLOP, triggerLightHaptic } from '@src/shared/utils'
 
 type PlacesHeaderFavoriteButtonProps = {
   place: PlacesByIdResponse
@@ -35,6 +35,7 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
   })
 
   const favoritePlace = async () => {
+    triggerLightHaptic()
     scale.value = withSequence(
       withSpring(1.15, { damping: 5, stiffness: 200 }),
       withSpring(1, { damping: 5, stiffness: 200 })
@@ -45,6 +46,7 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
   }
 
   const unfavoritePlace = async () => {
+    triggerLightHaptic()
     scale.value = withSequence(
       withSpring(1.15, { damping: 5, stiffness: 200 }),
       withSpring(1, { damping: 5, stiffness: 200 })

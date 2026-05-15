@@ -10,7 +10,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 import { useNavigateToProfile } from '@src/shared/hooks'
-import { formatRelativeTime } from '@src/shared/utils'
+import { formatRelativeTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { FeedReviewItem, ReviewCounts } from '../domain/feed-review-item.model'
 import { FeedService } from '../services'
@@ -72,6 +72,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
   })
 
   const handleReactionPress = (type: 'on' | 'off') => {
+    triggerLightHaptic()
     submitReaction(counts?.viewerReaction === type ? null : type)
   }
 

@@ -14,7 +14,7 @@ import { theme } from '@src/shared/constants/theme'
 import { colors } from '@src/shared/constants/tokens'
 import { useUploadImage } from '@src/shared/hooks'
 import { locationStateAtom } from '@src/shared/state/location.state'
-import { getDevMockPhotoUriIfSimulator, isSimulatorDev } from '@src/shared/utils'
+import { getDevMockPhotoUriIfSimulator, isSimulatorDev, triggerLightHaptic, triggerSuccessHaptic } from '@src/shared/utils'
 
 import {
   PlaceReviewApiErrorBody,
@@ -43,12 +43,14 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
     if (type === 'place') {
       const mock = getDevMockPhotoUriIfSimulator()
       if (mock) {
+        triggerLightHaptic()
         setPlacePhotoUri(mock)
         return
       }
     } else if (isSimulatorDev()) {
       const mock = getDevMockPhotoUriIfSimulator()
       if (mock) {
+        triggerLightHaptic()
         setSelfieUri(mock)
         return
       }
@@ -62,6 +64,7 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
         ...(type === 'selfie' && { cameraType: ImagePicker.CameraType.front })
       })
       if (!result.canceled && result.assets[0]) {
+        triggerLightHaptic()
         if (type === 'place') {
           setPlacePhotoUri(result.assets[0].uri)
         } else {
@@ -107,7 +110,10 @@ export const PlaceReviewPostScreen: React.FC<Props> = ({ route, navigation }) =>
         comment: comment.trim() || undefined
       })
     },
-    onSuccess: () => navigation.goBack(),
+    onSuccess: () => {
+      triggerSuccessHaptic()
+      navigation.goBack()
+    },
     onError: (error: { response?: { data?: PlaceReviewApiErrorBody } }) => {
       const code = error.response?.data?.code
       showToast(placeReviewErrorMessage(code), 'error')

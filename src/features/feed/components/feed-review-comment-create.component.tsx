@@ -7,6 +7,7 @@ import { useToast } from '@src/app/providers'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, ThemedIcon } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { triggerLightHaptic } from '@src/shared/utils'
 
 import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
 import { FeedService } from '../services'
@@ -96,6 +97,7 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
       return
     }
 
+    triggerLightHaptic()
     createComment(trimmedContent)
   }
 

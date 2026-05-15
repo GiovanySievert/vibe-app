@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { Button, ThemedText } from '@src/shared/components'
+import { triggerLightHaptic } from '@src/shared/utils'
 
 import { FollowRequestsService } from '../../services'
 import { FollowService } from '../../services'
@@ -47,10 +48,13 @@ export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActio
 
   const handleToggleFollow = () => {
     if (followStatus === 'following') {
+      triggerLightHaptic()
       unfollowMutation.mutate()
     } else if (followStatus === 'none') {
+      triggerLightHaptic()
       followMutation.mutate()
     } else if (followStatus === 'pending') {
+      triggerLightHaptic()
       cancelFollowRequestMutation.mutate()
     }
   }

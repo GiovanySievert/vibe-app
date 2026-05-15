@@ -8,6 +8,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, Input } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { triggerLightHaptic } from '@src/shared/utils'
 
 import { EventCommentResponse, EventCommentService, ListEventCommentsResponse } from '../services/event-comment.service'
 
@@ -64,13 +65,22 @@ export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId,
     }
   })
 
+  const handlePostComment = () => {
+    if (!content.trim()) {
+      return
+    }
+
+    triggerLightHaptic()
+    postComment()
+  }
+
   return (
     <Box flexDirection="row" gap={2} alignItems="center">
       <Box flex={1}>
         <Input value={content} onChangeText={setContent} maxLength={500} />
       </Box>
       <TouchableOpacity
-        onPress={() => content.trim() && postComment()}
+        onPress={handlePostComment}
         disabled={!content.trim()}
         style={[styles.sendButton, !content.trim() && styles.sendButtonDisabled]}
       >

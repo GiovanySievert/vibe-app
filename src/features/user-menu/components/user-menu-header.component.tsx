@@ -30,12 +30,7 @@ export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
                 {userData.email}
               </ThemedText>
             </Box>
-            <TouchableOpacity
-              style={styles.profileButton}
-              onPress={() =>
-                navigation.navigate('UserProfileMain')
-              }
-            >
+            <TouchableOpacity style={styles.profileButton} onPress={() => navigation.goBack()}>
               <ThemedText size="sm" weight="medium" style={styles.profileButtonText}>
                 ver perfil
               </ThemedText>
