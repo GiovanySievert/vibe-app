@@ -27,7 +27,8 @@ export const OnboardingStepLocation: React.FC<OnboardingStepLocationProps> = ({ 
         })
         setLocation({
           latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude
+          longitude: loc.coords.longitude,
+          neighborhood: null
         })
       }
     } catch {

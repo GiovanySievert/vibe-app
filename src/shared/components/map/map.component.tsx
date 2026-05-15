@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
@@ -27,12 +27,19 @@ type MapWithPinsProps = {
 }
 
 const THRESHOLD_KM = 1
+const DEFAULT_MAP_CENTER: Coords = { latitude: -25.4284, longitude: -49.2733 }
 
 export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onPressPin, onRegionMoved }) => {
   const [locationState] = useAtom(locationStateAtom)
-  const lastSearchCoords = useRef<Coords>({ latitude: locationState!.latitude, longitude: locationState!.longitude })
+  const activeCenter = locationState ?? DEFAULT_MAP_CENTER
+  const lastSearchCoords = useRef<Coords>(activeCenter)
   const [showSearchButton, setShowSearchButton] = useState(false)
   const pendingCenter = useRef<Coords | null>(null)
+
+  useEffect(() => {
+    lastSearchCoords.current = activeCenter
+    setShowSearchButton(false)
+  }, [activeCenter])
 
   const handleCameraChanged = (
     state: Parameters<NonNullable<React.ComponentProps<typeof MapboxGL.MapView>['onCameraChanged']>>[0]
@@ -54,7 +61,7 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, o
     <View style={styles.container}>
       <MapboxGL.MapView style={styles.map} styleJSON={vibesMapStyle} onCameraChanged={handleCameraChanged}>
         <MapboxGL.Camera
-          centerCoordinate={[locationState!.longitude, locationState!.latitude]}
+          centerCoordinate={[activeCenter.longitude, activeCenter.latitude]}
           zoomLevel={14}
           animationDuration={0}
           animationMode="none"
@@ -74,7 +81,7 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, o
             />
           ))}
 
-        <UserLocationPin coordinate={[locationState!.longitude, locationState!.latitude]} />
+        {locationState && <UserLocationPin coordinate={[locationState.longitude, locationState.latitude]} />}
       </MapboxGL.MapView>
 
       {(showSearchButton || isSearching) && (

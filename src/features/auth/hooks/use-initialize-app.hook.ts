@@ -14,7 +14,7 @@ export const useInitializeApp = () => {
   const setShowOnboarding = useSetAtom(showOnboardingAtom)
   const [isRestoringAuth, setIsRestoringAuth] = useState(true)
   const { persistAuthSession, restoreAuthSession } = useAuthSession()
-  const { loading } = useUserLocation()
+  useUserLocation()
   const { data, isPending } = authClient.useSession()
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const useInitializeApp = () => {
     initialize()
   }, [data, persistAuthSession, setShowOnboarding])
 
-  const isLoading = loading || isPending || isRestoringAuth
+  const isLoading = isPending || isRestoringAuth
 
   return { isLoading }
 }
