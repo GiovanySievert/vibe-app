@@ -54,9 +54,11 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
               <ThemedText color="textPrimary" weight="medium" size="lg">
                 {placeData.name}
               </ThemedText>
-              <ThemedText color="textSecondary" variant="mono" weight="medium" size="xs" letterSpacing="wider">
-                Bar
-              </ThemedText>
+              {(placeData.type || placeData.neighborhood) && (
+                <ThemedText color="textSecondary" variant="mono" weight="medium" size="xs" letterSpacing="wider">
+                  {[placeData.type, placeData.neighborhood].filter(Boolean).join(' · ')}
+                </ThemedText>
+              )}
             </>
           ) : (
             <>

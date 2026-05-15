@@ -17,6 +17,7 @@ export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
   const [inputSearch, setInputSearch] = useState('')
 
   const debouncedSearchTerm = useDebounce(inputSearch, 300)
+
   return (
     <Box flex={1}>
       <ScrollView style={styles.scroll} overScrollMode="never">
@@ -26,7 +27,7 @@ export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
               <SearchInput inputSearch={inputSearch} setInputSearch={setInputSearch} />
             </Box>
             {inputSearch.length ? (
-              <Tabs titles={['Places', 'Users']} defaultIndex={0} variant="secondary">
+              <Tabs titles={['Lugares', 'Pessoas']} defaultIndex={0} variant="secondary">
                 <SearchPlaces inputSearch={debouncedSearchTerm} />
                 <SearchUsers inputSearch={debouncedSearchTerm} />
               </Tabs>
