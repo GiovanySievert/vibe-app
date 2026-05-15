@@ -10,7 +10,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Card, Divider, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
-import { formatShortEventDateTime } from '@src/shared/utils'
+import { formatShortEventDateTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { EventParticipantStatus } from '../domain/event.model'
 import { EventResponse, EventService } from '../services/event.service'
@@ -36,6 +36,11 @@ const EventInvitationItem = ({
       EventService.respondToInvitation(item.id, status),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['eventInvitations'] })
   })
+
+  const handleRespond = (status: EventParticipantStatus.ACCEPTED | EventParticipantStatus.DECLINED) => {
+    triggerLightHaptic()
+    respond.mutate(status)
+  }
 
   return (
     <Card pr={4} pl={4} pt={4} pb={4} gap={3}>
@@ -91,7 +96,7 @@ const EventInvitationItem = ({
             flex={1}
             size="sm"
             loading={respond.isPending}
-            onPress={() => respond.mutate(EventParticipantStatus.ACCEPTED)}
+            onPress={() => handleRespond(EventParticipantStatus.ACCEPTED)}
           >
             <ThemedText color="background" weight="bold">
               vou
@@ -103,7 +108,7 @@ const EventInvitationItem = ({
             variant="outline"
             type="secondary"
             loading={respond.isPending}
-            onPress={() => respond.mutate(EventParticipantStatus.DECLINED)}
+            onPress={() => handleRespond(EventParticipantStatus.DECLINED)}
           >
             <ThemedText color="textPrimary" weight="bold">
               não vou

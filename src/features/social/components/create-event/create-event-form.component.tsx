@@ -1,19 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
-import { Box, Button, Input, ThemedText } from '@src/shared/components'
-import { applyDateMask, applyTimeMask, validationMapErrors } from '@src/shared/utils'
+import { useAtomValue, useSetAtom } from 'jotai'
+
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
+import { Box, Button, FakeInput, Input, ThemedText } from '@src/shared/components'
+import { applyDateMask, applyTimeMask, triggerLightHaptic, validationMapErrors } from '@src/shared/utils'
 
 import { EventFormData } from '../../domain/event.model'
 import { createEventSchema } from '../../domain/event.schema'
+import { eventPlacePickerAtom } from '../../state/event-place-picker.state'
+import { pickEventImageFromLibrary } from '../../utils/pick-event-image'
+import { EventPhotoPicker } from '../event-photo-picker.component'
 
 type CreateEventFormProps = {
   formData: EventFormData
-  onChange: (field: keyof EventFormData, value: string) => void
+  onChange: (field: keyof EventFormData, value: EventFormData[keyof EventFormData]) => void
   onNext: () => void
 }
 
-const EMPTY_ERRORS: Record<keyof EventFormData, string> = {
+type CreateEventFieldErrors = {
+  name: string
+  date: string
+  time: string
+  description: string
+}
+
+const EMPTY_ERRORS: CreateEventFieldErrors = {
   name: '',
   date: '',
   time: '',
@@ -21,7 +35,16 @@ const EMPTY_ERRORS: Record<keyof EventFormData, string> = {
 }
 
 export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onChange, onNext }) => {
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const selectedPlace = useAtomValue(eventPlacePickerAtom)
+  const setSelectedPlace = useSetAtom(eventPlacePickerAtom)
   const [errors, setErrors] = useState(EMPTY_ERRORS)
+
+  useEffect(() => {
+    if (selectedPlace && selectedPlace.id !== formData.place?.id) {
+      onChange('place', selectedPlace)
+    }
+  }, [formData.place, onChange, selectedPlace])
 
   const handleNext = () => {
     const result = createEventSchema.safeParse(formData)
@@ -33,14 +56,45 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
     onNext()
   }
 
-  const handleChange = (field: keyof EventFormData, value: string) => {
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }))
+  const handleChange = (field: keyof EventFormData, value: EventFormData[keyof EventFormData]) => {
+    if (field in errors && errors[field as keyof CreateEventFieldErrors]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }))
+    }
     onChange(field, value)
   }
+
+  const handleOpenPlaceSearch = () => {
+    setSelectedPlace(formData.place)
+    navigation.navigate('Modals', {
+      screen: 'EventPlaceSearchScreen'
+    })
+  }
+
+  const handleClearPlace = () => {
+    setSelectedPlace(null)
+    onChange('place', null)
+  }
+
+  const handlePickImage = async () => {
+    const imageUri = await pickEventImageFromLibrary()
+    if (imageUri) {
+      triggerLightHaptic()
+      onChange('imageUri', imageUri)
+    }
+  }
+
+  const placeMeta = [formData.place?.type, formData.place?.neighborhood].filter(Boolean).join(' · ')
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
       <Box gap={4} pb={6}>
+        <EventPhotoPicker
+          label="foto do evento"
+          uri={formData.imageUri}
+          onPick={handlePickImage}
+          onClear={() => onChange('imageUri', null)}
+        />
+
         <Input
           label="nome do evento"
           value={formData.name}
@@ -80,6 +134,23 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
           multiline
           maxLength={300}
         />
+
+        <Box gap={1}>
+          <FakeInput
+            label="local"
+            value={formData.place?.name ?? ''}
+            placeholder="selecionar local"
+            startIconName="MapPin"
+            isClearable
+            onClear={handleClearPlace}
+            onPress={handleOpenPlaceSearch}
+          />
+          {!!placeMeta && (
+            <ThemedText size="xs" color="textSecondary">
+              {placeMeta}
+            </ThemedText>
+          )}
+        </Box>
 
         <Button onPress={handleNext}>
           <ThemedText color="background" weight="semibold">

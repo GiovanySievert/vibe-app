@@ -10,9 +10,10 @@ import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Card, Divider, LoadingPage, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
-import { formatEventDateTime } from '@src/shared/utils'
+import { formatEventDateTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { EventCommentsSection } from '../components/event-comments-section.component'
+import { EventCoverImage } from '../components/event-cover-image.component'
 import { EventParticipantStatus } from '../domain/event.model'
 import { EventService } from '../services/event.service'
 
@@ -48,6 +49,15 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
   const isOwner = event?.ownerId === currentUserId
   const canAccessEvent = !!event && (isOwner || !!participant)
 
+  const handleOpenPlace = () => {
+    if (!event?.place) return
+
+    navigation.navigate('Modals', {
+      screen: 'PlacesDetailsScreen',
+      params: { placeId: event.place.id }
+    })
+  }
+
   const respondToInvitationMutation = useMutation({
     mutationFn: (status: EventParticipantStatus.ACCEPTED | EventParticipantStatus.DECLINED) =>
       EventService.respondToInvitation(token, status),
@@ -80,6 +90,11 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
       showToast('não foi possível responder ao convite.', 'error')
     }
   })
+
+  const handleRespondToInvitation = (status: EventParticipantStatus.ACCEPTED | EventParticipantStatus.DECLINED) => {
+    triggerLightHaptic()
+    respondToInvitationMutation.mutate(status)
+  }
 
   if (isLoading || !session?.user.id) {
     return (
@@ -149,6 +164,8 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
+        {event.imageUrl && <EventCoverImage uri={event.imageUrl} />}
+
         <Box gap={1} mb={4}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
             Descrição
@@ -163,6 +180,26 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             Horário
           </ThemedText>
           <ThemedText>{formatEventDateTime(event.date, event.time)}</ThemedText>
+        </Box>
+
+        <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
+          <ThemedText size="sm" color="textSecondary" weight="semibold">
+            Local
+          </ThemedText>
+          {event.place ? (
+            <TouchableOpacity activeOpacity={0.7} onPress={handleOpenPlace}>
+              <Box gap={1}>
+                <ThemedText>{event.place.name}</ThemedText>
+                {!![event.place.type, event.place.neighborhood].filter(Boolean).length && (
+                  <ThemedText size="sm" color="textSecondary">
+                    {[event.place.type, event.place.neighborhood].filter(Boolean).join(' · ')}
+                  </ThemedText>
+                )}
+              </Box>
+            </TouchableOpacity>
+          ) : (
+            <ThemedText color="textSecondary">Sem local</ThemedText>
+          )}
         </Box>
 
         <Box gap={2} mb={4}>
@@ -211,14 +248,14 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             <Card gap={3}>
               <ThemedText weight="semibold">Sua resposta</ThemedText>
               <Box gap={3}>
-                <Button onPress={() => respondToInvitationMutation.mutate(EventParticipantStatus.ACCEPTED)}>
+                <Button onPress={() => handleRespondToInvitation(EventParticipantStatus.ACCEPTED)}>
                   <ThemedText color="background" weight="semibold">
                     Confirmar presença
                   </ThemedText>
                 </Button>
                 <Button
                   variant="outline"
-                  onPress={() => respondToInvitationMutation.mutate(EventParticipantStatus.DECLINED)}
+                  onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}
                 >
                   <ThemedText color="primary" weight="semibold">
                     Recusar convite
@@ -232,7 +269,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
               <ThemedText color="textSecondary" size="sm">
                 Mudou de ideia? Você ainda pode confirmar presença.
               </ThemedText>
-              <Button onPress={() => respondToInvitationMutation.mutate(EventParticipantStatus.ACCEPTED)}>
+              <Button onPress={() => handleRespondToInvitation(EventParticipantStatus.ACCEPTED)}>
                 <ThemedText color="background" weight="semibold">
                   Confirmar presença
                 </ThemedText>
@@ -252,7 +289,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
                   Presença confirmada
                 </ThemedText>
               </Box>
-              <TouchableOpacity onPress={() => respondToInvitationMutation.mutate(EventParticipantStatus.DECLINED)}>
+              <TouchableOpacity onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}>
                 <ThemedText size="xs" color="textSecondary">
                   Recusar convite
                 </ThemedText>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 
@@ -21,6 +21,11 @@ const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => vo
           <ThemedText variant="mono" size="xs">
             {formatShortEventDateTime(item.date, item.time)}
           </ThemedText>
+          {item.place && (
+            <ThemedText color="textSecondary" size="sm" numberOfLines={1}>
+              {item.place.name}
+            </ThemedText>
+          )}
         </Box>
 
         <Box style={styles.hostBadge}>
@@ -29,6 +34,8 @@ const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => vo
           </ThemedText>
         </Box>
       </Box>
+
+      {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.coverImage} resizeMode="cover" />}
 
       {item.participants.length > 0 && (
         <Box flexDirection="row" alignItems="center" gap={2}>
@@ -101,5 +108,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: theme.colors.primary
+  },
+  coverImage: {
+    width: '100%',
+    height: 140,
+    borderRadius: 14
   }
 })

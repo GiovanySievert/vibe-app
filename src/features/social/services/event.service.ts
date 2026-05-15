@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import { coreApi } from '@src/services/api'
 
-import { CreateEventPayload, EventParticipantStatus } from '../domain/event.model'
+import { CreateEventRequest, EventParticipantStatus, EventPlaceSummary } from '../domain/event.model'
 
 export type EventParticipantResponse = {
   id: string
@@ -19,17 +19,21 @@ export type EventResponse = {
   date: string
   time: string
   description: string | null
+  place: EventPlaceSummary | null
+  imageUrl: string | null
   createdAt: string
   participants: EventParticipantResponse[]
 }
 
 export const EventService = {
-  create: (payload: CreateEventPayload): Promise<AxiosResponse<EventResponse>> =>
+  create: (payload: CreateEventRequest): Promise<AxiosResponse<EventResponse>> =>
     coreApi.post('/events', {
       name: payload.name,
       date: payload.date,
       time: payload.time,
       description: payload.description || undefined,
+      placeId: payload.place?.id || undefined,
+      imageUrl: payload.imageUrl,
       participantIds: payload.participants.map((p) => p.id)
     }),
 
@@ -39,7 +43,10 @@ export const EventService = {
 
   getById: (id: string): Promise<AxiosResponse<EventResponse>> => coreApi.get(`/events/${id}`),
 
-  update: (id: string, payload: { description: string }): Promise<AxiosResponse<EventResponse>> =>
+  update: (
+    id: string,
+    payload: { description: string; placeId: string | null; imageUrl: string | null }
+  ): Promise<AxiosResponse<EventResponse>> =>
     coreApi.patch(`/events/${id}`, payload),
 
   respondToInvitation: (

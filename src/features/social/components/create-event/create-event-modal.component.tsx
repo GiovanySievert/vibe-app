@@ -3,15 +3,19 @@ import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { useToast } from '@src/app/providers'
 import { Box, SwipeableModal, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
+import { useUploadImage } from '@src/shared/hooks'
+import { triggerSuccessHaptic } from '@src/shared/utils'
 
-import { CreateEventPayload, EventFormData } from '../../domain/event.model'
+import { CreateEventPayload, CreateEventRequest, EventFormData } from '../../domain/event.model'
 import { EventService } from '../../services/event.service'
+import { eventPlacePickerAtom } from '../../state/event-place-picker.state'
 import { CreateEventConfirmation } from './create-event-confirmation.component'
 import { CreateEventForm } from './create-event-form.component'
 import { CreateEventIntro } from './create-event-intro.component'
@@ -39,17 +43,33 @@ type CreateEventModalProps = {
 export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onClose }) => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
+  const { upload, uploading } = useUploadImage()
+  const setSelectedPlace = useSetAtom(eventPlacePickerAtom)
   const [currentStep, setCurrentStep] = useState(CREATE_EVENT_STEPS.INTRO)
-  const [formData, setFormData] = useState<EventFormData>({ name: '', date: '', time: '', description: '' })
+  const [formData, setFormData] = useState<EventFormData>({
+    name: '',
+    date: '',
+    time: '',
+    description: '',
+    place: null,
+    imageUri: null
+  })
   const [participants, setParticipants] = useState<GetUserByUsername[]>([])
   const [eventLink, setEventLink] = useState('')
 
-  const { mutate: saveEvent } = useMutation({
-    mutationFn: (payload: CreateEventPayload) => EventService.create(payload),
-    onMutate: () => {
-      goToStep(CREATE_EVENT_STEPS.SUCCESS)
+  const { mutate: saveEvent, isPending: isSavingEvent } = useMutation({
+    mutationFn: async (payload: CreateEventPayload) => {
+      const { imageUri, ...rest } = payload
+      const requestPayload: CreateEventRequest = {
+        ...rest,
+        imageUrl: imageUri ? await upload(imageUri, 'uploads') : undefined
+      }
+
+      return EventService.create(requestPayload)
     },
     onSuccess: ({ data }) => {
+      triggerSuccessHaptic()
+      goToStep(CREATE_EVENT_STEPS.SUCCESS)
       setEventLink(`vibes://events/share/${data.id}`)
       queryClient.invalidateQueries({ queryKey: ['myEvents'] })
     },
@@ -69,9 +89,10 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
   const handleClose = () => {
     animatedValue.value = 0
     setCurrentStep(CREATE_EVENT_STEPS.INTRO)
-    setFormData({ name: '', date: '', time: '', description: '' })
+    setFormData({ name: '', date: '', time: '', description: '', place: null, imageUri: null })
     setParticipants([])
     setEventLink('')
+    setSelectedPlace(null)
     onClose()
   }
 
@@ -79,7 +100,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
     transform: [{ translateX: animatedValue.value * -screenWidth }]
   }))
 
-  const handleChange = (field: keyof EventFormData, value: string) => {
+  const handleChange = (field: keyof EventFormData, value: EventFormData[keyof EventFormData]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -152,6 +173,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
             {currentStep === CREATE_EVENT_STEPS.CONFIRMATION && (
               <CreateEventConfirmation
                 payload={{ ...formData, participants }}
+                loading={uploading || isSavingEvent}
                 onSave={handleSave}
                 onBack={() => goToStep(CREATE_EVENT_STEPS.PARTICIPANTS)}
               />
