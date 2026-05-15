@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-import { ModalNavigatorParamsList } from '@src/app/navigation/types'
+import { AuthenticatedStackParamList, ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { formatCountdown } from '@src/shared/utils'
 
@@ -15,6 +15,8 @@ type Nav = NativeStackNavigationProp<ModalNavigatorParamsList>
 type PlaceArg = {
   id: string
   name: string
+  type?: string
+  neighborhood?: string
   lat: number | string
   lng: number | string
 }
@@ -63,11 +65,23 @@ export const PlacesFlutuantButton = ({ place }: { place: PlaceArg }) => {
 
   const handlePress = () => {
     if (buttonState.status !== FlutuantButtonStatus.READY) return
-    navigation.navigate('PlaceReviewPostScreen', {
-      placeId: place.id,
-      placeName: place.name,
-      placeLat,
-      placeLng
+    navigation.getParent<NativeStackNavigationProp<AuthenticatedStackParamList>>()?.navigate('Tabs', {
+      screen: 'PostScreen',
+      params: {
+        screen: 'PostMain',
+        params: {
+          preselectedPlace: {
+            id: place.id,
+            name: place.name,
+            type: place.type,
+            neighborhood: place.neighborhood,
+            location: {
+              lat: placeLat,
+              lon: placeLng
+            }
+          }
+        }
+      }
     })
   }
 

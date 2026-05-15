@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { PlacesDetailsScreen } from '@src/features/places'
 import { PlaceReviewPostScreen } from '@src/features/places/screens'
 import { SearchScreen } from '@src/features/search/screens/search.screen'
-import { FollowRequestsScreen } from '@src/features/social/screens'
+import { EventPlaceSearchScreen, FollowRequestsScreen } from '@src/features/social/screens'
 import { BlockedUsersScreen } from '@src/features/user-menu/screens'
 import { UsersProfileScreen } from '@src/features/users-profile'
 import { FollowListScreen } from '@src/features/users-profile/screens/follow-list.screen'
@@ -19,6 +19,7 @@ export function ModalNavigator() {
       <ModalStack.Screen name="PlacesDetailsScreen" component={PlacesDetailsScreen} />
       <ModalStack.Screen name="UsersProfileScreen" component={UsersProfileScreen} />
       <ModalStack.Screen name="SearchScreen" component={SearchScreen} />
+      <ModalStack.Screen name="EventPlaceSearchScreen" component={EventPlaceSearchScreen} />
       <ModalStack.Screen name="PlaceReviewPostScreen" component={PlaceReviewPostScreen} />
       <ModalStack.Screen name="FollowRequestsScreen" component={FollowRequestsScreen} />
       <ModalStack.Screen name="BlockedUsersScreen" component={BlockedUsersScreen} />

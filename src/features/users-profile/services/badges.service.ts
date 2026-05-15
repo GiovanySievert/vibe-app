@@ -16,7 +16,20 @@ export type PlaceBadgeListItem = {
   }>
 }
 
+export type PlaceBadgeForPlace = {
+  userId: string
+  placeId: string
+  reviewCount: number
+  tiers: Array<{
+    tier: PlaceReviewBadgeTier
+    label: string
+    achievedAt: string
+  }>
+}
+
 export const BadgesService = {
   fetchUserBadges: (userId: string): Promise<AxiosResponse<PlaceBadgeListItem[]>> =>
-    coreApi.get(`badges/user/${userId}`)
+    coreApi.get(`badges/user/${userId}`),
+  fetchUserBadgeForPlace: (userId: string, placeId: string): Promise<AxiosResponse<PlaceBadgeForPlace>> =>
+    coreApi.get(`badges/user/${userId}/place/${placeId}`)
 }

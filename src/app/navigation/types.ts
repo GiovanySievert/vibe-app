@@ -30,6 +30,7 @@ export type UserMenuStackParamList = {
 
 export type PostStackParamList = {
   PostMain: undefined
+  PostReviewSuccess: { placeId: string; placeName: string }
 }
 
 export type SocialStackParamList = {
@@ -48,6 +49,7 @@ export type ModalNavigatorParamsList = {
   PlacesDetailsScreen: { placeId: string }
   UsersProfileScreen: { userId: string }
   SearchScreen: undefined
+  EventPlaceSearchScreen: undefined
   LocationModal: undefined
   PlaceReviewCameraScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
   PlaceReviewPostScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }

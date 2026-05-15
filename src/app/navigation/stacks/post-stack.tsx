@@ -11,6 +11,7 @@ export function PostStackNavigator() {
   return (
     <PostStack.Navigator screenOptions={{ headerShown: false }}>
       <PostStack.Screen name="PostMain" component={PostFeatures.PostScreen} />
+      <PostStack.Screen name="PostReviewSuccess" component={PostFeatures.PostReviewSuccessScreen} />
     </PostStack.Navigator>
   )
 }

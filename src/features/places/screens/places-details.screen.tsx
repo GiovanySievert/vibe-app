@@ -76,6 +76,8 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
         place={{
           id: placeId,
           name: placeData.name,
+          type: placeData.brand.type,
+          neighborhood: placeData.location.neighborhood,
           lat: placeData.location.lat,
           lng: placeData.location.lng
         }}
