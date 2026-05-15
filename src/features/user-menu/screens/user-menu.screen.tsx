@@ -1,4 +1,5 @@
 import { useAtom } from 'jotai'
+import { ScrollView } from 'react-native'
 
 import { authStateAtom } from '@src/features/auth/state'
 import { Box, ThemedText } from '@src/shared/components'
@@ -11,11 +12,13 @@ export const UserMenuScreen = () => {
 
   return (
     <Screen>
-      <Box flex={1} bg="background" gap={6} p={6}>
-        <UserMenuHeader userData={authState.user} />
-        <UserMenuOptions />
-        <ThemedText>1.0.1</ThemedText>
-      </Box>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Box bg="background" gap={6} p={6}>
+          <UserMenuHeader userData={authState.user} />
+          <UserMenuOptions />
+          <ThemedText>1.0.1</ThemedText>
+        </Box>
+      </ScrollView>
     </Screen>
   )
 }

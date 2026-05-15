@@ -50,7 +50,7 @@ export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = (
       reset()
       onClose()
       if (isAxiosError(error) && error.response?.status === 409) {
-        showToast('você já reportou esse usuário.')
+        showToast('você já reportou esse usuário.', 'warning')
       } else {
         showToast('erro ao enviar denúncia. tente novamente mais tarde.', 'error')
       }

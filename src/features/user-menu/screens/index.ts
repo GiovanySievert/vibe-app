@@ -1,5 +1,7 @@
 export * from './blocked-users.screen'
+export * from './change-username.screen'
 export * from './terms-of-use.screen'
+export * from './user-badges.screen'
 export * from './user-delete-account.screen'
 export * from './user-edit-profile.screen'
 export * from './user-menu.screen'
