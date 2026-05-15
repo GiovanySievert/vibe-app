@@ -28,8 +28,19 @@ export type UserMenuStackParamList = {
   UserPrivacyScreen: undefined
 }
 
+export type PostPreselectedPlace = {
+  id: string
+  name: string
+  type?: string
+  neighborhood?: string
+  location: {
+    lat: number
+    lon: number
+  }
+}
+
 export type PostStackParamList = {
-  PostMain: undefined
+  PostMain: { preselectedPlace?: PostPreselectedPlace } | undefined
   PostReviewSuccess: { placeId: string; placeName: string }
 }
 
@@ -51,8 +62,6 @@ export type ModalNavigatorParamsList = {
   SearchScreen: undefined
   EventPlaceSearchScreen: undefined
   LocationModal: undefined
-  PlaceReviewCameraScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
-  PlaceReviewPostScreen: { placeId: string; placeName: string; placeLat: number; placeLng: number }
   FollowRequestsScreen: { type: 'received' | 'sent' }
   BlockedUsersScreen: undefined
   FollowListScreen: { userId: string; username: string; initialTab: 'followers' | 'followings' }
