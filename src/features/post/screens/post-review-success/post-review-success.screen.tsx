@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
@@ -17,6 +17,7 @@ import { triggerBadgeUnlockHaptic } from '@src/shared/utils'
 import { MilestonesFloatingCard } from './components/milestones-floating-card.component'
 import { ProgressBlock } from './components/progress-block.component'
 import { ReviewCountBadge } from './components/review-count-badge.component'
+import { StreakCelebrationStep } from './components/streak-celebration-step.component'
 
 import { BADGE_MILESTONES, UNLOCKED_GRADIENT_COLORS, UNLOCKED_GRADIENT_LOCATIONS } from './constants'
 import { useSuccessAnimations } from './use-success-animations'
@@ -25,10 +26,12 @@ import { useSuccessNavigation } from './use-success-navigation'
 type Props = NativeStackScreenProps<PostStackParamList, 'PostReviewSuccess'>
 
 export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { placeId, placeName } = route.params
+  const { placeId, placeName, streakUpdate } = route.params
   const authState = useAtomValue(authStateAtom)
   const { closeToFeed, openBadges } = useSuccessNavigation({ navigation })
   const triggeredBadgeHapticKey = useRef<string | null>(null)
+  const [step, setStep] = useState<'badge' | 'streak'>('badge')
+  const hasTriggeredStreak = streakUpdate?.triggered === true
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['userBadgeForPlace', authState.user.id, placeId],
@@ -96,6 +99,20 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
     ? (unlockedMilestone?.minReviews ?? reviewCount)
     : (progressState.next?.minReviews ?? 20)
 
+  const handlePrimaryAction = () => {
+    if (hasTriggeredStreak) {
+      setStep('streak')
+      return
+    }
+
+    if (hasUnlockedBadge) {
+      openBadges()
+      return
+    }
+
+    closeToFeed()
+  }
+
   const content = (
     <Box flex={1} p={5} style={styles.content}>
       <Box flexDirection="row" justifyContent="flex-end">
@@ -146,9 +163,9 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
           />
         </Box>
 
-        <Button onPress={hasUnlockedBadge ? openBadges : closeToFeed}>
+        <Button onPress={handlePrimaryAction}>
           <ThemedText weight="bold" color="background" letterSpacing="normal">
-            {hasUnlockedBadge ? 'ver badges' : 'continuar'}
+            {hasTriggeredStreak ? 'continuar' : hasUnlockedBadge ? 'ver badges' : 'continuar'}
           </ThemedText>
         </Button>
       </Box>
@@ -161,7 +178,21 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
 
   return (
     <Screen>
-      {hasUnlockedBadge ? (
+      {step === 'streak' && streakUpdate ? (
+        <LinearGradient
+          colors={UNLOCKED_GRADIENT_COLORS}
+          locations={UNLOCKED_GRADIENT_LOCATIONS}
+          start={{ x: 0.8, y: 0 }}
+          end={{ x: 0.2, y: 1 }}
+          style={styles.gradient}
+        >
+          <StreakCelebrationStep
+            streakUpdate={streakUpdate}
+            onClose={closeToFeed}
+            onContinue={closeToFeed}
+          />
+        </LinearGradient>
+      ) : hasUnlockedBadge ? (
         <LinearGradient
           colors={UNLOCKED_GRADIENT_COLORS}
           locations={UNLOCKED_GRADIENT_LOCATIONS}

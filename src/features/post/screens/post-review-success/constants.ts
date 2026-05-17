@@ -1,5 +1,6 @@
 import { PlaceReviewBadgeTier } from '@src/features/users-profile/services'
 import { theme } from '@src/shared/constants/theme'
+import { space } from '@src/shared/utils'
 
 export type BadgeMilestone = {
   tier: PlaceReviewBadgeTier
@@ -14,8 +15,6 @@ export const BADGE_MILESTONES: BadgeMilestone[] = [
   { tier: 'legend', minReviews: 15, label: 'lenda' },
   { tier: 'king', minReviews: 20, label: 'rei' }
 ]
-
-export const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spacing[value])
 
 export const REVIEW_COUNT_CIRCLE_SIZE = space(16) * 3
 export const REVIEW_COUNT_RING_STROKE_WIDTH = 4

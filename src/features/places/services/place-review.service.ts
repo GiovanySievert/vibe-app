@@ -1,4 +1,5 @@
 import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
+import type { StreakUpdateResponse } from '@src/features/users-profile/types'
 import { coreApi } from '@src/services/api'
 
 export type PlaceReviewEligibility = {
@@ -10,6 +11,10 @@ export type PlaceReviewEligibility = {
     cooldownMinutes: number
   }
   reason: 'cooldown' | null
+}
+
+export type CreatePlaceReviewResponse = {
+  streakUpdate: StreakUpdateResponse | null
 }
 
 export const PlaceReviewService = {
@@ -25,7 +30,7 @@ export const PlaceReviewService = {
     selfieUrl?: string
     selfieFriendsOnly?: boolean
     comment?: string
-  }) => coreApi.post('/place-reviews', payload),
+  }) => coreApi.post<CreatePlaceReviewResponse>('/place-reviews', payload),
   getFeed: (page?: number) => coreApi.get<FeedReviewItem[]>('/place-reviews/feed', { params: { page } }),
   listByPlace: (placeId: string) => coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}`),
   listByUser: (userId: string, page?: number) =>

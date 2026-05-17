@@ -6,6 +6,7 @@ import { NearbyPlacesScroll } from '@src/features/home/components'
 import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
+import { space } from '@src/shared/utils'
 
 type Props = {
   places: PlacesModel[]
@@ -14,7 +15,6 @@ type Props = {
   onSelectPlace: (place: PlacesModel) => void
 }
 
-const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spacing[value])
 
 export const PostPlaceStep: React.FC<Props> = ({ places, isFetching, selectedPlace, onSelectPlace }) => (
   <Box gap={5}>

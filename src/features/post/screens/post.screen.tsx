@@ -26,6 +26,7 @@ import { locationStateAtom } from '@src/shared/state/location.state'
 import {
   getDevMockPhotoUriIfSimulator,
   isSimulatorDev,
+  space,
   triggerLightHaptic,
   triggerSuccessHaptic
 } from '@src/shared/utils'
@@ -34,7 +35,6 @@ type Props = NativeStackScreenProps<PostStackParamList, 'PostMain'>
 type Step = 0 | 1 | 2
 
 const STEPS = ['local', 'fotos', 'review']
-const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spacing[value])
 
 export function PostScreen({ navigation, route }: Props) {
   const { showToast } = useToast()
@@ -150,7 +150,7 @@ export function PostScreen({ navigation, route }: Props) {
         comment: comment.trim() || undefined
       })
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       if (!selectedPlace) return
 
       queryClient.invalidateQueries({ queryKey: MY_BADGES_QUERY_KEY })
@@ -160,7 +160,8 @@ export function PostScreen({ navigation, route }: Props) {
       showToast('review publicada.')
       navigation.replace('PostReviewSuccess', {
         placeId: selectedPlace.id,
-        placeName: selectedPlace.name
+        placeName: selectedPlace.name,
+        streakUpdate: response.data.streakUpdate ?? null
       })
     },
     onError: (error: { response?: { data?: PlaceReviewApiErrorBody } }) => {

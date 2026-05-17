@@ -5,6 +5,7 @@ import { PostPreselectedPlace } from '@src/app/navigation/types'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { theme } from '@src/shared/constants/theme'
+import { space } from '@src/shared/utils'
 
 export type PostRating = 'crowded' | 'dead'
 
@@ -29,7 +30,6 @@ type RatingOptionProps = {
 }
 
 const MAX_COMMENT_LENGTH = 600
-const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spacing[value])
 const PHOTO_STAGE_HEIGHT = space(16) * 4
 const REVIEW_PHOTO_HEIGHT = PHOTO_STAGE_HEIGHT - space(2)
 const SELFIE_WIDTH = space(12) * 2

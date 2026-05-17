@@ -3,6 +3,7 @@ import { Image, Pressable, StyleSheet, Switch, View } from 'react-native'
 
 import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { space } from '@src/shared/utils'
 
 export type PostPhotoType = 'place' | 'selfie'
 
@@ -21,7 +22,6 @@ type PhotoButtonProps = {
   onPress: (type: PostPhotoType) => void
 }
 
-const space = (value: keyof typeof theme.spacing) => Number.parseFloat(theme.spacing[value])
 const PHOTO_STAGE_HEIGHT = space(16) * 4
 const SELFIE_WIDTH = space(12) * 2
 const SELFIE_HEIGHT = space(16) + space(12)

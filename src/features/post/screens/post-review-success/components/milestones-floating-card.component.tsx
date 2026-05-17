@@ -4,8 +4,9 @@ import Animated, { AnimatedStyle } from 'react-native-reanimated'
 
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { space } from '@src/shared/utils'
 
-import { BADGE_MILESTONES, BadgeMilestone, space } from '../constants'
+import { BADGE_MILESTONES, BadgeMilestone } from '../constants'
 
 type ProgressState = {
   current: BadgeMilestone | null
