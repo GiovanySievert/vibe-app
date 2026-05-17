@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
@@ -27,6 +27,7 @@ type MapWithPinsProps = {
 }
 
 const THRESHOLD_KM = 1
+const TELEPORT_THRESHOLD_KM = 20
 
 export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onRegionMoved }) => {
   const locationState = useAtomValue(locationStateAtom)
@@ -47,6 +48,22 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, o
     () => (locationState ? [locationState.longitude, locationState.latitude] : null),
     [locationState?.longitude, locationState?.latitude]
   )
+
+  useEffect(() => {
+    if (!locationState) return
+    const ref = pendingCenter.current ?? initialCenter.current
+    if (!ref) return
+    const dist = calculateDistance(ref.latitude, ref.longitude, locationState.latitude, locationState.longitude)
+    if (dist < TELEPORT_THRESHOLD_KM) return
+    cameraRef.current?.setCamera({
+      centerCoordinate: [locationState.longitude, locationState.latitude],
+      zoomLevel: 14,
+      animationDuration: 600
+    })
+    lastSearchCoords.current = locationState
+    pendingCenter.current = locationState
+    setShowSearchButton(false)
+  }, [locationState?.latitude, locationState?.longitude])
 
   const handleCameraChanged = useCallback(
     (state: Parameters<NonNullable<React.ComponentProps<typeof MapboxGL.MapView>['onCameraChanged']>>[0]) => {

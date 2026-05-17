@@ -13,14 +13,34 @@ export const StorageService = {
     coreApi.post<UploadUrlResponse>('/storage/upload-url', { contentType, folder }),
 
   uploadToStorage: async (localUri: string, uploadUrl: string, contentType: ImageContentType) => {
-    const response = await fetch(localUri)
-    const blob = await response.blob()
+    const startedAt = Date.now()
+    console.log('📤 [UPLOAD]', 'PUT', uploadUrl)
 
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': contentType },
-      body: blob
-    })
+    try {
+      const localResponse = await fetch(localUri)
+      if (!localResponse.ok) {
+        throw new Error(`local image read failed with status ${localResponse.status}`)
+      }
+
+      const blob = await localResponse.blob()
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': contentType },
+        body: blob
+      })
+
+      const duration = Date.now() - startedAt
+      console.log('📥 [UPLOAD]', uploadResponse.status, uploadUrl, `\n⏱ ${duration}ms`)
+
+      if (!uploadResponse.ok) {
+        const body = await uploadResponse.text()
+        throw new Error(`storage upload failed with status ${uploadResponse.status}: ${body}`)
+      }
+    } catch (error) {
+      const duration = Date.now() - startedAt
+      console.log('❌ [UPLOAD]', uploadUrl, `\n⏱ ${duration}ms`, '\nMessage:', error)
+      throw error
+    }
   },
 
   uploadImage: async (localUri: string, folder: UploadFolder, contentType: ImageContentType = 'image/jpeg') => {
