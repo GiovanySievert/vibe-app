@@ -15,7 +15,9 @@ import { validationMapErrors } from '@src/shared/utils'
 import { signInSchema, UserSignInRequestDTO } from '../domain'
 import {
   AppleSignInMessage,
+  AuthMessage,
   GoogleSignInMessage,
+  isBannedAuthError,
   useAppleSignIn,
   useAuthSession,
   useGoogleSignIn
@@ -80,6 +82,15 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
   }
 
   const handleErrorsInSignIn = (error: any) => {
+    if (isBannedAuthError(error)) {
+      setFormError({
+        login: '',
+        password: AuthMessage.banned
+      })
+      showToast(AuthMessage.banned, 'error')
+      return
+    }
+
     if (error?.status === 403) {
       goToStep(SIGN_IN_STEPS.VERIFY)
       return
@@ -118,8 +129,8 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
       if (data) {
         await persistAuthSession({ token: data.token, user: data.user })
       }
-    } catch (error) {
-      console.error('todo -- add loger', error)
+    } catch {
+      showToast('algo deu errado, tente novamente mais tarde.', 'error')
     } finally {
       setLoading(false)
     }

@@ -6,7 +6,7 @@ import * as AppleAuthentication from 'expo-apple-authentication'
 import { authClient } from '@src/services/api/auth-client'
 
 import { mapUserData } from '../domain'
-import { AppleErrorCode, AppleSignInMessage } from './auth-messages'
+import { AppleErrorCode, AppleSignInMessage, AuthMessage, isBannedAuthError } from './auth-messages'
 import { useAuthSession } from './use-auth-session.hook'
 
 type AppleSignInResult = {
@@ -43,7 +43,10 @@ export const useAppleSignIn = () => {
       })
 
       if (error || !data) {
-        return { success: false, errorMessage: error?.message ?? AppleSignInMessage.authFailed }
+        return {
+          success: false,
+          errorMessage: isBannedAuthError(error) ? AuthMessage.banned : (error?.message ?? AppleSignInMessage.authFailed)
+        }
       }
 
       const token = (data as { token?: string }).token

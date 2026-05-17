@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 
+import { AuthMessage, isBannedAuthError } from './auth-messages'
 import { AuthSessionPayload, useAuthSession } from './use-auth-session.hook'
 
 type ResolveEmailVerificationSessionInput = {
@@ -28,6 +29,10 @@ export const useEmailVerificationSession = () => {
       })
 
       if (error || !data?.token) {
+        if (isBannedAuthError(error)) {
+          showToast(AuthMessage.banned, 'error')
+          return null
+        }
         showToast('email confirmado. entre novamente para continuar.', 'info')
         return null
       }

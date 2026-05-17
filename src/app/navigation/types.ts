@@ -1,5 +1,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native'
 
+import type { StreakUpdateResponse } from '@src/features/users-profile/types'
+
 export enum TabRoutesName {
   HOME = 'mapa',
   FEED = 'feed',
@@ -43,7 +45,7 @@ export type PostPreselectedPlace = {
 
 export type PostStackParamList = {
   PostMain: { preselectedPlace?: PostPreselectedPlace } | undefined
-  PostReviewSuccess: { placeId: string; placeName: string }
+  PostReviewSuccess: { placeId: string; placeName: string; streakUpdate?: StreakUpdateResponse | null }
 }
 
 export type SocialStackParamList = {

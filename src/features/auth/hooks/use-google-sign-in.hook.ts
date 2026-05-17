@@ -5,7 +5,7 @@ import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google
 import { authClient } from '@src/services/api/auth-client'
 
 import { mapUserData } from '../domain'
-import { GoogleSignInMessage } from './auth-messages'
+import { AuthMessage, GoogleSignInMessage, isBannedAuthError } from './auth-messages'
 import { useAuthSession } from './use-auth-session.hook'
 
 type GoogleSignInResult = {
@@ -53,7 +53,10 @@ export const useGoogleSignIn = () => {
       })
 
       if (error || !data) {
-        return { success: false, errorMessage: error?.message ?? GoogleSignInMessage.authFailed }
+        return {
+          success: false,
+          errorMessage: isBannedAuthError(error) ? AuthMessage.banned : (error?.message ?? GoogleSignInMessage.authFailed)
+        }
       }
 
       const token = (data as { token?: string }).token

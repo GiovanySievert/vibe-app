@@ -16,3 +16,22 @@ export const GoogleSignInMessage = {
   signInInProgress: 'login em andamento',
   playServicesUnavailable: 'google play services indisponível'
 } as const
+
+export const AuthMessage = {
+  banned: 'sua conta foi bloqueada. entre em contato com o suporte.'
+} as const
+
+export const AuthErrorCode = {
+  bannedUser: 'BANNED_USER',
+  userBanned: 'USER_BANNED'
+} as const
+
+type AuthError = {
+  code?: string
+  message?: string
+}
+
+export const isBannedAuthError = (error?: AuthError | null) => {
+  const message = error?.message?.toLowerCase() ?? ''
+  return error?.code === AuthErrorCode.bannedUser || error?.code === AuthErrorCode.userBanned || message.includes('banned')
+}
