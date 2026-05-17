@@ -137,9 +137,15 @@ const styles = StyleSheet.create({
     top: space(4),
     width: SELFIE_WIDTH - space(2),
     height: SELFIE_HEIGHT,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: theme.colors.border
+    borderRadius: 4,
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: 'rgb(17, 17, 17)',
+    shadowColor: 'rgb(0, 0, 0)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 6
   },
   ratingOption: {
     flex: 1,

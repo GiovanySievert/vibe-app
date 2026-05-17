@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Animated, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
@@ -14,14 +14,18 @@ type Props = {
 
 export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRatio = 4 / 5, placeName }) => {
   const [selfieExpanded, setSelfieExpanded] = useState(false)
-  const scaleAnim = useRef(new Animated.Value(1)).current
+  const [overlaysHidden, setOverlaysHidden] = useState(false)
+  const overlayOpacity = useRef(new Animated.Value(1)).current
+
+  useEffect(() => {
+    Animated.timing(overlayOpacity, {
+      toValue: overlaysHidden ? 0 : 1,
+      duration: 120,
+      useNativeDriver: true
+    }).start()
+  }, [overlayOpacity, overlaysHidden])
 
   const handleThumbnailPress = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.9, duration: 80, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 80, useNativeDriver: true })
-    ]).start()
-
     setSelfieExpanded((prev) => !prev)
   }
 
@@ -30,22 +34,36 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
 
   return (
     <Box style={[styles.photoWrap, { aspectRatio }]}>
-      <Image source={{ uri: mainUri ?? undefined }} style={styles.mainPhoto} resizeMode="cover" />
+      <Pressable
+        style={styles.mainPhoto}
+        onPressIn={() => setOverlaysHidden(true)}
+        onPressOut={() => setOverlaysHidden(false)}
+      >
+        <Image source={{ uri: mainUri ?? undefined }} style={styles.mainPhoto} resizeMode="cover" />
+      </Pressable>
 
       {placeName && !selfieExpanded ? (
-        <Box position="absolute" pl={1} pr={1} style={styles.placeTag}>
+        <Animated.View
+          pointerEvents={overlaysHidden ? 'none' : 'auto'}
+          style={[styles.placeTag, { opacity: overlayOpacity }]}
+        >
           <ThemedText size="xs" weight="medium" color="textPrimary">
             {placeName}
           </ThemedText>
-        </Box>
+        </Animated.View>
       ) : null}
 
       {selfieUrl && (
-        <TouchableOpacity onPress={handleThumbnailPress} activeOpacity={1} style={styles.thumbnailWrap}>
-          <Animated.View style={[styles.thumbnailContainer, { transform: [{ scale: scaleAnim }] }]}>
-            <Image source={{ uri: thumbUri ?? undefined }} style={styles.thumbnail} resizeMode="cover" />
-          </Animated.View>
-        </TouchableOpacity>
+        <Animated.View
+          pointerEvents={overlaysHidden ? 'none' : 'auto'}
+          style={[styles.thumbnailWrap, { opacity: overlayOpacity }]}
+        >
+          <TouchableOpacity onPress={handleThumbnailPress} activeOpacity={1}>
+            <View style={styles.thumbnailContainer}>
+              <Image source={{ uri: thumbUri ?? undefined }} style={styles.thumbnail} resizeMode="cover" />
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
       )}
     </Box>
   )
@@ -65,8 +83,10 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   placeTag: {
+    position: 'absolute',
     top: 12,
     left: 12,
+    paddingHorizontal: 4,
     backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: 6
   },
@@ -77,14 +97,20 @@ const styles = StyleSheet.create({
   },
   thumbnailContainer: {
     width: 64,
-    height: 64,
-    borderRadius: 32,
+    height: 82,
+    borderRadius: 4,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: theme.colors.background
+    borderWidth: 1.5,
+    borderColor: 'rgb(17, 17, 17)',
+    shadowColor: 'rgb(0, 0, 0)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 6
   },
   thumbnail: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderRadius: 4
   }
 })
