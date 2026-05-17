@@ -55,7 +55,7 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
     const result = otpSchema.safeParse(values)
     if (!result.success) {
       setFormError(validationMapErrors(result.error, formError))
-      throw Error
+      throw new Error('otp validation failed')
     }
   }
 
@@ -93,9 +93,6 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
           session: data.token ? { token: data.token, user: data.user } : null
         })
       }
-    },
-    onError: (error) => {
-      console.error('todo - add logger', error)
     }
   })
 

@@ -88,9 +88,6 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
     mutationFn: async () => submitForm(),
     onSuccess: async (data) => {
       if (data) navigation.navigate('AuthScreen')
-    },
-    onError: (error) => {
-      console.error('todo - add logger', error)
     }
   })
 

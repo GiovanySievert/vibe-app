@@ -37,8 +37,10 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
   useEffect(() => {
     FeedService.getCounts(review.id)
       .then((r) => setCounts(r.data))
-      .catch(() => {})
-  }, [review.id])
+      .catch(() => {
+        showToast('não foi possível carregar interações.', 'error')
+      })
+  }, [review.id, showToast])
 
   const { mutate: submitReaction } = useMutation({
     mutationFn: (nextReaction: 'on' | 'off' | null) => {
@@ -66,7 +68,9 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
     onSettled: () => {
       FeedService.getCounts(review.id)
         .then((r) => setCounts(r.data))
-        .catch(() => {})
+        .catch(() => {
+          showToast('não foi possível atualizar interações.', 'error')
+        })
       queryClient.invalidateQueries({ queryKey: ['feed'] })
     }
   })

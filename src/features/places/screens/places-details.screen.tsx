@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
@@ -36,11 +36,20 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
     isLoading,
     error
   } = useQuery<PlacesByIdResponse, Error>({
-    queryKey: ['fetchPlacesById'],
+    queryKey: ['fetchPlacesById', placeId],
     queryFn: fetchPlaces,
     retry: false,
-    staleTime: 0
+    staleTime: 0,
+    enabled: !!placeId
   })
+
+  const hasFailed = !isLoading && (!!error || !placeData)
+
+  useEffect(() => {
+    if (!hasFailed) return
+    showToast('algo deu errado, tente novamente mais tarde!', 'error')
+    navigation.goBack()
+  }, [hasFailed, navigation, showToast])
 
   if (isLoading) {
     return (
@@ -50,9 +59,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
     )
   }
 
-  if (!placeData || error) {
-    navigation.goBack()
-    showToast('algo deu errado, tente novamente mais tarde!', 'error')
+  if (!placeData) {
     return null
   }
 

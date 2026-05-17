@@ -8,13 +8,11 @@ export const useLogout = () => {
   const logout = async () => {
     await unregisterPushNotificationsAsync()
 
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: async () => {
-          await clearAuthSession()
-        }
-      }
-    })
+    try {
+      await authClient.signOut()
+    } finally {
+      await clearAuthSession()
+    }
   }
 
   return { logout }

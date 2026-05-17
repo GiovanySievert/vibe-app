@@ -118,7 +118,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     const result = signUpEmailSchema.safeParse({ email: form.email, password: form.password })
     if (!result.success) {
       setFormError((prev) => ({ ...prev, ...validationMapErrors(result.error, formError) }))
-      throw Error
+      throw new Error('signup validation failed')
     }
 
     const { error } = await authClient.signUp.email({
@@ -133,8 +133,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
         error?.status === 422 ? 'não foi possível criar a conta' : 'algo deu errado, tente novamente mais tarde',
         'error'
       )
-      console.log(error)
-      throw Error
+      throw new Error('signup request failed')
     }
   }
 
@@ -142,9 +141,6 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     mutationFn: async () => submitSignUp(),
     onSuccess: () => {
       goToStep(SIGN_UP_STEPS.VERIFY)
-    },
-    onError: (error) => {
-      console.error('todo - add logger', error)
     }
   })
 

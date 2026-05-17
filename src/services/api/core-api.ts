@@ -1,6 +1,16 @@
 import axios from 'axios'
 
+import { getAuthTokenFromStorage } from '@src/features/auth/storage/auth-storage'
+
 import { authClient } from './auth-client'
+
+declare module 'axios' {
+  export interface InternalAxiosRequestConfig {
+    metadata?: { start: number }
+  }
+}
+
+const getSessionCookie = (token: string) => `better-auth.session_token=${token}`
 
 export const coreApi = axios.create({
   baseURL: 'http://localhost:3000/',
@@ -10,6 +20,10 @@ export const coreApi = axios.create({
   }
 })
 
+if (__DEV__) {
+  attachAxiosLogging(coreApi)
+}
+
 coreApi.interceptors.request.use(async (config) => {
   const cookies = authClient.getCookie()
 
@@ -17,19 +31,25 @@ coreApi.interceptors.request.use(async (config) => {
     config.headers.Cookie = cookies
   }
 
+  if (!config.headers.Authorization) {
+    const token = await getAuthTokenFromStorage()
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Cookie = getSessionCookie(token)
+    }
+  }
+
   return config
 })
 
-// if (__DEV__) {
-//   attachAxiosLogging(coreApi)
-// }
-
 function attachAxiosLogging(instance: typeof coreApi) {
   instance.interceptors.request.use((config) => {
-    ;(config as any).metadata = { start: Date.now() }
+    config.metadata = { start: Date.now() }
 
     const maskedHeaders = { ...config.headers }
     if (maskedHeaders?.Authorization) maskedHeaders.Authorization = '****'
+    if (maskedHeaders?.Cookie) maskedHeaders.Cookie = '****'
 
     console.log(
       '📤 [REQUEST]',
@@ -50,14 +70,16 @@ function attachAxiosLogging(instance: typeof coreApi) {
         ? `--data '${typeof config.data === 'string' ? config.data : JSON.stringify(config.data)}'`
         : ''
       console.log(`curl -X ${config.method?.toUpperCase()} ${h} ${d} '${url}'`)
-    } catch {}
+    } catch (e) {
+      console.debug(e)
+    }
 
     return config
   })
 
   instance.interceptors.response.use(
     (response) => {
-      const start = (response.config as any).metadata?.start ?? Date.now()
+      const start = response.config.metadata?.start ?? Date.now()
       const duration = Date.now() - start
 
       console.log(
@@ -77,7 +99,7 @@ function attachAxiosLogging(instance: typeof coreApi) {
     },
     (error) => {
       const cfg = error.config ?? {}
-      const start = (cfg as any).metadata?.start ?? Date.now()
+      const start = cfg.metadata?.start ?? Date.now()
       const duration = Date.now() - start
 
       if (error.response) {
