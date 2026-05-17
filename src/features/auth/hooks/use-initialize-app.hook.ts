@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
 
 import { useUserLocation } from '@src/features/home/hooks/use-get-user-location.hook'
+import { useLocationGate } from '@src/features/location-gate'
 import { registerForPushNotificationsAsync } from '@src/features/notifications/services/push-notification.service'
 import { showOnboardingAtom } from '@src/features/onboarding/state/onboarding.state'
 import { getOnboardingComplete } from '@src/features/onboarding/storage/onboarding-storage'
@@ -16,6 +17,7 @@ export const useInitializeApp = () => {
   const { persistAuthSession, restoreAuthSession } = useAuthSession()
   useUserLocation()
   const { data, isPending } = authClient.useSession()
+  useLocationGate({ enabled: !!data?.user })
 
   useEffect(() => {
     const restoreAuth = async () => {

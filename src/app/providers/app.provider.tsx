@@ -3,6 +3,7 @@ import React from 'react'
 import { useAtomValue } from 'jotai'
 
 import { useAuthSession, useInitializeApp } from '@src/features/auth/hooks'
+import { LocationGateModal } from '@src/features/location-gate'
 import { OnboardingModal } from '@src/features/onboarding/components/onboarding-modal.component'
 import { showOnboardingAtom } from '@src/features/onboarding/state/onboarding.state'
 import { setUnauthorizedHandler } from '@src/services/api/interceptor'
@@ -35,6 +36,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       <LoadingApplication isVisible={isLoading} />
       {children}
       {showOnboarding && <OnboardingModal />}
+      <LocationGateModal />
     </Box>
   )
 }
