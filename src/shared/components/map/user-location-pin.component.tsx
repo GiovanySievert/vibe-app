@@ -9,12 +9,17 @@ type UserLocationPinProps = {
   coordinate: [number, number]
 }
 
-export const UserLocationPin: React.FC<UserLocationPinProps> = ({ coordinate }) => (
+const UserLocationPinComponent: React.FC<UserLocationPinProps> = ({ coordinate }) => (
   <MapboxGL.MarkerView id="user-location" coordinate={coordinate} allowOverlap={true} anchor={{ x: 0.5, y: 0.5 }}>
     <View style={styles.outer}>
       <View style={styles.inner} />
     </View>
   </MapboxGL.MarkerView>
+)
+
+export const UserLocationPin = React.memo(
+  UserLocationPinComponent,
+  (prev, next) => prev.coordinate[0] === next.coordinate[0] && prev.coordinate[1] === next.coordinate[1]
 )
 
 const styles = StyleSheet.create({

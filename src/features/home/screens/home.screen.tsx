@@ -39,12 +39,7 @@ export const HomeScreen = () => {
       </Box>
 
       <Box pl={4} pr={4} style={styles.mapContainer}>
-        <MapWithPins
-          points={places}
-          isSearching={isFetching}
-          onPressPin={(p) => console.log('clicou', p)}
-          onRegionMoved={setSearchCoords}
-        />
+        <MapWithPins points={places} isSearching={isFetching} onRegionMoved={setSearchCoords} />
       </Box>
 
       {!!places.length && <NearbyPlacesScroll places={places} />}

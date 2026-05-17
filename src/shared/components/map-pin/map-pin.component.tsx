@@ -15,10 +15,9 @@ type PinProps = {
   placeName?: string
   placeIsHot: boolean
   coordinate: [number, number]
-  onPress?: () => void
 }
 
-export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coordinate, onPress }) => {
+const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coordinate }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   return (
     <MapboxGL.MarkerView
@@ -27,7 +26,7 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coo
       allowOverlap={true}
       anchor={{ x: 0.5, y: 1.0 }}
     >
-      <Box style={styles.wrapper} onTouchEnd={onPress}>
+      <Box style={styles.wrapper}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
         >
@@ -42,6 +41,16 @@ export const MapPin: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coo
     </MapboxGL.MarkerView>
   )
 }
+
+export const MapPin = React.memo(
+  MapPinComponent,
+  (prev, next) =>
+    prev.placeId === next.placeId &&
+    prev.placeName === next.placeName &&
+    prev.placeIsHot === next.placeIsHot &&
+    prev.coordinate[0] === next.coordinate[0] &&
+    prev.coordinate[1] === next.coordinate[1]
+)
 
 const styles = StyleSheet.create({
   wrapper: { alignItems: 'center' },

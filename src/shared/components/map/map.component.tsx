@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
+import { LocateFixed } from 'lucide-react-native'
 
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
@@ -22,66 +23,89 @@ type Coords = { latitude: number; longitude: number }
 type MapWithPinsProps = {
   points?: PlacesModel[]
   isSearching?: boolean
-  onPressPin?: (point: PlacesModel) => void
   onRegionMoved?: (coords: Coords) => void
 }
 
 const THRESHOLD_KM = 1
-const DEFAULT_MAP_CENTER: Coords = { latitude: -25.4284, longitude: -49.2733 }
 
-export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onPressPin, onRegionMoved }) => {
-  const [locationState] = useAtom(locationStateAtom)
-  const activeCenter = locationState ?? DEFAULT_MAP_CENTER
-  const lastSearchCoords = useRef<Coords>(activeCenter)
-  const [showSearchButton, setShowSearchButton] = useState(false)
+export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onRegionMoved }) => {
+  const locationState = useAtomValue(locationStateAtom)
+  const initialCenter = useRef<Coords | null>(null)
+  const lastSearchCoords = useRef<Coords | null>(null)
   const pendingCenter = useRef<Coords | null>(null)
+  const cameraRef = useRef<MapboxGL.Camera>(null)
+  const [showSearchButton, setShowSearchButton] = useState(false)
 
-  useEffect(() => {
-    lastSearchCoords.current = activeCenter
-    setShowSearchButton(false)
-  }, [activeCenter])
-
-  const handleCameraChanged = (
-    state: Parameters<NonNullable<React.ComponentProps<typeof MapboxGL.MapView>['onCameraChanged']>>[0]
-  ) => {
-    const [lon, lat] = state.properties.center
-    pendingCenter.current = { latitude: lat, longitude: lon }
-    const dist = calculateDistance(lastSearchCoords.current.latitude, lastSearchCoords.current.longitude, lat, lon)
-    setShowSearchButton(dist >= THRESHOLD_KM)
+  if (initialCenter.current === null && locationState) {
+    initialCenter.current = locationState
+    lastSearchCoords.current = locationState
   }
 
-  const handleSearchHere = () => {
+  const sortedPoints = useMemo(() => points?.slice().sort((a, b) => b.location.lat - a.location.lat), [points])
+
+  const userCoord = useMemo<[number, number] | null>(
+    () => (locationState ? [locationState.longitude, locationState.latitude] : null),
+    [locationState?.longitude, locationState?.latitude]
+  )
+
+  const handleCameraChanged = useCallback(
+    (state: Parameters<NonNullable<React.ComponentProps<typeof MapboxGL.MapView>['onCameraChanged']>>[0]) => {
+      const [lon, lat] = state.properties.center
+      pendingCenter.current = { latitude: lat, longitude: lon }
+      const ref = lastSearchCoords.current
+      if (!ref) return
+      const dist = calculateDistance(ref.latitude, ref.longitude, lat, lon)
+      const next = dist >= THRESHOLD_KM
+      setShowSearchButton((prev) => (prev === next ? prev : next))
+    },
+    []
+  )
+
+  const handleSearchHere = useCallback(() => {
     if (!pendingCenter.current) return
     lastSearchCoords.current = pendingCenter.current
     setShowSearchButton(false)
     onRegionMoved?.(pendingCenter.current)
+  }, [onRegionMoved])
+
+  const handleRecenter = useCallback(() => {
+    if (!locationState) return
+    cameraRef.current?.setCamera({
+      centerCoordinate: [locationState.longitude, locationState.latitude],
+      zoomLevel: 14,
+      animationDuration: 400
+    })
+    lastSearchCoords.current = locationState
+    pendingCenter.current = locationState
+    setShowSearchButton(false)
+  }, [locationState?.longitude, locationState?.latitude])
+
+  if (!initialCenter.current) {
+    return <View style={styles.container} />
   }
 
   return (
     <View style={styles.container}>
       <MapboxGL.MapView style={styles.map} styleJSON={vibesMapStyle} onCameraChanged={handleCameraChanged}>
         <MapboxGL.Camera
-          centerCoordinate={[activeCenter.longitude, activeCenter.latitude]}
-          zoomLevel={14}
-          animationDuration={0}
-          animationMode="none"
+          ref={cameraRef}
+          defaultSettings={{
+            centerCoordinate: [initialCenter.current.longitude, initialCenter.current.latitude],
+            zoomLevel: 14
+          }}
         />
 
-        {points
-          ?.slice()
-          .sort((a, b) => b.location.lat - a.location.lat)
-          .map((p) => (
-            <MapPin
-              key={p.id}
-              placeId={p.id}
-              placeName={p.name}
-              placeIsHot={!!p.isHot}
-              coordinate={[p.location.lon, p.location.lat]}
-              onPress={() => onPressPin?.(p)}
-            />
-          ))}
+        {sortedPoints?.map((p) => (
+          <MapPin
+            key={p.id}
+            placeId={p.id}
+            placeName={p.name}
+            placeIsHot={!!p.isHot}
+            coordinate={[p.location.lon, p.location.lat]}
+          />
+        ))}
 
-        {locationState && <UserLocationPin coordinate={[locationState.longitude, locationState.latitude]} />}
+        {userCoord && <UserLocationPin coordinate={userCoord} />}
       </MapboxGL.MapView>
 
       {(showSearchButton || isSearching) && (
@@ -92,6 +116,17 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, o
             </ThemedText>
           </TouchableOpacity>
         </Box>
+      )}
+
+      {locationState && (
+        <TouchableOpacity
+          style={styles.recenterButton}
+          onPress={handleRecenter}
+          accessibilityRole="button"
+          accessibilityLabel="Centrar no meu local"
+        >
+          <LocateFixed size={20} color={theme.colors.textPrimary} strokeWidth={1.5} />
+        </TouchableOpacity>
       )}
     </View>
   )
@@ -118,6 +153,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 0.5,
+    borderColor: theme.colors.border
+  },
+  recenterButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.backgroundSecondary,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: theme.colors.border
   }
