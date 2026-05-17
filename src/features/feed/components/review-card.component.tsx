@@ -22,9 +22,10 @@ import { ReviewInteractionsModal } from './review-interactions-modal.component'
 type Props = {
   review: FeedReviewItem
   currentUserId: string
+  enableFavoriteAction?: boolean
 }
 
-export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
+export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavoriteAction = false }) => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const navigateToProfile = useNavigateToProfile()
@@ -109,7 +110,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId }) => {
               {relativeTime} · {review.placeName}
             </ThemedText>
           </Box>
-          <ReviewCardMenu review={review} isOwner={isOwner} />
+          <ReviewCardMenu review={review} isOwner={isOwner} enableFavoriteAction={enableFavoriteAction} />
         </Box>
 
         <DualPhoto placeImageUrl={review.placeImageUrl} selfieUrl={review.selfieUrl} placeName={review.placeName} />

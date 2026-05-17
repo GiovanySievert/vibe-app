@@ -8,16 +8,19 @@ import { useToast } from '@src/app/providers/toast.provider'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
+import { useFavoriteReview } from '../hooks/use-favorite-review'
 import { FeedService } from '../services'
 
 type Props = {
   review: FeedReviewItem
   isOwner: boolean
+  enableFavoriteAction?: boolean
 }
 
-export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner }) => {
+export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavoriteAction = false }) => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
+  const { isFavorite, setFavorite } = useFavoriteReview(review)
 
   const { mutate: deleteReview } = useMutation({
     mutationFn: () => FeedService.deleteReview(review.id),
@@ -33,15 +36,38 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner }) => {
     }
   })
 
+  const handleFavoritePress = () => {
+    if (isFavorite) {
+      setFavorite(false)
+      return
+    }
+
+    Alert.alert(
+      'favoritar review?',
+      'essa review vai aparecer primeiro no seu grid. se você já tiver outra favorita, ela será substituída.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Favoritar', onPress: () => setFavorite(true) }
+      ]
+    )
+  }
+
   const handleMenuPress = () => {
     const shareUrl = ExpoLinking.createURL(`reviews/share/${review.id}`)
-    const actions: Parameters<typeof Alert.alert>[2] = [
-      {
-        text: 'Compartilhar',
-        onPress: () =>
-          Share.share({ message: `${review.user.username} avaliou ${review.placeName} no vibes\n${shareUrl}` })
-      }
-    ]
+    const actions: Parameters<typeof Alert.alert>[2] = []
+
+    if (isOwner && enableFavoriteAction) {
+      actions.push({
+        text: isFavorite ? 'Desfavoritar' : 'Favoritar',
+        onPress: handleFavoritePress
+      })
+    }
+
+    actions.push({
+      text: 'Compartilhar',
+      onPress: () =>
+        Share.share({ message: `${review.user.username} avaliou ${review.placeName} no vibes\n${shareUrl}` })
+    })
 
     if (isOwner) {
       actions.push({

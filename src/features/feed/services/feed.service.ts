@@ -26,6 +26,12 @@ export const FeedService = {
   removeReaction: (reviewId: string): Promise<AxiosResponse<{ success: boolean }>> =>
     coreApi.delete(`/place-reviews/${reviewId}/reaction`),
 
+  favoriteReview: (reviewId: string): Promise<AxiosResponse<{ success: boolean }>> =>
+    coreApi.put(`/place-reviews/${reviewId}/favorite`),
+
+  unfavoriteReview: (reviewId: string): Promise<AxiosResponse<{ success: boolean }>> =>
+    coreApi.delete(`/place-reviews/${reviewId}/favorite`),
+
   deleteReview: (reviewId: string): Promise<AxiosResponse<void>> =>
     coreApi.delete(`/place-reviews/${reviewId}`),
 

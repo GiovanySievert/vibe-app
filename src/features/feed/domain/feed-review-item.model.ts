@@ -9,6 +9,7 @@ export type FeedReviewItem = {
   comment: string | null
   createdAt: string
   updatedAt: string
+  isFavorite: boolean
   user: {
     id: string
     username: string
