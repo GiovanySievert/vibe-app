@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
-import { Box } from '@src/shared/components'
+import { Box, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -63,9 +63,9 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ rout
     <Screen gradient>
       <ScrollView>
         <Box pl={6} pr={6} pt={2} pb={6} flexDirection="row" alignItems="center">
-          <TouchableOpacity onPress={() => handlePressGoBackButton()} style={styles.goBackButton}>
+          <Touchable onPress={() => handlePressGoBackButton()} style={styles.goBackButton}>
             <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
-          </TouchableOpacity>
+          </Touchable>
         </Box>
 
         <Animated.View style={[{ flexDirection: 'row' }, animatedStyle]}>

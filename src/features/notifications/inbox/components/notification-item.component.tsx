@@ -1,9 +1,9 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { Bell, CalendarPlus, MessageCircle, ThumbsUp, UserCheck, UserPlus } from 'lucide-react-native'
 
-import { Box, Divider, ThemedText } from '@src/shared/components'
+import { Box, Divider, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 import { NotificationItem as NotificationItemModel } from '../services/notification-inbox.service'
@@ -41,7 +41,7 @@ export const NotificationItemRow: React.FC<Props> = ({ item, isLast, onPress }) 
   const isUnread = item.readAt === null
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+    <Touchable onPress={onPress} activeOpacity={0.7}>
       <Box flexDirection="row" gap={3} pt={3} pb={3} alignItems="flex-start">
         <Box style={[styles.iconWrap, isUnread && styles.iconWrapUnread]}>
           <Icon
@@ -62,7 +62,7 @@ export const NotificationItemRow: React.FC<Props> = ({ item, isLast, onPress }) 
         {isUnread && <Box style={styles.unreadDot} />}
       </Box>
       {!isLast && <Divider />}
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

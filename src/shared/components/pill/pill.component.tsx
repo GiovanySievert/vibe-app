@@ -1,10 +1,11 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type PillProps = {
   label: string
@@ -19,7 +20,7 @@ export const Pill: React.FC<PillProps> = ({ label, textSize = 'md', onPress, sel
 
   return (
     <Box style={styles.pill}>
-      <TouchableOpacity
+      <Touchable
         onPress={onPress}
         disabled={!isInteractive}
         accessible={isInteractive}
@@ -30,7 +31,7 @@ export const Pill: React.FC<PillProps> = ({ label, textSize = 'md', onPress, sel
         <ThemedText weight="semibold" size={textSize}>
           {label}
         </ThemedText>
-      </TouchableOpacity>
+      </Touchable>
     </Box>
   )
 }

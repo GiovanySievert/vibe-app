@@ -1,7 +1,7 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 
-import { Box, Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 
@@ -21,7 +21,7 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
         </ThemedText>
       )}
 
-      <TouchableOpacity
+      <Touchable
         activeOpacity={0.85}
         onPress={onPick}
         style={styles.previewCard}
@@ -45,7 +45,7 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
             </ThemedText>
           </Box>
         )}
-      </TouchableOpacity>
+      </Touchable>
 
       <Box flexDirection="row" gap={3}>
         <Button variant={uri ? 'outline' : 'solid'} size="sm" onPress={onPick} flex={1}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import MapboxGL from '@rnmapbox/maps'
@@ -9,6 +9,7 @@ import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type PinProps = {
   placeId: string
@@ -27,7 +28,7 @@ const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, c
       anchor={{ x: 0.5, y: 1.0 }}
     >
       <Box style={styles.wrapper}>
-        <TouchableOpacity
+        <Touchable
           onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
           accessibilityRole="button"
           accessibilityLabel={placeName ?? 'Lugar no mapa'}
@@ -40,7 +41,7 @@ const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, c
             </ThemedText>
           </Box>
           <Box style={[styles.dot, placeIsHot ? styles.dotHot : styles.dotInactive]} />
-        </TouchableOpacity>
+        </Touchable>
       </Box>
     </MapboxGL.MarkerView>
   )

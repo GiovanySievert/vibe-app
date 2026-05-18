@@ -1,6 +1,6 @@
-import { Alert, TouchableOpacity } from 'react-native'
+import { Alert } from 'react-native'
 
-import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal/swipeable-modal.component'
 import { UserModel } from '@src/shared/domain/users.model'
 
@@ -50,19 +50,19 @@ export const UsersProfileOptionsModal: React.FC<UsersProfileOptionsModalProps> =
   return (
     <SwipeableModal visible={visible} height={180} onClose={onClose}>
       <Box pt={2} pb={4}>
-        <TouchableOpacity onPress={handleBlock}>
+        <Touchable onPress={handleBlock}>
           <Box flexDirection="row" alignItems="center" gap={3} pl={6} pr={6} pt={4} pb={4}>
             <ThemedIcon name={blockData?.isBlocked ? 'ShieldOff' : 'Shield'} color="textPrimary" size={20} />
             <ThemedText size="lg">{blockData?.isBlocked ? 'Desbloquear usuário' : 'Bloquear usuário'}</ThemedText>
           </Box>
-        </TouchableOpacity>
+        </Touchable>
 
-        <TouchableOpacity onPress={handleReport}>
+        <Touchable onPress={handleReport}>
           <Box flexDirection="row" alignItems="center" gap={3} pl={6} pr={6} pt={4} pb={4}>
             <ThemedIcon name="TriangleAlert" color="textPrimary" size={20} />
             <ThemedText size="lg">Denunciar usuário</ThemedText>
           </Box>
-        </TouchableOpacity>
+        </Touchable>
       </Box>
     </SwipeableModal>
   )

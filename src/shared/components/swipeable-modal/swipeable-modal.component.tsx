@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-import { Dimensions, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Modal, StyleSheet, View } from 'react-native'
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler'
 import Animated, { clamp, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { theme } from '@src/shared/constants/theme'
+
+import { AnimatedTouchable } from '../touchable'
 
 const screenHeight = Dimensions.get('window').height
 
@@ -16,8 +18,6 @@ type SwipeableModalProps = {
   handleBarColor?: string
   onClose: () => void
 }
-
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 
 export const SwipeableModal: React.FC<SwipeableModalProps> = ({
@@ -87,7 +87,7 @@ export const SwipeableModal: React.FC<SwipeableModalProps> = ({
   return (
     <Modal transparent visible={visible} animationType="none" testID="modal--swipeable-modal">
       <GestureHandlerRootView style={styles.gestureRoot}>
-        <AnimatedTouchableOpacity
+        <AnimatedTouchable
           activeOpacity={1}
           onPress={() => isDismissible && closeModal()}
           style={[styles.overlay, overlayStyle]}

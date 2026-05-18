@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, Dimensions, ScrollView, Share, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Dimensions, ScrollView, Share, StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -8,7 +8,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Button, Divider, FakeInput, Input, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Divider, FakeInput, Input, ThemedText, Touchable } from '@src/shared/components'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -163,12 +163,12 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                 {event.name}
               </ThemedText>
             </Box>
-            <TouchableOpacity onPress={handleDelete} style={styles.iconButton}>
+            <Touchable onPress={handleDelete} style={styles.iconButton}>
               <ThemedIcon name="Trash2" size={20} color="error" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleShare} style={styles.iconButton}>
+            </Touchable>
+            <Touchable onPress={handleShare} style={styles.iconButton}>
               <ThemedIcon name="Share2" size={20} color="primary" />
-            </TouchableOpacity>
+            </Touchable>
           </Box>
 
           <Divider />
@@ -187,9 +187,9 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                   Descrição
                 </ThemedText>
                 {!isEditing && (
-                  <TouchableOpacity onPress={() => setIsEditing(true)} style={styles.iconButton}>
+                  <Touchable onPress={() => setIsEditing(true)} style={styles.iconButton}>
                     <ThemedIcon name="Pencil" size={16} color="textSecondary" />
-                  </TouchableOpacity>
+                  </Touchable>
                 )}
               </Box>
 
@@ -250,7 +250,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
               </ThemedText>
 
               {pickerPlace ? (
-                <TouchableOpacity activeOpacity={0.7} onPress={handleOpenPlace}>
+                <Touchable activeOpacity={0.7} onPress={handleOpenPlace}>
                   <Box gap={1}>
                     <ThemedText>{pickerPlace.name}</ThemedText>
                     {!![pickerPlace.type, pickerPlace.neighborhood].filter(Boolean).length && (
@@ -259,7 +259,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                       </ThemedText>
                     )}
                   </Box>
-                </TouchableOpacity>
+                </Touchable>
               ) : (
                 <ThemedText color="textSecondary">Sem local</ThemedText>
               )}

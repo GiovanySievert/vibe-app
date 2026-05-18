@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { Bell } from 'lucide-react-native'
 
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 import { useUnreadCount } from '../hooks/use-unread-count.hook'
@@ -16,7 +16,7 @@ export const NotificationBell: React.FC = () => {
 
   return (
     <>
-      <TouchableOpacity onPress={() => setOpen(true)} style={styles.button} activeOpacity={0.7}>
+      <Touchable onPress={() => setOpen(true)} style={styles.button} activeOpacity={0.7}>
         <Bell size={20} color={theme.colors.textPrimary} strokeWidth={1.5} />
         {count > 0 && (
           <Box style={styles.badge}>
@@ -25,7 +25,7 @@ export const NotificationBell: React.FC = () => {
             </ThemedText>
           </Box>
         )}
-      </TouchableOpacity>
+      </Touchable>
 
       <NotificationsModal visible={open} onClose={() => setOpen(false)} />
     </>

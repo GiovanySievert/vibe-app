@@ -1,9 +1,9 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { UserData } from '@src/features/auth/domain'
-import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 type userMenuHeaderProps = {
@@ -30,11 +30,11 @@ export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
                 {userData.email}
               </ThemedText>
             </Box>
-            <TouchableOpacity style={styles.profileButton} onPress={() => navigation.goBack()}>
+            <Touchable style={styles.profileButton} onPress={() => navigation.goBack()}>
               <ThemedText size="sm" weight="medium" style={styles.profileButtonText}>
                 ver perfil
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
           </Box>
         </Box>
       </Box>

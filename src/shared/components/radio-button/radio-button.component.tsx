@@ -1,10 +1,11 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type RadioOption = {
   label: string
@@ -48,7 +49,7 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
 
           return (
             <View key={option.value} style={styles.optionContainer}>
-              <TouchableOpacity
+              <Touchable
                 onPress={() => onValueChange(option.value)}
                 testID={`${option.value}--radio-button`}
                 style={styles.touchable}
@@ -83,7 +84,7 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
                 >
                   {option.label}
                 </ThemedText>
-              </TouchableOpacity>
+              </Touchable>
             </View>
           )
         })}

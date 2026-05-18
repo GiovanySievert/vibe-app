@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Animated, Image, Pressable, StyleSheet, View } from 'react-native'
 
+import { Touchable } from '@src/shared/components'
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
@@ -68,7 +69,7 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
           pointerEvents={overlaysHidden ? 'none' : 'auto'}
           style={[styles.thumbnailWrap, { opacity: overlayOpacity }]}
         >
-          <TouchableOpacity
+          <Touchable
             onPress={handleThumbnailPress}
             activeOpacity={1}
             accessibilityRole="button"
@@ -83,7 +84,7 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
                 accessibilityLabel={thumbLabel}
               />
             </View>
-          </TouchableOpacity>
+          </Touchable>
         </Animated.View>
       )}
     </Box>

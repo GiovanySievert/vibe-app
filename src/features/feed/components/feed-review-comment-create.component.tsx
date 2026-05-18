@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Input, ThemedIcon } from '@src/shared/components'
+import { Box, Input, ThemedIcon, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { triggerLightHaptic } from '@src/shared/utils'
 
@@ -106,13 +106,13 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
       <Box flex={1}>
         <Input value={content} onChangeText={setContent} maxLength={500} />
       </Box>
-      <TouchableOpacity
+      <Touchable
         onPress={handleCreateComment}
         disabled={!content.trim()}
         style={[styles.sendButton, !content.trim() && styles.sendButtonDisabled]}
       >
         <ThemedIcon name="Send" size={18} color="background" />
-      </TouchableOpacity>
+      </Touchable>
     </Box>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Input } from '@src/shared/components'
+import { Box, Input, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { triggerLightHaptic } from '@src/shared/utils'
@@ -79,13 +79,13 @@ export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId,
       <Box flex={1}>
         <Input value={content} onChangeText={setContent} maxLength={500} />
       </Box>
-      <TouchableOpacity
+      <Touchable
         onPress={handlePostComment}
         disabled={!content.trim()}
         style={[styles.sendButton, !content.trim() && styles.sendButtonDisabled]}
       >
         <ThemedIcon name="Send" size={18} color="background" />
-      </TouchableOpacity>
+      </Touchable>
     </Box>
   )
 }

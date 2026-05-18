@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Button, Card, Divider, LoadingPage, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Card, Divider, LoadingPage, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { formatEventDateTime, triggerLightHaptic } from '@src/shared/utils'
@@ -151,9 +151,9 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             {event.name}
           </ThemedText>
         </Box>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+        <Touchable onPress={() => navigation.goBack()} style={styles.iconButton}>
           <ThemedIcon name="X" size={20} color="textSecondary" />
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       <Divider />
@@ -187,7 +187,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             Local
           </ThemedText>
           {event.place ? (
-            <TouchableOpacity activeOpacity={0.7} onPress={handleOpenPlace}>
+            <Touchable activeOpacity={0.7} onPress={handleOpenPlace}>
               <Box gap={1}>
                 <ThemedText>{event.place.name}</ThemedText>
                 {!![event.place.type, event.place.neighborhood].filter(Boolean).length && (
@@ -196,7 +196,7 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
                   </ThemedText>
                 )}
               </Box>
-            </TouchableOpacity>
+            </Touchable>
           ) : (
             <ThemedText color="textSecondary">Sem local</ThemedText>
           )}
@@ -289,11 +289,11 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
                   Presença confirmada
                 </ThemedText>
               </Box>
-              <TouchableOpacity onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}>
+              <Touchable onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}>
                 <ThemedText size="xs" color="textSecondary">
                   Recusar convite
                 </ThemedText>
-              </TouchableOpacity>
+              </Touchable>
             </Box>
           )}
         </Box>

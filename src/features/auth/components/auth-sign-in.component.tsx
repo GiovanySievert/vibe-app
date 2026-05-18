@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { Input } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -182,7 +182,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
             />
 
             <Box mt={2} alignItems="flex-end">
-              <TouchableOpacity
+              <Touchable
                 onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}
                 accessibilityRole="link"
                 accessibilityLabel="Esqueci a senha"
@@ -190,7 +190,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
                 <ThemedText size="sm" color="textSecondary" textDecorationLine="underline">
                   esqueci a senha
                 </ThemedText>
-              </TouchableOpacity>
+              </Touchable>
             </Box>
             <Box gap={3}>
               <Button onPress={() => submitForm()} loading={loading}>
@@ -216,7 +216,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               )}
             </Box>
           </Box>
-          <TouchableOpacity
+          <Touchable
             onPress={() => goToSignUp()}
             accessibilityRole="link"
             accessibilityLabel="Criar conta"
@@ -228,7 +228,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
                 criar conta
               </ThemedText>
             </Box>
-          </TouchableOpacity>
+          </Touchable>
 
           <Box justifyContent="center" flexDirection="row" alignItems="center">
             <ThemedText variant="mono" color="textSecondary">
@@ -241,7 +241,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               os{' '}
             </ThemedText>
 
-            <TouchableOpacity
+            <Touchable
               onPress={() => navigation.navigate('TermsScreen')}
               accessibilityRole="link"
               accessibilityLabel="Termos de uso"
@@ -249,14 +249,14 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
                 termos
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
 
             <ThemedText variant="mono" color="textSecondary">
               {' '}
               e a{' '}
             </ThemedText>
 
-            <TouchableOpacity
+            <Touchable
               onPress={() => navigation.navigate('PrivacyScreen')}
               accessibilityRole="link"
               accessibilityLabel="Política de privacidade"
@@ -264,7 +264,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
                 privacidade
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
           </Box>
         </Box>
 
@@ -276,7 +276,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
           importantForAccessibility={isVerifyStepActive ? 'auto' : 'no-hide-descendants'}
         >
           <Box mb={6} flexDirection="row" alignItems="center" gap={3}>
-            <TouchableOpacity
+            <Touchable
               onPress={() => goToStep(SIGN_IN_STEPS.FORM)}
               style={styles.goBackButton}
               accessibilityRole="button"
@@ -284,7 +284,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               accessibilityHint="Volta para o formulário de login"
             >
               <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
-            </TouchableOpacity>
+            </Touchable>
             <ThemedText variant="title">confirme seu email</ThemedText>
           </Box>
           <AuthVerifyEmail

@@ -1,9 +1,8 @@
-import { TouchableOpacity } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { useUserReviews } from '@src/features/users-profile/hooks/use-user-reviews.hook'
-import { Avatar, Box, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Avatar, Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
 import { FollowStatsService } from '../services'
@@ -70,7 +69,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
             </ThemedText>
           </Box>
 
-          <TouchableOpacity onPress={handleOpenFollowers}>
+          <Touchable onPress={handleOpenFollowers}>
             <Box alignItems="center">
               <ThemedText weight="bold" size="lg" color="textPrimary">
                 {data?.followersCount ?? 0}
@@ -79,9 +78,9 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
                 seguidores
               </ThemedText>
             </Box>
-          </TouchableOpacity>
+          </Touchable>
 
-          <TouchableOpacity onPress={handleOpenFollowings}>
+          <Touchable onPress={handleOpenFollowings}>
             <Box alignItems="center">
               <ThemedText weight="bold" size="lg" color="textPrimary">
                 {data?.followingCount ?? 0}
@@ -90,7 +89,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
                 seguindo
               </ThemedText>
             </Box>
-          </TouchableOpacity>
+          </Touchable>
         </Box>
       </Box>
 

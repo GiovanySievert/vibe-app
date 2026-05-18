@@ -1,9 +1,9 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
 import { triggerLightHaptic } from '@src/shared/utils'
@@ -71,7 +71,7 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   if (compact) {
     const isFollowing = followData?.status === FollowStatus.FOLLOWING
     return (
-      <TouchableOpacity
+      <Touchable
         onPress={handlePress}
         activeOpacity={0.7}
         style={isFollowing ? styles.btnFollowing : styles.btn}
@@ -79,7 +79,7 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
         <ThemedText weight="semibold" size="sm" style={isFollowing ? styles.textFollowing : styles.text}>
           {followLabel()}
         </ThemedText>
-      </TouchableOpacity>
+      </Touchable>
     )
   }
 

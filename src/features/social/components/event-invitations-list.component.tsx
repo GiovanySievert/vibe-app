@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Avatar, Box, Button, Card, Divider, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Card, Divider, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { formatShortEventDateTime, triggerLightHaptic } from '@src/shared/utils'
@@ -44,7 +44,7 @@ const EventInvitationItem = ({
 
   return (
     <Card pr={4} pl={4} pt={4} pb={4} gap={3}>
-      <TouchableOpacity onPress={() => navigation.navigate('SharedEventScreen', { token: item.id })} activeOpacity={0.7}>
+      <Touchable onPress={() => navigation.navigate('SharedEventScreen', { token: item.id })} activeOpacity={0.7}>
         <Box gap={1}>
           <ThemedText weight="bold" size="md">
             {item.name}
@@ -53,7 +53,7 @@ const EventInvitationItem = ({
             {formatShortEventDateTime(item.date, item.time)}
           </ThemedText>
         </Box>
-      </TouchableOpacity>
+      </Touchable>
 
       {item.participants.length > 0 && (
         <Box flexDirection="row" alignItems="center" gap={2}>

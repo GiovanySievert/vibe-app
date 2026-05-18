@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useQuery } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
-import { Avatar, Box, Divider, Input, LoadingPage, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Divider, Input, LoadingPage, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
@@ -84,7 +84,7 @@ export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ 
 
             <Box gap={4}>
               {(places ?? []).map((place) => (
-                <TouchableOpacity key={place.id} onPress={() => handleSelectPlace(place)}>
+                <Touchable key={place.id} onPress={() => handleSelectPlace(place)}>
                   <Box gap={4}>
                     <Box flexDirection="row" alignItems="center" gap={4}>
                       <Avatar size="sm" square uri={place.image} placeholderIcon="MapPin" />
@@ -107,7 +107,7 @@ export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ 
                     </Box>
                     <Divider />
                   </Box>
-                </TouchableOpacity>
+                </Touchable>
               ))}
             </Box>
           </Box>

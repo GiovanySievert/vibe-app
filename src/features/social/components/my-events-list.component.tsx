@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { formatShortEventDateTime } from '@src/shared/utils'
 
@@ -11,7 +11,7 @@ import { EventResponse, EventService } from '../services/event.service'
 import { EventDetailModal } from './event-detail-modal.component'
 
 const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => void }) => (
-  <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+  <Touchable onPress={onPress} activeOpacity={0.7}>
     <Card pr={4} pl={4} pt={4} pb={4} gap={3}>
       <Box flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap={3}>
         <Box flex={1} gap={1}>
@@ -60,7 +60,7 @@ const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => vo
         </Box>
       )}
     </Card>
-  </TouchableOpacity>
+  </Touchable>
 )
 
 export const MyEventsList = () => {

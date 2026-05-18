@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { StyleSheet, TextInput, TextInputProps, TouchableOpacity } from 'react-native'
+import { StyleSheet, TextInput, TextInputProps } from 'react-native'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { icons } from 'lucide-react-native'
@@ -11,6 +11,7 @@ import { AnimatedBox } from '../animated-box'
 import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type IconName = keyof typeof icons
 
@@ -159,7 +160,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           />
 
           {isClearable && localInputValue && !disabled && (
-            <TouchableOpacity
+            <Touchable
               onPress={handleClear}
               hitSlop={HIT_SLOP}
               style={style.endIconContainer}
@@ -167,11 +168,11 @@ export const Input = forwardRef<TextInput, InputProps>(
               accessibilityLabel="Limpar campo"
             >
               <ThemedIcon name={'X'} size={18} testID="clear-button--input" color="textPrimary" />
-            </TouchableOpacity>
+            </Touchable>
           )}
 
           {!!localInputValue && !!secureTextEntry && (
-            <TouchableOpacity
+            <Touchable
               onPress={() => setSecureTextEntryisShowing((prev) => !prev)}
               style={style.endIconContainer}
               hitSlop={HIT_SLOP}
@@ -182,7 +183,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               <ThemedText size="xs" weight="medium" color="textSecondary" textDecorationLine="underline">
                 {secureTextEntryisShowing ? 'mostrar' : 'ocultar'}
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
           )}
         </Box>
 

@@ -1,9 +1,9 @@
 import React from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
+import { FlatList } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
 import { formatDistance } from '@src/shared/utils'
@@ -47,7 +47,7 @@ export const NearbyPlacesScroll: React.FC<Props> = ({ places, selectedPlaceId, o
           const isSelected = place.id === selectedPlaceId
 
           return (
-            <TouchableOpacity onPress={() => handlePlacePress(place)}>
+            <Touchable onPress={() => handlePlacePress(place)}>
               <Box
                 bg={isSelected ? 'primary' : 'background'}
                 flexDirection="row"
@@ -95,7 +95,7 @@ export const NearbyPlacesScroll: React.FC<Props> = ({ places, selectedPlaceId, o
                   {formatDistance(place.distance)}
                 </ThemedText>
               </Box>
-            </TouchableOpacity>
+            </Touchable>
           )
         }}
       />

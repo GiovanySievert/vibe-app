@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useAtomValue } from 'jotai'
 import { Search } from 'lucide-react-native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { MapWithPins } from '@src/shared/components/map'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
@@ -30,12 +30,12 @@ export const HomeScreen = () => {
             {neighborhoodLabel} · últimas 24h
           </ThemedText>
         </Box>
-        <TouchableOpacity
+        <Touchable
           onPress={() => navigation.navigate('Modals', { screen: 'SearchScreen' })}
           style={styles.searchButton}
         >
           <Search size={20} color={theme.colors.textPrimary} strokeWidth={1.5} />
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       <Box pl={4} pr={4} style={styles.mapContainer}>

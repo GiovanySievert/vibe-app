@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
+import { Touchable } from '@src/shared/components'
 import { Avatar } from '@src/shared/components/avatar'
 import { Box } from '@src/shared/components/box'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
@@ -122,14 +123,14 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
         )}
 
         <Box flexDirection="row" alignItems="center" gap={4} mt={3}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.voteBtn} onPress={() => handleReactionPress('on')}>
+          <Touchable activeOpacity={0.7} style={styles.voteBtn} onPress={() => handleReactionPress('on')}>
             <Box style={[styles.dot, counts?.viewerReaction === 'on' ? styles.dotActive : styles.dotInactive]} />
             <ThemedText size="xs" weight="medium" color={counts?.viewerReaction === 'on' ? 'primary' : 'textSecondary'}>
               on · {counts?.onCount ?? 0}
             </ThemedText>
-          </TouchableOpacity>
+          </Touchable>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.voteBtn} onPress={() => handleReactionPress('off')}>
+          <Touchable activeOpacity={0.7} style={styles.voteBtn} onPress={() => handleReactionPress('off')}>
             <Box style={[styles.dot, counts?.viewerReaction === 'off' ? styles.dotActiveOff : styles.dotInactive]} />
             <ThemedText
               size="xs"
@@ -138,18 +139,18 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
             >
               off · {counts?.offCount ?? 0}
             </ThemedText>
-          </TouchableOpacity>
+          </Touchable>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.actionBtn} onPress={() => setIsCommentsVisible(true)}>
+          <Touchable activeOpacity={0.7} style={styles.actionBtn} onPress={() => setIsCommentsVisible(true)}>
             <ThemedIcon name="MessageCircle" size={16} color="textSecondary" />
             <ThemedText size="xs" weight="medium" color="textSecondary">
               comentários · {counts?.commentsCount ?? 0}
             </ThemedText>
-          </TouchableOpacity>
+          </Touchable>
         </Box>
 
         {isOwner && totalComments > 0 ? (
-          <TouchableOpacity
+          <Touchable
             activeOpacity={0.7}
             onPress={() => setIsInteractionsVisible(true)}
             style={styles.interactionsBtn}
@@ -157,7 +158,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
             <ThemedText size="xs" color="primary">
               ver {totalComments} interações
             </ThemedText>
-          </TouchableOpacity>
+          </Touchable>
         ) : (
           <Box style={styles.interactionsBtn}>
             <ThemedText size="xs" color="textSecondary">

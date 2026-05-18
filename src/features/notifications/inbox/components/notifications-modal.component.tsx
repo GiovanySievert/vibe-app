@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { BellOff } from 'lucide-react-native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, SwipeableModal, ThemedText } from '@src/shared/components'
+import { Box, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 import { useMarkAllAsRead, useMarkAsRead } from '../hooks/use-mark-as-read.hook'
@@ -55,11 +55,11 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
         <ThemedText variant="title" size="lg">
           Notificacoes
         </ThemedText>
-        <TouchableOpacity onPress={() => markAllAsRead.mutate()} disabled={!hasUnread || markAllAsRead.isPending}>
+        <Touchable onPress={() => markAllAsRead.mutate()} disabled={!hasUnread || markAllAsRead.isPending}>
           <ThemedText size="sm" color={hasUnread ? 'primary' : 'textSecondary'}>
             Marcar todas
           </ThemedText>
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       {isInitialLoading ? (

@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import { Dimensions, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, FlatList, StyleSheet } from 'react-native'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { Touchable } from '@src/shared/components'
 import { Avatar } from '@src/shared/components/avatar'
 import { Box } from '@src/shared/components/box'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'
@@ -64,7 +65,7 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
   return (
     <SwipeableModal visible={visible} onClose={onClose} height={MODAL_HEIGHT}>
       <Box style={styles.tabs}>
-        <TouchableOpacity style={styles.tab} onPress={() => setActiveTab('on')}>
+        <Touchable style={styles.tab} onPress={() => setActiveTab('on')}>
           <ThemedText
             size="sm"
             weight={activeTab === 'on' ? 'semibold' : 'regular'}
@@ -73,9 +74,9 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
             on {onCount}
           </ThemedText>
           {activeTab === 'on' && <Box style={styles.tabUnderline} />}
-        </TouchableOpacity>
+        </Touchable>
 
-        <TouchableOpacity style={styles.tab} onPress={() => setActiveTab('off')}>
+        <Touchable style={styles.tab} onPress={() => setActiveTab('off')}>
           <ThemedText
             size="sm"
             weight={activeTab === 'off' ? 'semibold' : 'regular'}
@@ -84,7 +85,7 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
             off {offCount}
           </ThemedText>
           {activeTab === 'off' && <Box style={styles.tabUnderline} />}
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       <FlatList

@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
+import { Touchable } from '@src/shared/components'
 import { Box } from '@src/shared/components/box'
 import { LoadingPage } from '@src/shared/components/loading-page'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
@@ -32,9 +33,9 @@ export const SharedReviewScreen: React.FC<Props> = ({ route, navigation }) => {
     <Box style={styles.container}>
       <Box style={styles.header} pl={5} pr={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
         <ThemedText weight="semibold" size="lg">review</ThemedText>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+        <Touchable onPress={() => navigation.goBack()} style={styles.iconButton}>
           <ThemedIcon name="X" size={20} color="textSecondary" />
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       {isLoading ? (

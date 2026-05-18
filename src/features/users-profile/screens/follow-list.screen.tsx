@@ -1,12 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Input, ThemedText } from '@src/shared/components'
+import { Box, Input, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -89,14 +89,14 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
   return (
     <Screen>
       <Box style={styles.header}>
-        <TouchableOpacity
+        <Touchable
           onPress={() => navigation.goBack()}
           hitSlop={HIT_SLOP}
           accessibilityRole="button"
           accessibilityLabel="Voltar"
         >
           <ThemedIcon name="ArrowLeft" size={22} color="textPrimary" />
-        </TouchableOpacity>
+        </Touchable>
         <ThemedText weight="semibold" size="md" color="textPrimary">
           @{username}
         </ThemedText>
@@ -104,7 +104,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
       </Box>
 
       <Box style={styles.tabs}>
-        <TouchableOpacity style={styles.tab} onPress={() => setActiveTab('followers')}>
+        <Touchable style={styles.tab} onPress={() => setActiveTab('followers')}>
           <ThemedText
             weight={activeTab === 'followers' ? 'semibold' : 'regular'}
             color={activeTab === 'followers' ? 'textPrimary' : 'textSecondary'}
@@ -113,9 +113,9 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
             seguidores {statsData?.followersCount ?? 0}
           </ThemedText>
           {activeTab === 'followers' && <Box style={styles.tabUnderline} />}
-        </TouchableOpacity>
+        </Touchable>
 
-        <TouchableOpacity style={styles.tab} onPress={() => setActiveTab('followings')}>
+        <Touchable style={styles.tab} onPress={() => setActiveTab('followings')}>
           <ThemedText
             weight={activeTab === 'followings' ? 'semibold' : 'regular'}
             color={activeTab === 'followings' ? 'textPrimary' : 'textSecondary'}
@@ -124,7 +124,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
             seguindo {statsData?.followingCount ?? 0}
           </ThemedText>
           {activeTab === 'followings' && <Box style={styles.tabUnderline} />}
-        </TouchableOpacity>
+        </Touchable>
       </Box>
 
       <Box pl={5} pr={5} pt={3} pb={2}>

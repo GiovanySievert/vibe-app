@@ -1,9 +1,9 @@
 import React from 'react'
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { useNavigateToProfile } from '@src/shared/hooks'
 import { formatRelativeTime, HIT_SLOP } from '@src/shared/utils'
@@ -80,14 +80,14 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, re
         </ThemedText>
       </Box>
       {canDelete && (
-        <TouchableOpacity
+        <Touchable
           onPress={handleDelete}
           hitSlop={HIT_SLOP}
           accessibilityRole="button"
           accessibilityLabel="Excluir comentário"
         >
           <ThemedIcon name="Trash2" size={14} color="textSecondary" />
-        </TouchableOpacity>
+        </Touchable>
       )}
     </Box>
   )

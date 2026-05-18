@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { HotPlaceItem } from '@src/features/search/domain'
-import { Avatar, Box, Divider, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Divider, ThemedText, Touchable } from '@src/shared/components'
 import { formatDistance } from '@src/shared/utils'
 
 type HotPlacesCardProps = {
@@ -29,14 +29,14 @@ export const HotPlacesCard: React.FC<HotPlacesCardProps> = ({ item, index }) => 
           {position}
         </ThemedText>
         <Avatar size="sm" square placeholderIcon="MapPin" />
-        <TouchableOpacity onPress={handleNavigate} style={styles.content}>
+        <Touchable onPress={handleNavigate} style={styles.content}>
           <ThemedText color="textPrimary" weight="medium" size="lg">
             {item.name}
           </ThemedText>
           <ThemedText color="textSecondary" variant="mono" size="xs" letterSpacing="wider">
             {formatDistance(item.distance)}
           </ThemedText>
-        </TouchableOpacity>
+        </Touchable>
         {item.isHot && (
           <ThemedText size="sm" color="success" weight="semibold">
             em alta

@@ -1,10 +1,10 @@
 import React from 'react'
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
-import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { formatRelativeTime, HIT_SLOP } from '@src/shared/utils'
@@ -97,9 +97,9 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
           </Box>
           {canDelete && (
             <Box>
-              <TouchableOpacity onPress={() => deleteComment(item.id)} hitSlop={HIT_SLOP}>
+              <Touchable onPress={() => deleteComment(item.id)} hitSlop={HIT_SLOP}>
                 <ThemedIcon name="Trash2" size={16} color="textSecondary" />
-              </TouchableOpacity>
+              </Touchable>
             </Box>
           )}
         </Box>

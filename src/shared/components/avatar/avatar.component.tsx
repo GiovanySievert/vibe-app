@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, Image, type ImageSourcePropType, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, type ImageSourcePropType, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { icons } from 'lucide-react-native'
@@ -7,6 +7,7 @@ import { icons } from 'lucide-react-native'
 import { theme } from '@src/shared/constants/theme'
 
 import { ThemedIcon } from '../themed-icon/themed-icon.component'
+import { Touchable } from '../touchable'
 
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 type IconName = keyof typeof icons
@@ -167,14 +168,14 @@ export const Avatar: React.FC<AvatarProps> = ({
   return (
     <>
       {onPress ? (
-        <TouchableOpacity
+        <Touchable
           onPress={onPress}
           activeOpacity={0.7}
           accessibilityRole="button"
           accessibilityLabel={resolvedLabel}
         >
           {content}
-        </TouchableOpacity>
+        </Touchable>
       ) : (
         content
       )}

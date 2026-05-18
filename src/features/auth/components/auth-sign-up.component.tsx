@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { useMutation } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { validationMapErrors } from '@src/shared/utils'
@@ -155,7 +155,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   return (
     <Box flex={1} style={styles.container}>
       <Box pl={6} pr={6} pt={2} pb={6} flexDirection="row" alignItems="center">
-        <TouchableOpacity
+        <Touchable
           onPress={handleBack}
           style={styles.goBackButton}
           accessibilityRole="button"
@@ -163,7 +163,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
           accessibilityHint="Volta para o passo anterior do cadastro"
         >
           <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
-        </TouchableOpacity>
+        </Touchable>
 
         <Box flex={1} flexDirection="row" gap={2} style={{ justifyContent: 'center' }}>
           {PROGRESS_STEPS.map((_, i) => (

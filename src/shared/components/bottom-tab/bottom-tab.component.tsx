@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -8,6 +8,7 @@ import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type BottomTabProps = BottomTabBarProps
 
@@ -82,7 +83,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
 
         if (route.name === 'PostScreen') {
           return (
-            <TouchableOpacity
+            <Touchable
               style={styles.centerButton}
               key={route.key}
               onPress={onPress}
@@ -93,7 +94,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
               <ThemedText size="sm" color="background" weight="semibold" numberOfLines={1} ellipsizeMode="clip">
                 postar
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
           )
         }
 

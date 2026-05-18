@@ -1,6 +1,5 @@
-import { TouchableOpacity } from 'react-native'
 
-import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 
 import { UsersProfileFollowActions } from './users-profile-follow-actions.component'
@@ -17,9 +16,9 @@ export const UsersProfileTopBar: React.FC<UsersProfileTopBarProps> = ({ userData
     </ThemedText>
     <Box flexDirection="row" alignItems="center" gap={3}>
       <UsersProfileFollowActions userData={userData} compact />
-      <TouchableOpacity onPress={onOpenOptions}>
+      <Touchable onPress={onOpenOptions}>
         <ThemedIcon name="Ellipsis" color="textPrimary" size={22} />
-      </TouchableOpacity>
+      </Touchable>
     </Box>
   </Box>
 )

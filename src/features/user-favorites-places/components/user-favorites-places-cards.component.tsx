@@ -1,11 +1,11 @@
 import React from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
+import { FlatList } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useAtom } from 'jotai'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Avatar, Box, Card, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { userFavoritesPlacesAtom } from '@src/shared/state'
 
 interface UserFavoritePlace {
@@ -26,7 +26,7 @@ export const UserFavoritesPlacesCards = () => {
     return (
       <>
         <Box pl={4} pr={4} pb={4} pt={4}>
-          <TouchableOpacity
+          <Touchable
             onPress={() =>
               navigation.navigate('Modals', {
                 screen: 'PlacesDetailsScreen',
@@ -50,12 +50,12 @@ export const UserFavoritesPlacesCards = () => {
               </Box>
 
               <Box mt={3}>
-                <TouchableOpacity>
+                <Touchable>
                   <ThemedIcon name="ChevronRight" size={16} color="textSecondary" />
-                </TouchableOpacity>
+                </Touchable>
               </Box>
             </Box>
-          </TouchableOpacity>
+          </Touchable>
         </Box>
 
         {index !== userFavoritesPlaces.length - 1 && <Divider />}

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Alert, Share, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Share, StyleSheet } from 'react-native'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as ExpoLinking from 'expo-linking'
 
 import { useToast } from '@src/app/providers/toast.provider'
+import { Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
@@ -82,9 +83,9 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
   }
 
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={handleMenuPress} style={styles.menuBtn}>
+    <Touchable activeOpacity={0.7} onPress={handleMenuPress} style={styles.menuBtn}>
       <ThemedIcon name="Ellipsis" size={18} color="textSecondary" />
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

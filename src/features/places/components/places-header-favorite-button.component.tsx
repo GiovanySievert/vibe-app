@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react'
-import { TouchableOpacity } from 'react-native'
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated'
+import { useAnimatedStyle, useSharedValue, withSequence, withSpring } from 'react-native-reanimated'
 
 import { useAtom, useSetAtom } from 'jotai'
 
 import { UserFavoritesPlacesService } from '@src/features/user-favorites-places/services'
-import { Box, ThemedIcon } from '@src/shared/components'
+import { AnimatedTouchable, Box, ThemedIcon } from '@src/shared/components'
 import { PlacesByIdResponse } from '@src/shared/domain'
 import { useUserFavoritesPlaces } from '@src/shared/hooks/use-user-favorites-places.hook'
 import { userFavoritesPlacesAtom } from '@src/shared/state'
@@ -14,8 +13,6 @@ import { HIT_SLOP, triggerLightHaptic } from '@src/shared/utils'
 type PlacesHeaderFavoriteButtonProps = {
   place: PlacesByIdResponse
 }
-
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
 export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProps> = ({ place }) => {
   const scale = useSharedValue(1)
@@ -57,13 +54,13 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
 
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
-      <AnimatedTouchableOpacity
+      <AnimatedTouchable
         hitSlop={HIT_SLOP}
         onPress={() => (isPlaceFavorited ? unfavoritePlace() : favoritePlace())}
         style={animatedStyle}
       >
         <ThemedIcon name="Heart" color="background" type={isPlaceFavorited ? 'solid' : 'light'} size={20} />
-      </AnimatedTouchableOpacity>
+      </AnimatedTouchable>
     </Box>
   )
 }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { SearchService } from '@src/features/search/services'
-import { Avatar, Box, Button, Divider, Input, LoadingPage, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Button, Divider, Input, LoadingPage, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useDebounce } from '@src/shared/hooks'
@@ -57,7 +57,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
         {selected.length > 0 && (
           <Box flexDirection="row" flexWrap="wrap" gap={2}>
             {selected.map((username) => (
-              <TouchableOpacity key={username.id} onPress={() => onToggle(username)}>
+              <Touchable key={username.id} onPress={() => onToggle(username)}>
                 <Box style={styles.chip} flexDirection="row" alignItems="center" gap={1}>
                   <ThemedText size="sm" color="primary">
                     {username.username}
@@ -66,7 +66,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
                     ×
                   </ThemedText>
                 </Box>
-              </TouchableOpacity>
+              </Touchable>
             ))}
           </Box>
         )}
@@ -95,7 +95,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
           (users ?? []).map((user) => {
             const checked = isSelected(user)
             return (
-              <TouchableOpacity key={user.id} onPress={() => onToggle(user)}>
+              <Touchable key={user.id} onPress={() => onToggle(user)}>
                 <Box flexDirection="row" alignItems="center" gap={3} pt={3} pb={3}>
                   <Avatar size="sm" uri={user.image} />
                   <Box flex={1}>
@@ -114,7 +114,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
                   </Box>
                 </Box>
                 <Divider />
-              </TouchableOpacity>
+              </Touchable>
             )
           })}
       </Box>

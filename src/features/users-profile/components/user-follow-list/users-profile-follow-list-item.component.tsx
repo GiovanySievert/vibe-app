@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
-import { Avatar, Box, ThemedText } from '@src/shared/components'
+import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { useNavigateToProfile } from '@src/shared/hooks'
 
 import { ListFollowersResponse } from '../../types'
@@ -21,7 +21,7 @@ export const UsersProfileFollowListItem: React.FC<UsersProfileFollowListItem> = 
   const navigateToProfile = useNavigateToProfile()
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => navigateToProfile(followRelation.userId)}>
+    <Touchable style={styles.container} onPress={() => navigateToProfile(followRelation.userId)}>
       <Avatar size="sm" uri={followRelation.image} fallbackLetter={followRelation.name || followRelation.username} />
       <Box flex={1} gap={1}>
         <ThemedText weight="semibold" size="sm" color="textPrimary">
@@ -32,7 +32,7 @@ export const UsersProfileFollowListItem: React.FC<UsersProfileFollowListItem> = 
         </ThemedText>
       </Box>
       {isUserLoggedProfile && <UsersProfileFollowListActions followRelation={followRelation} type={type} />}
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

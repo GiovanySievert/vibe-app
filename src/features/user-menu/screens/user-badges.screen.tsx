@@ -1,19 +1,14 @@
 import React from 'react'
-import { Alert, DimensionValue, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, DimensionValue, ScrollView, StyleSheet } from 'react-native'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
 import {
-  BadgesService,
-  MY_BADGE_PROGRESS_QUERY_KEY,
-  MY_BADGES_QUERY_KEY,
-  PlaceBadgeListItem,
-  PlaceBadgeProgressItem,
-  USER_BADGES_QUERY_KEY
+  BadgesService, MY_BADGE_PROGRESS_QUERY_KEY, MY_BADGES_QUERY_KEY, PlaceBadgeListItem, PlaceBadgeProgressItem, USER_BADGES_QUERY_KEY
 } from '@src/features/users-profile/services'
-import { Box, Card, GoBackButton, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, Card, GoBackButton, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 
@@ -44,7 +39,7 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, disabled, onPress }) => {
   const isSelected = badge.visibleOnProfile
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress} disabled={disabled}>
+    <Touchable activeOpacity={0.8} onPress={onPress} disabled={disabled}>
       <Card p={5} gap={4} style={[styles.card, isSelected ? styles.cardSelected : styles.cardInactive]}>
         <Box flexDirection="row" alignItems="center" gap={4}>
           <Box style={[styles.countBadge, isSelected ? styles.countBadgeSelected : styles.countBadgeInactive]}>
@@ -75,7 +70,7 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, disabled, onPress }) => {
           </Box>
         ) : null}
       </Card>
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

@@ -1,9 +1,10 @@
 import React from 'react'
-import { Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, Image, StyleSheet } from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient'
 
 import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
+import { Touchable } from '@src/shared/components'
 import { Box } from '@src/shared/components/box'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
@@ -25,7 +26,7 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
   const shouldShowSelfie = Boolean(item.placeImageUrl && item.selfieUrl)
 
   return (
-    <TouchableOpacity
+    <Touchable
       activeOpacity={0.8}
       onPress={() => onPress(item)}
       accessibilityRole="button"
@@ -66,7 +67,7 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
           </ThemedText>
         </LinearGradient>
       </Box>
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

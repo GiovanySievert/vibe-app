@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import * as ImagePicker from 'expo-image-picker'
 
-import { Avatar, Box, ThemedIcon } from '@src/shared/components'
+import { Avatar, Box, ThemedIcon, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 
 type EditableAvatarProps = {
@@ -30,12 +30,12 @@ export const EditableAvatar = ({ currentUri, onAvatarChange }: EditableAvatarPro
   }
 
   return (
-    <TouchableOpacity onPress={pickAvatar} style={styles.container}>
+    <Touchable onPress={pickAvatar} style={styles.container}>
       <Avatar uri={localUri ?? currentUri} size="lg" />
       <Box style={styles.editIcon}>
         <ThemedIcon name="Pen" size={16} color="textPrimary" />
       </Box>
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

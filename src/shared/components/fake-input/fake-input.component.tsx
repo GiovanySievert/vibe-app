@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, TextInputProps, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, TextInputProps, TouchableWithoutFeedback } from 'react-native'
 
 import { icons } from 'lucide-react-native'
 
@@ -9,6 +9,7 @@ import { AnimatedBox } from '../animated-box'
 import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type IconName = keyof typeof icons
 
@@ -104,17 +105,17 @@ export const FakeInput = ({
             {hasSecondBox && (
               <Box flex={1}>
                 {isClearable && localInputValue && (
-                  <TouchableOpacity
+                  <Touchable
                     onPress={handleClear}
                     style={{ zIndex: 10 }}
                     accessibilityRole="button"
                     accessibilityLabel="Limpar campo"
                   >
                     <ThemedIcon name="X" size={18} color="textSecondary" testID="clear-button--input" />
-                  </TouchableOpacity>
+                  </Touchable>
                 )}
                 {!isClearable && endIconName && (
-                  <TouchableOpacity
+                  <Touchable
                     onPress={onEndIconPress}
                     style={{ position: 'absolute', right: 0, zIndex: 10, bottom: -10 }}
                     accessibilityRole="button"
@@ -126,7 +127,7 @@ export const FakeInput = ({
                       color="textSecondary"
                       testID="end-icon--input"
                     />
-                  </TouchableOpacity>
+                  </Touchable>
                 )}
               </Box>
             )}

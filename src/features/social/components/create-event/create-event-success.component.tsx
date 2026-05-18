@@ -1,7 +1,7 @@
 import React from 'react'
-import { Share, StyleSheet, TouchableOpacity } from 'react-native'
+import { Share, StyleSheet } from 'react-native'
 
-import { Box, Button, ThemedText } from '@src/shared/components'
+import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 
@@ -50,9 +50,9 @@ export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventNam
               {eventLink || 'Gerando link...'}
             </ThemedText>
             {eventLink ? (
-              <TouchableOpacity onPress={handleShare} hitSlop={styles.copyHitSlop}>
+              <Touchable onPress={handleShare} hitSlop={styles.copyHitSlop}>
                 <ThemedIcon name="Share2" size={18} color="primary" />
-              </TouchableOpacity>
+              </Touchable>
             ) : null}
           </Box>
         </Box>

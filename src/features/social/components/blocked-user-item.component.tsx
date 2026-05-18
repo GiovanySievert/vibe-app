@@ -1,8 +1,7 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
-import { Avatar, Box, Card, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Card, ThemedText, Touchable } from '@src/shared/components'
 import { useNavigateToProfile } from '@src/shared/hooks'
 
 import { BlockedUserActions } from './blocked-user-actions.component'
@@ -20,11 +19,11 @@ export const BlockedUserItem = ({ item, onUnblock }: BlockedUserItemProps) => {
   return (
     <Card pr={3} pl={3} pt={3} pb={3}>
       <Box flexDirection="row" alignItems="center" gap={3}>
-        <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
+        <Touchable onPress={handlePress} activeOpacity={0.7}>
           <Avatar uri={item.avatar} size="sm" />
-        </TouchableOpacity>
+        </Touchable>
 
-        <TouchableOpacity onPress={handlePress} activeOpacity={0.7} style={{ flex: 1 }}>
+        <Touchable onPress={handlePress} activeOpacity={0.7} style={{ flex: 1 }}>
           <Box gap={1}>
             <ThemedText weight="bold" size="md" textTransform="capitalize">
               {item.username}
@@ -33,7 +32,7 @@ export const BlockedUserItem = ({ item, onUnblock }: BlockedUserItemProps) => {
               @{item.username}
             </ThemedText>
           </Box>
-        </TouchableOpacity>
+        </Touchable>
 
         <BlockedUserActions userId={item.userId} username={item.username} onUnblock={onUnblock} />
       </Box>

@@ -1,7 +1,7 @@
 import React from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
 
@@ -25,7 +25,7 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
         />
       ) : null}
 
-      <TouchableOpacity
+      <Touchable
         style={styles.backButton}
         onPress={onBack}
         activeOpacity={0.8}
@@ -34,7 +34,7 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
         accessibilityHint="Volta para a tela anterior"
       >
         <ThemedText style={styles.backArrow}>←</ThemedText>
-      </TouchableOpacity>
+      </Touchable>
 
       <Box style={styles.actionsContainer}>
         <PlacesActions place={place} />

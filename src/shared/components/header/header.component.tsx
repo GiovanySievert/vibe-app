@@ -1,5 +1,4 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
 import { getHeaderTitle } from '@react-navigation/elements'
 import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -10,6 +9,7 @@ import { Box } from '../box'
 import { Divider } from '../divider'
 import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 
 type HeaderProps = NativeStackHeaderProps
 
@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ navigation, route, options }) =>
         backgroundColor: theme.colors.background
       }}
     >
-      <TouchableOpacity
+      <Touchable
         onPress={() => handleGoBack()}
         accessibilityRole="button"
         accessibilityLabel="Voltar"
@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ navigation, route, options }) =>
             {title}
           </ThemedText>
         </Box>
-      </TouchableOpacity>
+      </Touchable>
       <Divider />
     </SafeAreaView>
   )

@@ -1,8 +1,8 @@
-import { Pressable, TouchableOpacity } from 'react-native'
+import { Pressable } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Avatar, Box, Divider, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Avatar, Box, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { PlacesModel } from '@src/shared/domain'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useNavigateToProfile } from '@src/shared/hooks'
@@ -49,7 +49,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
           uri={isPlace ? placeData.image : (userData.image ?? undefined)}
           placeholderIcon={isPlace ? 'MapPin' : 'User'}
         />
-        <TouchableOpacity onPress={() => handleNavigation()} style={{ flex: 1 }}>
+        <Touchable onPress={() => handleNavigation()} style={{ flex: 1 }}>
           {isPlace ? (
             <>
               <ThemedText color="textPrimary" weight="medium" size="lg">
@@ -71,7 +71,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
               </ThemedText>
             </>
           )}
-        </TouchableOpacity>
+        </Touchable>
         {onRemove && (
           <Pressable
             onPress={onRemove}

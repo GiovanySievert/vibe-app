@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { theme } from '@src/shared/constants/theme'
 import { HIT_SLOP } from '@src/shared/utils'
 
 import { ThemedIcon } from '../themed-icon'
+import { Touchable } from '../touchable'
 
 type GoBackButtonProps = {
   onPress?: () => void
@@ -21,7 +22,7 @@ export const GoBackButton: React.FC<GoBackButtonProps> = ({
   const navigation = useNavigation()
 
   return (
-    <TouchableOpacity
+    <Touchable
       onPress={onPress ?? (() => navigation.goBack())}
       style={styles.button}
       accessibilityRole="button"
@@ -30,7 +31,7 @@ export const GoBackButton: React.FC<GoBackButtonProps> = ({
       hitSlop={HIT_SLOP}
     >
       <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
-    </TouchableOpacity>
+    </Touchable>
   )
 }
 

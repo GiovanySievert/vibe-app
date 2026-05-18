@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { useToast } from '@src/app/providers/toast.provider'
-import { Box, SwipeableModal, ThemedText } from '@src/shared/components'
+import { Box, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
@@ -125,9 +125,9 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
             <ThemedText weight="semibold" size="lg">
               Crie seu evento
             </ThemedText>
-            <TouchableOpacity onPress={handleClose} hitSlop={styles.closeHitSlop}>
+            <Touchable onPress={handleClose} hitSlop={styles.closeHitSlop}>
               <ThemedIcon name="X" size={20} color="textSecondary" />
-            </TouchableOpacity>
+            </Touchable>
           </Box>
 
           {showProgress && (

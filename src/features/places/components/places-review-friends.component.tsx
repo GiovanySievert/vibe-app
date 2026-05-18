@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import { Dimensions, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, FlatList, StyleSheet } from 'react-native'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { Avatar, Box, SwipeableModal, ThemedText } from '@src/shared/components'
+import { Avatar, Box, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { useNavigateToProfile } from '@src/shared/hooks'
 
@@ -56,7 +56,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
 
   const renderItem = useCallback(
     ({ item }: { item: PlaceReviewFriend }) => (
-      <TouchableOpacity
+      <Touchable
         activeOpacity={0.7}
         onPress={() => handlePressFriend(item.id)}
         accessibilityRole="button"
@@ -73,7 +73,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
             </ThemedText>
           </Box>
         </Box>
-      </TouchableOpacity>
+      </Touchable>
     ),
     [handlePressFriend]
   )
@@ -105,7 +105,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
           </Box>
 
           {data.total > 1 ? (
-            <TouchableOpacity
+            <Touchable
               activeOpacity={0.7}
               onPress={() => setModalVisible(true)}
               accessibilityRole="button"
@@ -114,7 +114,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
               <ThemedText color="textPrimary" weight="semibold">
                 ver todos {data.total}
               </ThemedText>
-            </TouchableOpacity>
+            </Touchable>
           ) : null}
         </Box>
       </Box>
