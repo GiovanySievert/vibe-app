@@ -66,7 +66,13 @@ export const FakeInput = ({
           </ThemedText>
         </Box>
       )}
-      <TouchableWithoutFeedback onPress={onPress} style={{ flex: 1 }}>
+      <TouchableWithoutFeedback
+        onPress={onPress}
+        style={{ flex: 1 }}
+        accessibilityRole="button"
+        accessibilityLabel={label ?? (typeof placeholder === 'string' ? placeholder : undefined)}
+        accessibilityState={{ disabled }}
+      >
         <Box style={[styles.input, errorMessage && styles.inputError]} testID="fake-input-field--fake-input">
           <Box flexDirection="row" alignItems="center" justifyContent="space-between" flex={1}>
             <Box flexDirection="row" alignItems="center" flex={8}>
@@ -98,7 +104,12 @@ export const FakeInput = ({
             {hasSecondBox && (
               <Box flex={1}>
                 {isClearable && localInputValue && (
-                  <TouchableOpacity onPress={handleClear} style={{ zIndex: 10 }}>
+                  <TouchableOpacity
+                    onPress={handleClear}
+                    style={{ zIndex: 10 }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Limpar campo"
+                  >
                     <ThemedIcon name="X" size={18} color="textSecondary" testID="clear-button--input" />
                   </TouchableOpacity>
                 )}
@@ -106,6 +117,8 @@ export const FakeInput = ({
                   <TouchableOpacity
                     onPress={onEndIconPress}
                     style={{ position: 'absolute', right: 0, zIndex: 10, bottom: -10 }}
+                    accessibilityRole="button"
+                    accessibilityLabel="Ação do campo"
                   >
                     <ThemedIcon
                       name={endIconName as IconName}
@@ -122,7 +135,7 @@ export const FakeInput = ({
       </TouchableWithoutFeedback>
       {errorMessage && (
         <AnimatedBox isVisible={!!errorMessage}>
-          <Box mt={2}>
+          <Box mt={2} accessibilityLiveRegion="polite" accessibilityRole="alert">
             <ThemedText size="sm" weight="semibold" color="error">
               {errorMessage}
             </ThemedText>

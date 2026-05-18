@@ -21,9 +21,21 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
         </ThemedText>
       )}
 
-      <TouchableOpacity activeOpacity={0.85} onPress={onPick} style={styles.previewCard}>
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={onPick}
+        style={styles.previewCard}
+        accessibilityRole="button"
+        accessibilityLabel={uri ? 'Trocar foto do evento' : 'Adicionar foto do evento'}
+      >
         {uri ? (
-          <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+          <Image
+            source={{ uri }}
+            style={styles.image}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel="Foto do evento selecionada"
+          />
         ) : (
           <Box alignItems="center" justifyContent="center" gap={2} style={styles.emptyState}>
             <ThemedIcon name="ImagePlus" size={24} color="textSecondary" />

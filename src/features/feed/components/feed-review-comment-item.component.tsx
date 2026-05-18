@@ -6,7 +6,7 @@ import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query
 import { Avatar, Box, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { useNavigateToProfile } from '@src/shared/hooks'
-import { formatRelativeTime } from '@src/shared/utils'
+import { formatRelativeTime, HIT_SLOP } from '@src/shared/utils'
 
 import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
 import { FeedService } from '../services'
@@ -80,7 +80,12 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, re
         </ThemedText>
       </Box>
       {canDelete && (
-        <TouchableOpacity onPress={handleDelete} hitSlop={8}>
+        <TouchableOpacity
+          onPress={handleDelete}
+          hitSlop={HIT_SLOP}
+          accessibilityRole="button"
+          accessibilityLabel="Excluir comentário"
+        >
           <ThemedIcon name="Trash2" size={14} color="textSecondary" />
         </TouchableOpacity>
       )}

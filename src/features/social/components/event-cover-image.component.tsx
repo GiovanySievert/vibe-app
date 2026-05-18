@@ -37,13 +37,35 @@ export const EventCoverImage: React.FC<EventCoverImageProps> = ({ uri, height = 
 
   return (
     <>
-      <Pressable onPress={openModal}>
-        <Image source={{ uri }} style={[styles.coverImage, { height }]} resizeMode="cover" />
+      <Pressable
+        onPress={openModal}
+        accessibilityRole="imagebutton"
+        accessibilityLabel="Imagem de capa do evento"
+        accessibilityHint="Toque para ampliar"
+      >
+        <Image
+          source={{ uri }}
+          style={[styles.coverImage, { height }]}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel="Imagem de capa do evento"
+        />
       </Pressable>
 
       <Modal visible={visible} transparent animationType="none" statusBarTranslucent onRequestClose={closeModal}>
-        <Pressable style={styles.backdrop} onPress={closeModal}>
-          <Animated.Image source={{ uri }} resizeMode="contain" style={[styles.fullImage, animatedStyle]} />
+        <Pressable
+          style={styles.backdrop}
+          onPress={closeModal}
+          accessibilityRole="button"
+          accessibilityLabel="Fechar imagem"
+        >
+          <Animated.Image
+            source={{ uri }}
+            resizeMode="contain"
+            style={[styles.fullImage, animatedStyle]}
+            accessible
+            accessibilityLabel="Imagem de capa do evento"
+          />
         </Pressable>
       </Modal>
     </>

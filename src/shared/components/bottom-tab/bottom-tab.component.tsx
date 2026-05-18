@@ -32,7 +32,14 @@ const TabItem: React.FC<TabItemProps> = ({ label, isFocused, onPress }) => {
   }))
 
   return (
-    <Pressable onPress={onPress} testID="tab-item" style={styles.pressable}>
+    <Pressable
+      onPress={onPress}
+      testID="tab-item"
+      style={styles.pressable}
+      accessibilityRole="tab"
+      accessibilityLabel={label}
+      accessibilityState={{ selected: isFocused }}
+    >
       <AnimatedThemedText weight="medium" numberOfLines={1} ellipsizeMode="clip" style={animatedTextStyle}>
         {label}
       </AnimatedThemedText>
@@ -47,6 +54,7 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
     <Box
       flexDirection="row"
       justifyContent="space-between"
+      accessibilityRole="tablist"
       style={[
         styles.containerTabs,
         {
@@ -74,7 +82,14 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
 
         if (route.name === 'PostScreen') {
           return (
-            <TouchableOpacity style={styles.centerButton} key={route.key} onPress={onPress}>
+            <TouchableOpacity
+              style={styles.centerButton}
+              key={route.key}
+              onPress={onPress}
+              accessibilityRole="button"
+              accessibilityLabel="Postar"
+              accessibilityHint="Abre a tela de criar um novo post"
+            >
               <ThemedText size="sm" color="background" weight="semibold" numberOfLines={1} ellipsizeMode="clip">
                 postar
               </ThemedText>

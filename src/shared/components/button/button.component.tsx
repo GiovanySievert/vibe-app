@@ -13,6 +13,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from '
 import { icons } from 'lucide-react-native'
 
 import { theme } from '@src/shared/constants/theme'
+import { HIT_SLOP } from '@src/shared/utils'
 
 import { ThemedIcon } from '../themed-icon'
 
@@ -22,7 +23,7 @@ type ButtonSize = 'sm' | 'md'
 type IconName = keyof typeof icons
 
 const SIZE_STYLES: Record<ButtonSize, Pick<ViewStyle, 'height' | 'borderRadius' | 'paddingHorizontal'>> = {
-  sm: { height: 40, borderRadius: 10, paddingHorizontal: 14 },
+  sm: { height: 44, borderRadius: 10, paddingHorizontal: 14 },
   md: { height: 58, borderRadius: 12, paddingHorizontal: 16 }
 }
 
@@ -98,7 +99,7 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         case 'text':
           return { ...base, backgroundColor: 'transparent', height: undefined, paddingVertical: 4 }
         case 'icon':
-          return { ...base, height: 40, width: 40, backgroundColor: typeColors[type], borderRadius: 9999 }
+          return { ...base, height: 44, width: 44, backgroundColor: typeColors[type], borderRadius: 9999 }
         default:
           return base
       }
@@ -124,6 +125,9 @@ export const Button = React.forwardRef<View, PropsWithChildren<ButtonProps>>(
         onPressOut={handlePressOut}
         disabled={disabled || loading}
         testID={testID || 'button-container--button'}
+        accessibilityRole={props.accessibilityRole ?? 'button'}
+        accessibilityState={{ disabled: !!disabled, busy: !!loading, ...(props.accessibilityState ?? {}) }}
+        hitSlop={props.hitSlop ?? HIT_SLOP}
         style={[
           getButtonStyle(variant, type, size, disabled),
           pressed && { opacity: 0.7 },

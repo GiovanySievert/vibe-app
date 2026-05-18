@@ -44,6 +44,7 @@ type AvatarProps = {
   placeholderIcon?: IconName
   fallbackLetter?: string
   onPress?: () => void
+  accessibilityLabel?: string
 }
 
 function createStyles(size: number, square = false, hasPlaceholder = false) {
@@ -95,8 +96,11 @@ export const Avatar: React.FC<AvatarProps> = ({
   pressable = false,
   placeholderIcon,
   fallbackLetter,
-  onPress
+  onPress,
+  accessibilityLabel
 }) => {
+  const resolvedLabel =
+    accessibilityLabel ?? (fallbackLetter ? `Foto de perfil de ${fallbackLetter}` : 'Foto de perfil')
   const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
   const hasPlaceholder = !!(placeholderIcon || fallbackLetter)
@@ -127,9 +131,15 @@ export const Avatar: React.FC<AvatarProps> = ({
   const letter = fallbackLetter?.charAt(0).toUpperCase()
 
   const imageEl = imgSource ? (
-    <Image source={imgSource as ImageSourcePropType} resizeMode="cover" style={s.image} />
+    <Image
+      source={imgSource as ImageSourcePropType}
+      resizeMode="cover"
+      style={s.image}
+      accessible
+      accessibilityLabel={resolvedLabel}
+    />
   ) : (
-    <View style={s.placeholder}>
+    <View style={s.placeholder} accessible accessibilityLabel={resolvedLabel}>
       {letter ? (
         <Text style={{ color: theme.colors.textPrimary, fontSize: LETTER_SIZES[size], fontWeight: '600' }}>
           {letter}
@@ -141,7 +151,13 @@ export const Avatar: React.FC<AvatarProps> = ({
   )
 
   const content = pressable && imgSource ? (
-    <Pressable onPress={openModal} style={s.root}>
+    <Pressable
+      onPress={openModal}
+      style={s.root}
+      accessibilityRole="imagebutton"
+      accessibilityLabel={resolvedLabel}
+      accessibilityHint="Toque para ampliar"
+    >
       {imageEl}
     </Pressable>
   ) : (
@@ -151,7 +167,12 @@ export const Avatar: React.FC<AvatarProps> = ({
   return (
     <>
       {onPress ? (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={resolvedLabel}
+        >
           {content}
         </TouchableOpacity>
       ) : (
@@ -159,11 +180,18 @@ export const Avatar: React.FC<AvatarProps> = ({
       )}
 
       <Modal visible={visible} transparent animationType="none" statusBarTranslucent onRequestClose={closeModal}>
-        <Pressable style={modalStyles.backdrop} onPress={closeModal}>
+        <Pressable
+          style={modalStyles.backdrop}
+          onPress={closeModal}
+          accessibilityRole="button"
+          accessibilityLabel="Fechar imagem"
+        >
           <Animated.Image
             source={imgSource as ImageSourcePropType}
             resizeMode="cover"
             style={[modalStyles.fullImage, animatedStyle]}
+            accessible
+            accessibilityLabel={resolvedLabel}
           />
         </Pressable>
       </Modal>

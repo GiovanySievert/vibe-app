@@ -6,6 +6,7 @@ import { Avatar, Box, Divider, ThemedIcon, ThemedText } from '@src/shared/compon
 import { PlacesModel } from '@src/shared/domain'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { HIT_SLOP } from '@src/shared/utils'
 
 enum SearchType {
   USERS = 'USERS',
@@ -72,7 +73,12 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
           )}
         </TouchableOpacity>
         {onRemove && (
-          <Pressable onPress={onRemove} hitSlop={8}>
+          <Pressable
+            onPress={onRemove}
+            hitSlop={HIT_SLOP}
+            accessibilityRole="button"
+            accessibilityLabel="Remover do histórico"
+          >
             <ThemedIcon name="X" size={18} color="textSecondary" />
           </Pressable>
         )}

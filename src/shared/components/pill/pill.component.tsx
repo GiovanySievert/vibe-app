@@ -10,12 +10,23 @@ type PillProps = {
   label: string
   textSize?: 'sm' | 'md' | 'lg'
   onPress?: () => void
+  selected?: boolean
+  accessibilityLabel?: string
 }
 
-export const Pill: React.FC<PillProps> = ({ label, textSize = 'md', onPress }) => {
+export const Pill: React.FC<PillProps> = ({ label, textSize = 'md', onPress, selected, accessibilityLabel }) => {
+  const isInteractive = !!onPress
+
   return (
     <Box style={styles.pill}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={onPress}
+        disabled={!isInteractive}
+        accessible={isInteractive}
+        accessibilityRole={isInteractive ? 'button' : undefined}
+        accessibilityLabel={accessibilityLabel ?? label}
+        accessibilityState={isInteractive ? { selected: !!selected } : undefined}
+      >
         <ThemedText weight="semibold" size={textSize}>
           {label}
         </ThemedText>

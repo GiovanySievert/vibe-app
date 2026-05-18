@@ -20,6 +20,7 @@ type BlurEvent = Parameters<NonNullable<TextInputProps['onBlur']>>[0]
 export interface InputProps extends TextInputProps {
   label?: string
   errorMessage?: string
+  helperText?: string
   startIconName?: string
   startIconColor?: string
   endIconName?: string
@@ -40,6 +41,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     {
       label,
       errorMessage,
+      helperText,
       startIconName,
       startIconColor,
       iconType = 'light',
@@ -150,11 +152,20 @@ export const Input = forwardRef<TextInput, InputProps>(
             multiline={multiline}
             testID="input-field"
             secureTextEntry={secureTextEntry && secureTextEntryisShowing}
+            accessibilityLabel={rest.accessibilityLabel ?? label}
+            accessibilityHint={rest.accessibilityHint ?? helperText}
+            accessibilityState={{ disabled }}
             {...rest}
           />
 
           {isClearable && localInputValue && !disabled && (
-            <TouchableOpacity onPress={handleClear} hitSlop={HIT_SLOP} style={style.endIconContainer}>
+            <TouchableOpacity
+              onPress={handleClear}
+              hitSlop={HIT_SLOP}
+              style={style.endIconContainer}
+              accessibilityRole="button"
+              accessibilityLabel="Limpar campo"
+            >
               <ThemedIcon name={'X'} size={18} testID="clear-button--input" color="textPrimary" />
             </TouchableOpacity>
           )}
@@ -163,6 +174,10 @@ export const Input = forwardRef<TextInput, InputProps>(
             <TouchableOpacity
               onPress={() => setSecureTextEntryisShowing((prev) => !prev)}
               style={style.endIconContainer}
+              hitSlop={HIT_SLOP}
+              accessibilityRole="button"
+              accessibilityLabel={secureTextEntryisShowing ? 'Ocultar senha' : 'Mostrar senha'}
+              accessibilityState={{ expanded: !secureTextEntryisShowing }}
             >
               <ThemedText size="xs" weight="medium" color="textSecondary" textDecorationLine="underline">
                 {secureTextEntryisShowing ? 'mostrar' : 'ocultar'}
@@ -173,7 +188,7 @@ export const Input = forwardRef<TextInput, InputProps>(
 
         <Box flexDirection="row" justifyContent="space-between">
           <AnimatedBox isVisible={!!errorMessage}>
-            <Box mt={1}>
+            <Box mt={1} accessibilityLiveRegion="polite" accessibilityRole="alert">
               <ThemedText size="sm" weight="medium" color="error">
                 {errorMessage}
               </ThemedText>

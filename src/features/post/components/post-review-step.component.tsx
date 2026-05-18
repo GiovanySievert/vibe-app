@@ -50,8 +50,24 @@ export const PostReviewStep: React.FC<Props> = ({
 }) => (
   <Box pl={5} pr={5} gap={5}>
     <Box style={styles.reviewPhotoCard}>
-      {placePhotoUri ? <Image source={{ uri: placePhotoUri }} style={styles.reviewPhoto} resizeMode="cover" /> : null}
-      {selfieUri ? <Image source={{ uri: selfieUri }} style={styles.reviewSelfie} resizeMode="cover" /> : null}
+      {placePhotoUri ? (
+        <Image
+          source={{ uri: placePhotoUri }}
+          style={styles.reviewPhoto}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel="Foto do local"
+        />
+      ) : null}
+      {selfieUri ? (
+        <Image
+          source={{ uri: selfieUri }}
+          style={styles.reviewSelfie}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel="Selfie do autor"
+        />
+      ) : null}
     </Box>
 
     <Box flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap={3}>

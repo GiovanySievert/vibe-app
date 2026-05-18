@@ -25,20 +25,40 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
   const shouldShowSelfie = Boolean(item.placeImageUrl && item.selfieUrl)
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => onPress(item)}
+      accessibilityRole="button"
+      accessibilityLabel={`Review de ${item.placeName}${item.isFavorite ? ', favorito' : ''}`}
+      accessibilityHint="Abre os detalhes do review"
+    >
       <Box
         bg="backgroundSecondary"
         position="relative"
         style={[styles.cell, col !== 0 && styles.cellGap]}
       >
-        {imageUri && <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />}
+        {imageUri && (
+          <Image
+            source={{ uri: imageUri }}
+            style={styles.image}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel={`Foto do local ${item.placeName}`}
+          />
+        )}
         {item.isFavorite && (
           <Box style={styles.favoriteBadge}>
             <ThemedIcon name="Star" color="primary" type="solid" size={16} />
           </Box>
         )}
         {shouldShowSelfie && (
-          <Image source={{ uri: item.selfieUrl ?? undefined }} style={styles.selfie} resizeMode="cover" />
+          <Image
+            source={{ uri: item.selfieUrl ?? undefined }}
+            style={styles.selfie}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel="Selfie do autor"
+          />
         )}
         <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={styles.labelContainer}>
           <ThemedText variant="mono" color="textPrimary" size="xxs" numberOfLines={1}>

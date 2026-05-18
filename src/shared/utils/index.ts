@@ -1,3 +1,4 @@
+export * from './a11y-announce'
 export * from './calculate-distance'
 export * from './dev-mock-photo'
 export * from './format-countdown'

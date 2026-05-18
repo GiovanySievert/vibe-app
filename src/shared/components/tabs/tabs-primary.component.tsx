@@ -22,9 +22,17 @@ export const PrimaryTabs: React.FC<PrimaryTabsProps> = ({ titles, activeIndex, o
           borderRadius: 8
         }
       ]}
+      accessibilityRole="tablist"
     >
       {titles.map((title, index) => (
-        <Pressable key={title + index} style={styles.tab} onPress={() => onTabPress(index)}>
+        <Pressable
+          key={title + index}
+          style={styles.tab}
+          onPress={() => onTabPress(index)}
+          accessibilityRole="tab"
+          accessibilityLabel={title}
+          accessibilityState={{ selected: index === activeIndex }}
+        >
           <View
             style={[
               styles.tabTextContainer,

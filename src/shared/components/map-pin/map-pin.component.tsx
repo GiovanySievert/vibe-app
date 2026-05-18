@@ -29,6 +29,10 @@ const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, c
       <Box style={styles.wrapper}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
+          accessibilityRole="button"
+          accessibilityLabel={placeName ?? 'Lugar no mapa'}
+          accessibilityHint="Abre os detalhes do lugar"
+          accessibilityState={{ selected: placeIsHot }}
         >
           <Box style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}>
             <ThemedText weight="semibold" style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>

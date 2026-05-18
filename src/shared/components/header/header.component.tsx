@@ -29,10 +29,15 @@ export const Header: React.FC<HeaderProps> = ({ navigation, route, options }) =>
         backgroundColor: theme.colors.background
       }}
     >
-      <TouchableOpacity onPress={() => handleGoBack()}>
+      <TouchableOpacity
+        onPress={() => handleGoBack()}
+        accessibilityRole="button"
+        accessibilityLabel="Voltar"
+        accessibilityHint={`Volta para a tela anterior, ${title}`}
+      >
         <Box flexDirection="row" alignItems="center" gap={2} pr={4} pl={4} mb={4}>
           <ThemedIcon name="ArrowLeft" color="textPrimary" />
-          <ThemedText color="textPrimary" weight="medium">
+          <ThemedText color="textPrimary" weight="medium" accessibilityRole="header">
             {title}
           </ThemedText>
         </Box>

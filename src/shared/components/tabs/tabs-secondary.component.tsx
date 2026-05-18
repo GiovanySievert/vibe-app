@@ -13,9 +13,16 @@ type SecondaryTabsProps = {
 
 export const SecondaryTabs: React.FC<SecondaryTabsProps> = ({ titles, activeIndex, onTabPress }) => {
   return (
-    <View style={styles.secondaryTabContainer}>
+    <View style={styles.secondaryTabContainer} accessibilityRole="tablist">
       {titles.map((title, index) => (
-        <Pressable key={title + index} style={styles.secondaryTab} onPress={() => onTabPress(index)}>
+        <Pressable
+          key={title + index}
+          style={styles.secondaryTab}
+          onPress={() => onTabPress(index)}
+          accessibilityRole="tab"
+          accessibilityLabel={title}
+          accessibilityState={{ selected: index === activeIndex }}
+        >
           <ThemedText
             style={{
               color: index === activeIndex ? theme.colors.textPrimary : theme.colors.textSecondary,

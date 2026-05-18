@@ -87,7 +87,13 @@ const PhotoButton: React.FC<PhotoButtonProps> = ({ type, uri, onPress }) => (
     style={[styles.photoButton, type === 'selfie' && styles.selfieButton]}
   >
     {uri ? (
-      <Image source={{ uri }} style={styles.photoImage} resizeMode="cover" />
+      <Image
+        source={{ uri }}
+        style={styles.photoImage}
+        resizeMode="cover"
+        accessible
+        accessibilityLabel={type === 'place' ? 'Foto do local capturada' : 'Selfie capturada'}
+      />
     ) : (
       <Box alignItems="center" justifyContent="center" gap={2}>
         <ThemedIcon name="Camera" size={type === 'place' ? 28 : 22} color="textSecondary" />

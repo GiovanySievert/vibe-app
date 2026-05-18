@@ -16,10 +16,23 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
   return (
     <Box style={styles.container}>
       {place?.brand?.avatar ? (
-        <Image source={{ uri: place?.brand?.avatar }} style={styles.heroImage} resizeMode="cover" />
+        <Image
+          source={{ uri: place?.brand?.avatar }}
+          style={styles.heroImage}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel={`Imagem do local ${place.name}`}
+        />
       ) : null}
 
-      <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={onBack}
+        activeOpacity={0.8}
+        accessibilityRole="button"
+        accessibilityLabel="Voltar"
+        accessibilityHint="Volta para a tela anterior"
+      >
         <ThemedText style={styles.backArrow}>←</ThemedText>
       </TouchableOpacity>
 

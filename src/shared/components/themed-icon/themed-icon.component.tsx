@@ -1,4 +1,5 @@
 import React from 'react'
+import { View } from 'react-native'
 
 import { icons } from 'lucide-react-native'
 
@@ -13,6 +14,8 @@ type ThemedIconProps = {
   type?: 'light' | 'solid'
   strokeWidth?: number
   testID?: string
+  accessible?: boolean
+  accessibilityLabel?: string
 }
 
 export const ThemedIcon: React.FC<ThemedIconProps> = ({
@@ -21,7 +24,9 @@ export const ThemedIcon: React.FC<ThemedIconProps> = ({
   color = 'gray.400',
   type = 'light',
   strokeWidth = 2,
-  testID
+  testID,
+  accessible = false,
+  accessibilityLabel
 }) => {
   const Icon = icons[name]
 
@@ -42,5 +47,20 @@ export const ThemedIcon: React.FC<ThemedIconProps> = ({
 
   const iconColor = getTextColor(color)
 
-  return <Icon size={size} color={iconColor} fill={type === 'solid' ? iconColor : 'none'} strokeWidth={strokeWidth} testID={testID} />
+  return (
+    <View
+      accessible={accessible}
+      accessibilityLabel={accessible ? accessibilityLabel : undefined}
+      accessibilityRole={accessible ? 'image' : undefined}
+      importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+    >
+      <Icon
+        size={size}
+        color={iconColor}
+        fill={type === 'solid' ? iconColor : 'none'}
+        strokeWidth={strokeWidth}
+        testID={testID}
+      />
+    </View>
+  )
 }

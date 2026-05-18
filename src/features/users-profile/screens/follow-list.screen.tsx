@@ -10,6 +10,7 @@ import { Box, Input, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { HIT_SLOP } from '@src/shared/utils'
 
 import { UsersProfileFollowListItem } from '../components/user-follow-list/users-profile-follow-list-item.component'
 import { FollowStatsService } from '../services'
@@ -88,7 +89,12 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
   return (
     <Screen>
       <Box style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={8}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          hitSlop={HIT_SLOP}
+          accessibilityRole="button"
+          accessibilityLabel="Voltar"
+        >
           <ThemedIcon name="ArrowLeft" size={22} color="textPrimary" />
         </TouchableOpacity>
         <ThemedText weight="semibold" size="md" color="textPrimary">

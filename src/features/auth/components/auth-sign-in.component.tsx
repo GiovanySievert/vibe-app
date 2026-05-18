@@ -182,7 +182,11 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
             />
 
             <Box mt={2} alignItems="flex-end">
-              <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}
+                accessibilityRole="link"
+                accessibilityLabel="Esqueci a senha"
+              >
                 <ThemedText size="sm" color="textSecondary" textDecorationLine="underline">
                   esqueci a senha
                 </ThemedText>
@@ -212,7 +216,12 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               )}
             </Box>
           </Box>
-          <TouchableOpacity onPress={() => goToSignUp()}>
+          <TouchableOpacity
+            onPress={() => goToSignUp()}
+            accessibilityRole="link"
+            accessibilityLabel="Criar conta"
+            accessibilityHint="Abre o fluxo de cadastro"
+          >
             <Box mt={6} justifyContent="center" flexDirection="row" alignItems="center">
               <ThemedText color="textSecondary">primeira vez? </ThemedText>
               <ThemedText weight="semibold" textDecorationLine="underline">
@@ -232,7 +241,11 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               os{' '}
             </ThemedText>
 
-            <TouchableOpacity onPress={() => navigation.navigate('TermsScreen')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TermsScreen')}
+              accessibilityRole="link"
+              accessibilityLabel="Termos de uso"
+            >
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
                 termos
               </ThemedText>
@@ -243,7 +256,11 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               e a{' '}
             </ThemedText>
 
-            <TouchableOpacity onPress={() => navigation.navigate('PrivacyScreen')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('PrivacyScreen')}
+              accessibilityRole="link"
+              accessibilityLabel="Política de privacidade"
+            >
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
                 privacidade
               </ThemedText>
@@ -259,7 +276,13 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
           importantForAccessibility={isVerifyStepActive ? 'auto' : 'no-hide-descendants'}
         >
           <Box mb={6} flexDirection="row" alignItems="center" gap={3}>
-            <TouchableOpacity onPress={() => goToStep(SIGN_IN_STEPS.FORM)} style={styles.goBackButton}>
+            <TouchableOpacity
+              onPress={() => goToStep(SIGN_IN_STEPS.FORM)}
+              style={styles.goBackButton}
+              accessibilityRole="button"
+              accessibilityLabel="Voltar"
+              accessibilityHint="Volta para o formulário de login"
+            >
               <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
             </TouchableOpacity>
             <ThemedText variant="title">confirme seu email</ThemedText>

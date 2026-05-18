@@ -12,7 +12,7 @@ import { BadgesService } from '@src/features/users-profile/services'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
-import { triggerBadgeUnlockHaptic } from '@src/shared/utils'
+import { announce, triggerBadgeUnlockHaptic } from '@src/shared/utils'
 
 import { MilestonesFloatingCard } from './components/milestones-floating-card.component'
 import { ProgressBlock } from './components/progress-block.component'
@@ -74,11 +74,16 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
   })
 
   useEffect(() => {
+    announce(`Review publicado em ${placeName}`)
+  }, [placeName])
+
+  useEffect(() => {
     if (!hasUnlockedBadge || !unlockedMilestone) return
     const hapticKey = `${placeId}-${unlockedMilestone.tier}-${reviewCount}`
     if (triggeredBadgeHapticKey.current === hapticKey) return
     triggeredBadgeHapticKey.current = hapticKey
     triggerBadgeUnlockHaptic()
+    announce(`Badge desbloqueada: ${unlockedMilestone.label}`)
   }, [hasUnlockedBadge, placeId, reviewCount, unlockedMilestone])
 
   const progressText = hasUnlockedBadge

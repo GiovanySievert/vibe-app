@@ -35,7 +35,15 @@ const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => vo
         </Box>
       </Box>
 
-      {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.coverImage} resizeMode="cover" />}
+      {item.imageUrl && (
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={styles.coverImage}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel={`Imagem do evento ${item.name}`}
+        />
+      )}
 
       {item.participants.length > 0 && (
         <Box flexDirection="row" alignItems="center" gap={2}>

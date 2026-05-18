@@ -7,6 +7,7 @@ import { icons } from 'lucide-react-native'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { theme } from '@src/shared/constants/theme'
+import { HIT_SLOP } from '@src/shared/utils'
 
 import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
@@ -75,10 +76,14 @@ export const Toast = () => {
 
   const palette = PALETTE_BY_LEVEL[toast.level]
 
+  const isAssertive = toast.level === 'error' || toast.level === 'warning'
+
   return (
     <Animated.View
       pointerEvents="box-none"
       style={[styles.wrapper, animatedStyle, { top: insets.top + 12 }]}
+      accessibilityLiveRegion={isAssertive ? 'assertive' : 'polite'}
+      accessibilityRole={isAssertive ? 'alert' : 'text'}
     >
       <Box
         flexDirection="row"
@@ -108,7 +113,7 @@ export const Toast = () => {
           onPress={hideToast}
           accessibilityRole="button"
           accessibilityLabel="Fechar notificação"
-          hitSlop={8}
+          hitSlop={HIT_SLOP}
           style={styles.dismiss}
         >
           <ThemedIcon name="X" color="textTerciary" size={16} />

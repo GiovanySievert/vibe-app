@@ -64,7 +64,8 @@ export const OtpInput: React.FC<OtpInputProps> = ({
         onPress={focusInput}
         disabled={disabled}
         accessibilityRole="text"
-        accessibilityLabel="código de verificação"
+        accessibilityLabel="Código de verificação"
+        accessibilityHint={`Digite os ${length} dígitos do código`}
       >
         <TextInput
           ref={inputRef}
@@ -96,6 +97,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
                 alignItems="center"
                 justifyContent="center"
                 style={[styles.digitBox, isActive && styles.digitBoxActive, hasError && styles.digitBoxError]}
+                accessibilityLabel={`Dígito ${index + 1} de ${length}${digit ? `, ${digit}` : ', vazio'}`}
               >
                 <ThemedText variant="mono" size="2xl" color="textPrimary" weight="bold">
                   {digit}
@@ -107,7 +109,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       </Pressable>
 
       {!!errorMessage && (
-        <Box mt={2}>
+        <Box mt={2} accessibilityLiveRegion="polite" accessibilityRole="alert">
           <ThemedText size="sm" weight="medium" color="error">
             {errorMessage}
           </ThemedText>

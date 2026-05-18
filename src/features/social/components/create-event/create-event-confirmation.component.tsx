@@ -23,7 +23,15 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
     <Box style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         <Box gap={4} pb={4}>
-          {payload.imageUri && <Image source={{ uri: payload.imageUri }} style={styles.coverImage} resizeMode="cover" />}
+          {payload.imageUri && (
+            <Image
+              source={{ uri: payload.imageUri }}
+              style={styles.coverImage}
+              resizeMode="cover"
+              accessible
+              accessibilityLabel={`Imagem de capa do evento ${payload.name}`}
+            />
+          )}
 
           <Box gap={1}>
             <ThemedText size="sm" color="textSecondary" weight="semibold">

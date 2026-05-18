@@ -155,7 +155,13 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   return (
     <Box flex={1} style={styles.container}>
       <Box pl={6} pr={6} pt={2} pb={6} flexDirection="row" alignItems="center">
-        <TouchableOpacity onPress={handleBack} style={styles.goBackButton}>
+        <TouchableOpacity
+          onPress={handleBack}
+          style={styles.goBackButton}
+          accessibilityRole="button"
+          accessibilityLabel="Voltar"
+          accessibilityHint="Volta para o passo anterior do cadastro"
+        >
           <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
         </TouchableOpacity>
 

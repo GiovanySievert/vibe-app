@@ -72,6 +72,8 @@ export function ThemedText({
   textDecorationLine,
   textTransform,
   underlineOffset = -5,
+  allowFontScaling = true,
+  maxFontSizeMultiplier = 1.5,
   ...rest
 }: ThemedTextProps) {
   const baseByVariant: Record<TextVariant, TextStyle> = {
@@ -114,7 +116,12 @@ export function ThemedText({
 
     return (
       <View style={wrapperStyle}>
-        <Text style={[resolvedStyle, lineThrough]} {...rest} />
+        <Text
+          style={[resolvedStyle, lineThrough]}
+          allowFontScaling={allowFontScaling}
+          maxFontSizeMultiplier={maxFontSizeMultiplier}
+          {...rest}
+        />
       </View>
     )
   }
@@ -133,6 +140,8 @@ export function ThemedText({
         overrideTextTransform,
         style
       ]}
+      allowFontScaling={allowFontScaling}
+      maxFontSizeMultiplier={maxFontSizeMultiplier}
       {...rest}
     />
   )

@@ -13,13 +13,21 @@ type RadioOption = {
 
 type RadioButtonProps = {
   title?: string
+  groupLabel?: string
   options: RadioOption[]
   selectedValue: string
   onValueChange: (value: string) => void
   testID?: string
 }
 
-export const RadioButton: React.FC<RadioButtonProps> = ({ title, options, selectedValue, onValueChange, testID }) => {
+export const RadioButton: React.FC<RadioButtonProps> = ({
+  title,
+  groupLabel,
+  options,
+  selectedValue,
+  onValueChange,
+  testID
+}) => {
   return (
     <Box>
       {title && (
@@ -29,7 +37,12 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ title, options, select
           </ThemedText>
         </Box>
       )}
-      <View style={styles.container} testID={testID}>
+      <View
+        style={styles.container}
+        testID={testID}
+        accessibilityRole="radiogroup"
+        accessibilityLabel={groupLabel ?? title}
+      >
         {options.map((option) => {
           const isSelected = selectedValue === option.value
 
@@ -39,6 +52,9 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ title, options, select
                 onPress={() => onValueChange(option.value)}
                 testID={`${option.value}--radio-button`}
                 style={styles.touchable}
+                accessibilityRole="radio"
+                accessibilityLabel={option.label}
+                accessibilityState={{ selected: isSelected }}
               >
                 <View
                   style={[

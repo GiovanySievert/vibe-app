@@ -91,10 +91,17 @@ export const SwipeableModal: React.FC<SwipeableModalProps> = ({
           activeOpacity={1}
           onPress={() => isDismissible && closeModal()}
           style={[styles.overlay, overlayStyle]}
+          accessibilityRole="button"
+          accessibilityLabel="Fechar modal"
+          importantForAccessibility={isDismissible ? 'yes' : 'no-hide-descendants'}
         />
 
         <GestureDetector gesture={pan}>
-          <Animated.View style={modalStyle}>
+          <Animated.View
+            style={modalStyle}
+            accessibilityViewIsModal
+            importantForAccessibility="yes"
+          >
             <View style={[styles.handleBar, { backgroundColor: handleBarColor }]} />
             {children}
           </Animated.View>

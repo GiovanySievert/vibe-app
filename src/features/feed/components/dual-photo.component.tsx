@@ -31,6 +31,8 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
 
   const mainUri = selfieExpanded ? selfieUrl : placeImageUrl
   const thumbUri = selfieExpanded ? placeImageUrl : selfieUrl
+  const mainLabel = selfieExpanded ? 'Selfie do autor' : `Foto do local${placeName ? `, ${placeName}` : ''}`
+  const thumbLabel = selfieExpanded ? `Foto do local${placeName ? `, ${placeName}` : ''}` : 'Selfie do autor'
 
   return (
     <Box style={[styles.photoWrap, { aspectRatio }]}>
@@ -38,8 +40,16 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
         style={styles.mainPhoto}
         onPressIn={() => setOverlaysHidden(true)}
         onPressOut={() => setOverlaysHidden(false)}
+        accessibilityRole="image"
+        accessibilityLabel={mainLabel}
       >
-        <Image source={{ uri: mainUri ?? undefined }} style={styles.mainPhoto} resizeMode="cover" />
+        <Image
+          source={{ uri: mainUri ?? undefined }}
+          style={styles.mainPhoto}
+          resizeMode="cover"
+          accessible
+          accessibilityLabel={mainLabel}
+        />
       </Pressable>
 
       {placeName && !selfieExpanded ? (
@@ -58,9 +68,20 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
           pointerEvents={overlaysHidden ? 'none' : 'auto'}
           style={[styles.thumbnailWrap, { opacity: overlayOpacity }]}
         >
-          <TouchableOpacity onPress={handleThumbnailPress} activeOpacity={1}>
+          <TouchableOpacity
+            onPress={handleThumbnailPress}
+            activeOpacity={1}
+            accessibilityRole="button"
+            accessibilityLabel={`Alternar para ${thumbLabel.toLowerCase()}`}
+          >
             <View style={styles.thumbnailContainer}>
-              <Image source={{ uri: thumbUri ?? undefined }} style={styles.thumbnail} resizeMode="cover" />
+              <Image
+                source={{ uri: thumbUri ?? undefined }}
+                style={styles.thumbnail}
+                resizeMode="cover"
+                accessible
+                accessibilityLabel={thumbLabel}
+              />
             </View>
           </TouchableOpacity>
         </Animated.View>
