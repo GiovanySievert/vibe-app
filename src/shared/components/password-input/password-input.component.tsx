@@ -4,6 +4,7 @@ import { StyleSheet, TextInputProps } from 'react-native'
 import { theme } from '@src/shared/constants/theme'
 import { getPasswordStrength } from '@src/shared/utils'
 
+import { useAppTranslation } from '../../i18n'
 import { Box } from '../box'
 import { Input } from '../input'
 import { ThemedText } from '../themed-text'
@@ -19,19 +20,20 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   value,
   onChange,
   errorMessage,
-  label = 'senha',
+  label,
   keyboardType = 'default',
   autoComplete = 'off',
   textContentType = 'none',
   inputMode,
   autoFocus
 }) => {
+  const { t } = useAppTranslation()
   const strength = getPasswordStrength(value)
 
   return (
     <Box gap={3}>
       <Input
-        label={label}
+        label={label ?? t('common.password.label')}
         value={value}
         onChange={({ nativeEvent }) => onChange(nativeEvent.text)}
         errorMessage={errorMessage}
@@ -43,7 +45,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
         autoFocus={autoFocus}
       />
       <ThemedText variant="mono" size="sm" color="textSecondary">
-        mínimo 8 caracteres · uma letra maiúscula e um número
+        {t('common.password.requirements')}
       </ThemedText>
       <Box flexDirection="row" gap={1}>
         {[0, 1, 2, 3].map((i) => (

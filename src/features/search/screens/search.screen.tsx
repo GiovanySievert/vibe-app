@@ -8,12 +8,14 @@ import { Screen } from '@src/shared/components/screen'
 import { Tabs } from '@src/shared/components/tabs/tabs.component'
 import { theme } from '@src/shared/constants/theme'
 import { useDebounce } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { HotPlaces, LastSearched, SearchInput, SearchPlaces, SearchUsers } from '../components'
 
 type SearchScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'SearchScreen'>
 
 export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
+  const { t } = useAppTranslation()
   const [inputSearch, setInputSearch] = useState('')
 
   const debouncedSearchTerm = useDebounce(inputSearch, 300)
@@ -27,7 +29,7 @@ export const SearchScreen: React.FC<SearchScreenScreenProps> = () => {
               <SearchInput inputSearch={inputSearch} setInputSearch={setInputSearch} />
             </Box>
             {inputSearch.length ? (
-              <Tabs titles={['Lugares', 'Pessoas']} defaultIndex={0} variant="secondary">
+              <Tabs titles={[t('search.tabs.places'), t('search.tabs.people')]} defaultIndex={0} variant="secondary">
                 <SearchPlaces inputSearch={debouncedSearchTerm} />
                 <SearchUsers inputSearch={debouncedSearchTerm} />
               </Tabs>

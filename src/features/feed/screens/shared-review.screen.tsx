@@ -12,6 +12,7 @@ import { LoadingPage } from '@src/shared/components/loading-page'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { ReviewCard } from '../components'
 import { FeedService } from '../services'
@@ -19,10 +20,15 @@ import { FeedService } from '../services'
 type Props = NativeStackScreenProps<AuthenticatedStackParamList, 'SharedReviewScreen'>
 
 export const SharedReviewScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { t } = useAppTranslation()
   const { reviewId } = route.params
   const { data: session } = authClient.useSession()
 
-  const { data: review, isLoading, isError } = useQuery({
+  const {
+    data: review,
+    isLoading,
+    isError
+  } = useQuery({
     queryKey: ['review', reviewId],
     queryFn: () => FeedService.getById(reviewId).then((r) => r.data),
     enabled: !!session?.user.id,
@@ -31,8 +37,18 @@ export const SharedReviewScreen: React.FC<Props> = ({ route, navigation }) => {
 
   return (
     <Box style={styles.container}>
-      <Box style={styles.header} pl={5} pr={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
-        <ThemedText weight="semibold" size="lg">review</ThemedText>
+      <Box
+        style={styles.header}
+        pl={5}
+        pr={5}
+        pb={4}
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <ThemedText weight="semibold" size="lg">
+          review
+        </ThemedText>
         <Touchable onPress={() => navigation.goBack()} style={styles.iconButton}>
           <ThemedIcon name="X" size={20} color="textSecondary" />
         </Touchable>
@@ -44,9 +60,11 @@ export const SharedReviewScreen: React.FC<Props> = ({ route, navigation }) => {
         </Box>
       ) : isError || !review ? (
         <Box flex={1} justifyContent="center" alignItems="center" ml={5} mr={5} gap={4}>
-          <ThemedText weight="semibold" size="lg">Não foi possível abrir esta review.</ThemedText>
+          <ThemedText weight="semibold" size="lg">
+            {t('feed.shared.errorTitle')}
+          </ThemedText>
           <ThemedText color="textSecondary" style={styles.centerText}>
-            Verifique se o link ainda é válido e tente novamente.
+            {t('feed.shared.errorMsg')}
           </ThemedText>
         </Box>
       ) : (

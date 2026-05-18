@@ -2,6 +2,7 @@ import { Alert } from 'react-native'
 
 import { Avatar, Box, Button, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useBlockMutation } from '../hooks/use-block-mutation.hook'
 import { BlockAction } from '../types'
@@ -11,17 +12,22 @@ type UsersProfileBlockedStateProps = {
 }
 
 export const UsersProfileBlockedState: React.FC<UsersProfileBlockedStateProps> = ({ userData }) => {
+  const { t } = useAppTranslation()
   const unblockMutation = useBlockMutation(userData.id)
 
   const handleUnblock = () => {
-    Alert.alert(`Desbloquear @${userData.username}?`, 'Ele poderá voltar a ver seu perfil e seus posts.', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Desbloquear',
-        style: 'default',
-        onPress: () => unblockMutation.mutate(BlockAction.UNBLOCK)
-      }
-    ])
+    Alert.alert(
+      t('usersProfile.block.unblockTitle', { username: userData.username }),
+      t('usersProfile.block.unblockMsg'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('usersProfile.block.unblock'),
+          style: 'default',
+          onPress: () => unblockMutation.mutate(BlockAction.UNBLOCK)
+        }
+      ]
+    )
   }
 
   return (
@@ -31,12 +37,12 @@ export const UsersProfileBlockedState: React.FC<UsersProfileBlockedStateProps> =
         @{userData.username}
       </ThemedText>
       <ThemedText size="md" color="textSecondary" weight="medium">
-        Este perfil está bloqueado
+        {t('usersProfile.block.blockedTitle')}
       </ThemedText>
       <Box mt={2} pr={5} pl={5} style={{ width: '100%' }}>
         <Button loading={unblockMutation.isPending} onPress={handleUnblock}>
           <ThemedText weight="semibold" color="background" size="lg">
-            Desbloquear
+            {t('usersProfile.block.unblock')}
           </ThemedText>
         </Button>
       </Box>

@@ -4,6 +4,7 @@ import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-g
 import Animated, { clamp, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { AnimatedTouchable } from '../touchable'
 
@@ -19,7 +20,6 @@ type SwipeableModalProps = {
   onClose: () => void
 }
 
-
 export const SwipeableModal: React.FC<SwipeableModalProps> = ({
   visible,
   height = 500,
@@ -28,6 +28,7 @@ export const SwipeableModal: React.FC<SwipeableModalProps> = ({
   handleBarColor = '#9CA3AF',
   onClose
 }) => {
+  const { t } = useAppTranslation()
   const translateY = useSharedValue(screenHeight)
   const overlayOpacity = useSharedValue(0)
 
@@ -92,16 +93,12 @@ export const SwipeableModal: React.FC<SwipeableModalProps> = ({
           onPress={() => isDismissible && closeModal()}
           style={[styles.overlay, overlayStyle]}
           accessibilityRole="button"
-          accessibilityLabel="Fechar modal"
+          accessibilityLabel={t('common.closeModal')}
           importantForAccessibility={isDismissible ? 'yes' : 'no-hide-descendants'}
         />
 
         <GestureDetector gesture={pan}>
-          <Animated.View
-            style={modalStyle}
-            accessibilityViewIsModal
-            importantForAccessibility="yes"
-          >
+          <Animated.View style={modalStyle} accessibilityViewIsModal importantForAccessibility="yes">
             <View style={[styles.handleBar, { backgroundColor: handleBarColor }]} />
             {children}
           </Animated.View>

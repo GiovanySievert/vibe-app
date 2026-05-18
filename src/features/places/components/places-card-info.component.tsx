@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type PlacesCardInfoProps = {
   place: PlacesByIdResponse
@@ -16,10 +17,19 @@ type StatRow = {
 }
 
 export const PlacesCardInfo: React.FC<PlacesCardInfoProps> = ({ place }) => {
+  const { t } = useAppTranslation()
   const rows: StatRow[] = [
-    { label: 'amigos lá agora', detail: '—', value: '—' },
-    { label: 'vibe checks hoje', detail: 'último recente', value: '—' },
-    { label: 'preço', detail: '', value: place.priceRange ?? '—' }
+    { label: t('places.stats.friendsNow'), detail: '—', value: '—' },
+    {
+      label: t('places.stats.vibeChecksToday'),
+      detail: t('places.stats.latestRecent'),
+      value: '—'
+    },
+    {
+      label: t('places.stats.price'),
+      detail: '',
+      value: place.priceRange ?? '—'
+    }
   ]
 
   return (

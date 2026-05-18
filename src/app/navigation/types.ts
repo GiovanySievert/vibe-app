@@ -2,14 +2,6 @@ import { NavigatorScreenParams } from '@react-navigation/native'
 
 import type { StreakUpdateResponse } from '@src/features/users-profile/types'
 
-export enum TabRoutesName {
-  HOME = 'mapa',
-  FEED = 'feed',
-  POST = 'post',
-  SOCIAL = 'social',
-  MENU = 'você'
-}
-
 export type UnathenticatedStackParamList = {
   AuthScreen: undefined
   SignInScreen: undefined
@@ -30,6 +22,7 @@ export type UserMenuStackParamList = {
   TermsOfUseScreen: undefined
   NotificationPreferencesScreen: undefined
   UserPrivacyScreen: undefined
+  LanguageSelectionScreen: undefined
 }
 
 export type PostPreselectedPlace = {
@@ -45,7 +38,11 @@ export type PostPreselectedPlace = {
 
 export type PostStackParamList = {
   PostMain: { preselectedPlace?: PostPreselectedPlace } | undefined
-  PostReviewSuccess: { placeId: string; placeName: string; streakUpdate?: StreakUpdateResponse | null }
+  PostReviewSuccess: {
+    placeId: string
+    placeName: string
+    streakUpdate?: StreakUpdateResponse | null
+  }
 }
 
 export type SocialStackParamList = {
@@ -61,14 +58,18 @@ export type TabsNavigatorParamsList = {
 }
 
 export type ModalNavigatorParamsList = {
-  PlacesDetailsScreen: { placeId: string }
+  PlacesDetailsScreen: { placeId: string; isHot?: boolean }
   UsersProfileScreen: { userId: string }
   SearchScreen: undefined
   EventPlaceSearchScreen: undefined
   LocationModal: undefined
   FollowRequestsScreen: { type: 'received' | 'sent' }
   BlockedUsersScreen: undefined
-  FollowListScreen: { userId: string; username: string; initialTab: 'followers' | 'followings' }
+  FollowListScreen: {
+    userId: string
+    username: string
+    initialTab: 'followers' | 'followings'
+  }
 }
 
 export type AuthenticatedStackParamList = {

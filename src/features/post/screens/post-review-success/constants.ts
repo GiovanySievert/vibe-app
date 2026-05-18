@@ -5,15 +5,15 @@ import { space } from '@src/shared/utils'
 export type BadgeMilestone = {
   tier: PlaceReviewBadgeTier
   minReviews: number
-  label: string
+  labelKey: string
 }
 
 export const BADGE_MILESTONES: BadgeMilestone[] = [
-  { tier: 'regular', minReviews: 3, label: 'cliente' },
-  { tier: 'fan', minReviews: 5, label: 'fã' },
-  { tier: 'frequent', minReviews: 10, label: 'VIP' },
-  { tier: 'legend', minReviews: 15, label: 'lenda' },
-  { tier: 'king', minReviews: 20, label: 'rei' }
+  { tier: 'regular', minReviews: 3, labelKey: 'post.badges.regular' },
+  { tier: 'fan', minReviews: 5, labelKey: 'post.badges.fan' },
+  { tier: 'frequent', minReviews: 10, labelKey: 'post.badges.frequent' },
+  { tier: 'legend', minReviews: 15, labelKey: 'post.badges.legend' },
+  { tier: 'king', minReviews: 20, labelKey: 'post.badges.king' }
 ]
 
 export const REVIEW_COUNT_CIRCLE_SIZE = space(16) * 3

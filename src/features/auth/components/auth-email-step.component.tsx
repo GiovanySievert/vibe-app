@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { TextInput } from 'react-native'
 
 import { AnimatedBox, Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { SignUpEmailForm } from '../domain'
 
@@ -23,6 +24,7 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
   isActive
 }) => {
   const emailInputRef = useRef<TextInput>(null)
+  const { t } = useAppTranslation()
 
   useEffect(() => {
     if (!isActive) return
@@ -37,15 +39,15 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
   return (
     <Box gap={6}>
       <Box gap={1} mb={6}>
-        <ThemedText variant="title">criar conta</ThemedText>
-        <ThemedText variant="secondary">precisa só do básico pra começar.</ThemedText>
+        <ThemedText variant="title">{t('auth.signUp.title')}</ThemedText>
+        <ThemedText variant="secondary">{t('auth.signUp.subtitle')}</ThemedText>
       </Box>
 
       <Box gap={6}>
         <Box gap={2}>
           <Input
             ref={emailInputRef}
-            label="email"
+            label={t('auth.signUp.emailLabel')}
             value={form.email}
             onChange={({ nativeEvent }) => onChangeForm('email', nativeEvent.text)}
             errorMessage={formError.email}
@@ -57,7 +59,7 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
           />
           <AnimatedBox isVisible={form.email.length > 10}>
             <ThemedText variant="mono" size="sm" color="textSecondary">
-              iremos validar seu email, confirme se está correto.
+              {t('auth.signUp.emailHint')}
             </ThemedText>
           </AnimatedBox>
         </Box>
@@ -75,23 +77,22 @@ export const AuthEmailStep: React.FC<AuthEmailStepProps> = ({
       <Box mt={4} gap={4}>
         <Button loading={isLoading} onPress={onContinue}>
           <ThemedText color="background" size="lg" weight="semibold">
-            continuar
+            {t('common.continue')}
           </ThemedText>
         </Button>
 
-        <Box justifyContent="center" flexDirection="row" alignItems="center">
+        <Box justifyContent="center" flexDirection="row" alignItems="center" flexWrap="wrap">
           <ThemedText variant="mono" color="textSecondary">
-            ao continuar você aceita os{' '}
+            {t('auth.signUp.termsPrefix')}
           </ThemedText>
           <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-            termos
+            {t('auth.signUp.termsLink')}
           </ThemedText>
           <ThemedText variant="mono" color="textSecondary">
-            {' '}
-            e a{' '}
+            {t('auth.signUp.termsConnector')}
           </ThemedText>
           <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-            privacidade
+            {t('auth.signUp.privacyLink')}
           </ThemedText>
         </Box>
       </Box>

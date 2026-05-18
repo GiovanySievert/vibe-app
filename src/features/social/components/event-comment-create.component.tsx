@@ -8,11 +8,15 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { triggerLightHaptic } from '@src/shared/utils'
 
 import { EventCommentResponse, EventCommentService, ListEventCommentsResponse } from '../services/event-comment.service'
 
-type InfiniteData = { pages: ListEventCommentsResponse[]; pageParams: unknown[] }
+type InfiniteData = {
+  pages: ListEventCommentsResponse[]
+  pageParams: unknown[]
+}
 
 type EventCommentCreateProps = {
   eventId: string
@@ -20,6 +24,7 @@ type EventCommentCreateProps = {
 }
 
 export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId, currentUserId }) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const { data: session } = authClient.useSession()
@@ -48,7 +53,14 @@ export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId,
         const [first, ...rest] = old.pages
         return {
           ...old,
-          pages: [{ ...first, data: [optimistic, ...first.data], total: first.total + 1 }, ...rest]
+          pages: [
+            {
+              ...first,
+              data: [optimistic, ...first.data],
+              total: first.total + 1
+            },
+            ...rest
+          ]
         }
       })
 
@@ -61,7 +73,7 @@ export const EventCommentCreate: React.FC<EventCommentCreateProps> = ({ eventId,
       if (context?.previous) {
         queryClient.setQueryData(['eventComments', eventId], context.previous)
       }
-      showToast('não foi possível postar o recado.', 'error')
+      showToast(t('social.createEvent.commentFailed'), 'error')
     }
   })
 

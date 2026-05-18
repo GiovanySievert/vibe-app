@@ -6,9 +6,10 @@ import { useMutation } from '@tanstack/react-query'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { ForgotPasswordEmailStepForm, forgotPasswordEmailStepSchema } from '../../domain'
+import { buildForgotPasswordEmailStepSchema, ForgotPasswordEmailStepForm } from '../../domain'
 
 type ForgotPasswordEmailStepProps = {
   typedEmail?: string
@@ -28,6 +29,7 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
   const emailInputRef = useRef<TextInput>(null)
   const [email, setEmail] = useState<string>(typedEmail ?? '')
   const [formError, setFormError] = useState<ForgotPasswordEmailStepForm>(EMPTY_ERRORS)
+  const { t } = useAppTranslation()
 
   useEffect(() => {
     if (!isActive) return
@@ -40,7 +42,7 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
   }, [isActive])
 
   const validateEmailSchema = (): boolean => {
-    const result = forgotPasswordEmailStepSchema.safeParse({ email })
+    const result = buildForgotPasswordEmailStepSchema().safeParse({ email })
 
     if (!result.success) {
       setFormError(validationMapErrors(result.error, EMPTY_ERRORS))
@@ -74,16 +76,16 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
     <>
       <Box mb={4}>
         <ThemedText variant="title" size="4xl" color="textPrimary">
-          esqueceu a senha?
+          {t('auth.forgotPassword.title')}
         </ThemedText>
         <ThemedText variant="primary" color="textSecondary">
-          digite o email cadastrado que enviaremos um codigo.
+          {t('auth.forgotPassword.subtitle')}
         </ThemedText>
       </Box>
       <Box gap={6}>
         <Input
           ref={emailInputRef}
-          label="email"
+          label={t('auth.forgotPassword.emailLabel')}
           value={email}
           onChange={({ nativeEvent }) => setEmail(nativeEvent.text)}
           errorMessage={formError.email}
@@ -95,7 +97,7 @@ export const ForgotPasswordEmailStep: React.FC<ForgotPasswordEmailStepProps> = (
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
           <ThemedText color="background" size="lg" weight="semibold">
-            continuar
+            {t('auth.forgotPassword.submitButton')}
           </ThemedText>
         </Button>
       </Box>

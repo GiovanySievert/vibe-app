@@ -1,3 +1,5 @@
+import { i18n } from '@src/shared/i18n'
+
 export enum PlaceReviewErrorCode {
   RATE_LIMITED = 'RATE_LIMITED',
   OUT_OF_RANGE = 'OUT_OF_RANGE',
@@ -12,15 +14,14 @@ export type PlaceReviewApiErrorBody = {
   maxAllowedMeters?: number
 }
 
-const FALLBACK_MESSAGE = 'algo deu errado, tente novamente mais tarde'
-
-const MESSAGES: Record<PlaceReviewErrorCode, string> = {
-  [PlaceReviewErrorCode.RATE_LIMITED]: 'você já postou aqui há pouco tempo, espere um pouco antes de postar de novo',
-  [PlaceReviewErrorCode.OUT_OF_RANGE]: 'você precisa estar no local pra postar essa review',
-  [PlaceReviewErrorCode.PHOTO_REQUIRED]: 'a foto do local é obrigatória'
+const MESSAGE_KEYS: Record<PlaceReviewErrorCode, string> = {
+  [PlaceReviewErrorCode.RATE_LIMITED]: 'post.errors.rateLimited',
+  [PlaceReviewErrorCode.OUT_OF_RANGE]: 'post.errors.outOfRange',
+  [PlaceReviewErrorCode.PHOTO_REQUIRED]: 'post.errors.photoRequired'
 }
 
 export const placeReviewErrorMessage = (code: string | undefined): string => {
-  if (!code) return FALLBACK_MESSAGE
-  return MESSAGES[code as PlaceReviewErrorCode] ?? FALLBACK_MESSAGE
+  if (!code) return i18n.t('auth.errors.generic')
+  const key = MESSAGE_KEYS[code as PlaceReviewErrorCode]
+  return key ? i18n.t(key) : i18n.t('auth.errors.generic')
 }

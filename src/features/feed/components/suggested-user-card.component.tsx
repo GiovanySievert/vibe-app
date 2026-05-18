@@ -5,6 +5,7 @@ import { UsersProfileFollowActions } from '@src/features/users-profile/component
 import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { UserSuggestion } from '@src/shared/domain/users.model'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 interface SuggestedUserCardProps {
   item: UserSuggestion
@@ -12,6 +13,7 @@ interface SuggestedUserCardProps {
 }
 
 export const SuggestedUserCard: React.FC<SuggestedUserCardProps> = ({ item, badge }) => {
+  const { t } = useAppTranslation()
   const navigateToProfile = useNavigateToProfile()
 
   return (
@@ -28,13 +30,21 @@ export const SuggestedUserCard: React.FC<SuggestedUserCardProps> = ({ item, badg
             </ThemedText>
           ) : item.mutualCount > 0 ? (
             <ThemedText size="xs" color="textSecondary">
-              {item.mutualCount} {item.mutualCount === 1 ? 'amigo' : 'amigos'} em comum
+              {t('social.suggestions.mutualFriends', {
+                count: item.mutualCount
+              })}
             </ThemedText>
           ) : null}
         </Box>
       </Touchable>
       <UsersProfileFollowActions
-        userData={{ id: item.id, username: item.username, image: item.image, name: item.username, bio: null }}
+        userData={{
+          id: item.id,
+          username: item.username,
+          image: item.image,
+          name: item.username,
+          bio: null
+        }}
         compact
       />
     </Box>

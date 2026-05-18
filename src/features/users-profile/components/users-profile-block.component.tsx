@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { getBlockStatusQueryKey, useBlockStatus } from '../hooks/use-block-status.hook'
 import { BlockService } from '../services'
@@ -16,6 +17,7 @@ type UsersProfileBlockProps = {
 }
 
 export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData, onBlockChange }) => {
+  const { t } = useAppTranslation()
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
@@ -66,7 +68,7 @@ export const UsersProfileBlock: React.FC<UsersProfileBlockProps> = ({ userData, 
   }
 
   const handleBlockText = () => {
-    return blockData?.isBlocked ? 'Desbloquear' : 'Bloquear'
+    return blockData?.isBlocked ? t('usersProfile.block.unblock') : t('usersProfile.block.block')
   }
 
   return (

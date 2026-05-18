@@ -7,11 +7,15 @@ import { useToast } from '@src/app/providers/toast.provider'
 import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatRelativeTime, HIT_SLOP } from '@src/shared/utils'
 
 import { EventCommentResponse, EventCommentService, ListEventCommentsResponse } from '../services/event-comment.service'
 
-type InfiniteData = { pages: ListEventCommentsResponse[]; pageParams: unknown[] }
+type InfiniteData = {
+  pages: ListEventCommentsResponse[]
+  pageParams: unknown[]
+}
 
 type EventCommentListProps = {
   eventId: string
@@ -35,6 +39,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
   isFetchingNextPage,
   fetchNextPage
 }) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
 
@@ -62,7 +67,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
       if (context?.previous) {
         queryClient.setQueryData(['eventComments', eventId], context.previous)
       }
-      showToast('não foi possível excluir o recado.', 'error')
+      showToast(t('social.createEvent.commentDeleteFailed'), 'error')
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['eventComments', eventId] })
   })
@@ -83,7 +88,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
               {isCreator && (
                 <Box style={styles.creatorBadge}>
                   <ThemedText size="xs" color="primary" weight="semibold">
-                    Criador
+                    {t('social.createEvent.creatorBadge')}
                   </ThemedText>
                 </Box>
               )}
@@ -110,7 +115,7 @@ export const EventCommentList: React.FC<EventCommentListProps> = ({
   if (!isLoading && comments.length === 0) {
     return (
       <ThemedText size="sm" color="textSecondary">
-        Nenhum recado ainda. Seja o primeiro!
+        {t('social.createEvent.commentEmpty')}
       </ThemedText>
     )
   }

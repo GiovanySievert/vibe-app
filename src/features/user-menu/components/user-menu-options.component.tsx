@@ -8,6 +8,7 @@ import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { authStateAtom } from '@src/features/auth/state'
 import { Box, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { useLogout } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { UserMenuContactModal } from './user-menu-contact-modal.component'
 
@@ -15,34 +16,38 @@ export const UserMenuOptions = () => {
   const navigation = useNavigation<NavigationProp<UserMenuStackParamList>>()
   const [isContactModalVisible, setIsContactModalVisible] = useState(false)
   const authState = useAtomValue(authStateAtom)
+  const { t } = useAppTranslation()
 
   const { logout } = useLogout()
 
   return (
     <>
       <ThemedText size="xs" weight="semibold" variant="secondary" style={styles.sectionLabel}>
-        conta
+        {t('userMenu.options.accountSection')}
       </ThemedText>
       <Box gap={4}>
         <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('UserEditProfile')}>
           <Box>
-            <ThemedText weight="medium">editar perfil</ThemedText>
-            <ThemedText size="sm" variant="secondary">nome, bio, foto</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.editProfileTitle')}</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              {t('userMenu.options.editProfileSubtitle')}
+            </ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
         <Divider />
 
-        <Touchable
-          style={styles.actionContainer}
-          onPress={() => navigation.navigate('ChangeUsernameScreen')}
-        >
+        <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('ChangeUsernameScreen')}>
           <Box>
-            <ThemedText weight="medium">usuário</ThemedText>
-            <ThemedText size="sm" variant="secondary">@{authState.user.username}</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.usernameTitle')}</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              @{authState.user.username}
+            </ThemedText>
           </Box>
           <Box flexDirection="row" alignItems="center" gap={2}>
-            <ThemedText size="sm" variant="secondary">mudar</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              {t('userMenu.options.usernameChange')}
+            </ThemedText>
             <ThemedIcon name="ChevronRight" color="textPrimary" />
           </Box>
         </Touchable>
@@ -50,8 +55,10 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('UserBadgesScreen')}>
           <Box>
-            <ThemedText weight="medium">badges</ThemedText>
-            <ThemedText size="sm" variant="secondary">conquistas no perfil</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.badgesTitle')}</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              {t('userMenu.options.badgesSubtitle')}
+            </ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
@@ -59,8 +66,10 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('UserPrivacyScreen')}>
           <Box>
-            <ThemedText weight="medium">privacidade</ThemedText>
-            <ThemedText size="sm" variant="secondary">perfil público</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.privacyTitle')}</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              {t('userMenu.options.privacySubtitle')}
+            </ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
@@ -68,22 +77,30 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('TermsOfUseScreen')}>
           <Box>
-            <ThemedText weight="medium">termos de uso</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.termsOfUseTitle')}</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
       </Box>
 
       <ThemedText size="xs" weight="semibold" variant="secondary" style={styles.sectionLabel}>
-        no app
+        {t('userMenu.options.appSection')}
       </ThemedText>
       <Box gap={4}>
-        <Touchable
-          style={styles.actionContainer}
-          onPress={() => navigation.navigate('NotificationPreferencesScreen')}
-        >
+        <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('LanguageSelectionScreen')}>
           <Box>
-            <ThemedText weight="medium">notificações</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.language.menuItem')}</ThemedText>
+            <ThemedText size="sm" variant="secondary">
+              {t('userMenu.language.menuItemHint')}
+            </ThemedText>
+          </Box>
+          <ThemedIcon name="ChevronRight" color="textPrimary" />
+        </Touchable>
+        <Divider />
+
+        <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('NotificationPreferencesScreen')}>
+          <Box>
+            <ThemedText weight="medium">{t('userMenu.options.notificationsTitle')}</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
@@ -91,7 +108,7 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => setIsContactModalVisible(true)}>
           <Box>
-            <ThemedText weight="medium">falar com a equipe</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.contactTitle')}</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
@@ -99,7 +116,7 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => navigation.navigate('UserDeleteAccountScreen')}>
           <Box>
-            <ThemedText weight="medium">deletar conta</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.deleteAccountTitle')}</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>
@@ -107,7 +124,7 @@ export const UserMenuOptions = () => {
 
         <Touchable style={styles.actionContainer} onPress={() => logout()}>
           <Box>
-            <ThemedText weight="medium">deslogar</ThemedText>
+            <ThemedText weight="medium">{t('userMenu.options.logoutTitle')}</ThemedText>
           </Box>
           <ThemedIcon name="ChevronRight" color="textPrimary" />
         </Touchable>

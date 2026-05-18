@@ -21,15 +21,15 @@ type PinProps = {
 const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coordinate }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   return (
-    <MapboxGL.MarkerView
-      id={placeId}
-      coordinate={coordinate}
-      allowOverlap={true}
-      anchor={{ x: 0.5, y: 1.0 }}
-    >
+    <MapboxGL.MarkerView id={placeId} coordinate={coordinate} allowOverlap={true} anchor={{ x: 0.5, y: 1.0 }}>
       <Box style={styles.wrapper}>
         <Touchable
-          onPress={() => navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId } })}
+          onPress={() =>
+            navigation.navigate('Modals', {
+              screen: 'PlacesDetailsScreen',
+              params: { placeId, isHot: placeIsHot }
+            })
+          }
           accessibilityRole="button"
           accessibilityLabel={placeName ?? 'Lugar no mapa'}
           accessibilityHint="Abre os detalhes do lugar"

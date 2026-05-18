@@ -11,6 +11,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatRelativeTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { FeedReviewItem, ReviewCounts } from '../domain/feed-review-item.model'
@@ -27,6 +28,7 @@ type Props = {
 }
 
 export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavoriteAction = false }) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const navigateToProfile = useNavigateToProfile()
@@ -40,9 +42,9 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
     FeedService.getCounts(review.id)
       .then((r) => setCounts(r.data))
       .catch(() => {
-        showToast('não foi possível carregar interações.', 'error')
+        showToast(t('feed.errors.loadInteractionsFailed'), 'error')
       })
-  }, [review.id, showToast])
+  }, [review.id, showToast, t])
 
   const { mutate: submitReaction } = useMutation({
     mutationFn: (nextReaction: 'on' | 'off' | null) => {
@@ -65,13 +67,13 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
     },
     onError: (_error, _variables, context) => {
       if (context?.previousCounts !== undefined) setCounts(context.previousCounts)
-      showToast('não foi possível atualizar sua reação.', 'error')
+      showToast(t('feed.errors.updateReactionFailed'), 'error')
     },
     onSettled: () => {
       FeedService.getCounts(review.id)
         .then((r) => setCounts(r.data))
         .catch(() => {
-          showToast('não foi possível atualizar interações.', 'error')
+          showToast(t('feed.errors.updateInteractionsFailed'), 'error')
         })
       queryClient.invalidateQueries({ queryKey: ['feed'] })
     }
@@ -101,7 +103,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
             {isOwner && (
               <Box style={styles.ownerBadge}>
                 <ThemedText size="xs" color="textSecondary" style={styles.ownerBadgeText}>
-                  você
+                  {t('feed.card.ownerBadge')}
                 </ThemedText>
               </Box>
             )}
@@ -144,25 +146,21 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
           <Touchable activeOpacity={0.7} style={styles.actionBtn} onPress={() => setIsCommentsVisible(true)}>
             <ThemedIcon name="MessageCircle" size={16} color="textSecondary" />
             <ThemedText size="xs" weight="medium" color="textSecondary">
-              comentários · {counts?.commentsCount ?? 0}
+              {t('feed.card.comments', { count: counts?.commentsCount ?? 0 })}
             </ThemedText>
           </Touchable>
         </Box>
 
         {isOwner && totalComments > 0 ? (
-          <Touchable
-            activeOpacity={0.7}
-            onPress={() => setIsInteractionsVisible(true)}
-            style={styles.interactionsBtn}
-          >
+          <Touchable activeOpacity={0.7} onPress={() => setIsInteractionsVisible(true)} style={styles.interactionsBtn}>
             <ThemedText size="xs" color="primary">
-              ver {totalComments} interações
+              {t('feed.card.viewInteractions', { count: totalComments })}
             </ThemedText>
           </Touchable>
         ) : (
           <Box style={styles.interactionsBtn}>
             <ThemedText size="xs" color="textSecondary">
-              sem interações
+              {t('feed.card.noInteractions')}
             </ThemedText>
           </Box>
         )}

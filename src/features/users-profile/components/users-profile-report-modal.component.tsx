@@ -7,6 +7,7 @@ import { useToast } from '@src/app/providers/toast.provider'
 import { Box, Button, Input, SwipeableModal, ThemedText } from '@src/shared/components'
 import { RadioButton } from '@src/shared/components/radio-button/radio-button.component'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { ReportService } from '../services'
 import { ReportReason } from '../types'
@@ -17,15 +18,8 @@ type UsersProfileReportModalProps = {
   onClose: () => void
 }
 
-const REPORT_REASON_OPTIONS = [
-  { label: 'spam', value: ReportReason.SPAM },
-  { label: 'conteúdo inapropriado', value: ReportReason.INAPPROPRIATE_CONTENT },
-  { label: 'assédio', value: ReportReason.HARASSMENT },
-  { label: 'conta falsa', value: ReportReason.FAKE_ACCOUNT },
-  { label: 'outro', value: ReportReason.OTHER }
-]
-
 export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = ({ userData, visible, onClose }) => {
+  const { t } = useAppTranslation()
   const [selectedReason, setSelectedReason] = useState<ReportReason | null>(null)
   const [description, setDescription] = useState('')
   const { showToast } = useToast()
@@ -44,15 +38,15 @@ export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = (
     onSuccess: () => {
       reset()
       onClose()
-      showToast('denúncia enviada com sucesso.')
+      showToast(t('usersProfile.report.success'))
     },
     onError: (error) => {
       reset()
       onClose()
       if (isAxiosError(error) && error.response?.status === 409) {
-        showToast('você já reportou esse usuário.', 'warning')
+        showToast(t('usersProfile.report.alreadyReported'), 'warning')
       } else {
-        showToast('erro ao enviar denúncia. tente novamente mais tarde.', 'error')
+        showToast(t('usersProfile.report.failed'), 'error')
       }
     }
   })
@@ -67,13 +61,34 @@ export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = (
       <Box pt={2} pb={6} pl={6} pr={6}>
         <Box mb={4}>
           <ThemedText size="lg" weight="semibold">
-            denunciar usuário @{userData.username}
+            {t('usersProfile.report.title', { username: userData.username })}
           </ThemedText>
         </Box>
 
         <Box mb={4}>
           <RadioButton
-            options={REPORT_REASON_OPTIONS}
+            options={[
+              {
+                label: t('usersProfile.report.reasons.spam'),
+                value: ReportReason.SPAM
+              },
+              {
+                label: t('usersProfile.report.reasons.inappropriate'),
+                value: ReportReason.INAPPROPRIATE_CONTENT
+              },
+              {
+                label: t('usersProfile.report.reasons.harassment'),
+                value: ReportReason.HARASSMENT
+              },
+              {
+                label: t('usersProfile.report.reasons.fake'),
+                value: ReportReason.FAKE_ACCOUNT
+              },
+              {
+                label: t('usersProfile.report.reasons.other'),
+                value: ReportReason.OTHER
+              }
+            ]}
             selectedValue={selectedReason ?? ''}
             onValueChange={(value) => setSelectedReason(value as ReportReason)}
           />
@@ -97,7 +112,7 @@ export const UsersProfileReportModal: React.FC<UsersProfileReportModalProps> = (
           onPress={() => reportMutation.mutate()}
         >
           <ThemedText color="background" weight="semibold">
-            Confirmar denúncia
+            {t('usersProfile.report.confirm')}
           </ThemedText>
         </Button>
       </Box>

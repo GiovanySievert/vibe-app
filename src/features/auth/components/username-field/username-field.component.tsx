@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react'
 import { TextInput } from 'react-native'
 
 import { Box, Input, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type UsernameFieldProps = {
   value: string
@@ -14,12 +15,15 @@ type UsernameFieldProps = {
 }
 
 export const UsernameField = forwardRef<TextInput, UsernameFieldProps>(
-  ({ value, onChangeText, onBlur, available, errorMessage, label = 'usuário', autoFocus }, ref) => {
+  ({ value, onChangeText, onBlur, available, errorMessage, label, autoFocus }, ref) => {
+    const { t } = useAppTranslation()
+    const resolvedLabel = label ?? t('auth.signUp.usernameLabel')
+
     return (
       <Box gap={2}>
         <Input
           ref={ref}
-          label={label}
+          label={resolvedLabel}
           value={value}
           onChange={({ nativeEvent }) => onChangeText(nativeEvent.text)}
           errorMessage={errorMessage}
@@ -34,7 +38,7 @@ export const UsernameField = forwardRef<TextInput, UsernameFieldProps>(
         />
         {available === true && value.length > 0 && (
           <ThemedText variant="mono" size="sm" color="textSecondary">
-            vibes.app/{value} · disponível
+            {t('auth.signUp.usernameAvailable', { value })}
           </ThemedText>
         )}
       </Box>

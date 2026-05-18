@@ -7,6 +7,7 @@ import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/featu
 import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { FollowRequestItem } from '../components/follow-request-item.component'
 import { useFollowRequestActions } from '../hooks/use-follow-request-actions'
@@ -15,6 +16,7 @@ import { useInfiniteFollowRequests } from '../hooks/use-follow-requests'
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'FollowRequestsScreen'>
 
 export const FollowRequestsScreen: React.FC<Props> = ({ route }) => {
+  const { t } = useAppTranslation()
   const type = route.params.type === 'received' ? FollowRequestType.RECEIVED : FollowRequestType.SENT
 
   const { acceptFollowRequest, rejectFollowRequest, cancelFollowRequest } = useFollowRequestActions({
@@ -25,7 +27,10 @@ export const FollowRequestsScreen: React.FC<Props> = ({ route }) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteFollowRequests({ type })
 
   const allRequests = data?.pages.flatMap((page) => page) ?? []
-  const title = type === FollowRequestType.RECEIVED ? 'solicitações' : 'solicitações enviadas'
+  const title =
+    type === FollowRequestType.RECEIVED
+      ? t('social.followRequests.receivedTitle')
+      : t('social.followRequests.sentTitle')
   const count = allRequests.length.toString().padStart(2, '0')
 
   const renderItem = ({ item }: { item: ListUserAllFollowRequestsResponse }) => (
@@ -73,7 +78,7 @@ export const FollowRequestsScreen: React.FC<Props> = ({ route }) => {
             !isLoading ? (
               <Box mt={6} alignItems="center">
                 <ThemedText variant="mono" size="xs" color="textSecondary">
-                  nenhuma solicitação
+                  {t('social.followRequests.empty')}
                 </ThemedText>
               </Box>
             ) : null

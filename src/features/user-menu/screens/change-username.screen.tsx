@@ -7,23 +7,25 @@ import { useAtom } from 'jotai'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { UsernameField } from '@src/features/auth/components'
-import { signUpProfileSchema } from '@src/features/auth/domain'
+import { buildSignUpProfileSchema } from '@src/features/auth/domain'
 import { AuthService } from '@src/features/auth/services'
 import { authStateAtom } from '@src/features/auth/state'
 import { Box, Button, GoBackButton, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { useDebounce } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 const CHECK_DEBOUNCE_MS = 2000
 
-const usernameSchema = signUpProfileSchema.pick({ username: true })
+const buildUsernameSchema = () => buildSignUpProfileSchema().pick({ username: true })
 
 export const ChangeUsernameScreen = () => {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const [authState, setAuthState] = useAtom(authStateAtom)
+  const { t } = useAppTranslation()
 
   const currentUsername = authState.user.username
   const [username, setUsername] = useState(currentUsername)
@@ -40,7 +42,7 @@ export const ChangeUsernameScreen = () => {
     mutationFn: (value: string) => AuthService.checkIfUsernameIsAvailable(value),
     onSuccess: ({ data }) => {
       if (!data.available) {
-        setError('esse username não está disponível')
+        setError(t('userMenu.changeUsername.unavailable'))
         setAvailable(false)
         return
       }
@@ -48,7 +50,7 @@ export const ChangeUsernameScreen = () => {
       setAvailable(true)
     },
     onError: () => {
-      setError('erro ao verificar username, tente novamente')
+      setError(t('userMenu.changeUsername.checkError'))
       setAvailable(null)
     }
   })
@@ -59,14 +61,14 @@ export const ChangeUsernameScreen = () => {
     const trimmed = debouncedUsername.trim()
     if (trimmed.length === 0 || trimmed === currentUsername) return
 
-    const result = usernameSchema.safeParse({ username: trimmed })
+    const result = buildUsernameSchema().safeParse({ username: trimmed })
     if (!result.success) {
-      setError(result.error.issues[0]?.message ?? 'username inválido')
+      setError(result.error.issues[0]?.message ?? t('userMenu.changeUsername.invalid'))
       setAvailable(false)
       return
     }
     checkUsername(trimmed)
-  }, [debouncedUsername, currentUsername, checkUsername])
+  }, [debouncedUsername, currentUsername, checkUsername, t])
 
   const { mutate: submitUpdate, isPending: isSaving } = useMutation({
     mutationFn: (value: string) => AuthService.updateUsername(value),
@@ -75,26 +77,28 @@ export const ChangeUsernameScreen = () => {
         ...prev,
         user: { ...prev.user, username: data.username }
       }))
-      queryClient.invalidateQueries({ queryKey: ['fetchUserById', authState.user.id] })
-      showToast('username atualizado')
+      queryClient.invalidateQueries({
+        queryKey: ['fetchUserById', authState.user.id]
+      })
+      showToast(t('userMenu.changeUsername.successToast'))
       navigation.goBack()
     },
     onError: (mutationError) => {
       const status = (mutationError as { status?: number; response?: { status?: number } })?.response?.status
       if (status === 409) {
-        setError('username já está em uso')
+        setError(t('userMenu.changeUsername.inUse'))
         setAvailable(false)
         return
       }
-      showToast('não foi possível atualizar, tente novamente', 'error')
+      showToast(t('userMenu.changeUsername.updateError'), 'error')
     }
   })
 
   const handleSave = () => {
     const trimmed = username.trim()
-    const result = usernameSchema.safeParse({ username: trimmed })
+    const result = buildUsernameSchema().safeParse({ username: trimmed })
     if (!result.success) {
-      setError(result.error.issues[0]?.message ?? 'username inválido')
+      setError(result.error.issues[0]?.message ?? t('userMenu.changeUsername.invalid'))
       return
     }
     submitUpdate(trimmed)
@@ -109,8 +113,8 @@ export const ChangeUsernameScreen = () => {
         <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
           <GoBackButton />
           <Box>
-            <ThemedText variant="title">trocar usuário</ThemedText>
-            <ThemedText variant="mono">como seus amigos te encontram</ThemedText>
+            <ThemedText variant="title">{t('userMenu.changeUsername.title')}</ThemedText>
+            <ThemedText variant="mono">{t('userMenu.changeUsername.subtitle')}</ThemedText>
           </Box>
         </Box>
 
@@ -125,7 +129,7 @@ export const ChangeUsernameScreen = () => {
 
           <Button disabled={isDisabled} loading={isSaving} onPress={handleSave}>
             <ThemedText color="background" weight="semibold" size="lg">
-              salvar
+              {t('common.save')}
             </ThemedText>
           </Button>
         </Box>

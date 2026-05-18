@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Pressable, StyleSheet, TextInput } from 'react-native'
 
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
@@ -27,6 +28,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   length = 6,
   disabled = false
 }) => {
+  const { t } = useAppTranslation()
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState(false)
 
@@ -64,8 +66,8 @@ export const OtpInput: React.FC<OtpInputProps> = ({
         onPress={focusInput}
         disabled={disabled}
         accessibilityRole="text"
-        accessibilityLabel="Código de verificação"
-        accessibilityHint={`Digite os ${length} dígitos do código`}
+        accessibilityLabel={t('common.verificationCode')}
+        accessibilityHint={t('common.verificationCodeHint', { length })}
       >
         <TextInput
           ref={inputRef}
@@ -97,7 +99,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
                 alignItems="center"
                 justifyContent="center"
                 style={[styles.digitBox, isActive && styles.digitBoxActive, hasError && styles.digitBoxError]}
-                accessibilityLabel={`Dígito ${index + 1} de ${length}${digit ? `, ${digit}` : ', vazio'}`}
+                accessibilityLabel={t('common.digitA11y', {
+                  index: index + 1,
+                  length,
+                  value: digit ? t('common.digitValue', { digit }) : t('common.digitEmpty')
+                })}
               >
                 <ThemedText variant="mono" size="2xl" color="textPrimary" weight="bold">
                   {digit}

@@ -4,41 +4,12 @@ import { ScrollView, StyleSheet, Switch } from 'react-native'
 import { Box, Card, Divider, GoBackButton, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
-import { NotificationType } from '../../inbox/services/notification-inbox.service'
-import {
-  useNotificationPreferences,
-  useUpdateNotificationPreference
-} from '../hooks/use-notification-preferences.hook'
-
-const TYPE_LABELS: Record<NotificationType, { title: string; description: string }> = {
-  event_invitation: {
-    title: 'Convites para eventos',
-    description: 'Quando alguem te convida pra um evento.'
-  },
-  follow_request_created: {
-    title: 'Solicitacoes de seguir',
-    description: 'Quando alguem pede pra te seguir.'
-  },
-  follow_request_accepted: {
-    title: 'Solicitacao aceita',
-    description: 'Quando alguem aceita seu pedido de seguir.'
-  },
-  event_comment_created: {
-    title: 'Comentarios no evento',
-    description: 'Quando alguem comenta no seu evento.'
-  },
-  place_review_comment: {
-    title: 'Comentarios no post',
-    description: 'Quando alguem comenta no seu post.'
-  },
-  place_review_reaction: {
-    title: 'Reacoes no post',
-    description: 'Quando alguem reage no seu post.'
-  }
-}
+import { useNotificationPreferences, useUpdateNotificationPreference } from '../hooks/use-notification-preferences.hook'
 
 export const NotificationPreferencesScreen = () => {
+  const { t } = useAppTranslation()
   const { data, isLoading } = useNotificationPreferences()
   const update = useUpdateNotificationPreference()
 
@@ -48,35 +19,39 @@ export const NotificationPreferencesScreen = () => {
         <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
           <GoBackButton />
           <Box>
-            <ThemedText variant="title">notificacoes</ThemedText>
-            <ThemedText variant="mono">controle como cada tipo te alcanca</ThemedText>
+            <ThemedText variant="title">{t('notifications.preferences.title')}</ThemedText>
+            <ThemedText variant="mono">{t('notifications.preferences.subtitle')}</ThemedText>
           </Box>
         </Box>
 
         <Box pl={5} pr={5}>
           <Card pt={4} pb={4} pl={4} pr={4}>
             {isLoading ? (
-              <ThemedText color="textSecondary">Carregando...</ThemedText>
+              <ThemedText color="textSecondary">{t('notifications.preferences.loading')}</ThemedText>
             ) : (
               data?.map((pref, idx) => {
-                const meta = TYPE_LABELS[pref.type]
                 return (
                   <React.Fragment key={pref.type}>
                     <Box flexDirection="row" alignItems="center" gap={3} pt={3} pb={3}>
                       <Box flex={1}>
-                        <ThemedText weight="semibold">{meta.title}</ThemedText>
+                        <ThemedText weight="semibold">
+                          {t(`notifications.preferences.types.${pref.type}.title`)}
+                        </ThemedText>
                         <ThemedText size="sm" color="textSecondary">
-                          {meta.description}
+                          {t(`notifications.preferences.types.${pref.type}.description`)}
                         </ThemedText>
                       </Box>
                       <Box alignItems="flex-end">
                         <ThemedText size="xs" color="textSecondary">
-                          push
+                          {t('notifications.preferences.push')}
                         </ThemedText>
                         <Switch
                           value={pref.pushEnabled}
                           onValueChange={(value) =>
-                            update.mutate({ type: pref.type, pushEnabled: value })
+                            update.mutate({
+                              type: pref.type,
+                              pushEnabled: value
+                            })
                           }
                           trackColor={{
                             true: theme.colors.primary,
@@ -94,7 +69,7 @@ export const NotificationPreferencesScreen = () => {
 
           <Box pt={4}>
             <ThemedText size="xs" color="textSecondary" style={styles.footer}>
-              Notificacoes in-app aparecem sempre no inbox.
+              {t('notifications.preferences.footer')}
             </ThemedText>
           </Box>
         </Box>

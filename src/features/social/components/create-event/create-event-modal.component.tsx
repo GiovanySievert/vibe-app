@@ -11,6 +11,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useUploadImage } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { triggerSuccessHaptic } from '@src/shared/utils'
 
 import { CreateEventPayload, CreateEventRequest, EventFormData } from '../../domain/event.model'
@@ -30,8 +31,6 @@ enum CREATE_EVENT_STEPS {
   SUCCESS = 4
 }
 
-const PROGRESS_STEPS = ['Detalhes', 'Participantes', 'Confirmar']
-
 const screenWidth = Dimensions.get('window').width
 const MODAL_HEIGHT = Dimensions.get('window').height * 0.9
 
@@ -41,6 +40,7 @@ type CreateEventModalProps = {
 }
 
 export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onClose }) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const { upload, uploading } = useUploadImage()
@@ -75,7 +75,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
     },
     onError: () => {
       goToStep(CREATE_EVENT_STEPS.CONFIRMATION)
-      showToast('não foi possível criar o evento.', 'error')
+      showToast(t('social.createEvent.createFailed'), 'error')
     }
   })
 
@@ -89,7 +89,14 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
   const handleClose = () => {
     animatedValue.value = 0
     setCurrentStep(CREATE_EVENT_STEPS.INTRO)
-    setFormData({ name: '', date: '', time: '', description: '', place: null, imageUri: null })
+    setFormData({
+      name: '',
+      date: '',
+      time: '',
+      description: '',
+      place: null,
+      imageUri: null
+    })
     setParticipants([])
     setEventLink('')
     setSelectedPlace(null)
@@ -116,6 +123,11 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
 
   const progressIndex = currentStep - CREATE_EVENT_STEPS.FORM
   const showProgress = currentStep > CREATE_EVENT_STEPS.INTRO && currentStep < CREATE_EVENT_STEPS.SUCCESS
+  const progressSteps = [
+    t('social.createEvent.detailsStep'),
+    t('social.createEvent.participantsStep'),
+    t('social.createEvent.confirmStep')
+  ]
 
   return (
     <SwipeableModal visible={visible} onClose={handleClose} height={MODAL_HEIGHT}>
@@ -123,7 +135,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
         <Box pl={5} pr={5} pt={2} pb={4} gap={4}>
           <Box flexDirection="row" alignItems="center" justifyContent="space-between">
             <ThemedText weight="semibold" size="lg">
-              Crie seu evento
+              {t('social.createEvent.modalTitle')}
             </ThemedText>
             <Touchable onPress={handleClose} hitSlop={styles.closeHitSlop}>
               <ThemedIcon name="X" size={20} color="textSecondary" />
@@ -132,7 +144,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ visible, onC
 
           {showProgress && (
             <Box flexDirection="row" gap={2}>
-              {PROGRESS_STEPS.map((label, i) => (
+              {progressSteps.map((label, i) => (
                 <Box key={i} flex={1} gap={1}>
                   <Box style={[styles.progressBar, i <= progressIndex && styles.progressBarActive]} />
                   <ThemedText size="xs" color={i <= progressIndex ? 'primary' : 'textSecondary'}>

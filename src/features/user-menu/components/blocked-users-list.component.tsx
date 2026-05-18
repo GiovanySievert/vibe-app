@@ -9,6 +9,7 @@ import { useBlockActions } from '@src/features/social/hooks/use-block-actions'
 import { useBlockedUsers } from '@src/features/social/hooks/use-blocked-users'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
 import { Box, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 interface BlockedUsersListProps {
   limit?: number
@@ -18,6 +19,7 @@ export const BlockedUsersList = ({ limit }: BlockedUsersListProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthenticatedStackParamList>>()
   const { unblockUser } = useBlockActions()
   const { data: blockedUsers, isLoading } = useBlockedUsers()
+  const { t } = useAppTranslation()
 
   if (isLoading) return null
 
@@ -27,13 +29,16 @@ export const BlockedUsersList = ({ limit }: BlockedUsersListProps) => {
   const count = total.toString().padStart(2, '0')
 
   const openModal = () =>
-    navigation.navigate('Modals', { screen: 'BlockedUsersScreen', params: undefined })
+    navigation.navigate('Modals', {
+      screen: 'BlockedUsersScreen',
+      params: undefined
+    })
 
   return (
     <Box gap={3}>
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
-          bloqueados
+          {t('userMenu.privacy.blockedSection')}
         </ThemedText>
         <ThemedText variant="mono" size="xs" letterSpacing="wider">
           {count}
@@ -42,7 +47,7 @@ export const BlockedUsersList = ({ limit }: BlockedUsersListProps) => {
 
       {total === 0 ? (
         <ThemedText variant="mono" size="xs" color="textSecondary">
-          você ainda não bloqueou ninguém.
+          {t('userMenu.privacy.emptyBlocked')}
         </ThemedText>
       ) : (
         <Box gap={3}>
@@ -55,7 +60,7 @@ export const BlockedUsersList = ({ limit }: BlockedUsersListProps) => {
       {hasMore && (
         <Pressable onPress={openModal}>
           <ThemedText variant="mono" size="xs" color="textSecondary">
-            ver todos ({count})
+            {t('userMenu.privacy.viewAll', { value: count })}
           </ThemedText>
         </Pressable>
       )}

@@ -14,11 +14,13 @@ import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 export const UserOwnProfileScreen = () => {
   const [authState] = useAtom(authStateAtom)
   const userId = authState.user.id
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const { t } = useAppTranslation()
 
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
     queryKey: ['fetchUserById', userId],
@@ -30,7 +32,7 @@ export const UserOwnProfileScreen = () => {
   if (isLoading) {
     return (
       <Box bg="background">
-        <ThemedText>CARREGANDO</ThemedText>
+        <ThemedText>{t('userMenu.profile.loading')}</ThemedText>
       </Box>
     )
   }

@@ -3,8 +3,10 @@ import { StyleSheet } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
 
 import { Box, Divider, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 export const UsersProfileHeaderLoading: React.FC = () => {
+  const { t } = useAppTranslation()
   const opacity = useSharedValue(1)
 
   useEffect(() => {
@@ -28,14 +30,14 @@ export const UsersProfileHeaderLoading: React.FC = () => {
             <Box alignItems="center">
               <Animated.View style={[styles.loadingSkeletonPrimary, { width: '30%', left: 5 }, animatedStyle]} />
               <ThemedText variant="secondary" size="sm">
-                Seguindo
+                {t('usersProfile.loading.following')}
               </ThemedText>
             </Box>
 
             <Box alignItems="center">
               <Animated.View style={[styles.loadingSkeletonPrimary, { width: '25%', left: 6 }, animatedStyle]} />
               <ThemedText variant="secondary" size="sm">
-                Seguidores
+                {t('usersProfile.loading.followers')}
               </ThemedText>
             </Box>
           </Box>

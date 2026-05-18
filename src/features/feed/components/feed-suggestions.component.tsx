@@ -5,11 +5,13 @@ import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 import { UserSuggestion } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useUserSuggestions } from '../hooks'
 import { SuggestedUserCard } from './suggested-user-card.component'
 
 export const FeedSuggestions: React.FC = () => {
+  const { t } = useAppTranslation()
   const { data: suggestions, isPending } = useUserSuggestions()
 
   if (isPending) {
@@ -28,12 +30,12 @@ export const FeedSuggestions: React.FC = () => {
     <Box pt={6} pl={4} pr={4}>
       <Box mb={1}>
         <ThemedText weight="semibold" size="lg">
-          Pessoas que você pode conhecer
+          {t('feed.suggestions.title')}
         </ThemedText>
       </Box>
       <Box mb={5}>
         <ThemedText color="textSecondary" size="sm">
-          Siga alguém para ver as reviews deles aqui
+          {t('feed.suggestions.description')}
         </ThemedText>
       </Box>
       <FlatList<UserSuggestion>

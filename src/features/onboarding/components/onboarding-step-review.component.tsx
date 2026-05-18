@@ -4,44 +4,44 @@ import { StyleSheet } from 'react-native'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type OnboardingStepReviewProps = {
   onNext: () => void
 }
 
-const REVIEW_STEPS = [
-  {
-    icon: 'Camera' as const,
-    title: 'Foto do lugar',
-    description: 'Tire uma foto mostrando como tá o ambiente — cheio, vazio, animado ou parado.'
-  },
-  {
-    icon: 'MessageSquare' as const,
-    title: 'Deixe um comentário',
-    description: 'Conta como tá o clima. Uma frase já ajuda todo mundo a decidir.'
-  },
-  {
-    icon: 'Globe' as const,
-    title: 'Aparece pra todo mundo',
-    description: 'Sua review fica visível na página do lugar em tempo real.'
-  }
-]
-
 export const OnboardingStepReview: React.FC<OnboardingStepReviewProps> = ({ onNext }) => {
+  const { t } = useAppTranslation()
+  const reviewSteps = [
+    {
+      icon: 'Camera' as const,
+      title: t('onboarding.review.step1Title'),
+      description: t('onboarding.review.step1Desc')
+    },
+    {
+      icon: 'MessageSquare' as const,
+      title: t('onboarding.review.step2Title'),
+      description: t('onboarding.review.step2Desc')
+    },
+    {
+      icon: 'Globe' as const,
+      title: t('onboarding.review.step3Title'),
+      description: t('onboarding.review.step3Desc')
+    }
+  ]
+
   return (
     <Box style={styles.container} justifyContent="space-between">
       <Box gap={6}>
         <Box gap={2}>
           <ThemedText size="xl" weight="bold">
-            Como é uma review?
+            {t('onboarding.review.title')}
           </ThemedText>
-          <ThemedText color="textSecondary">
-            Uma review de lugar é simples e rápida. Em menos de um minuto você ajuda a galera a decidir onde ir.
-          </ThemedText>
+          <ThemedText color="textSecondary">{t('onboarding.review.description')}</ThemedText>
         </Box>
 
         <Box gap={5}>
-          {REVIEW_STEPS.map((reviewStep, stepIndex) => (
+          {reviewSteps.map((reviewStep, stepIndex) => (
             <Box key={reviewStep.title} flexDirection="row" gap={4} alignItems="flex-start">
               <Box style={styles.stepNumber} alignItems="center" justifyContent="center">
                 <ThemedText weight="bold" color="primary">
@@ -65,11 +65,11 @@ export const OnboardingStepReview: React.FC<OnboardingStepReviewProps> = ({ onNe
           <Box flexDirection="row" alignItems="center" gap={2}>
             <ThemedIcon name="Info" size={14} color="primary" />
             <ThemedText size="xs" color="primary" weight="semibold">
-              Dica
+              {t('onboarding.review.tipLabel')}
             </ThemedText>
           </Box>
           <ThemedText size="sm" color="textSecondary">
-            Abra a página de qualquer lugar no mapa e toque em "Fazer review" para começar.
+            {t('onboarding.review.tipText')}
           </ThemedText>
         </Box>
       </Box>
@@ -77,7 +77,7 @@ export const OnboardingStepReview: React.FC<OnboardingStepReviewProps> = ({ onNe
       <Box pt={6}>
         <Button onPress={onNext}>
           <ThemedText color="background" weight="semibold">
-            Entendi!
+            {t('onboarding.review.confirmBtn')}
           </ThemedText>
         </Button>
       </Box>

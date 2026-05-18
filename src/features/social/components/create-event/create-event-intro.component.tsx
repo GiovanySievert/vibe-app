@@ -4,44 +4,44 @@ import { StyleSheet } from 'react-native'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type CreateEventIntroProps = {
   onNext: () => void
 }
 
-const FEATURES = [
-  {
-    icon: 'CalendarPlus' as const,
-    title: 'Crie seu evento',
-    description: 'Configure nome, data, hora e uma descrição para o seu evento em segundos.'
-  },
-  {
-    icon: 'Users' as const,
-    title: 'Convide seus amigos',
-    description: 'Busque e selecione amigos que já tem conta no app para participar.'
-  },
-  {
-    icon: 'CircleCheck' as const,
-    title: 'Confirmação de presença',
-    description: 'Seus amigos recebem o convite e podem confirmar presença diretamente pelo app.'
-  }
-]
-
 export const CreateEventIntro: React.FC<CreateEventIntroProps> = ({ onNext }) => {
+  const { t } = useAppTranslation()
+  const features = [
+    {
+      icon: 'CalendarPlus' as const,
+      title: t('social.createEventIntro.feature1Title'),
+      description: t('social.createEventIntro.feature1Desc')
+    },
+    {
+      icon: 'Users' as const,
+      title: t('social.createEventIntro.feature2Title'),
+      description: t('social.createEventIntro.feature2Desc')
+    },
+    {
+      icon: 'CircleCheck' as const,
+      title: t('social.createEventIntro.feature3Title'),
+      description: t('social.createEventIntro.feature3Desc')
+    }
+  ]
+
   return (
     <Box style={styles.container} justifyContent="space-between">
       <Box gap={6}>
         <Box gap={2}>
           <ThemedText size="xl" weight="bold">
-            Eventos com quem você curte
+            {t('social.createEventIntro.title')}
           </ThemedText>
-          <ThemedText color="textSecondary">
-            O jeito mais fácil de organizar seu aniversário, um churrasco ou qualquer rolê com os amigos que estão no app.
-          </ThemedText>
+          <ThemedText color="textSecondary">{t('social.createEventIntro.description')}</ThemedText>
         </Box>
 
         <Box gap={5}>
-          {FEATURES.map((item, i) => (
+          {features.map((item, i) => (
             <Box key={i} flexDirection="row" gap={4} alignItems="flex-start">
               <Box style={styles.iconWrapper}>
                 <ThemedIcon name={item.icon} size={20} color="primary" />
@@ -60,7 +60,7 @@ export const CreateEventIntro: React.FC<CreateEventIntroProps> = ({ onNext }) =>
       <Box pt={6}>
         <Button onPress={onNext}>
           <ThemedText color="background" weight="semibold">
-            Criar evento
+            {t('social.createEventBtn')}
           </ThemedText>
         </Button>
       </Box>

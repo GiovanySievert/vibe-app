@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import * as Location from 'expo-location'
 import { useSetAtom } from 'jotai'
 
+import { i18n } from '@src/shared/i18n'
 import { locationStateAtom } from '@src/shared/state/location.state'
 
 export function useUserLocation() {
@@ -21,7 +22,7 @@ export function useUserLocation() {
         const { status } = await Location.requestForegroundPermissionsAsync()
         if (!isMountedRef.current) return
         if (status !== 'granted') {
-          setErrorMsg('Permissão negada')
+          setErrorMsg(i18n.t('location.permissionDenied'))
           setLoading(false)
           return
         }
@@ -56,7 +57,7 @@ export function useUserLocation() {
         })
       } catch {
         if (!isMountedRef.current) return
-        setErrorMsg('Não foi possível obter a localização')
+        setErrorMsg(i18n.t('location.unavailable'))
       } finally {
         if (isMountedRef.current) setLoading(false)
       }

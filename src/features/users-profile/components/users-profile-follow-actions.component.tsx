@@ -6,6 +6,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 import { triggerLightHaptic } from '@src/shared/utils'
 
 import { getFollowStatusQueryKey, useFollowStatus } from '../hooks/use-follow-status.hook'
@@ -18,6 +19,7 @@ type UsersProfileFollowActionsProps = {
 }
 
 export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps> = ({ userData, compact = false }) => {
+  const { t } = useAppTranslation()
   const { data: userLoggedData } = authClient.useSession()
   const queryClient = useQueryClient()
 
@@ -39,7 +41,10 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
           : action === FollowAction.CANCEL
             ? FollowStatus.NONE
             : FollowStatus.NONE
-      queryClient.setQueryData<GetFollowStatusResponse>(queryKey, { status: newStatus, id: followData!.id })
+      queryClient.setQueryData<GetFollowStatusResponse>(queryKey, {
+        status: newStatus,
+        id: followData!.id
+      })
       return { previousData }
     },
     onError: (_err, _variables, context) => {
@@ -47,7 +52,9 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey })
-      queryClient.invalidateQueries({ queryKey: ['fetchFollowersStats', userData.id] })
+      queryClient.invalidateQueries({
+        queryKey: ['fetchFollowersStats', userData.id]
+      })
     }
   })
 
@@ -63,19 +70,15 @@ export const UsersProfileFollowActions: React.FC<UsersProfileFollowActionsProps>
   }
 
   const followLabel = () => {
-    if (followData?.status === FollowStatus.FOLLOWING) return 'seguindo'
-    if (followData?.status === FollowStatus.PENDING) return 'aguardando'
-    return 'seguir'
+    if (followData?.status === FollowStatus.FOLLOWING) return t('usersProfile.follow.following')
+    if (followData?.status === FollowStatus.PENDING) return t('usersProfile.follow.pending')
+    return t('usersProfile.follow.follow')
   }
 
   if (compact) {
     const isFollowing = followData?.status === FollowStatus.FOLLOWING
     return (
-      <Touchable
-        onPress={handlePress}
-        activeOpacity={0.7}
-        style={isFollowing ? styles.btnFollowing : styles.btn}
-      >
+      <Touchable onPress={handlePress} activeOpacity={0.7} style={isFollowing ? styles.btnFollowing : styles.btn}>
         <ThemedText weight="semibold" size="sm" style={isFollowing ? styles.textFollowing : styles.text}>
           {followLabel()}
         </ThemedText>

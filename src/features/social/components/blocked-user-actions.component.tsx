@@ -2,6 +2,7 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { Button, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 interface BlockedUserActionsProps {
   userId: string
@@ -10,17 +11,23 @@ interface BlockedUserActionsProps {
 }
 
 export const BlockedUserActions = ({ userId, username, onUnblock }: BlockedUserActionsProps) => {
+  const { t } = useAppTranslation()
+
   const handlePress = () => {
-    Alert.alert(`Desbloquear @${username}?`, 'Ele poderá voltar a ver seu perfil e seus posts.', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Desbloquear', style: 'default', onPress: () => onUnblock(userId) }
+    Alert.alert(t('usersProfile.block.unblockTitle', { username }), t('usersProfile.block.unblockMsg'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('usersProfile.block.unblock'),
+        style: 'default',
+        onPress: () => onUnblock(userId)
+      }
     ])
   }
 
   return (
     <Button size="sm" variant="outline" type="secondary" onPress={handlePress}>
       <ThemedText color="textPrimary" weight="bold" size="xs">
-        desbloquear
+        {t('social.blockedUsers.unblock')}
       </ThemedText>
     </Button>
   )

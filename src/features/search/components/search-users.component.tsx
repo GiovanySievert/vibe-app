@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { Box, LoadingPage, ThemedText } from '@src/shared/components'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useLastSearched } from '../hooks'
 import { SearchService } from '../services'
@@ -14,6 +15,7 @@ type SearchPlacesProps = {
 }
 
 export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
+  const { t } = useAppTranslation()
   const { saveSearch } = useLastSearched()
 
   const fetchPlacesByName = async () => {
@@ -50,7 +52,7 @@ export const SearchUsers: React.FC<SearchPlacesProps> = ({ inputSearch }) => {
   if (!usersData?.length && !isLoading && inputSearch.length > 0) {
     return (
       <Box mt={5}>
-        <ThemedText>Nenhum usuário encontrado.</ThemedText>
+        <ThemedText>{t('search.emptyUsers')}</ThemedText>
       </Box>
     )
   }

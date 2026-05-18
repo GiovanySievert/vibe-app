@@ -7,6 +7,7 @@ import { useSetAtom } from 'jotai'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { locationStateAtom } from '@src/shared/state/location.state'
 
 type OnboardingStepLocationProps = {
@@ -14,6 +15,7 @@ type OnboardingStepLocationProps = {
 }
 
 export const OnboardingStepLocation: React.FC<OnboardingStepLocationProps> = ({ onNext }) => {
+  const { t } = useAppTranslation()
   const [loading, setLoading] = useState(false)
   const setLocation = useSetAtom(locationStateAtom)
 
@@ -48,20 +50,19 @@ export const OnboardingStepLocation: React.FC<OnboardingStepLocationProps> = ({ 
 
         <Box gap={2} alignItems="center">
           <ThemedText size="xl" weight="bold" style={styles.textCenter}>
-            Precisamos da sua localização
+            {t('onboarding.location.title')}
           </ThemedText>
           <ThemedText color="textSecondary" style={styles.textCenter}>
-            Para mostrar os lugares e vibes perto de você, o app precisa saber onde você está. Seus dados não são
-            compartilhados com ninguém.
+            {t('onboarding.location.description')}
           </ThemedText>
         </Box>
 
         <Box style={styles.infoBox} gap={3}>
           {LOCATION_INFO_ITEMS.map((locationInfo) => (
-            <Box key={locationInfo.text} flexDirection="row" gap={3} alignItems="center">
+            <Box key={locationInfo.key} flexDirection="row" gap={3} alignItems="center">
               <ThemedIcon name={locationInfo.icon} size={16} color="primary" />
               <ThemedText size="sm" color="textSecondary">
-                {locationInfo.text}
+                {t(locationInfo.key)}
               </ThemedText>
             </Box>
           ))}
@@ -71,12 +72,12 @@ export const OnboardingStepLocation: React.FC<OnboardingStepLocationProps> = ({ 
       <Box gap={3} pt={6}>
         <Button onPress={handleRequestLocation} disabled={loading}>
           <ThemedText color="background" weight="semibold">
-            {loading ? 'Aguardando...' : 'Liberar localização'}
+            {loading ? t('onboarding.location.waiting') : t('onboarding.location.allowBtn')}
           </ThemedText>
         </Button>
         <Button variant="ghost" onPress={onNext}>
           <ThemedText color="textSecondary" weight="semibold">
-            Agora não
+            {t('onboarding.location.skipBtn')}
           </ThemedText>
         </Button>
       </Box>
@@ -85,9 +86,9 @@ export const OnboardingStepLocation: React.FC<OnboardingStepLocationProps> = ({ 
 }
 
 const LOCATION_INFO_ITEMS = [
-  { icon: 'Shield' as const, text: 'Usada apenas para encontrar lugares próximos' },
-  { icon: 'EyeOff' as const, text: 'Não compartilhamos sua localização com terceiros' },
-  { icon: 'Settings' as const, text: 'Você pode alterar isso a qualquer momento nas configurações' }
+  { icon: 'Shield' as const, key: 'onboarding.location.info1' },
+  { icon: 'EyeOff' as const, key: 'onboarding.location.info2' },
+  { icon: 'Settings' as const, key: 'onboarding.location.info3' }
 ]
 
 const styles = StyleSheet.create({

@@ -6,6 +6,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useUserReviews } from '../hooks/use-user-reviews.hook'
 import { UserReviewDetailModal } from './user-review-detail-modal.component'
@@ -25,6 +26,7 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
   canViewReviews,
   isReviewAccessLoading = false
 }) => {
+  const { t } = useAppTranslation()
   const { data, isLoading } = useUserReviews(userId, canViewReviews)
   const { data: session } = authClient.useSession()
   const currentUserId = session?.user.id ?? ''
@@ -35,7 +37,7 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
   if (isLoading || isReviewAccessLoading) {
     return (
       <Box>
-        <ThemedText>carregando...</ThemedText>
+        <ThemedText>{t('common.loading')}</ThemedText>
       </Box>
     )
   }
@@ -45,13 +47,13 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
       <Box>
         <Box justifyContent="center" alignItems="center" flexDirection="row" pb={4} pt={4}>
           <ThemedText color="textPrimary" weight="bold">
-            vibes
+            {t('usersProfile.vibes')}
           </ThemedText>
         </Box>
         <Box style={styles.divider} />
         <Box pt={4} pb={4} pl={5} pr={5} justifyContent="center" alignItems="center">
           <ThemedText variant="mono" color="textSecondary">
-            siga este usuário para ver as vibes dele.
+            {t('usersProfile.followToSee')}
           </ThemedText>
         </Box>
       </Box>
@@ -62,7 +64,7 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
     return (
       <Box pt={4} pb={4} pl={5} pr={5} justifyContent="center" alignItems="center">
         <ThemedText variant="mono" color="textSecondary">
-          nenhuma vibe ainda
+          {t('usersProfile.emptyVibes')}
         </ThemedText>
       </Box>
     )
@@ -72,7 +74,7 @@ export const UserReviewsGrid: React.FC<UserReviewsGridProps> = ({
     <Box>
       <Box justifyContent="center" alignItems="center" flexDirection="row" pb={4} pt={4}>
         <ThemedText color="textPrimary" weight="bold">
-          vibes{' '}
+          {t('usersProfile.vibes')}{' '}
         </ThemedText>
         <ThemedText variant="mono" size="xxs">
           {reviewCount}

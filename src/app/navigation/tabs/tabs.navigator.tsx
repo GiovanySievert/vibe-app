@@ -3,15 +3,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { FeedFeatures, HomeFeatures } from '@src/features'
 import { BottomTab } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { SocialStackNavigator } from '../social/social-stack.navigator'
 import { PostStackNavigator } from '../stacks/post-stack'
 import { UserMenuNavigator } from '../stacks/user-menu-stack'
-import { TabRoutesName, TabsNavigatorParamsList } from '../types'
+import { TabsNavigatorParamsList } from '../types'
 
 const Tab = createBottomTabNavigator<TabsNavigatorParamsList>()
 
 export function TabsNavigator() {
+  const { t } = useAppTranslation()
+
   return (
     <Tab.Navigator
       tabBar={(props) => <BottomTab {...props} />}
@@ -23,7 +26,7 @@ export function TabsNavigator() {
         name="HomeScreen"
         component={HomeFeatures.HomeScreen}
         options={{
-          tabBarLabel: TabRoutesName.HOME
+          tabBarLabel: t('common.tabs.map')
         }}
       />
 
@@ -31,7 +34,7 @@ export function TabsNavigator() {
         name="FeedScreen"
         component={FeedFeatures.FeedScreen}
         options={{
-          tabBarLabel: TabRoutesName.FEED
+          tabBarLabel: t('common.tabs.feed')
         }}
       />
 
@@ -39,7 +42,7 @@ export function TabsNavigator() {
         name="PostScreen"
         component={PostStackNavigator}
         options={{
-          tabBarLabel: TabRoutesName.POST
+          tabBarLabel: t('common.tabs.post')
         }}
       />
 
@@ -47,7 +50,7 @@ export function TabsNavigator() {
         name="SocialScreen"
         component={SocialStackNavigator}
         options={{
-          tabBarLabel: TabRoutesName.SOCIAL
+          tabBarLabel: t('common.tabs.social')
         }}
       />
 
@@ -55,7 +58,7 @@ export function TabsNavigator() {
         name="UserMenuScreen"
         component={UserMenuNavigator}
         options={{
-          tabBarLabel: TabRoutesName.MENU
+          tabBarLabel: t('common.tabs.you')
         }}
       />
     </Tab.Navigator>

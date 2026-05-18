@@ -9,10 +9,17 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { SignUpEmailForm, signUpEmailSchema, SignUpForm, SignUpProfileForm, signUpProfileSchema } from '../domain'
-import { AppleSignInMessage, GoogleSignInMessage, useAppleSignIn, useGoogleSignIn } from '../hooks'
+import {
+  buildSignUpEmailSchema,
+  buildSignUpProfileSchema,
+  SignUpEmailForm,
+  SignUpForm,
+  SignUpProfileForm
+} from '../domain'
+import { AppleSignInMessageKey, GoogleSignInMessageKey, useAppleSignIn, useGoogleSignIn } from '../hooks'
 import { AuthService } from '../services'
 import { AuthEmailStep } from './auth-email-step.component'
 import { AuthProfileStep } from './auth-profile-step.component'
@@ -24,12 +31,22 @@ enum SIGN_UP_STEPS {
   VERIFY = 2
 }
 
-const PROGRESS_STEPS = ['perfil', 'email', 'verificação']
+const PROGRESS_STEPS_COUNT = 3
 
 const screenWidth = Dimensions.get('window').width
 
-const EMPTY_FORM: SignUpForm = { name: '', username: '', email: '', password: '' }
-const EMPTY_ERRORS: SignUpForm = { name: '', username: '', email: '', password: '' }
+const EMPTY_FORM: SignUpForm = {
+  name: '',
+  username: '',
+  email: '',
+  password: ''
+}
+const EMPTY_ERRORS: SignUpForm = {
+  name: '',
+  username: '',
+  email: '',
+  password: ''
+}
 
 type AuthSignUpProps = {
   onBack: () => void
@@ -39,6 +56,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const { showToast } = useToast()
   const { isAvailable: isAppleAvailable, loading: appleLoading, signIn: signInWithApple } = useAppleSignIn()
   const { isAvailable: isGoogleAvailable, loading: googleLoading, signIn: signInWithGoogle } = useGoogleSignIn()
+  const { t } = useAppTranslation()
 
   const [currentStep, setCurrentStep] = useState<SIGN_UP_STEPS>(SIGN_UP_STEPS.PROFILE)
   const [form, setForm] = useState<SignUpForm>(EMPTY_FORM)
@@ -49,7 +67,10 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     mutationFn: (username: string) => AuthService.checkIfUsernameIsAvailable(username),
     onSuccess: ({ data }) => {
       if (!data.available) {
-        setFormError((prev) => ({ ...prev, username: 'esse username não está disponível' }))
+        setFormError((prev) => ({
+          ...prev,
+          username: t('auth.errors.usernameTaken')
+        }))
         setUsernameAvailable(false)
       } else {
         setFormError((prev) => ({ ...prev, username: '' }))
@@ -57,7 +78,10 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
       }
     },
     onError: () => {
-      setFormError((prev) => ({ ...prev, username: 'erro ao verificar username, tente novamente' }))
+      setFormError((prev) => ({
+        ...prev,
+        username: t('auth.errors.usernameCheckError')
+      }))
       setUsernameAvailable(null)
     }
   })
@@ -89,9 +113,15 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   }
 
   const handleContinueProfileStep = () => {
-    const result = signUpProfileSchema.safeParse({ name: form.name, username: form.username })
+    const result = buildSignUpProfileSchema().safeParse({
+      name: form.name,
+      username: form.username
+    })
     if (!result.success) {
-      setFormError((prev) => ({ ...prev, ...validationMapErrors(result.error, formError) }))
+      setFormError((prev) => ({
+        ...prev,
+        ...validationMapErrors(result.error, formError)
+      }))
       return
     }
     goToStep(SIGN_UP_STEPS.EMAIL)
@@ -105,19 +135,25 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
   const handleAppleSignIn = async () => {
     const result = await signInWithApple()
     if (result.success || result.cancelled) return
-    showToast(result.errorMessage ?? AppleSignInMessage.authFailed, 'error')
+    showToast(result.errorMessage ?? t(AppleSignInMessageKey.authFailed), 'error')
   }
 
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle()
     if (result.success || result.cancelled) return
-    showToast(result.errorMessage ?? GoogleSignInMessage.authFailed, 'error')
+    showToast(result.errorMessage ?? t(GoogleSignInMessageKey.authFailed), 'error')
   }
 
   const submitSignUp = async () => {
-    const result = signUpEmailSchema.safeParse({ email: form.email, password: form.password })
+    const result = buildSignUpEmailSchema().safeParse({
+      email: form.email,
+      password: form.password
+    })
     if (!result.success) {
-      setFormError((prev) => ({ ...prev, ...validationMapErrors(result.error, formError) }))
+      setFormError((prev) => ({
+        ...prev,
+        ...validationMapErrors(result.error, formError)
+      }))
       throw new Error('signup validation failed')
     }
 
@@ -129,10 +165,7 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     })
 
     if (error) {
-      showToast(
-        error?.status === 422 ? 'não foi possível criar a conta' : 'algo deu errado, tente novamente mais tarde',
-        'error'
-      )
+      showToast(error?.status === 422 ? t('auth.signUp.errors.creationFailed') : t('auth.errors.generic'), 'error')
       throw new Error('signup request failed')
     }
   }
@@ -144,10 +177,22 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
     }
   })
 
-  const profileForm: SignUpProfileForm = { name: form.name, username: form.username }
-  const profileFormError: SignUpProfileForm = { name: formError.name, username: formError.username }
-  const emailForm: SignUpEmailForm = { email: form.email, password: form.password }
-  const emailFormError: SignUpEmailForm = { email: formError.email, password: formError.password }
+  const profileForm: SignUpProfileForm = {
+    name: form.name,
+    username: form.username
+  }
+  const profileFormError: SignUpProfileForm = {
+    name: formError.name,
+    username: formError.username
+  }
+  const emailForm: SignUpEmailForm = {
+    email: form.email,
+    password: form.password
+  }
+  const emailFormError: SignUpEmailForm = {
+    email: formError.email,
+    password: formError.password
+  }
   const isProfileStepActive = currentStep === SIGN_UP_STEPS.PROFILE
   const isEmailStepActive = currentStep === SIGN_UP_STEPS.EMAIL
   const isVerifyStepActive = currentStep === SIGN_UP_STEPS.VERIFY
@@ -159,20 +204,20 @@ export const AuthSignUp: React.FC<AuthSignUpProps> = ({ onBack }) => {
           onPress={handleBack}
           style={styles.goBackButton}
           accessibilityRole="button"
-          accessibilityLabel="Voltar"
-          accessibilityHint="Volta para o passo anterior do cadastro"
+          accessibilityLabel={t('auth.signUp.backButtonA11y')}
+          accessibilityHint={t('auth.signUp.backButtonHint')}
         >
           <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
         </Touchable>
 
         <Box flex={1} flexDirection="row" gap={2} style={{ justifyContent: 'center' }}>
-          {PROGRESS_STEPS.map((_, i) => (
+          {Array.from({ length: PROGRESS_STEPS_COUNT }).map((_, i) => (
             <Box key={i} style={[styles.progressBar, i <= currentStep && styles.progressBarActive]} />
           ))}
         </Box>
 
         <ThemedText variant="mono" size="xs" color="textSecondary">
-          {currentStep + 1}/{PROGRESS_STEPS.length}
+          {currentStep + 1}/{PROGRESS_STEPS_COUNT}
         </ThemedText>
       </Box>
 

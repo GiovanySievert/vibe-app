@@ -1,9 +1,9 @@
-
 import { useQuery } from '@tanstack/react-query'
 
 import { useUserReviews } from '@src/features/users-profile/hooks/use-user-reviews.hook'
 import { Avatar, Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { FollowStatsService } from '../services'
 import { UserFollowStatsResponse } from '../types'
@@ -28,6 +28,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   onOpenFollowers,
   onOpenFollowings
 }) => {
+  const { t } = useAppTranslation()
   const fetchFollowersStats = async () => {
     const response = await FollowStatsService.fetchUsersFollowStats(userData.id)
     return response.data
@@ -65,7 +66,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
               {isReviewAccessLoading ? '...' : canViewReviews ? vibesCount : '--'}
             </ThemedText>
             <ThemedText variant="mono" size="xs" color="textSecondary">
-              vibes
+              {t('usersProfile.vibes')}
             </ThemedText>
           </Box>
 
@@ -75,7 +76,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
                 {data?.followersCount ?? 0}
               </ThemedText>
               <ThemedText variant="mono" size="xs" color="textSecondary">
-                seguidores
+                {t('usersProfile.followers')}
               </ThemedText>
             </Box>
           </Touchable>
@@ -86,7 +87,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
                 {data?.followingCount ?? 0}
               </ThemedText>
               <ThemedText variant="mono" size="xs" color="textSecondary">
-                seguindo
+                {t('usersProfile.following')}
               </ThemedText>
             </Box>
           </Touchable>
@@ -105,7 +106,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
         <Box flexDirection="row" alignItems="center" gap={1} mt={1}>
           <ThemedIcon name="User" size={12} color="textSecondary" />
           <ThemedText size="xs" color="textSecondary" variant="mono">
-            usuário beta
+            {t('usersProfile.betaUser')}
           </ThemedText>
         </Box>
         <UserPlaceBadges userId={userData.id} />

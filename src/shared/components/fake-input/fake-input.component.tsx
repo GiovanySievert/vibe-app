@@ -5,6 +5,7 @@ import { icons } from 'lucide-react-native'
 
 import { theme } from '@src/shared/constants/theme'
 
+import { useAppTranslation } from '../../i18n'
 import { AnimatedBox } from '../animated-box'
 import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
@@ -41,6 +42,7 @@ export const FakeInput = ({
   onPress,
   ...rest
 }: InputProps) => {
+  const { t } = useAppTranslation()
   const [localInputValue, setLocalInputValue] = useState('')
   const hasSecondBox = (isClearable && localInputValue) || (!isClearable && endIconName)
 
@@ -109,7 +111,7 @@ export const FakeInput = ({
                     onPress={handleClear}
                     style={{ zIndex: 10 }}
                     accessibilityRole="button"
-                    accessibilityLabel="Limpar campo"
+                    accessibilityLabel={t('common.clearField')}
                   >
                     <ThemedIcon name="X" size={18} color="textSecondary" testID="clear-button--input" />
                   </Touchable>
@@ -117,9 +119,14 @@ export const FakeInput = ({
                 {!isClearable && endIconName && (
                   <Touchable
                     onPress={onEndIconPress}
-                    style={{ position: 'absolute', right: 0, zIndex: 10, bottom: -10 }}
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      zIndex: 10,
+                      bottom: -10
+                    }}
                     accessibilityRole="button"
-                    accessibilityLabel="Ação do campo"
+                    accessibilityLabel={t('common.fieldAction')}
                   >
                     <ThemedIcon
                       name={endIconName as IconName}

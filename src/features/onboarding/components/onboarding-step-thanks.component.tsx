@@ -4,12 +4,15 @@ import { StyleSheet } from 'react-native'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type OnboardingStepThanksProps = {
   onFinish: () => void
 }
 
 export const OnboardingStepThanks: React.FC<OnboardingStepThanksProps> = ({ onFinish }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box style={styles.container} justifyContent="space-between">
       <Box gap={6} alignItems="center" pt={4}>
@@ -19,24 +22,22 @@ export const OnboardingStepThanks: React.FC<OnboardingStepThanksProps> = ({ onFi
 
         <Box gap={4} alignItems="center">
           <ThemedText size="xl" weight="bold" style={styles.textCenter}>
-            Obrigado por baixar o Vibes
+            {t('onboarding.thanks.title')}
           </ThemedText>
 
           <ThemedText color="textSecondary" style={styles.textCenter}>
-            Esse app foi feito com muito carinho por um programador solo. Cada linha de código, cada tela e cada detalhe
-            foi pensado para te ajudar a encontrar o lugar certo na hora certa.
+            {t('onboarding.thanks.description1')}
           </ThemedText>
 
           <ThemedText color="textSecondary" style={styles.textCenter}>
-            Você não é só um usuário — é parte do que faz esse projeto existir. Espero que o Vibes te ajude a viver
-            momentos incríveis.
+            {t('onboarding.thanks.description2')}
           </ThemedText>
         </Box>
 
         <Box style={styles.signatureBox} gap={1} alignItems="center">
           <ThemedIcon name="Code" size={16} color="primary" />
           <ThemedText size="sm" color="textSecondary" style={styles.textCenter}>
-            Feito com ❤️ por um dev solo
+            {t('onboarding.thanks.signature')}
           </ThemedText>
         </Box>
       </Box>
@@ -44,7 +45,7 @@ export const OnboardingStepThanks: React.FC<OnboardingStepThanksProps> = ({ onFi
       <Box pt={6}>
         <Button onPress={onFinish}>
           <ThemedText color="background" weight="semibold">
-            Vamos lá!
+            {t('onboarding.thanks.continueBtn')}
           </ThemedText>
         </Button>
       </Box>

@@ -5,6 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 import { icons } from 'lucide-react-native'
 
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { ThemedIcon } from '../themed-icon/themed-icon.component'
 import { Touchable } from '../touchable'
@@ -100,8 +101,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   onPress,
   accessibilityLabel
 }) => {
+  const { t } = useAppTranslation()
   const resolvedLabel =
-    accessibilityLabel ?? (fallbackLetter ? `Foto de perfil de ${fallbackLetter}` : 'Foto de perfil')
+    accessibilityLabel ??
+    (fallbackLetter ? t('common.profilePhotoFor', { value: fallbackLetter }) : t('common.profilePhoto'))
   const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
   const hasPlaceholder = !!(placeholderIcon || fallbackLetter)
@@ -142,7 +145,13 @@ export const Avatar: React.FC<AvatarProps> = ({
   ) : (
     <View style={s.placeholder} accessible accessibilityLabel={resolvedLabel}>
       {letter ? (
-        <Text style={{ color: theme.colors.textPrimary, fontSize: LETTER_SIZES[size], fontWeight: '600' }}>
+        <Text
+          style={{
+            color: theme.colors.textPrimary,
+            fontSize: LETTER_SIZES[size],
+            fontWeight: '600'
+          }}
+        >
           {letter}
         </Text>
       ) : placeholderIcon ? (
@@ -151,29 +160,25 @@ export const Avatar: React.FC<AvatarProps> = ({
     </View>
   )
 
-  const content = pressable && imgSource ? (
-    <Pressable
-      onPress={openModal}
-      style={s.root}
-      accessibilityRole="imagebutton"
-      accessibilityLabel={resolvedLabel}
-      accessibilityHint="Toque para ampliar"
-    >
-      {imageEl}
-    </Pressable>
-  ) : (
-    <View style={s.root}>{imageEl}</View>
-  )
+  const content =
+    pressable && imgSource ? (
+      <Pressable
+        onPress={openModal}
+        style={s.root}
+        accessibilityRole="imagebutton"
+        accessibilityLabel={resolvedLabel}
+        accessibilityHint={t('common.tapToExpand')}
+      >
+        {imageEl}
+      </Pressable>
+    ) : (
+      <View style={s.root}>{imageEl}</View>
+    )
 
   return (
     <>
       {onPress ? (
-        <Touchable
-          onPress={onPress}
-          activeOpacity={0.7}
-          accessibilityRole="button"
-          accessibilityLabel={resolvedLabel}
-        >
+        <Touchable onPress={onPress} activeOpacity={0.7} accessibilityRole="button" accessibilityLabel={resolvedLabel}>
           {content}
         </Touchable>
       ) : (
@@ -185,7 +190,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           style={modalStyles.backdrop}
           onPress={closeModal}
           accessibilityRole="button"
-          accessibilityLabel="Fechar imagem"
+          accessibilityLabel={t('common.closeImage')}
         >
           <Animated.Image
             source={imgSource as ImageSourcePropType}

@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import { AuthenticatedStackParamList, ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { Box, Button, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatCountdown } from '@src/shared/utils'
 
 import { useDistanceToPlace } from '../hooks/use-distance-to-place.hook'
@@ -53,10 +54,16 @@ export const PlacesFlutuantButton = ({ place }: { place: PlaceArg }) => {
     if (!hasLocation) return { status: FlutuantButtonStatus.NO_USER_LOCATION }
     if (isLoading) return { status: FlutuantButtonStatus.LOADING }
     if (withinRange === false) {
-      return { status: FlutuantButtonStatus.OUT_OF_RANGE, distanceMeters: distanceMeters ?? 0 }
+      return {
+        status: FlutuantButtonStatus.OUT_OF_RANGE,
+        distanceMeters: distanceMeters ?? 0
+      }
     }
     if (eligibility?.cooldown.active) {
-      return { status: FlutuantButtonStatus.COOLDOWN, secondsRemaining: secondsUntilAllowed }
+      return {
+        status: FlutuantButtonStatus.COOLDOWN,
+        secondsRemaining: secondsUntilAllowed
+      }
     }
     return { status: FlutuantButtonStatus.READY }
   }, [hasLocation, isLoading, withinRange, distanceMeters, eligibility, secondsUntilAllowed])
@@ -95,38 +102,44 @@ export const PlacesFlutuantButton = ({ place }: { place: PlaceArg }) => {
 }
 
 const FlutuantButtonLabel = ({ state }: { state: FlutuantButtonState }) => {
+  const { t } = useAppTranslation()
+
   switch (state.status) {
     case FlutuantButtonStatus.LOADING:
       return (
         <Box flexDirection="row" alignItems="center" gap={2}>
           <ActivityIndicator color="#FFFFFF" />
           <ThemedText color="background" size="lg" weight="semibold">
-            verificando…
+            {t('places.reviewButton.checking')}
           </ThemedText>
         </Box>
       )
     case FlutuantButtonStatus.NO_USER_LOCATION:
       return (
         <ThemedText color="background" size="lg" weight="semibold">
-          ative a localização pra postar
+          {t('places.reviewButton.enableLocation')}
         </ThemedText>
       )
     case FlutuantButtonStatus.OUT_OF_RANGE:
       return (
         <ThemedText color="background" size="lg" weight="semibold">
-          chegue mais perto ({state.distanceMeters}m)
+          {t('places.reviewButton.getCloser', {
+            distance: state.distanceMeters
+          })}
         </ThemedText>
       )
     case FlutuantButtonStatus.COOLDOWN:
       return (
         <ThemedText color="background" size="lg" weight="semibold">
-          aguarde {formatCountdown(state.secondsRemaining)}
+          {t('places.reviewButton.wait', {
+            time: formatCountdown(state.secondsRemaining)
+          })}
         </ThemedText>
       )
     case FlutuantButtonStatus.READY:
       return (
         <ThemedText color="background" size="lg" weight="semibold">
-          postar vibe daqui
+          {t('places.reviewButton.ready')}
         </ThemedText>
       )
   }

@@ -12,6 +12,7 @@ import { BadgesService } from '@src/features/users-profile/services'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { announce, triggerBadgeUnlockHaptic } from '@src/shared/utils'
 
 import { MilestonesFloatingCard } from './components/milestones-floating-card.component'
@@ -26,6 +27,7 @@ import { useSuccessNavigation } from './use-success-navigation'
 type Props = NativeStackScreenProps<PostStackParamList, 'PostReviewSuccess'>
 
 export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { t } = useAppTranslation()
   const { placeId, placeName, streakUpdate } = route.params
   const authState = useAtomValue(authStateAtom)
   const { closeToFeed, openBadges } = useSuccessNavigation({ navigation })
@@ -50,6 +52,8 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
     [isError, isLoading, reviewCount]
   )
   const hasUnlockedBadge = !!unlockedMilestone
+  const getBadgeLabel = (milestone?: { labelKey: string } | null) =>
+    milestone ? t(milestone.labelKey) : t('post.badges.regular')
 
   const progressState = useMemo(() => {
     const achieved = BADGE_MILESTONES.filter((milestone) => reviewCount >= milestone.minReviews)
@@ -74,8 +78,8 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
   })
 
   useEffect(() => {
-    announce(`Review publicado em ${placeName}`)
-  }, [placeName])
+    announce(t('post.success.announce', { placeName }))
+  }, [placeName, t])
 
   useEffect(() => {
     if (!hasUnlockedBadge || !unlockedMilestone) return
@@ -83,22 +87,32 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
     if (triggeredBadgeHapticKey.current === hapticKey) return
     triggeredBadgeHapticKey.current = hapticKey
     triggerBadgeUnlockHaptic()
-    announce(`Badge desbloqueada: ${unlockedMilestone.label}`)
-  }, [hasUnlockedBadge, placeId, reviewCount, unlockedMilestone])
+    announce(
+      t('post.success.badgeUnlocked', {
+        label: getBadgeLabel(unlockedMilestone)
+      })
+    )
+  }, [hasUnlockedBadge, placeId, reviewCount, t, unlockedMilestone])
 
   const progressText = hasUnlockedBadge
     ? progressState.next
-      ? `"${progressState.next.label}" desbloqueia em ${progressState.next.minReviews} reviews`
-      : 'badge máxima desbloqueada'
+      ? t('post.success.nextBadge', {
+          label: getBadgeLabel(progressState.next),
+          minReviews: progressState.next.minReviews
+        })
+      : t('post.success.maxBadge')
     : progressState.next
-      ? `faltam ${progressState.remaining} pra "${progressState.next.label}"`
-      : 'badge máxima desbloqueada'
+      ? t('post.success.remainingBadge', {
+          remaining: progressState.remaining,
+          label: getBadgeLabel(progressState.next)
+        })
+      : t('post.success.maxBadge')
 
   const reviewText = isLoading
-    ? 'carregando progresso...'
+    ? t('post.success.loading')
     : hasUnlockedBadge
-      ? `${reviewCount} reviews em ${placeName}`
-      : `review #${reviewCount} · ${placeName}`
+      ? t('post.success.reviewCount', { reviewCount, placeName })
+      : t('post.success.reviewNumber', { reviewCount, placeName })
 
   const progressTarget = hasUnlockedBadge
     ? (unlockedMilestone?.minReviews ?? reviewCount)
@@ -123,7 +137,7 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
       <Box flexDirection="row" justifyContent="flex-end">
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="fechar"
+          accessibilityLabel={t('common.close')}
           onPress={closeToFeed}
           style={styles.closeButton}
         >
@@ -140,10 +154,14 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
               letterSpacing="wider"
               textTransform="uppercase"
             >
-              {hasUnlockedBadge ? 'badge desbloqueada' : 'review publicada'}
+              {hasUnlockedBadge ? t('post.success.badgeStatus') : t('post.success.reviewStatus')}
             </ThemedText>
             <ThemedText variant="title" letterSpacing="normal" style={styles.title}>
-              {hasUnlockedBadge ? `${unlockedMilestone?.label ?? 'badge'} desbloqueado` : 'obrigado por compartilhar'}
+              {hasUnlockedBadge
+                ? t('post.success.badgeTitle', {
+                    label: getBadgeLabel(unlockedMilestone)
+                  })
+                : t('post.success.shareTitle')}
             </ThemedText>
             <ThemedText variant="mono" color="textSecondary" size="sm" letterSpacing="normal">
               {reviewText}
@@ -170,7 +188,11 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
 
         <Button onPress={handlePrimaryAction}>
           <ThemedText weight="bold" color="background" letterSpacing="normal">
-            {hasTriggeredStreak ? 'continuar' : hasUnlockedBadge ? 'ver badges' : 'continuar'}
+            {hasTriggeredStreak
+              ? t('post.actions.continueBtn')
+              : hasUnlockedBadge
+                ? t('post.success.viewBadges')
+                : t('post.actions.continueBtn')}
           </ThemedText>
         </Button>
       </Box>
@@ -191,11 +213,7 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
           end={{ x: 0.2, y: 1 }}
           style={styles.gradient}
         >
-          <StreakCelebrationStep
-            streakUpdate={streakUpdate}
-            onClose={closeToFeed}
-            onContinue={closeToFeed}
-          />
+          <StreakCelebrationStep streakUpdate={streakUpdate} onClose={closeToFeed} onContinue={closeToFeed} />
         </LinearGradient>
       ) : hasUnlockedBadge ? (
         <LinearGradient

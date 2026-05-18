@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { ProfileQrModal } from './profile-qr-modal'
 
@@ -12,18 +13,19 @@ type UsersProfileActionsProps = {
 }
 
 export const UsersProfileActions: React.FC<UsersProfileActionsProps> = ({ user }) => {
+  const { t } = useAppTranslation()
   const [qrVisible, setQrVisible] = useState(false)
 
   return (
     <Box flexDirection="row" gap={3} pl={5} pr={5} pb={4} flex={1} justifyContent="space-between">
       <Touchable onPress={() => {}} style={styles.touchable}>
         <ThemedText weight="semibold" size="sm" color="textPrimary">
-          editar perfil
+          {t('usersProfile.editProfile')}
         </ThemedText>
       </Touchable>
       <Touchable onPress={() => setQrVisible(true)} style={styles.touchable}>
         <ThemedText weight="semibold" size="sm" color="textPrimary">
-          compartilhar
+          {t('usersProfile.share')}
         </ThemedText>
       </Touchable>
 

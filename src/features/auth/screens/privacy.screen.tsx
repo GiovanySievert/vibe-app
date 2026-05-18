@@ -5,9 +5,11 @@ import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 export const AuthPrivacyScreen = () => {
   const navigation = useNavigation()
+  const { t } = useAppTranslation()
 
   return (
     <Screen gradient>
@@ -18,10 +20,10 @@ export const AuthPrivacyScreen = () => {
       </Box>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}>
         <ThemedText variant="title" size="2xl" color="textPrimary">
-          privacidade
+          {t('auth.privacy.title')}
         </ThemedText>
         <ThemedText variant="primary" color="textSecondary">
-          vamos vernder seus dados
+          {t('auth.privacy.content')}
         </ThemedText>
       </ScrollView>
     </Screen>

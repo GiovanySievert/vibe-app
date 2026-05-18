@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useToast } from '@src/app/providers/toast.provider'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
 import { FeedService } from '../services'
@@ -15,6 +16,7 @@ const sortUserReviews = (items: FeedReviewItem[]) =>
   })
 
 export const useFavoriteReview = (review: FeedReviewItem) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const [isFavorite, setIsFavorite] = useState(Boolean(review.isFavorite))
@@ -37,11 +39,13 @@ export const useFavoriteReview = (review: FeedReviewItem) => {
         })
         return sortUserReviews(nextItems)
       })
-      queryClient.invalidateQueries({ queryKey: ['userReviews', review.userId] })
-      showToast(nextIsFavorite ? 'review favoritada.' : 'review desfavoritada.', 'success')
+      queryClient.invalidateQueries({
+        queryKey: ['userReviews', review.userId]
+      })
+      showToast(nextIsFavorite ? t('feed.favorite.success') : t('feed.favorite.removed'), 'success')
     },
     onError: () => {
-      showToast('não foi possível atualizar a review favorita.', 'error')
+      showToast(t('feed.favorite.failed'), 'error')
     }
   })
 

@@ -7,6 +7,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { usePlaceReviews } from '../hooks/use-place-reviews.hook'
 import { PlacesPopularReviews } from './places-popular-reviews.component'
@@ -16,6 +17,7 @@ type PlacesReviewsProps = {
 }
 
 export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
+  const { t } = useAppTranslation()
   const { data, isLoading } = usePlaceReviews(placeId)
   const { data: session } = authClient.useSession()
   const currentUserId = session?.user.id ?? ''
@@ -25,7 +27,7 @@ export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
   if (isLoading) {
     return (
       <Box pl={6} pr={6} pt={4} pb={4}>
-        <ThemedText>carregando...</ThemedText>
+        <ThemedText>{t('common.loading')}</ThemedText>
       </Box>
     )
   }
@@ -34,7 +36,7 @@ export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
     return (
       <Box>
         <Box pl={6} pr={6} style={styles.sectionHeader}>
-          <ThemedText>nenhuma vibe nas últimas 24h</ThemedText>
+          <ThemedText>{t('places.reviews.emptyRecent')}</ThemedText>
         </Box>
         <PlacesPopularReviews placeId={placeId} />
       </Box>
@@ -48,7 +50,7 @@ export const PlacesReviews: React.FC<PlacesReviewsProps> = ({ placeId }) => {
       scrollEnabled={false}
       ListHeaderComponent={
         <Box pl={6} pr={6} style={styles.sectionHeader}>
-          <ThemedText>vibes daqui · últimas 24h</ThemedText>
+          <ThemedText>{t('places.reviews.recentTitle')}</ThemedText>
         </Box>
       }
       renderItem={({ item }) => <ReviewCard review={item} currentUserId={currentUserId} />}

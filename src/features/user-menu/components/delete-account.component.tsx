@@ -4,12 +4,14 @@ import { Alert } from 'react-native'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
 import { useDeleteAccount } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { deleteAccountSchema } from '../domain'
 
 export const DeleteAccount = () => {
   const [password, setPassword] = useState<string>('')
   const [passwordError, setPasswordError] = useState<string>('')
+  const { t } = useAppTranslation()
 
   const { mutate: deleteAccount, isPending: isLoading } = useDeleteAccount({
     onError: (error) => setPasswordError(error.message)
@@ -28,25 +30,24 @@ export const DeleteAccount = () => {
   const handleDeletePress = () => {
     if (!validateDeleteAccountSchema()) return
 
-    Alert.alert(
-      'deletar conta',
-      'tem certeza que deseja deletar sua conta? essa ação é permanente e não pode ser desfeita.',
-      [
-        { text: 'cancelar', style: 'cancel' },
-        { text: 'deletar', style: 'destructive', onPress: () => deleteAccount({ password }) }
-      ]
-    )
+    Alert.alert(t('userMenu.deleteAccount.alertTitle'), t('userMenu.deleteAccount.alertMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('userMenu.deleteAccount.confirmDelete'),
+        style: 'destructive',
+        onPress: () => deleteAccount({ password })
+      }
+    ])
   }
 
   return (
     <Box gap={5}>
       <ThemedText size="sm" color="textSecondary">
-        ao deletar sua conta, todos os seus dados, posts e interações serão removidos permanentemente. confirme sua
-        senha para continuar.
+        {t('userMenu.deleteAccount.warning')}
       </ThemedText>
 
       <Input
-        label="senha"
+        label={t('userMenu.deleteAccount.passwordLabel')}
         value={password}
         onChange={({ nativeEvent }) => setPassword(nativeEvent.text)}
         errorMessage={passwordError}
@@ -55,7 +56,7 @@ export const DeleteAccount = () => {
       />
 
       <Button type="danger" loading={isLoading} onPress={handleDeletePress}>
-        <ThemedText weight="medium">deletar conta</ThemedText>
+        <ThemedText weight="medium">{t('userMenu.deleteAccount.buttonLabel')}</ThemedText>
       </Button>
     </Box>
   )

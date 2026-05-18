@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
 import { Button, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { triggerLightHaptic } from '@src/shared/utils'
 
 import { FollowRequestsService } from '../../services'
@@ -15,6 +16,7 @@ type UsersProfileFollowListActions = {
 }
 
 export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActions> = ({ followRelation, type }) => {
+  const { t } = useAppTranslation()
   const [followStatus, setFollowStatus] = useState<'following' | 'pending' | 'none'>('following')
   const [isRemoved, setIsRemoved] = useState(false)
 
@@ -74,7 +76,7 @@ export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActio
         disabled={isRemoved}
       >
         <ThemedText size="sm" weight="medium" color="textSecondary">
-          {isRemoved ? 'removido' : 'remover'}
+          {isRemoved ? t('usersProfile.follow.removed') : t('usersProfile.follow.remove')}
         </ThemedText>
       </Button>
     )
@@ -91,12 +93,12 @@ export const UsersProfileFollowListActions: React.FC<UsersProfileFollowListActio
       onPress={handleToggleFollow}
       loading={unfollowMutation.isPending || followMutation.isPending || cancelFollowRequestMutation.isPending}
     >
-      <ThemedText
-        size="sm"
-        weight="medium"
-        color={isFollowing || isPending ? 'textSecondary' : 'textPrimary'}
-      >
-        {isFollowing ? 'seguindo' : isPending ? 'pendente' : 'seguir'}
+      <ThemedText size="sm" weight="medium" color={isFollowing || isPending ? 'textSecondary' : 'textPrimary'}>
+        {isFollowing
+          ? t('usersProfile.follow.following')
+          : isPending
+            ? t('usersProfile.follow.pending')
+            : t('usersProfile.follow.follow')}
       </ThemedText>
     </Button>
   )

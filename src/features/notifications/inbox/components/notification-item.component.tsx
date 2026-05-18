@@ -5,19 +5,20 @@ import { Bell, CalendarPlus, MessageCircle, ThumbsUp, UserCheck, UserPlus } from
 
 import { Box, Divider, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { i18n } from '@src/shared/i18n'
 
 import { NotificationItem as NotificationItemModel } from '../services/notification-inbox.service'
 
 const formatRelative = (iso: string) => {
   const diff = Date.now() - new Date(iso).getTime()
   const minutes = Math.floor(diff / 60_000)
-  if (minutes < 1) return 'agora'
+  if (minutes < 1) return i18n.t('notifications.relative.now')
   if (minutes < 60) return `${minutes}m`
   const hours = Math.floor(minutes / 60)
   if (hours < 24) return `${hours}h`
   const days = Math.floor(hours / 24)
   if (days < 7) return `${days}d`
-  return new Date(iso).toLocaleDateString('pt-BR')
+  return new Date(iso).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es-ES' : 'pt-BR')
 }
 
 const iconForType = (type: string) => {
@@ -44,11 +45,7 @@ export const NotificationItemRow: React.FC<Props> = ({ item, isLast, onPress }) 
     <Touchable onPress={onPress} activeOpacity={0.7}>
       <Box flexDirection="row" gap={3} pt={3} pb={3} alignItems="flex-start">
         <Box style={[styles.iconWrap, isUnread && styles.iconWrapUnread]}>
-          <Icon
-            size={18}
-            color={isUnread ? theme.colors.primary : theme.colors.textSecondary}
-            strokeWidth={1.8}
-          />
+          <Icon size={18} color={isUnread ? theme.colors.primary : theme.colors.textSecondary} strokeWidth={1.8} />
         </Box>
         <Box flex={1} gap={1}>
           <ThemedText weight={isUnread ? 'semibold' : 'regular'}>{item.title}</ThemedText>

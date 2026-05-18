@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { FollowRequestType, ListUserAllFollowRequestsResponse } from '@src/features/users-profile/types'
 import { Box, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useFollowRequestActions } from '../hooks/use-follow-request-actions'
 import { useFollowRequests } from '../hooks/use-follow-requests'
@@ -17,6 +18,7 @@ interface FollowRequestsListProps {
 }
 
 export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<NativeStackNavigationProp<AuthenticatedStackParamList>>()
   const { acceptFollowRequest, rejectFollowRequest, cancelFollowRequest } = useFollowRequestActions({ type })
   const { data: followRequestsData, isLoading } = useFollowRequests({ type })
@@ -25,7 +27,10 @@ export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => 
     return null
   }
 
-  const title = type === FollowRequestType.RECEIVED ? 'solicitações' : 'solicitações enviadas'
+  const title =
+    type === FollowRequestType.RECEIVED
+      ? t('social.followRequests.receivedTitle')
+      : t('social.followRequests.sentTitle')
   const total = followRequestsData.length
   const displayedRequests = limit ? followRequestsData.slice(0, limit) : followRequestsData
   const hasMore = !!limit && total > limit
@@ -34,7 +39,9 @@ export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => 
   const openModal = () =>
     navigation.navigate('Modals', {
       screen: 'FollowRequestsScreen',
-      params: { type: type === FollowRequestType.RECEIVED ? 'received' : 'sent' }
+      params: {
+        type: type === FollowRequestType.RECEIVED ? 'received' : 'sent'
+      }
     })
 
   return (
@@ -64,7 +71,7 @@ export const FollowRequestsList = ({ type, limit }: FollowRequestsListProps) => 
       {hasMore && (
         <Pressable onPress={openModal}>
           <ThemedText variant="mono" size="xs" color="textSecondary">
-            ver todas ({count})
+            {t('social.followRequests.viewAllBtn', { value: count })}
           </ThemedText>
         </Pressable>
       )}

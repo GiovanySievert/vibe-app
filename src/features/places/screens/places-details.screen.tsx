@@ -6,9 +6,10 @@ import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 import { PlacesService } from '@src/shared/services'
 
 import {
@@ -24,6 +25,7 @@ import {
 type PlacesDetailsScreenScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'PlacesDetailsScreen'>
 
 export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ route, navigation }) => {
+  const { t } = useAppTranslation()
   const placeId = route.params?.placeId
   const { showToast } = useToast()
 
@@ -48,9 +50,9 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
 
   useEffect(() => {
     if (!hasFailed) return
-    showToast('algo deu errado, tente novamente mais tarde!', 'error')
+    showToast(t('places.errors.loadFailed'), 'error')
     navigation.goBack()
-  }, [hasFailed, navigation, showToast])
+  }, [hasFailed, navigation, showToast, t])
 
   if (isLoading) {
     return (
@@ -64,6 +66,8 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
     return null
   }
 
+  const isHot = route.params?.isHot === true || !!placeData.isHot
+
   return (
     <Box flex={1} bg="background">
       <ScrollView style={styles.scroll} overScrollMode="never" showsVerticalScrollIndicator={false}>
@@ -76,6 +80,21 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
         ) : null}
         <PlacesCardInfo place={placeData} />
         <PlacesAddress place={placeData} />
+        {isHot ? (
+          <Box pl={6} pr={6} pt={5} pb={5} style={styles.hotSection}>
+            <Box flexDirection="row" alignItems="center" gap={3}>
+              <Box alignItems="center" justifyContent="center" style={styles.hotIcon}>
+                <ThemedIcon name="Flame" size={16} color="background" type="solid" />
+              </Box>
+              <Box flex={1} gap={1}>
+                <ThemedText variant="mono" size="sm" textTransform="uppercase" color="primary">
+                  {t('places.hotLabel')}
+                </ThemedText>
+                <ThemedText color="textSecondary">{t('places.hotDescription')}</ThemedText>
+              </Box>
+            </Box>
+          </Box>
+        ) : null}
         <PlacesReviewFriends placeId={placeId} />
         <PlacesReviews placeId={placeId} />
         <Box h={14} />
@@ -105,5 +124,17 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
     marginTop: 8
+  },
+  hotSection: {
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    backgroundColor: theme.colors.primaryGlow,
+    marginTop: 8
+  },
+  hotIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: theme.colors.primary
   }
 })

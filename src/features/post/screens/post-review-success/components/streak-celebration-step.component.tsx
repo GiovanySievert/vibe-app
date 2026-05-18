@@ -7,6 +7,7 @@ import { StreakService } from '@src/features/users-profile/services'
 import type { FriendStreakSummary, StreakUpdateResponse } from '@src/features/users-profile/types'
 import { Avatar, Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { space } from '@src/shared/utils'
 
 type Props = {
@@ -19,6 +20,7 @@ const WEEK_DAYS = [1, 2, 3, 4, 5, 6, 7]
 const FRIENDS_LIMIT = 5
 
 export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, onContinue }) => {
+  const { t } = useAppTranslation()
   const activeWeeks = Math.min(streakUpdate.currentStreak, WEEK_DAYS.length)
 
   const { data, isLoading: loading } = useQuery({
@@ -34,7 +36,12 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
   return (
     <Box flex={1} p={5} style={styles.content}>
       <Box flexDirection="row" justifyContent="flex-end">
-        <Pressable accessibilityRole="button" accessibilityLabel="fechar" onPress={onClose} style={styles.closeButton}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('common.close')}
+          onPress={onClose}
+          style={styles.closeButton}
+        >
           <ThemedIcon name="X" size={20} color="textPrimary" />
         </Pressable>
       </Box>
@@ -44,16 +51,19 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
           <Box gap={6}>
             <Box gap={3}>
               <ThemedText variant="mono" color="primary" letterSpacing="wider" textTransform="uppercase">
-                review publicada
+                {t('post.success.reviewStatus')}
               </ThemedText>
               <Box flexDirection="row" alignItems="flex-end" gap={2} style={styles.titleRow}>
                 <ThemedText variant="title" letterSpacing="normal" style={styles.title}>
-                  {streakUpdate.currentStreak} {streakUpdate.currentStreak === 1 ? 'semana' : 'semanas'} de streak!
+                  {t('usersProfile.streak.week', {
+                    count: streakUpdate.currentStreak
+                  })}{' '}
+                  de streak!
                 </ThemedText>
                 <ThemedIcon name="Flame" size={34} color="primary" />
               </Box>
               <ThemedText variant="mono" color="textSecondary" size="sm" letterSpacing="normal" style={styles.subtitle}>
-                continue postando pra manter a sequência
+                {t('post.success.streakSubtitle')}
               </ThemedText>
             </Box>
 
@@ -77,7 +87,7 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
             <Box gap={4} p={5} style={styles.friendsCard}>
               <Box flexDirection="row" justifyContent="space-between" alignItems="center">
                 <ThemedText variant="mono" color="textSecondary" letterSpacing="wider" textTransform="uppercase">
-                  amigos com streak
+                  {t('post.success.friendsStreak')}
                 </ThemedText>
                 <ThemedText variant="mono" color="textSecondary" letterSpacing="normal">
                   {count}
@@ -93,7 +103,7 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
               ) : (
                 <Box justifyContent="center" style={loading ? styles.emptyLoading : undefined}>
                   <ThemedText variant="mono" color="textSecondary" size="sm" letterSpacing="normal">
-                    {loading ? 'carregando amigos...' : 'nenhum amigo com streak ativa agora'}
+                    {loading ? t('post.success.loadingFriends') : t('post.success.emptyFriends')}
                   </ThemedText>
                 </Box>
               )}
@@ -103,7 +113,7 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
 
         <Button onPress={onContinue}>
           <ThemedText weight="bold" color="background" letterSpacing="normal">
-            continuar
+            {t('post.actions.continueBtn')}
           </ThemedText>
         </Button>
       </Box>
@@ -111,29 +121,33 @@ export const StreakCelebrationStep: React.FC<Props> = ({ streakUpdate, onClose, 
   )
 }
 
-const FriendStreakRow: React.FC<{ friend: FriendStreakSummary }> = ({ friend }) => (
-  <Box flexDirection="row" alignItems="center" justifyContent="space-between" gap={3}>
-    <Box flex={1} flexDirection="row" alignItems="center" gap={3}>
-      <Avatar size="xs" uri={friend.image} fallbackLetter={friend.name || friend.username} />
-      <Box flex={1}>
-        <ThemedText weight="bold" color="textPrimary" letterSpacing="normal" numberOfLines={1}>
-          {friend.name}
+const FriendStreakRow: React.FC<{ friend: FriendStreakSummary }> = ({ friend }) => {
+  const { t } = useAppTranslation()
+
+  return (
+    <Box flexDirection="row" alignItems="center" justifyContent="space-between" gap={3}>
+      <Box flex={1} flexDirection="row" alignItems="center" gap={3}>
+        <Avatar size="xs" uri={friend.image} fallbackLetter={friend.name || friend.username} />
+        <Box flex={1}>
+          <ThemedText weight="bold" color="textPrimary" letterSpacing="normal" numberOfLines={1}>
+            {friend.name}
+          </ThemedText>
+          <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" numberOfLines={1}>
+            @{friend.username}
+          </ThemedText>
+        </Box>
+      </Box>
+      <Box flexDirection="row" alignItems="baseline" gap={1}>
+        <ThemedText weight="bold" size="xl" color="primary" letterSpacing="normal">
+          {friend.currentStreak}
         </ThemedText>
-        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" numberOfLines={1}>
-          @{friend.username}
+        <ThemedText variant="mono" size="xs" color="textSecondary" letterSpacing="normal">
+          {t('post.success.weekShort')}
         </ThemedText>
       </Box>
     </Box>
-    <Box flexDirection="row" alignItems="baseline" gap={1}>
-      <ThemedText weight="bold" size="xl" color="primary" letterSpacing="normal">
-        {friend.currentStreak}
-      </ThemedText>
-      <ThemedText variant="mono" size="xs" color="textSecondary" letterSpacing="normal">
-        sem
-      </ThemedText>
-    </Box>
-  </Box>
-)
+  )
+}
 
 const styles = StyleSheet.create({
   content: {

@@ -2,8 +2,9 @@ import { useCallback } from 'react'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
+import { i18n } from '@src/shared/i18n'
 
-import { AuthMessage, isBannedAuthError } from './auth-messages'
+import { AuthMessageKey, isBannedAuthError } from './auth-messages'
 import { AuthSessionPayload, useAuthSession } from './use-auth-session.hook'
 
 type ResolveEmailVerificationSessionInput = {
@@ -19,7 +20,7 @@ export const useEmailVerificationSession = () => {
   const signInAfterEmailVerification = useCallback(
     async (email: string, password?: string): Promise<AuthSessionPayload | null> => {
       if (!password) {
-        showToast('email confirmado. entre novamente para continuar.')
+        showToast(i18n.t('auth.verify.confirmationMessage'))
         return null
       }
 
@@ -30,10 +31,10 @@ export const useEmailVerificationSession = () => {
 
       if (error || !data?.token) {
         if (isBannedAuthError(error)) {
-          showToast(AuthMessage.banned, 'error')
+          showToast(i18n.t(AuthMessageKey.banned), 'error')
           return null
         }
-        showToast('email confirmado. entre novamente para continuar.', 'info')
+        showToast(i18n.t('auth.verify.confirmationMessage'), 'info')
         return null
       }
 

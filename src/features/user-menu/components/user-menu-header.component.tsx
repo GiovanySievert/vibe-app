@@ -5,6 +5,7 @@ import { UserMenuStackParamList } from '@src/app/navigation/types'
 import { UserData } from '@src/features/auth/domain'
 import { Avatar, Box, Card, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type userMenuHeaderProps = {
   userData: UserData
@@ -12,6 +13,7 @@ type userMenuHeaderProps = {
 
 export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
   const navigation = useNavigation<NavigationProp<UserMenuStackParamList>>()
+  const { t } = useAppTranslation()
 
   return (
     <Card bg="background" gap={4} p={4}>
@@ -32,7 +34,7 @@ export const UserMenuHeader: React.FC<userMenuHeaderProps> = ({ userData }) => {
             </Box>
             <Touchable style={styles.profileButton} onPress={() => navigation.goBack()}>
               <ThemedText size="sm" weight="medium" style={styles.profileButtonText}>
-                ver perfil
+                {t('userMenu.profile.viewProfile')}
               </ThemedText>
             </Touchable>
           </Box>

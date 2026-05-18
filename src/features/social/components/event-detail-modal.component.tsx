@@ -13,6 +13,7 @@ import { SwipeableModal } from '@src/shared/components/swipeable-modal'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatEventDateTime } from '@src/shared/utils'
 
 import { EventParticipantStatus } from '../domain/event.model'
@@ -25,16 +26,16 @@ import { EventPhotoPicker } from './event-photo-picker.component'
 
 const MODAL_HEIGHT = Dimensions.get('window').height * 0.85
 
-const STATUS_LABEL: Record<EventParticipantStatus, string> = {
-  [EventParticipantStatus.PENDING]: 'Pendente',
-  [EventParticipantStatus.ACCEPTED]: 'Presença confirmada',
-  [EventParticipantStatus.DECLINED]: 'Convite recusado'
-}
-
 const STATUS_COLOR: Record<EventParticipantStatus, keyof typeof theme.colors> = {
   [EventParticipantStatus.PENDING]: 'primary',
   [EventParticipantStatus.ACCEPTED]: 'success',
   [EventParticipantStatus.DECLINED]: 'error'
+}
+
+const STATUS_LABEL_KEY: Record<EventParticipantStatus, string> = {
+  [EventParticipantStatus.PENDING]: 'statusPending',
+  [EventParticipantStatus.ACCEPTED]: 'statusAccepted',
+  [EventParticipantStatus.DECLINED]: 'statusDeclined'
 }
 
 type EventDetailModalProps = {
@@ -44,6 +45,7 @@ type EventDetailModalProps = {
 }
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visible, onClose }) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
@@ -65,7 +67,9 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
   const { mutate: updateEvent, isPending: isUpdatingEvent } = useMutation({
     mutationFn: async () => {
       const nextImageUrl =
-        imageUri && imageUri !== event!.imageUrl && isLocalImageUri(imageUri) ? await upload(imageUri, 'uploads') : imageUri
+        imageUri && imageUri !== event!.imageUrl && isLocalImageUri(imageUri)
+          ? await upload(imageUri, 'uploads')
+          : imageUri
 
       return EventService.update(event!.id, {
         description,
@@ -84,7 +88,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
     },
     onError: () => {
       setIsEditing(true)
-      showToast('não foi possível salvar o evento.', 'error')
+      showToast(t('social.eventDetail.saveFailed'), 'error')
     }
   })
 
@@ -134,14 +138,18 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
       onClose()
     },
     onError: () => {
-      showToast('não foi possível excluir o evento.', 'error')
+      showToast(t('social.eventDetail.deleteFailed'), 'error')
     }
   })
 
   const handleDelete = () => {
-    Alert.alert('Excluir evento', 'Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Excluir', style: 'destructive', onPress: () => deleteEvent() }
+    Alert.alert(t('social.eventDetail.deleteTitle'), t('social.eventDetail.deleteMsg'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: () => deleteEvent()
+      }
     ])
   }
 
@@ -184,7 +192,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
             <Box gap={1} mb={4}>
               <Box flexDirection="row" alignItems="center" justifyContent="space-between">
                 <ThemedText size="sm" color="textSecondary" weight="semibold">
-                  Descrição
+                  {t('social.eventDetail.descLabel')}
                 </ThemedText>
                 {!isEditing && (
                   <Touchable onPress={() => setIsEditing(true)} style={styles.iconButton}>
@@ -206,9 +214,9 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                   />
                   <Box gap={1}>
                     <FakeInput
-                      label="local"
+                      label={t('social.createEvent.placeLabel')}
                       value={pickerPlace?.name ?? ''}
-                      placeholder="selecionar local"
+                      placeholder={t('social.createEvent.placeSelect')}
                       startIconName="MapPin"
                       isClearable
                       onClear={handleClearPlace}
@@ -224,14 +232,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                     <Box flex={1}>
                       <Button variant="ghost" onPress={handleCancelEdit}>
                         <ThemedText color="primary" weight="semibold">
-                          Cancelar
+                          {t('common.cancel')}
                         </ThemedText>
                       </Button>
                     </Box>
                     <Box flex={1}>
                       <Button onPress={() => updateEvent()} loading={uploading || isUpdatingEvent}>
                         <ThemedText color="background" weight="semibold">
-                          Salvar
+                          {t('common.save')}
                         </ThemedText>
                       </Button>
                     </Box>
@@ -239,14 +247,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                 </Box>
               ) : (
                 <ThemedText color={description ? 'textPrimary' : 'textSecondary'}>
-                  {description || 'Sem descrição'}
+                  {description || t('social.eventDetail.noDesc')}
                 </ThemedText>
               )}
             </Box>
 
             <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
               <ThemedText size="sm" color="textSecondary" weight="semibold">
-                Local
+                {t('social.eventDetail.placeLabel')}
               </ThemedText>
 
               {pickerPlace ? (
@@ -261,13 +269,13 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                   </Box>
                 </Touchable>
               ) : (
-                <ThemedText color="textSecondary">Sem local</ThemedText>
+                <ThemedText color="textSecondary">{t('social.eventDetail.noPlace')}</ThemedText>
               )}
             </Box>
 
             <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
               <ThemedText size="sm" color="textSecondary" weight="semibold">
-                Horário
+                {t('social.eventDetail.timeLabel')}
               </ThemedText>
 
               <ThemedText color={description ? 'textPrimary' : 'textSecondary'}>
@@ -277,12 +285,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
 
             <Box gap={3}>
               <ThemedText size="sm" color="textSecondary" weight="semibold">
-                Participantes ({event.participants.length})
+                {t('social.eventDetail.participantsLabel', {
+                  count: event.participants.length
+                })}
               </ThemedText>
 
               {event.participants.length === 0 ? (
                 <ThemedText color="textSecondary" size="sm">
-                  Nenhum participante
+                  {t('social.eventDetail.noParticipants')}
                 </ThemedText>
               ) : (
                 event.participants.map((participant, index) => (
@@ -293,7 +303,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, visib
                         <ThemedText>{participant.username}</ThemedText>
                       </Box>
                       <ThemedText size="xs" color={STATUS_COLOR[participant.status]}>
-                        {STATUS_LABEL[participant.status]}
+                        {t(`social.eventDetail.${STATUS_LABEL_KEY[participant.status]}`)}
                       </ThemedText>
                     </Box>
                     {index < event.participants.length - 1 && (

@@ -4,6 +4,7 @@ import { Share, StyleSheet } from 'react-native'
 import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type CreateEventSuccessProps = {
   eventName: string
@@ -12,9 +13,10 @@ type CreateEventSuccessProps = {
 }
 
 export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventName, eventLink, onClose }) => {
+  const { t } = useAppTranslation()
   const handleShare = async () => {
     await Share.share({
-      message: `Você foi convidado para "${eventName}"! Abra o app e faça login para responder ao convite: ${eventLink}`,
+      message: t('social.createEvent.shareMessage', { eventName, eventLink }),
       url: eventLink
     })
   }
@@ -28,16 +30,16 @@ export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventNam
 
         <Box gap={2} alignItems="center">
           <ThemedText size="xl" weight="bold" style={styles.textCenter}>
-            Evento criado!
+            {t('social.createEvent.successTitle')}
           </ThemedText>
           <ThemedText color="textSecondary" style={styles.textCenter}>
-            Compartilhe o link abaixo com seus convidados. Eles precisam abrir o app e estar logados para responder.
+            {t('social.createEvent.successDesc')}
           </ThemedText>
         </Box>
 
         <Box style={styles.linkBox} gap={3}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
-            Link do evento
+            {t('social.createEvent.linkLabel')}
           </ThemedText>
           <Box flexDirection="row" alignItems="center" gap={3} style={styles.linkRow}>
             <ThemedText
@@ -47,7 +49,7 @@ export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventNam
               numberOfLines={1}
               ellipsizeMode="middle"
             >
-              {eventLink || 'Gerando link...'}
+              {eventLink || t('social.createEvent.generatingLink')}
             </ThemedText>
             {eventLink ? (
               <Touchable onPress={handleShare} hitSlop={styles.copyHitSlop}>
@@ -61,12 +63,12 @@ export const CreateEventSuccess: React.FC<CreateEventSuccessProps> = ({ eventNam
       <Box gap={3} pb={4}>
         <Button onPress={handleShare} startIconName="Share2" disabled={!eventLink}>
           <ThemedText color="background" weight="semibold">
-            Compartilhar link
+            {t('social.createEvent.shareBtn')}
           </ThemedText>
         </Button>
         <Button variant="ghost" onPress={onClose}>
           <ThemedText color="primary" weight="semibold">
-            Fechar
+            {t('social.createEvent.closeBtn')}
           </ThemedText>
         </Button>
       </Box>

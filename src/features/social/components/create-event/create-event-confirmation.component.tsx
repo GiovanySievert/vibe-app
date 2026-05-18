@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, ScrollView, StyleSheet } from 'react-native'
 
 import { Avatar, Box, Button, Divider, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatEventDateTime } from '@src/shared/utils'
 
 import { CreateEventPayload } from '../../domain/event.model'
@@ -19,6 +20,8 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
   onSave,
   onBack
 }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -29,13 +32,15 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
               style={styles.coverImage}
               resizeMode="cover"
               accessible
-              accessibilityLabel={`Imagem de capa do evento ${payload.name}`}
+              accessibilityLabel={t('common.eventCoverImage', {
+                name: payload.name
+              })}
             />
           )}
 
           <Box gap={1}>
             <ThemedText size="sm" color="textSecondary" weight="semibold">
-              Nome do evento
+              {t('social.createEvent.eventNameLabel')}
             </ThemedText>
             <ThemedText weight="semibold">{payload.name}</ThemedText>
           </Box>
@@ -44,7 +49,7 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
 
           <Box gap={1}>
             <ThemedText size="sm" color="textSecondary" weight="semibold">
-              Data e hora
+              {t('social.createEvent.dateTimeLabel')}
             </ThemedText>
             <ThemedText>{formatEventDateTime(payload.date, payload.time)}</ThemedText>
           </Box>
@@ -54,7 +59,7 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
               <Divider />
               <Box gap={1}>
                 <ThemedText size="sm" color="textSecondary" weight="semibold">
-                  Local
+                  {t('social.eventDetail.placeLabel')}
                 </ThemedText>
                 <ThemedText>{payload.place.name}</ThemedText>
                 {!![payload.place.type, payload.place.neighborhood].filter(Boolean).length && (
@@ -71,7 +76,7 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
               <Divider />
               <Box gap={1}>
                 <ThemedText size="sm" color="textSecondary" weight="semibold">
-                  Descrição
+                  {t('social.eventDetail.descLabel')}
                 </ThemedText>
                 <ThemedText>{payload.description}</ThemedText>
               </Box>
@@ -82,11 +87,13 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
 
           <Box gap={2}>
             <ThemedText size="sm" color="textSecondary" weight="semibold">
-              Participantes ({payload.participants.length})
+              {t('social.createEvent.participantsLabel', {
+                count: payload.participants.length
+              })}
             </ThemedText>
             {payload.participants.length === 0 ? (
               <ThemedText color="textSecondary" size="sm">
-                Nenhum participante selecionado
+                {t('social.createEvent.noParticipantsSelected')}
               </ThemedText>
             ) : (
               <Box gap={3}>
@@ -105,12 +112,12 @@ export const CreateEventConfirmation: React.FC<CreateEventConfirmationProps> = (
       <Box gap={3} pt={4}>
         <Button onPress={onSave} loading={loading}>
           <ThemedText color="background" weight="semibold">
-            Salvar evento
+            {t('social.createEvent.saveBtn')}
           </ThemedText>
         </Button>
         <Button variant="ghost" onPress={onBack}>
           <ThemedText color="primary" weight="semibold">
-            Voltar
+            {t('social.createEvent.backBtn')}
           </ThemedText>
         </Button>
       </Box>

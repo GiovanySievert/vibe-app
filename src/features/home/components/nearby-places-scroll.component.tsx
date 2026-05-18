@@ -6,6 +6,7 @@ import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatDistance } from '@src/shared/utils'
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 
 export const NearbyPlacesScroll: React.FC<Props> = ({ places, selectedPlaceId, onPlacePress }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
+  const { t } = useAppTranslation()
 
   const handlePlacePress = (place: PlacesModel) => {
     if (onPlacePress) {
@@ -25,16 +27,16 @@ export const NearbyPlacesScroll: React.FC<Props> = ({ places, selectedPlaceId, o
 
     navigation.navigate('Modals', {
       screen: 'PlacesDetailsScreen',
-      params: { placeId: place.id }
+      params: { placeId: place.id, isHot: place.isHot }
     })
   }
 
   return (
     <Box pt={3} pb={4} bg="background">
       <Box flexDirection="row" justifyContent="space-between" alignItems="center" pl={4} pr={4} pb={2}>
-        <ThemedText weight="bold">o que tá rolando</ThemedText>
+        <ThemedText weight="bold">{t('home.places.title')}</ThemedText>
         <ThemedText variant="mono" color="textSecondary" size="sm" style={{ marginTop: 5 }}>
-          {places.length} locais ativos
+          {t('home.places.activeCount', { count: places.length })}
         </ThemedText>
       </Box>
       <FlatList

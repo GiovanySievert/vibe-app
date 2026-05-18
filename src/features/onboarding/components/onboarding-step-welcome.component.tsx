@@ -4,44 +4,44 @@ import { StyleSheet } from 'react-native'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type OnboardingStepWelcomeProps = {
   onNext: () => void
 }
 
-const WELCOME_FEATURES = [
-  {
-    icon: 'MapPin' as const,
-    title: 'Descubra onde tá rolando',
-    description: 'Veja em tempo real quais lugares estão cheios ou mortos perto de você.'
-  },
-  {
-    icon: 'Camera' as const,
-    title: 'Compartilhe o clima do lugar',
-    description: 'Tire uma foto, deixe um comentário e mostre pra galera como tá o rolê.'
-  },
-  {
-    icon: 'Users' as const,
-    title: 'Feito pela comunidade',
-    description: 'Cada review é de alguém que tá lá. Informação real, sem propaganda.'
-  }
-]
-
 export const OnboardingStepWelcome: React.FC<OnboardingStepWelcomeProps> = ({ onNext }) => {
+  const { t } = useAppTranslation()
+  const welcomeFeatures = [
+    {
+      icon: 'MapPin' as const,
+      title: t('onboarding.welcome.feature1Title'),
+      description: t('onboarding.welcome.feature1Desc')
+    },
+    {
+      icon: 'Camera' as const,
+      title: t('onboarding.welcome.feature2Title'),
+      description: t('onboarding.welcome.feature2Desc')
+    },
+    {
+      icon: 'Users' as const,
+      title: t('onboarding.welcome.feature3Title'),
+      description: t('onboarding.welcome.feature3Desc')
+    }
+  ]
+
   return (
     <Box style={styles.container} justifyContent="space-between">
       <Box gap={6}>
         <Box gap={2}>
           <ThemedText size="2xl" weight="bold">
-            Bem-vindo ao Vibes 👋
+            {t('onboarding.welcome.title')}
           </ThemedText>
-          <ThemedText color="textSecondary">
-            O app que te ajuda a decidir onde ir antes de sair de casa.
-          </ThemedText>
+          <ThemedText color="textSecondary">{t('onboarding.welcome.subtitle')}</ThemedText>
         </Box>
 
         <Box gap={5}>
-          {WELCOME_FEATURES.map((feature) => (
+          {welcomeFeatures.map((feature) => (
             <Box key={feature.title} flexDirection="row" gap={4} alignItems="flex-start">
               <Box style={styles.iconWrapper} alignItems="center" justifyContent="center">
                 <ThemedIcon name={feature.icon} size={20} color="primary" />
@@ -60,7 +60,7 @@ export const OnboardingStepWelcome: React.FC<OnboardingStepWelcomeProps> = ({ on
       <Box pt={6}>
         <Button onPress={onNext}>
           <ThemedText color="background" weight="semibold">
-            Começar
+            {t('onboarding.welcome.startBtn')}
           </ThemedText>
         </Button>
       </Box>

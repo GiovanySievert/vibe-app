@@ -4,6 +4,7 @@ import { Image, StyleSheet } from 'react-native'
 import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type EventPhotoPickerProps = {
   uri: string | null
@@ -13,6 +14,8 @@ type EventPhotoPickerProps = {
 }
 
 export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, onPick, onClear }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box gap={3}>
       {label && (
@@ -26,7 +29,7 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
         onPress={onPick}
         style={styles.previewCard}
         accessibilityRole="button"
-        accessibilityLabel={uri ? 'Trocar foto do evento' : 'Adicionar foto do evento'}
+        accessibilityLabel={uri ? t('social.createEvent.changePhotoA11y') : t('social.createEvent.addPhotoA11y')}
       >
         {uri ? (
           <Image
@@ -34,14 +37,14 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
             style={styles.image}
             resizeMode="cover"
             accessible
-            accessibilityLabel="Foto do evento selecionada"
+            accessibilityLabel={t('social.createEvent.photoSelectedA11y')}
           />
         ) : (
           <Box alignItems="center" justifyContent="center" gap={2} style={styles.emptyState}>
             <ThemedIcon name="ImagePlus" size={24} color="textSecondary" />
-            <ThemedText color="textSecondary">adicionar foto do evento</ThemedText>
+            <ThemedText color="textSecondary">{t('social.createEvent.addPhoto')}</ThemedText>
             <ThemedText size="xs" color="textSecondary">
-              opcional
+              {t('common.optional')}
             </ThemedText>
           </Box>
         )}
@@ -50,13 +53,13 @@ export const EventPhotoPicker: React.FC<EventPhotoPickerProps> = ({ uri, label, 
       <Box flexDirection="row" gap={3}>
         <Button variant={uri ? 'outline' : 'solid'} size="sm" onPress={onPick} flex={1}>
           <ThemedText color={uri ? 'primary' : 'background'} weight="semibold">
-            {uri ? 'Trocar foto' : 'Escolher foto'}
+            {uri ? t('social.createEvent.changePhoto') : t('social.createEvent.choosePhoto')}
           </ThemedText>
         </Button>
         {uri && (
           <Button variant="ghost" size="sm" onPress={onClear}>
             <ThemedText color="error" weight="semibold">
-              Remover
+              {t('common.remove')}
             </ThemedText>
           </Button>
         )}

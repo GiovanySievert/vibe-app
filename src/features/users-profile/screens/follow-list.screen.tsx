@@ -10,6 +10,7 @@ import { Box, Input, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { HIT_SLOP } from '@src/shared/utils'
 
 import { UsersProfileFollowListItem } from '../components/user-follow-list/users-profile-follow-list-item.component'
@@ -20,6 +21,7 @@ import { ListFollowersResponse } from '../types'
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'FollowListScreen'>
 
 export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
+  const { t } = useAppTranslation()
   const { userId, username, initialTab } = route.params
   const { data: session } = authClient.useSession()
   const isUserLoggedProfile = session?.user.id === userId
@@ -77,11 +79,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const renderItem = useCallback(
     ({ item }: { item: ListFollowersResponse }) => (
-      <UsersProfileFollowListItem
-        followRelation={item}
-        type={activeTab}
-        isUserLoggedProfile={isUserLoggedProfile}
-      />
+      <UsersProfileFollowListItem followRelation={item} type={activeTab} isUserLoggedProfile={isUserLoggedProfile} />
     ),
     [activeTab, isUserLoggedProfile]
   )
@@ -93,7 +91,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
           hitSlop={HIT_SLOP}
           accessibilityRole="button"
-          accessibilityLabel="Voltar"
+          accessibilityLabel={t('common.back')}
         >
           <ThemedIcon name="ArrowLeft" size={22} color="textPrimary" />
         </Touchable>
@@ -110,7 +108,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
             color={activeTab === 'followers' ? 'textPrimary' : 'textSecondary'}
             size="sm"
           >
-            seguidores {statsData?.followersCount ?? 0}
+            {t('usersProfile.followers')} {statsData?.followersCount ?? 0}
           </ThemedText>
           {activeTab === 'followers' && <Box style={styles.tabUnderline} />}
         </Touchable>
@@ -121,7 +119,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
             color={activeTab === 'followings' ? 'textPrimary' : 'textSecondary'}
             size="sm"
           >
-            seguindo {statsData?.followingCount ?? 0}
+            {t('usersProfile.following')} {statsData?.followingCount ?? 0}
           </ThemedText>
           {activeTab === 'followings' && <Box style={styles.tabUnderline} />}
         </Touchable>
@@ -129,7 +127,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
 
       <Box pl={5} pr={5} pt={3} pb={2}>
         <Input
-          placeholder="buscar"
+          placeholder={t('usersProfile.followList.searchPlaceholder')}
           startIconName="Search"
           value={searchQuery}
           onChangeText={handleSearch}

@@ -1,0 +1,757 @@
+{
+  "common": {
+    "continue": "continue",
+    "cancel": "cancel",
+    "back": "back",
+    "save": "save",
+    "share": "share",
+    "send": "send",
+    "close": "Close",
+    "delete": "Delete",
+    "loading": "loading...",
+    "genericError": "something went wrong. please try again.",
+    "clearField": "Clear field",
+    "fieldAction": "Field action",
+    "password": {
+      "label": "password",
+      "show": "Show password",
+      "hide": "Hide password",
+      "showLabel": "show",
+      "hideLabel": "hide",
+      "requirements": "min 8 characters · one uppercase letter and one digit"
+    },
+    "backHint": "Returns to the previous screen",
+    "backHintWithTitle": "Returns to the previous screen, {{title}}",
+    "profilePhoto": "Profile photo",
+    "profilePhotoFor": "Profile photo of {{value}}",
+    "tapToExpand": "Tap to expand",
+    "closeImage": "Close image",
+    "post": "post",
+    "createPostHint": "Opens the screen to create a new post",
+    "verificationCode": "Verification code",
+    "emptyCode": "empty",
+    "closeModal": "Close modal",
+    "closeNotification": "Close notification",
+    "verificationCodeHint": "Enter the {{length}} digits of the code",
+    "digitA11y": "Digit {{index}} of {{length}}{{value}}",
+    "digitValue": ", {{digit}}",
+    "digitEmpty": ", empty",
+    "remove": "Remove",
+    "optional": "optional",
+    "live": "LIVE",
+    "placeImage": "Image of {{name}}",
+    "retry": "Try again",
+    "eventCoverImage": "Event cover image for {{name}}",
+    "tabs": {
+      "map": "map",
+      "feed": "feed",
+      "post": "post",
+      "social": "social",
+      "you": "you"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "subtitle": "where your friends are now.",
+      "emailLabel": "email",
+      "passwordLabel": "password",
+      "forgotPasswordLink": "Forgot password",
+      "forgotPasswordText": "forgot password",
+      "submitButton": "sign in",
+      "appleButton": "sign in with apple",
+      "googleButton": "sign in with google",
+      "noAccount": "first time? ",
+      "signUpLink": "create account",
+      "signUpLinkA11y": "Create account",
+      "signUpLinkHint": "Opens the sign up flow",
+      "termsPrefix": "by continuing you accept",
+      "termsConnector": "the ",
+      "termsAndConnector": " and ",
+      "backButtonA11y": "Back",
+      "backButtonHint": "Returns to the sign in form",
+      "verifyEmailTitle": "confirm your email"
+    },
+    "signUp": {
+      "title": "create account",
+      "subtitle": "just the basics to get started.",
+      "emailLabel": "email",
+      "emailHint": "we will verify your email, please confirm it is correct.",
+      "termsPrefix": "by continuing you accept the ",
+      "termsLink": "terms",
+      "termsConnector": " and ",
+      "privacyLink": "privacy policy",
+      "steps": {
+        "profile": "profile",
+        "email": "email",
+        "verification": "verification"
+      },
+      "profile": {
+        "title": "what should we call you?",
+        "subtitle": "this is how your friends will find you.",
+        "nameLabel": "name",
+        "continueButton": "continue",
+        "appleButton": "sign up with apple",
+        "googleButton": "sign up with google"
+      },
+      "usernameLabel": "username",
+      "usernameAvailable": "vibes.app/{{value}} · available",
+      "errors": {
+        "creationFailed": "could not create the account"
+      },
+      "backButtonA11y": "Back",
+      "backButtonHint": "Returns to the previous sign up step"
+    },
+    "verify": {
+      "title": "confirm your email",
+      "sentMessage": "we sent a code to {{email}}.",
+      "submittingButton": "verifying...",
+      "resendCountdown": "resend in {{seconds}}s",
+      "resendButton": "resend code",
+      "confirmationMessage": "email confirmed. sign in again to continue."
+    },
+    "forgotPassword": {
+      "title": "forgot password?",
+      "subtitle": "enter your registered email and we will send a code.",
+      "emailLabel": "email",
+      "submitButton": "continue",
+      "codeStep": {
+        "title": "forgot password?",
+        "subtitle": "enter the code we sent to your email; if you did not receive it, try signing up."
+      },
+      "codeLabel": "code",
+      "newPasswordLabel": "new password"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "content": "we will sell your data",
+      "linkText": "terms",
+      "linkA11y": "Terms of use"
+    },
+    "privacy": {
+      "title": "privacy",
+      "content": "we will sell your data",
+      "linkText": "privacy",
+      "linkA11y": "Privacy policy"
+    },
+    "errors": {
+      "generic": "something went wrong, please try again later.",
+      "invalidCredentials": "invalid email or password",
+      "invalidOtp": "invalid code",
+      "usernameTaken": "this username is not available",
+      "usernameCheckError": "error checking username, please try again",
+      "invalidEmail": "invalid email",
+      "passwordMinLength": "minimum 8 characters",
+      "passwordUppercase": "needs 1 uppercase letter",
+      "passwordLowercase": "needs 1 lowercase letter",
+      "passwordDigit": "needs 1 digit",
+      "nameMinLength": "name too short",
+      "usernameMinLength": "username too short",
+      "fieldRequired": "required field",
+      "appleIosOnly": "apple sign in available only on ios",
+      "appleNoToken": "apple did not return identityToken",
+      "appleAuthFailed": "failed to authenticate with apple",
+      "googleNotConfigured": "google sign in not configured",
+      "googleNoToken": "google did not return idToken",
+      "googleAuthFailed": "failed to authenticate with google",
+      "googleInProgress": "sign in in progress",
+      "googlePlayServices": "google play services unavailable",
+      "accountBanned": "your account has been blocked. please contact support."
+    }
+  },
+  "home": {
+    "title": "now",
+    "locationFallback": "your area",
+    "timeRange": "last 24h",
+    "places": {
+      "title": "what's happening",
+      "activeCount_one": "{{count}} active place",
+      "activeCount_other": "{{count}} active places"
+    }
+  },
+  "userMenu": {
+    "language": {
+      "title": "language",
+      "subtitle": "choose the app language",
+      "menuItem": "language",
+      "menuItemHint": "portuguese · english · spanish"
+    },
+    "options": {
+      "accountSection": "account",
+      "appSection": "app",
+      "editProfileTitle": "edit profile",
+      "editProfileSubtitle": "name, bio, photo",
+      "usernameTitle": "username",
+      "usernameChange": "change",
+      "badgesTitle": "badges",
+      "badgesSubtitle": "achievements on profile",
+      "privacyTitle": "privacy",
+      "privacySubtitle": "public profile",
+      "termsOfUseTitle": "terms of use",
+      "notificationsTitle": "notifications",
+      "contactTitle": "talk to the team",
+      "deleteAccountTitle": "delete account",
+      "logoutTitle": "log out"
+    },
+    "editProfile": {
+      "title": "edit profile",
+      "subtitle": "avatar · name · bio",
+      "usernameLabel": "username",
+      "nameLabel": "name",
+      "bioLabel": "bio",
+      "bioPlaceholder": "..."
+    },
+    "changeUsername": {
+      "title": "change username",
+      "subtitle": "how your friends find you",
+      "unavailable": "this username is not available",
+      "checkError": "error checking username, please try again",
+      "invalid": "invalid username",
+      "successToast": "username updated",
+      "inUse": "username is already in use",
+      "updateError": "could not update, please try again"
+    },
+    "termsOfUse": {
+      "title": "terms of use",
+      "subtitle": "the deal · rules",
+      "body": "We will sell your data."
+    },
+    "badges": {
+      "title": "badges",
+      "subtitle": "achievements · profile",
+      "sectionTitle": "your achievements",
+      "hint": "tap to show/hide on profile",
+      "unlockedSection": "unlocked",
+      "lockedSection": "locked",
+      "loadError": "could not load your achievements",
+      "emptyUnlocked": "no achievements unlocked yet",
+      "emptyLocked": "no badges in progress",
+      "defaultLabel": "badge",
+      "defaultPlace": "place",
+      "visibleLabel": "visible on profile",
+      "limitTitle": "badge limit",
+      "limitMessage": "you can show up to 3 badges on your profile."
+    },
+    "deleteAccount": {
+      "title": "delete account",
+      "subtitle": "action · permanent",
+      "warning": "by deleting your account, all your data, posts and interactions will be permanently removed. confirm your password to continue.",
+      "passwordLabel": "password",
+      "buttonLabel": "delete account",
+      "alertTitle": "delete account",
+      "alertMessage": "are you sure you want to delete your account? this action is permanent and cannot be undone.",
+      "confirmDelete": "delete",
+      "errors": {
+        "passwordMinLength": "minimum 8 characters",
+        "passwordUppercase": "needs 1 uppercase letter",
+        "passwordLowercase": "needs 1 lowercase letter",
+        "passwordDigit": "needs 1 digit"
+      }
+    },
+    "privacy": {
+      "title": "privacy",
+      "subtitle": "blocked · controls",
+      "blockedSection": "blocked",
+      "emptyBlocked": "you haven't blocked anyone yet.",
+      "viewAll": "view all ({{value}})"
+    },
+    "profile": {
+      "loading": "LOADING",
+      "editProfile": "edit profile",
+      "viewProfile": "view profile"
+    },
+    "contact": {
+      "title": "Talk to the team",
+      "description": "Praise, question or suggestion — the team will read it.",
+      "sendButton": "Send message"
+    }
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Vibes 👋",
+      "subtitle": "The app that helps you decide where to go before leaving home.",
+      "feature1Title": "Discover what's happening",
+      "feature1Desc": "See in real time which places are packed or dead near you.",
+      "feature2Title": "Share the vibe of the place",
+      "feature2Desc": "Take a photo, leave a comment and show everyone what's going on.",
+      "feature3Title": "Built by the community",
+      "feature3Desc": "Every review is from someone who is there. Real info, no ads.",
+      "startBtn": "Get started"
+    },
+    "review": {
+      "title": "What's a review?",
+      "description": "A place review is quick and simple. In less than a minute you help others decide where to go.",
+      "step1Title": "Photo of the place",
+      "step1Desc": "Take a photo showing the atmosphere — packed, empty, lively or quiet.",
+      "step2Title": "Leave a comment",
+      "step2Desc": "Share the vibe. A single sentence already helps everyone decide.",
+      "step3Title": "Visible to everyone",
+      "step3Desc": "Your review appears on the place page in real time.",
+      "tipLabel": "Tip",
+      "tipText": "Open any place page on the map and tap \"Make review\" to start.",
+      "confirmBtn": "Got it!"
+    },
+    "location": {
+      "title": "We need your location",
+      "description": "To show places and vibes near you, the app needs to know where you are. Your data is not shared with anyone.",
+      "info1": "Used only to find nearby places",
+      "info2": "We do not share your location with third parties",
+      "info3": "You can change this at any time in settings",
+      "waiting": "Waiting...",
+      "allowBtn": "Allow location",
+      "skipBtn": "Not now"
+    },
+    "thanks": {
+      "title": "Thanks for downloading Vibes",
+      "description1": "This app was made with care by a solo developer. Every line of code, every screen and every detail was thought out to help you find the right place at the right time.",
+      "description2": "You are not just a user — you are part of what makes this project exist. I hope Vibes helps you live amazing moments.",
+      "signature": "Made with ❤️ by a solo dev",
+      "continueBtn": "Let's go!"
+    }
+  },
+  "locationGate": {
+    "title": "App available only in Curitiba",
+    "description": "We detected you are outside our coverage area. For now, Vibes works only in Curitiba.",
+    "setCuritibaBtn": "Set location to Curitiba",
+    "skipBtn": "Do nothing"
+  },
+  "feed": {
+    "card": {
+      "ownerBadge": "you",
+      "viewInteractions": "view {{count}} interactions",
+      "noInteractions": "no interactions",
+      "comments": "comments · {{count}}",
+      "shareMessage": "{{username}} reviewed {{placeName}} on vibes\n{{shareUrl}}"
+    },
+    "comments": {
+      "deleteLabel": "Delete comment",
+      "deleteTitle": "Delete comment",
+      "deleteMsg": "Are you sure?",
+      "deleteBtn": "Delete",
+      "title": "Comments",
+      "empty": "No comments yet.",
+      "currentUser": "You",
+      "replies_one": "{{count}} reply",
+      "replies_other": "{{count}} replies",
+      "firstReply": "Be the first to reply"
+    },
+    "menu": {
+      "deleteSuccess": "review deleted.",
+      "deleteFailed": "could not delete the review.",
+      "favoriteTitle": "favorite review?",
+      "favoriteMsg": "this review will appear first on your grid. if you already have another favorite, it will be replaced.",
+      "favoriteBtn": "Favorite",
+      "unfavoriteBtn": "Unfavorite",
+      "shareBtn": "Share",
+      "deleteBtn": "Delete review",
+      "cancelBtn": "Cancel",
+      "alertTitle": ""
+    },
+    "suggestions": {
+      "title": "People you may know",
+      "description": "Follow someone to see their reviews here"
+    },
+    "trending": {
+      "title": "Trending this week",
+      "description": "Most active users in the last 4 weeks"
+    },
+    "shared": {
+      "errorTitle": "Could not open this review.",
+      "errorMsg": "Check if the link is still valid and try again."
+    },
+    "errors": {
+      "commentFailed": "could not comment on this review.",
+      "loadInteractionsFailed": "could not load interactions.",
+      "updateReactionFailed": "could not update your reaction.",
+      "updateInteractionsFailed": "could not update interactions."
+    },
+    "favorite": {
+      "success": "review favorited.",
+      "removed": "review unfavorited.",
+      "failed": "could not update favorite review."
+    }
+  },
+  "post": {
+    "place": {
+      "title": "where are you?",
+      "description": "choose a nearby place to tag your review.",
+      "searching": "searching nearby places...",
+      "searchingDesc": "this should only take a few seconds.",
+      "noPlaces": "no nearby places found",
+      "noPlacesDesc": "enable your location or try moving the map on home.",
+      "selectedFallback": "selected place"
+    },
+    "photos": {
+      "title": "show how it is",
+      "description": "the place photo is required; the selfie is optional.",
+      "requiredError": "the place photo is required",
+      "privacyLabel": "Selfie only for friends?",
+      "privacyDesc": "Followers still see the selfie. If off, it appears to everyone.",
+      "addPlacePhoto": "add place photo",
+      "addSelfie": "add selfie",
+      "placePhotoCaptured": "Place photo captured",
+      "selfieCaptured": "Selfie captured",
+      "placePhotoLabel": "place photo *",
+      "selfieLabel": "selfie"
+    },
+    "review": {
+      "subtitle": "place review",
+      "changeBtn": "change",
+      "stateLabel": "state",
+      "emptyLabel": "Empty",
+      "crowdedLabel": "Crowded",
+      "commentLabel": "how was it",
+      "commentPlaceholder": "went for a quick drink and stayed until closing...",
+      "publishBtn": "publish review",
+      "placePhotoA11y": "Place photo",
+      "authorSelfieA11y": "Author selfie",
+      "changePlaceA11y": "change place"
+    },
+    "actions": {
+      "continueBtn": "continue"
+    },
+    "success": {
+      "message": "review published.",
+      "announce": "Review published at {{placeName}}",
+      "badgeUnlocked": "Badge unlocked: {{label}}",
+      "nextBadge": "{{label}} unlocks in {{minReviews}} reviews",
+      "maxBadge": "max badge unlocked",
+      "remainingBadge": "{{remaining}} left to \"{{label}}\"",
+      "loading": "loading progress...",
+      "reviewCount": "{{reviewCount}} reviews at {{placeName}}",
+      "badgeStatus": "badge unlocked",
+      "reviewStatus": "review published",
+      "badgeTitle": "{{label}} unlocked",
+      "shareTitle": "thanks for sharing",
+      "reviewPublished": "review published",
+      "viewBadges": "view badges",
+      "progressLabel": "progress",
+      "nextLevel": "next level",
+      "milestones": "milestones",
+      "loadingMilestones": "loading your milestones here",
+      "progressFailed": "could not load your progress right now",
+      "streakSubtitle": "keep posting to maintain your streak",
+      "friendsStreak": "friends with streak",
+      "loadingFriends": "loading friends...",
+      "emptyFriends": "no friends with an active streak right now",
+      "weekShort": "wk",
+      "reviewNumber": "review #{{reviewCount}} · {{placeName}}"
+    },
+    "errors": {
+      "cameraPermission": "enable the camera to add the photo.",
+      "cameraFailed": "could not open the camera.",
+      "placeRequired": "choose a place to continue.",
+      "photoRequired": "the place photo is required",
+      "ratingRequired": "tag whether the place is empty or crowded.",
+      "placePublishRequired": "choose a place to publish.",
+      "rateLimited": "you posted here recently, wait a bit before posting again",
+      "outOfRange": "you need to be at the place to post this review",
+      "placePhotoRequiredTitle": "Place photo required",
+      "locationUnavailableTitle": "Location unavailable"
+    },
+    "navigation": {
+      "close": "close",
+      "back": "back"
+    },
+    "badges": {
+      "regular": "regular",
+      "fan": "fan",
+      "frequent": "VIP",
+      "legend": "legend",
+      "king": "king"
+    }
+  },
+  "social": {
+    "title": "social",
+    "subtitle": "friends · events · favorites",
+    "createEventBtn": "Create event",
+    "createEvent": {
+      "photoLabel": "event photo",
+      "nameLabel": "event name",
+      "dateLabel": "date",
+      "timeLabel": "time",
+      "descriptionLabel": "description",
+      "placeLabel": "place",
+      "placeSelect": "select place",
+      "nextBtn": "Next",
+      "successTitle": "Event created!",
+      "successDesc": "Share the link below with your guests. They need to open the app and be signed in to respond.",
+      "linkLabel": "Event link",
+      "generatingLink": "Generating link...",
+      "shareBtn": "Share link",
+      "closeBtn": "Close",
+      "shareMessage": "You were invited to \"{{eventName}}\"! Open the app and sign in to respond: {{eventLink}}",
+      "changePhotoA11y": "Change event photo",
+      "addPhotoA11y": "Add event photo",
+      "photoSelectedA11y": "Event photo selected",
+      "addPhoto": "add event photo",
+      "changePhoto": "Change photo",
+      "choosePhoto": "Choose photo",
+      "commentFailed": "could not post the note.",
+      "commentDeleteFailed": "could not delete the note.",
+      "commentEmpty": "No notes yet. Be the first!",
+      "creatorBadge": "Creator",
+      "detailsStep": "Details",
+      "participantsStep": "Participants",
+      "confirmStep": "Confirm",
+      "modalTitle": "Create your event",
+      "createFailed": "could not create the event.",
+      "participantsEmpty": "No users found.",
+      "participantsMinChars": "Type at least 3 characters to search.",
+      "saveBtn": "Save event",
+      "backBtn": "Back",
+      "eventNameLabel": "Event name",
+      "dateTimeLabel": "Date and time",
+      "participantsLabel": "Participants ({{count}})",
+      "noParticipantsSelected": "No participant selected",
+      "errors": {
+        "nameTooShort": "name too short",
+        "nameTooLong": "name too long",
+        "invalidDate": "invalid date",
+        "invalidTime": "invalid time",
+        "descriptionTooLong": "description too long"
+      }
+    },
+    "eventInvitations": {
+      "accepted": "confirmed",
+      "declined": "declined",
+      "yesBtn": "going",
+      "noBtn": "not going",
+      "label": "invited at",
+      "people_one": "{{count}} person",
+      "people_other": "{{count}} people"
+    },
+    "myEvents": {
+      "title": "my events"
+    },
+    "followRequests": {
+      "receivedTitle": "requests",
+      "sentTitle": "sent requests",
+      "viewAllBtn": "view all ({{value}})",
+      "empty": "no requests",
+      "acceptBtn": "accept",
+      "ignoreBtn": "ignore",
+      "cancelBtn": "cancel"
+    },
+    "eventDetail": {
+      "statusPending": "Pending",
+      "statusAccepted": "Attendance confirmed",
+      "statusDeclined": "Invite declined",
+      "saveFailed": "could not save the event.",
+      "deleteTitle": "Delete event",
+      "deleteMsg": "Are you sure you want to delete this event? This action cannot be undone.",
+      "descLabel": "Description",
+      "noDesc": "No description",
+      "placeLabel": "Place",
+      "noPlace": "No place",
+      "timeLabel": "Time",
+      "participantsLabel": "Participants ({{count}})",
+      "noParticipants": "No participants",
+      "deleteFailed": "could not delete the event."
+    },
+    "createEventIntro": {
+      "feature1Title": "Create your event",
+      "feature1Desc": "Set name, date, time and a description for your event in seconds.",
+      "feature2Title": "Invite your friends",
+      "feature2Desc": "Search and select friends who already have an account in the app.",
+      "feature3Title": "RSVP",
+      "feature3Desc": "Your friends receive the invite and can RSVP directly in the app.",
+      "title": "Events with people you like",
+      "description": "The easiest way to organize a birthday, barbecue or any hangout with friends in the app."
+    },
+    "eventPlaceSearch": {
+      "title": "event place",
+      "description": "Search for a place to associate with the event.",
+      "placeholder": "search place",
+      "minChars": "Type at least 3 characters to search for a place.",
+      "empty": "No place found."
+    },
+    "sharedEvent": {
+      "responseSuccess": "response sent successfully.",
+      "responseFailed": "could not respond to the invitation.",
+      "openFailedTitle": "Could not open this event.",
+      "openFailedMsg": "Check if the link is still valid and try again.",
+      "accessDeniedTitle": "You do not have permission to access this event.",
+      "accessDeniedMsg": "This invitation is available only to authenticated participants.",
+      "guestsLabel": "Guests ({{count}})",
+      "morePeople": "{{count}} people",
+      "ownerTitle": "You created this event",
+      "ownerDescription": "Participants can open this link in the app to respond to the invitation.",
+      "yourResponse": "Your response",
+      "confirmPresence": "Confirm attendance",
+      "declineInvite": "Decline invite",
+      "declinedTitle": "You declined this invite",
+      "declinedDescription": "Changed your mind? You can still confirm attendance."
+    },
+    "blockedUsers": {
+      "unblock": "unblock"
+    },
+    "suggestions": {
+      "mutualFriends_one": "{{count}} mutual friend",
+      "mutualFriends_other": "{{count}} mutual friends"
+    }
+  },
+  "places": {
+    "loading": "loading...",
+    "hotLabel": "it's hot here",
+    "hotDescription": "this place is trending in the last 90 days",
+    "noMenu": "this place has no menu registered :/",
+    "errors": {
+      "loadFailed": "something went wrong, please try again later!"
+    },
+    "stats": {
+      "friendsNow": "friends there now",
+      "vibeChecksToday": "vibe checks today",
+      "latestRecent": "latest recent",
+      "price": "price"
+    },
+    "reviews": {
+      "emptyRecent": "no vibes in the last 24h",
+      "recentTitle": "vibes here · last 24h",
+      "friendsRecent": "friends who visited in the last 90d",
+      "friendsTitle": "friends who visited",
+      "viewAllFriends": "view all {{count}}",
+      "viewAllFriendsA11y": "View all {{count}} friends who visited",
+      "openProfileA11y": "Open {{username}} profile"
+    },
+    "reviewButton": {
+      "checking": "checking…",
+      "enableLocation": "enable location to post",
+      "getCloser": "get closer ({{distance}}m)",
+      "wait": "wait {{time}}",
+      "ready": "post vibe here"
+    },
+    "openingHours": {
+      "title": "Hours",
+      "description": "from 7pm to 7am, every day"
+    },
+    "tags": {
+      "uglyWoman": "Ugly Woman",
+      "forro": "Forro",
+      "electronicMusic": "Electronic Music",
+      "danceFloor": "Dance floor"
+    }
+  },
+  "search": {
+    "input": {
+      "placeholder": "search places and people"
+    },
+    "tabs": {
+      "places": "Places",
+      "people": "People"
+    },
+    "emptyUsers": "No users found.",
+    "removeHistory": "Remove from history",
+    "hotPlaces": {
+      "title": "hot near you",
+      "subtitle": "next 24h"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllBtn": "Mark all",
+    "emptyTitle": "All caught up here",
+    "emptyDesc": "When someone invites you to an event or sends a follow request, you'll see it here.",
+    "relative": {
+      "now": "now"
+    },
+    "preferences": {
+      "title": "notifications",
+      "subtitle": "control how each type reaches you",
+      "loading": "Loading...",
+      "push": "push",
+      "footer": "In-app notifications always appear in the inbox.",
+      "types": {
+        "event_invitation": {
+          "title": "Event invitations",
+          "description": "When someone invites you to an event."
+        },
+        "follow_request_created": {
+          "title": "Follow requests",
+          "description": "When someone asks to follow you."
+        },
+        "follow_request_accepted": {
+          "title": "Request accepted",
+          "description": "When someone accepts your follow request."
+        },
+        "event_comment_created": {
+          "title": "Event comments",
+          "description": "When someone comments on your event."
+        },
+        "place_review_comment": {
+          "title": "Post comments",
+          "description": "When someone comments on your post."
+        },
+        "place_review_reaction": {
+          "title": "Post reactions",
+          "description": "When someone reacts to your post."
+        }
+      }
+    }
+  },
+  "usersProfile": {
+    "loading": {
+      "following": "Following",
+      "followers": "Followers"
+    },
+    "vibes": "vibes",
+    "followers": "followers",
+    "following": "following",
+    "betaUser": "beta user",
+    "editProfile": "edit profile",
+    "share": "share",
+    "followToSee": "follow this user to see their vibes.",
+    "emptyVibes": "no vibes yet",
+    "block": {
+      "blockedTitle": "This profile is blocked",
+      "unblock": "Unblock",
+      "block": "Block",
+      "unblockUser": "Unblock user",
+      "blockUser": "Block user",
+      "reportUser": "Report user",
+      "unblockTitle": "Unblock @{{username}}?",
+      "blockTitle": "Block @{{username}}?",
+      "unblockMsg": "They will be able to see your profile and posts again.",
+      "blockMsg": "They will not be able to see your profile or posts."
+    },
+    "follow": {
+      "follow": "follow",
+      "following": "following",
+      "pending": "pending",
+      "removed": "removed",
+      "remove": "remove"
+    },
+    "report": {
+      "title": "report user @{{username}}",
+      "confirm": "Confirm report",
+      "success": "report sent successfully.",
+      "alreadyReported": "you already reported this user.",
+      "failed": "error sending report. please try again later.",
+      "reasons": {
+        "spam": "spam",
+        "inappropriate": "inappropriate content",
+        "harassment": "harassment",
+        "fake": "fake account",
+        "other": "other"
+      }
+    },
+    "followList": {
+      "searchPlaceholder": "search"
+    },
+    "streak": {
+      "week_one": "{{count}} week",
+      "week_other": "{{count}} weeks",
+      "sequence": "{{value}} in a row"
+    }
+  },
+  "userFavoritesPlaces": {
+    "title": "FAVORITES"
+  },
+  "map": {
+    "searchHere": "Search this area",
+    "centerMyLocation": "Center on my location"
+  },
+  "location": {
+    "permissionDenied": "Permission denied",
+    "unavailable": "Could not get location"
+  }
+}

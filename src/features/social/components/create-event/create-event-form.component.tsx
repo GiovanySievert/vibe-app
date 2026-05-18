@@ -6,6 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Box, Button, FakeInput, Input, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { applyDateMask, applyTimeMask, triggerLightHaptic, validationMapErrors } from '@src/shared/utils'
 
 import { EventFormData } from '../../domain/event.model'
@@ -35,6 +36,7 @@ const EMPTY_ERRORS: CreateEventFieldErrors = {
 }
 
 export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onChange, onNext }) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   const selectedPlace = useAtomValue(eventPlacePickerAtom)
   const setSelectedPlace = useSetAtom(eventPlacePickerAtom)
@@ -89,14 +91,14 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
       <Box gap={4} pb={6}>
         <EventPhotoPicker
-          label="foto do evento"
+          label={t('social.createEvent.photoLabel')}
           uri={formData.imageUri}
           onPick={handlePickImage}
           onClear={() => onChange('imageUri', null)}
         />
 
         <Input
-          label="nome do evento"
+          label={t('social.createEvent.nameLabel')}
           value={formData.name}
           onChangeText={(value) => handleChange('name', value)}
           errorMessage={errors.name}
@@ -106,7 +108,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
         <Box flexDirection="row" gap={3}>
           <Box flex={1}>
             <Input
-              label="data"
+              label={t('social.createEvent.dateLabel')}
               value={formData.date}
               onChangeText={(value) => handleChange('date', applyDateMask(value))}
               errorMessage={errors.date}
@@ -116,7 +118,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
           </Box>
           <Box flex={1}>
             <Input
-              label="hora"
+              label={t('social.createEvent.timeLabel')}
               value={formData.time}
               onChangeText={(value) => handleChange('time', applyTimeMask(value))}
               errorMessage={errors.time}
@@ -127,7 +129,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
         </Box>
 
         <Input
-          label="descrição"
+          label={t('social.createEvent.descriptionLabel')}
           value={formData.description}
           onChangeText={(value) => handleChange('description', value)}
           errorMessage={errors.description}
@@ -137,9 +139,9 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
 
         <Box gap={1}>
           <FakeInput
-            label="local"
+            label={t('social.createEvent.placeLabel')}
             value={formData.place?.name ?? ''}
-            placeholder="selecionar local"
+            placeholder={t('social.createEvent.placeSelect')}
             startIconName="MapPin"
             isClearable
             onClear={handleClearPlace}
@@ -154,7 +156,7 @@ export const CreateEventForm: React.FC<CreateEventFormProps> = ({ formData, onCh
 
         <Button onPress={handleNext}>
           <ThemedText color="background" weight="semibold">
-            Próximo
+            {t('social.createEvent.nextBtn')}
           </ThemedText>
         </Button>
       </Box>

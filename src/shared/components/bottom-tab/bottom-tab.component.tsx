@@ -5,6 +5,7 @@ import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTimin
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { Box } from '../box'
 import { ThemedText } from '../themed-text'
@@ -25,7 +26,9 @@ const TabItem: React.FC<TabItemProps> = ({ label, isFocused, onPress }) => {
   const progress = useSharedValue(isFocused ? 1 : 0)
 
   useEffect(() => {
-    progress.value = withTiming(isFocused ? 1 : 0, { duration: ANIMATION_DURATION })
+    progress.value = withTiming(isFocused ? 1 : 0, {
+      duration: ANIMATION_DURATION
+    })
   }, [isFocused, progress])
 
   const animatedTextStyle = useAnimatedStyle(() => ({
@@ -49,6 +52,7 @@ const TabItem: React.FC<TabItemProps> = ({ label, isFocused, onPress }) => {
 }
 
 export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, navigation }) => {
+  const { t } = useAppTranslation()
   const insets = useSafeAreaInsets()
 
   return (
@@ -88,11 +92,11 @@ export const BottomTab: React.FC<BottomTabProps> = ({ state, descriptors, naviga
               key={route.key}
               onPress={onPress}
               accessibilityRole="button"
-              accessibilityLabel="Postar"
-              accessibilityHint="Abre a tela de criar um novo post"
+              accessibilityLabel={t('common.post')}
+              accessibilityHint={t('common.createPostHint')}
             >
               <ThemedText size="sm" color="background" weight="semibold" numberOfLines={1} ellipsizeMode="clip">
-                postar
+                {t('common.post')}
               </ThemedText>
             </Touchable>
           )

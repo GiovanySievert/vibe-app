@@ -8,6 +8,7 @@ import { Avatar, Box, Button, Divider, Input, LoadingPage, ThemedText, Touchable
 import { theme } from '@src/shared/constants/theme'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useDebounce } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type CreateEventParticipantsProps = {
   selected: GetUserByUsername[]
@@ -22,6 +23,7 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
   onNext,
   onBack
 }) => {
+  const { t } = useAppTranslation()
   const [inputSearch, setInputSearch] = useState('')
   const debouncedSearch = useDebounce(inputSearch, 300)
 
@@ -79,14 +81,14 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
 
         {!isLoading && debouncedSearch.length >= 3 && !users?.length && (
           <Box mt={4}>
-            <ThemedText color="textSecondary">Nenhum usuário encontrado.</ThemedText>
+            <ThemedText color="textSecondary">{t('social.createEvent.participantsEmpty')}</ThemedText>
           </Box>
         )}
 
         {!isLoading && debouncedSearch.length < 3 && (
           <Box mt={2}>
             <ThemedText color="textSecondary" size="sm">
-              Digite pelo menos 3 caracteres para buscar.
+              {t('social.createEvent.participantsMinChars')}
             </ThemedText>
           </Box>
         )}
@@ -122,12 +124,12 @@ export const CreateEventParticipants: React.FC<CreateEventParticipantsProps> = (
       <Box gap={3} pt={4}>
         <Button onPress={onNext}>
           <ThemedText color="background" weight="semibold">
-            Próximo
+            {t('social.createEvent.nextBtn')}
           </ThemedText>
         </Button>
         <Button variant="ghost" onPress={onBack}>
           <ThemedText color="primary" weight="semibold">
-            Voltar
+            {t('social.createEvent.backBtn')}
           </ThemedText>
         </Button>
       </Box>

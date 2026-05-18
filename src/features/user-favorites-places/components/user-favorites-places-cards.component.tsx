@@ -6,6 +6,7 @@ import { useAtom } from 'jotai'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, Card, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { userFavoritesPlacesAtom } from '@src/shared/state'
 
 interface UserFavoritePlace {
@@ -16,6 +17,7 @@ interface UserFavoritePlace {
 }
 
 export const UserFavoritesPlacesCards = () => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const [userFavoritesPlaces] = useAtom(userFavoritesPlacesAtom)
@@ -71,7 +73,7 @@ export const UserFavoritesPlacesCards = () => {
     <Box mr={5} ml={5} gap={3}>
       <Box justifyContent="space-between" flexDirection="row" alignItems="baseline">
         <ThemedText color="textSecondary" variant="mono" size="sm">
-          FAVORITOS
+          {t('userFavoritesPlaces.title')}
         </ThemedText>
         <ThemedText color="textSecondary" variant="mono">
           {userFavoritesPlaces.length}

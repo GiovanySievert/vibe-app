@@ -20,7 +20,7 @@ export const NotificationBell: React.FC = () => {
         <Bell size={20} color={theme.colors.textPrimary} strokeWidth={1.5} />
         {count > 0 && (
           <Box style={styles.badge}>
-            <ThemedText size="xs" color="background" weight="semibold">
+            <ThemedText size="xs" color="background" weight="semibold" style={styles.numberBadge}>
               {count > 99 ? '99+' : count}
             </ThemedText>
           </Box>
@@ -54,5 +54,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 4
+  },
+  numberBadge: {
+    top: -3
   }
 })

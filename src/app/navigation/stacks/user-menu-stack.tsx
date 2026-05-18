@@ -11,7 +11,12 @@ const UserMenuStack = createNativeStackNavigator<UserMenuStackParamList>()
 
 export function UserMenuNavigator() {
   return (
-    <UserMenuStack.Navigator screenOptions={{ headerShown: false, header: (props) => <Header {...props} /> }}>
+    <UserMenuStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        header: (props) => <Header {...props} />
+      }}
+    >
       <UserMenuStack.Screen
         name="UserProfileMain"
         component={UserMenuFeatures.UserOwnProfileScreen}
@@ -55,6 +60,11 @@ export function UserMenuNavigator() {
       <UserMenuStack.Screen
         name="UserPrivacyScreen"
         component={UserMenuFeatures.UserPrivacyScreen}
+        options={{ headerShown: false }}
+      />
+      <UserMenuStack.Screen
+        name="LanguageSelectionScreen"
+        component={UserMenuFeatures.LanguageSelectionScreen}
         options={{ headerShown: false }}
       />
     </UserMenuStack.Navigator>

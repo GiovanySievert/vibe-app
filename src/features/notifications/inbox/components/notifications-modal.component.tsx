@@ -8,6 +8,7 @@ import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { useMarkAllAsRead, useMarkAsRead } from '../hooks/use-mark-as-read.hook'
 import { useNotifications } from '../hooks/use-notifications.hook'
@@ -22,6 +23,7 @@ type Props = {
 }
 
 export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
+  const { t } = useAppTranslation()
   const { data, isLoading, refetch, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useNotifications({
     enabled: visible
   })
@@ -53,11 +55,11 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
     <SwipeableModal visible={visible} onClose={onClose} height={600}>
       <Box pl={5} pr={5} pb={3} flexDirection="row" alignItems="center" justifyContent="space-between">
         <ThemedText variant="title" size="lg">
-          Notificacoes
+          {t('notifications.title')}
         </ThemedText>
         <Touchable onPress={() => markAllAsRead.mutate()} disabled={!hasUnread || markAllAsRead.isPending}>
           <ThemedText size="sm" color={hasUnread ? 'primary' : 'textSecondary'}>
-            Marcar todas
+            {t('notifications.markAllBtn')}
           </ThemedText>
         </Touchable>
       </Box>
@@ -69,9 +71,9 @@ export const NotificationsModal: React.FC<Props> = ({ visible, onClose }) => {
           <Box style={styles.emptyIconWrap}>
             <BellOff size={32} color={theme.colors.textSecondary} strokeWidth={1.5} />
           </Box>
-          <ThemedText weight="semibold">Tudo em dia por aqui</ThemedText>
+          <ThemedText weight="semibold">{t('notifications.emptyTitle')}</ThemedText>
           <ThemedText size="sm" color="textSecondary" style={styles.emptyDescription}>
-            Quando alguem te convidar pra um evento ou pedir pra te seguir, voce vai ver aqui.
+            {t('notifications.emptyDesc')}
           </ThemedText>
         </Box>
       ) : (

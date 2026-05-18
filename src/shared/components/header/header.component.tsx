@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { theme } from '@src/shared/constants/theme'
 
+import { useAppTranslation } from '../../i18n'
 import { Box } from '../box'
 import { Divider } from '../divider'
 import { ThemedIcon } from '../themed-icon'
@@ -14,6 +15,7 @@ import { Touchable } from '../touchable'
 type HeaderProps = NativeStackHeaderProps
 
 export const Header: React.FC<HeaderProps> = ({ navigation, route, options }) => {
+  const { t } = useAppTranslation()
   const title = getHeaderTitle(options, route.name)
 
   const handleGoBack = () => {
@@ -32,8 +34,8 @@ export const Header: React.FC<HeaderProps> = ({ navigation, route, options }) =>
       <Touchable
         onPress={() => handleGoBack()}
         accessibilityRole="button"
-        accessibilityLabel="Voltar"
-        accessibilityHint={`Volta para a tela anterior, ${title}`}
+        accessibilityLabel={t('common.back')}
+        accessibilityHint={t('common.backHintWithTitle', { title })}
       >
         <Box flexDirection="row" alignItems="center" gap={2} pr={4} pl={4} mb={4}>
           <ThemedIcon name="ArrowLeft" color="textPrimary" />

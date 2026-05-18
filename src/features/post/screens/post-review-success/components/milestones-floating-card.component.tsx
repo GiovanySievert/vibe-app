@@ -4,6 +4,7 @@ import Animated, { AnimatedStyle } from 'react-native-reanimated'
 
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { space } from '@src/shared/utils'
 
 import { BADGE_MILESTONES, BadgeMilestone } from '../constants'
@@ -19,31 +20,29 @@ type Props = {
   style: AnimatedStyle
 }
 
-export const MilestonesFloatingCard: React.FC<Props> = ({ reviewCount, progressState, style }) => (
-  <Animated.View pointerEvents="none" style={[styles.floating, style]}>
-    <Box style={styles.card} gap={4}>
-      <ThemedText
-        variant="mono"
-        color="textSecondary"
-        size="xs"
-        letterSpacing="wider"
-        textTransform="uppercase"
-      >
-        marcos
-      </ThemedText>
-      <Box flexDirection="row" justifyContent="space-between">
-        {BADGE_MILESTONES.map((milestone) => (
-          <Milestone
-            key={milestone.tier}
-            milestone={milestone}
-            reviewCount={reviewCount}
-            progressState={progressState}
-          />
-        ))}
+export const MilestonesFloatingCard: React.FC<Props> = ({ reviewCount, progressState, style }) => {
+  const { t } = useAppTranslation()
+
+  return (
+    <Animated.View pointerEvents="none" style={[styles.floating, style]}>
+      <Box style={styles.card} gap={4}>
+        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="wider" textTransform="uppercase">
+          {t('post.success.milestones')}
+        </ThemedText>
+        <Box flexDirection="row" justifyContent="space-between">
+          {BADGE_MILESTONES.map((milestone) => (
+            <Milestone
+              key={milestone.tier}
+              milestone={milestone}
+              reviewCount={reviewCount}
+              progressState={progressState}
+            />
+          ))}
+        </Box>
       </Box>
-    </Box>
-  </Animated.View>
-)
+    </Animated.View>
+  )
+}
 
 type MilestoneProps = {
   milestone: BadgeMilestone
@@ -52,6 +51,7 @@ type MilestoneProps = {
 }
 
 const Milestone: React.FC<MilestoneProps> = ({ milestone, reviewCount, progressState }) => {
+  const { t } = useAppTranslation()
   const achieved = reviewCount >= milestone.minReviews
   const active =
     progressState.current?.tier === milestone.tier ||
@@ -59,9 +59,7 @@ const Milestone: React.FC<MilestoneProps> = ({ milestone, reviewCount, progressS
 
   return (
     <Box alignItems="center" gap={2} style={styles.milestone}>
-      <View
-        style={[styles.circle, achieved && styles.circleAchieved, active && styles.circleActive]}
-      >
+      <View style={[styles.circle, achieved && styles.circleAchieved, active && styles.circleActive]}>
         <ThemedText
           variant="mono"
           weight="bold"
@@ -79,7 +77,7 @@ const Milestone: React.FC<MilestoneProps> = ({ milestone, reviewCount, progressS
         letterSpacing="normal"
         numberOfLines={1}
       >
-        {milestone.label}
+        {t(milestone.labelKey)}
       </ThemedText>
     </Box>
   )

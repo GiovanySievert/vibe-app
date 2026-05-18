@@ -17,7 +17,10 @@ export const HotPlacesCard: React.FC<HotPlacesCardProps> = ({ item, index }) => 
 
   const handleNavigate = () => {
     navigation.goBack()
-    navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId: item.id } })
+    navigation.navigate('Modals', {
+      screen: 'PlacesDetailsScreen',
+      params: { placeId: item.id, isHot: item.isHot }
+    })
   }
 
   const position = String(index + 1).padStart(2, '0')

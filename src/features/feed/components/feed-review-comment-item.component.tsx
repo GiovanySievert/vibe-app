@@ -6,6 +6,7 @@ import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query
 import { Avatar, Box, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatRelativeTime, HIT_SLOP } from '@src/shared/utils'
 
 import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
@@ -20,6 +21,7 @@ type Props = {
 type CommentsCache = InfiniteData<ListFeedReviewCommentsResponse>
 
 export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, reviewOwnerId }) => {
+  const { t } = useAppTranslation()
   const navigateToProfile = useNavigateToProfile()
   const queryClient = useQueryClient()
   const canDelete = item.userId === currentUserId || reviewOwnerId === currentUserId
@@ -52,20 +54,19 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, re
   })
 
   const handleDelete = () => {
-    Alert.alert('Excluir comentário', 'Tem certeza?', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Excluir', style: 'destructive', onPress: () => deleteComment() }
+    Alert.alert(t('feed.comments.deleteTitle'), t('feed.comments.deleteMsg'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('feed.comments.deleteBtn'),
+        style: 'destructive',
+        onPress: () => deleteComment()
+      }
     ])
   }
 
   return (
     <Box flexDirection="row" gap={3} mb={4}>
-      <Avatar
-        size="xs"
-        uri={item.user.image}
-        placeholderIcon="User"
-        onPress={() => navigateToProfile(item.user.id)}
-      />
+      <Avatar size="xs" uri={item.user.image} placeholderIcon="User" onPress={() => navigateToProfile(item.user.id)} />
       <Box flex={1} gap={1}>
         <Box flexDirection="row" alignItems="center" gap={2} style={styles.commentMeta}>
           <ThemedText size="sm" weight="semibold" color="textPrimary">
@@ -84,7 +85,7 @@ export const FeedReviewCommentItem: React.FC<Props> = ({ item, currentUserId, re
           onPress={handleDelete}
           hitSlop={HIT_SLOP}
           accessibilityRole="button"
-          accessibilityLabel="Excluir comentário"
+          accessibilityLabel={t('feed.comments.deleteLabel')}
         >
           <ThemedIcon name="Trash2" size={14} color="textSecondary" />
         </Touchable>

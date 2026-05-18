@@ -8,6 +8,7 @@ import { OnboardingModal } from '@src/features/onboarding/components/onboarding-
 import { showOnboardingAtom } from '@src/features/onboarding/state/onboarding.state'
 import { setUnauthorizedHandler } from '@src/services/api/interceptor'
 import { Box, LoadingApplication } from '@src/shared/components'
+import { useInitializeI18n } from '@src/shared/i18n'
 import { KeyboardAccessoryService } from '@src/shared/services/keyboard-accessory/keyboard-accessory.service'
 
 type AppProviderProps = {
@@ -16,6 +17,7 @@ type AppProviderProps = {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { isLoading } = useInitializeApp()
+  const { isReady: isI18nReady } = useInitializeI18n()
   const showOnboarding = useAtomValue(showOnboardingAtom)
   const { clearAuthSession } = useAuthSession()
 
@@ -31,9 +33,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     return () => KeyboardAccessoryService.setEnabled(false)
   }, [])
 
+  const isAppLoading = isLoading || !isI18nReady
+
   return (
     <Box style={{ position: 'relative', flex: 1 }}>
-      <LoadingApplication isVisible={isLoading} />
+      <LoadingApplication isVisible={isAppLoading} />
       {children}
       {showOnboarding && <OnboardingModal />}
       <LocationGateModal />

@@ -11,6 +11,7 @@ import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
 import { useDebounce } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { PlacesService } from '@src/shared/services'
 
 import { eventPlacePickerAtom } from '../state/event-place-picker.state'
@@ -18,6 +19,7 @@ import { eventPlacePickerAtom } from '../state/event-place-picker.state'
 type EventPlaceSearchScreenProps = NativeStackScreenProps<ModalNavigatorParamsList, 'EventPlaceSearchScreen'>
 
 export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ navigation }) => {
+  const { t } = useAppTranslation()
   const setSelectedPlace = useSetAtom(eventPlacePickerAtom)
   const [inputSearch, setInputSearch] = useState('')
   const debouncedSearch = useDebounce(inputSearch, 300)
@@ -50,9 +52,9 @@ export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ 
           <Box p={5} gap={4}>
             <Box gap={1}>
               <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
-                local do evento
+                {t('social.eventPlaceSearch.title')}
               </ThemedText>
-              <ThemedText color="textSecondary">Busque um local para associar ao evento.</ThemedText>
+              <ThemedText color="textSecondary">{t('social.eventPlaceSearch.description')}</ThemedText>
             </Box>
 
             <Input
@@ -61,14 +63,14 @@ export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ 
               autoFocus
               isClearable
               onClear={() => setInputSearch('')}
-              placeholder="buscar local"
+              placeholder={t('social.eventPlaceSearch.placeholder')}
               startIconName="Search"
               startIconColor="textPrimary"
             />
 
             {inputSearch.length < 3 && (
               <ThemedText color="textSecondary" size="sm">
-                Digite pelo menos 3 caracteres para buscar um local.
+                {t('social.eventPlaceSearch.minChars')}
               </ThemedText>
             )}
 
@@ -79,7 +81,7 @@ export const EventPlaceSearchScreen: React.FC<EventPlaceSearchScreenProps> = ({ 
             )}
 
             {!isFetching && inputSearch.length >= 3 && !places?.length && (
-              <ThemedText color="textSecondary">Nenhum local encontrado.</ThemedText>
+              <ThemedText color="textSecondary">{t('social.eventPlaceSearch.empty')}</ThemedText>
             )}
 
             <Box gap={4}>

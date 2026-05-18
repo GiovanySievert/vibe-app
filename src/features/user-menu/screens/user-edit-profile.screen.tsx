@@ -9,6 +9,7 @@ import { Box, Button, GoBackButton, Input, ThemedText } from '@src/shared/compon
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { EditableAvatar } from '../components'
 import { UserProfileService } from '../service'
@@ -16,6 +17,7 @@ import { UserProfileService } from '../service'
 export const UserEditProfile = () => {
   const [authState, setAuthState] = useAtom(authStateAtom)
   const queryClient = useQueryClient()
+  const { t } = useAppTranslation()
 
   const [name, setName] = useState(authState.user.name)
   const [bio, setBio] = useState(authState.user.bio ?? '')
@@ -42,7 +44,9 @@ export const UserEditProfile = () => {
           image: response.data.image
         }
       }))
-      queryClient.invalidateQueries({ queryKey: ['fetchUserById', authState.user.id] })
+      queryClient.invalidateQueries({
+        queryKey: ['fetchUserById', authState.user.id]
+      })
     }
   })
 
@@ -55,8 +59,8 @@ export const UserEditProfile = () => {
         <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
           <GoBackButton />
           <Box>
-            <ThemedText variant="title">editar perfil</ThemedText>
-            <ThemedText variant="mono">avatar · nome · bio</ThemedText>
+            <ThemedText variant="title">{t('userMenu.editProfile.title')}</ThemedText>
+            <ThemedText variant="mono">{t('userMenu.editProfile.subtitle')}</ThemedText>
           </Box>
         </Box>
 
@@ -64,13 +68,19 @@ export const UserEditProfile = () => {
           <Box justifyContent="center" alignItems="center">
             <EditableAvatar currentUri={authState.user.image} onAvatarChange={setAvatarUri} />
           </Box>
-          <Input label="username" value={authState.user.username ?? ''} disabled />
-          <Input label="nome" value={name} onChangeText={setName} maxLength={100} autoCapitalize="words" />
+          <Input label={t('userMenu.editProfile.usernameLabel')} value={authState.user.username ?? ''} disabled />
           <Input
-            label="bio"
+            label={t('userMenu.editProfile.nameLabel')}
+            value={name}
+            onChangeText={setName}
+            maxLength={100}
+            autoCapitalize="words"
+          />
+          <Input
+            label={t('userMenu.editProfile.bioLabel')}
             value={bio}
             onChangeText={setBio}
-            placeholder="..."
+            placeholder={t('userMenu.editProfile.bioPlaceholder')}
             multiline
             multilineHeight={80}
             maxLength={300}
@@ -84,7 +94,7 @@ export const UserEditProfile = () => {
             onPress={() => updateMutation.mutate()}
           >
             <ThemedText color="background" weight="semibold" size="lg">
-              Salvar
+              {t('common.save')}
             </ThemedText>
           </Button>
         </Box>

@@ -1,4 +1,5 @@
 import { Box, Input } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type SearchInputProps = {
   inputSearch: string
@@ -6,6 +7,8 @@ type SearchInputProps = {
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputSearch }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box>
       <Input
@@ -14,7 +17,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({ inputSearch, setInputS
         autoFocus
         isClearable
         onClear={() => setInputSearch('')}
-        placeholder="buscar lugares e pessoas"
+        placeholder={t('search.input.placeholder')}
         startIconName="Search"
         startIconColor="textPrimary"
       />

@@ -10,13 +10,14 @@ import { Box, Button, ThemedText, Touchable } from '@src/shared/components'
 import { Input } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { signInSchema, UserSignInRequestDTO } from '../domain'
+import { buildSignInSchema, UserSignInRequestDTO } from '../domain'
 import {
-  AppleSignInMessage,
-  AuthMessage,
-  GoogleSignInMessage,
+  AppleSignInMessageKey,
+  AuthMessageKey,
+  GoogleSignInMessageKey,
   isBannedAuthError,
   useAppleSignIn,
   useAuthSession,
@@ -41,6 +42,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
   const { showToast } = useToast()
   const { isAvailable: isAppleAvailable, loading: appleLoading, signIn: signInWithApple } = useAppleSignIn()
   const { isAvailable: isGoogleAvailable, loading: googleLoading, signIn: signInWithGoogle } = useGoogleSignIn()
+  const { t } = useAppTranslation()
 
   const animatedValue = useSharedValue(0)
   const [currentStep, setCurrentStep] = useState<SIGN_IN_STEPS>(SIGN_IN_STEPS.FORM)
@@ -73,7 +75,10 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
   }
 
   const validateSignInSchema = (): boolean => {
-    const result = signInSchema.safeParse({ login: form.login, password: form.password })
+    const result = buildSignInSchema().safeParse({
+      login: form.login,
+      password: form.password
+    })
     if (!result.success) {
       setFormError(validationMapErrors(result.error, formError))
       return false
@@ -85,9 +90,9 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
     if (isBannedAuthError(error)) {
       setFormError({
         login: '',
-        password: AuthMessage.banned
+        password: t(AuthMessageKey.banned)
       })
-      showToast(AuthMessage.banned, 'error')
+      showToast(t(AuthMessageKey.banned), 'error')
       return
     }
 
@@ -98,20 +103,20 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
 
     setFormError({
       login: '',
-      password: 'email ou senha inválidos'
+      password: t('auth.errors.invalidCredentials')
     })
   }
 
   const handleAppleSignIn = async () => {
     const result = await signInWithApple()
     if (result.success || result.cancelled) return
-    showToast(result.errorMessage ?? AppleSignInMessage.authFailed, 'error')
+    showToast(result.errorMessage ?? t(AppleSignInMessageKey.authFailed), 'error')
   }
 
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle()
     if (result.success || result.cancelled) return
-    showToast(result.errorMessage ?? GoogleSignInMessage.authFailed, 'error')
+    showToast(result.errorMessage ?? t(GoogleSignInMessageKey.authFailed), 'error')
   }
 
   const submitForm = async () => {
@@ -130,7 +135,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
         await persistAuthSession({ token: data.token, user: data.user })
       }
     } catch {
-      showToast('algo deu errado, tente novamente mais tarde.', 'error')
+      showToast(t('auth.errors.generic'), 'error')
     } finally {
       setLoading(false)
     }
@@ -155,12 +160,12 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               vibes
             </ThemedText>
             <ThemedText variant="primary" color="textSecondary">
-              onde seus amigos estāo agora.
+              {t('auth.signIn.subtitle')}
             </ThemedText>
           </Box>
           <Box gap={6}>
             <Input
-              label="email"
+              label={t('auth.signIn.emailLabel')}
               value={form.login}
               onChange={({ nativeEvent }) => handleChangeInputValue('login', nativeEvent.text)}
               errorMessage={formError.login}
@@ -171,7 +176,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               autoCapitalize="none"
             />
             <Input
-              label="senha"
+              label={t('auth.signIn.passwordLabel')}
               value={form.password}
               onChange={({ nativeEvent }) => handleChangeInputValue('password', nativeEvent.text)}
               errorMessage={formError.password}
@@ -183,26 +188,30 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
 
             <Box mt={2} alignItems="flex-end">
               <Touchable
-                onPress={() => navigation.navigate('ForgotPasswordScreen', { typedEmail: form.login })}
+                onPress={() =>
+                  navigation.navigate('ForgotPasswordScreen', {
+                    typedEmail: form.login
+                  })
+                }
                 accessibilityRole="link"
-                accessibilityLabel="Esqueci a senha"
+                accessibilityLabel={t('auth.signIn.forgotPasswordLink')}
               >
                 <ThemedText size="sm" color="textSecondary" textDecorationLine="underline">
-                  esqueci a senha
+                  {t('auth.signIn.forgotPasswordText')}
                 </ThemedText>
               </Touchable>
             </Box>
             <Box gap={3}>
               <Button onPress={() => submitForm()} loading={loading}>
                 <ThemedText color="background" size="lg" weight="semibold">
-                  entrar
+                  {t('auth.signIn.submitButton')}
                 </ThemedText>
               </Button>
 
               {isAppleAvailable && (
                 <Button variant="outline" onPress={handleAppleSignIn} loading={appleLoading}>
                   <ThemedText color="textPrimary" size="lg" weight="semibold">
-                    entrar com apple
+                    {t('auth.signIn.appleButton')}
                   </ThemedText>
                 </Button>
               )}
@@ -210,7 +219,7 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               {isGoogleAvailable && (
                 <Button variant="outline" onPress={handleGoogleSignIn} loading={googleLoading}>
                   <ThemedText color="textPrimary" size="lg" weight="semibold">
-                    entrar com google
+                    {t('auth.signIn.googleButton')}
                   </ThemedText>
                 </Button>
               )}
@@ -219,50 +228,49 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
           <Touchable
             onPress={() => goToSignUp()}
             accessibilityRole="link"
-            accessibilityLabel="Criar conta"
-            accessibilityHint="Abre o fluxo de cadastro"
+            accessibilityLabel={t('auth.signIn.signUpLinkA11y')}
+            accessibilityHint={t('auth.signIn.signUpLinkHint')}
           >
             <Box mt={6} justifyContent="center" flexDirection="row" alignItems="center">
-              <ThemedText color="textSecondary">primeira vez? </ThemedText>
+              <ThemedText color="textSecondary">{t('auth.signIn.noAccount')}</ThemedText>
               <ThemedText weight="semibold" textDecorationLine="underline">
-                criar conta
+                {t('auth.signIn.signUpLink')}
               </ThemedText>
             </Box>
           </Touchable>
 
           <Box justifyContent="center" flexDirection="row" alignItems="center">
             <ThemedText variant="mono" color="textSecondary">
-              ao continuar voce aceita
+              {t('auth.signIn.termsPrefix')}
             </ThemedText>
           </Box>
 
           <Box justifyContent="center" flexDirection="row" alignItems="center">
             <ThemedText variant="mono" color="textSecondary">
-              os{' '}
+              {t('auth.signIn.termsConnector')}
             </ThemedText>
 
             <Touchable
               onPress={() => navigation.navigate('TermsScreen')}
               accessibilityRole="link"
-              accessibilityLabel="Termos de uso"
+              accessibilityLabel={t('auth.terms.linkA11y')}
             >
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-                termos
+                {t('auth.terms.linkText')}
               </ThemedText>
             </Touchable>
 
             <ThemedText variant="mono" color="textSecondary">
-              {' '}
-              e a{' '}
+              {t('auth.signIn.termsAndConnector')}
             </ThemedText>
 
             <Touchable
               onPress={() => navigation.navigate('PrivacyScreen')}
               accessibilityRole="link"
-              accessibilityLabel="Política de privacidade"
+              accessibilityLabel={t('auth.privacy.linkA11y')}
             >
               <ThemedText variant="mono" weight="semibold" textDecorationLine="underline">
-                privacidade
+                {t('auth.privacy.linkText')}
               </ThemedText>
             </Touchable>
           </Box>
@@ -280,12 +288,12 @@ export const AuthSignIn: React.FC<AuthSignInProps> = ({ goToSignUp }) => {
               onPress={() => goToStep(SIGN_IN_STEPS.FORM)}
               style={styles.goBackButton}
               accessibilityRole="button"
-              accessibilityLabel="Voltar"
-              accessibilityHint="Volta para o formulário de login"
+              accessibilityLabel={t('auth.signIn.backButtonA11y')}
+              accessibilityHint={t('auth.signIn.backButtonHint')}
             >
               <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />
             </Touchable>
-            <ThemedText variant="title">confirme seu email</ThemedText>
+            <ThemedText variant="title">{t('auth.signIn.verifyEmailTitle')}</ThemedText>
           </Box>
           <AuthVerifyEmail
             emailToBeVerified={form.login}

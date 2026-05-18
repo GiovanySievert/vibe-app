@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { theme } from '@src/shared/constants/theme'
 import { HIT_SLOP } from '@src/shared/utils'
 
+import { useAppTranslation } from '../../i18n'
 import { ThemedIcon } from '../themed-icon'
 import { Touchable } from '../touchable'
 
@@ -14,11 +15,8 @@ type GoBackButtonProps = {
   accessibilityHint?: string
 }
 
-export const GoBackButton: React.FC<GoBackButtonProps> = ({
-  onPress,
-  accessibilityLabel = 'Voltar',
-  accessibilityHint = 'Volta para a tela anterior'
-}) => {
+export const GoBackButton: React.FC<GoBackButtonProps> = ({ onPress, accessibilityLabel, accessibilityHint }) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation()
 
   return (
@@ -26,8 +24,8 @@ export const GoBackButton: React.FC<GoBackButtonProps> = ({
       onPress={onPress ?? (() => navigation.goBack())}
       style={styles.button}
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel ?? t('common.back')}
+      accessibilityHint={accessibilityHint ?? t('common.backHint')}
       hitSlop={HIT_SLOP}
     >
       <ThemedIcon name="ArrowLeft" color="textPrimary" size={18} />

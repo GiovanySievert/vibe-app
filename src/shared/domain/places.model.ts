@@ -68,6 +68,7 @@ export type PlacesByIdResponse = {
   id: string
   brandId: string
   name: string
+  isHot?: boolean
   priceRange: string
   paymentMethods: string
   socialInstagram: string

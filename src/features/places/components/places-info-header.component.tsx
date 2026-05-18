@@ -4,6 +4,7 @@ import { Image, StyleSheet } from 'react-native'
 import { Box, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { PlacesActions } from './places-screen-header.component'
 
@@ -13,6 +14,8 @@ type PlacesInfoHeaderProps = {
 }
 
 export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBack }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box style={styles.container}>
       {place?.brand?.avatar ? (
@@ -21,7 +24,7 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
           style={styles.heroImage}
           resizeMode="cover"
           accessible
-          accessibilityLabel={`Imagem do local ${place.name}`}
+          accessibilityLabel={t('common.placeImage', { name: place.name })}
         />
       ) : null}
 
@@ -30,8 +33,8 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
         onPress={onBack}
         activeOpacity={0.8}
         accessibilityRole="button"
-        accessibilityLabel="Voltar"
-        accessibilityHint="Volta para a tela anterior"
+        accessibilityLabel={t('common.back')}
+        accessibilityHint={t('common.backHint')}
       >
         <ThemedText style={styles.backArrow}>←</ThemedText>
       </Touchable>
@@ -42,7 +45,7 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
 
       <Box style={styles.titleBlock}>
         <ThemedText variant="mono" style={styles.liveTag}>
-          AO VIVO
+          {t('common.live')}
         </ThemedText>
         <ThemedText variant="title" style={styles.placeName}>
           {place.name}

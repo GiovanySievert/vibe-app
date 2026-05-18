@@ -6,11 +6,17 @@ import { useAtom } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state'
 import {
-  BadgesService, MY_BADGE_PROGRESS_QUERY_KEY, MY_BADGES_QUERY_KEY, PlaceBadgeListItem, PlaceBadgeProgressItem, USER_BADGES_QUERY_KEY
+  BadgesService,
+  MY_BADGE_PROGRESS_QUERY_KEY,
+  MY_BADGES_QUERY_KEY,
+  PlaceBadgeListItem,
+  PlaceBadgeProgressItem,
+  USER_BADGES_QUERY_KEY
 } from '@src/features/users-profile/services'
 import { Box, Card, GoBackButton, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 const getSelectedPlaceIds = (badges: PlaceBadgeListItem[]) =>
   badges
@@ -35,6 +41,7 @@ type BadgeCardProps = {
 }
 
 const BadgeCard: React.FC<BadgeCardProps> = ({ badge, disabled, onPress }) => {
+  const { t } = useAppTranslation()
   const topTier = badge.tiers[badge.tiers.length - 1]
   const isSelected = badge.visibleOnProfile
 
@@ -50,10 +57,10 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, disabled, onPress }) => {
 
           <Box flex={1}>
             <ThemedText size="lg" weight="bold" color={isSelected ? 'textPrimary' : 'textSecondary'}>
-              {topTier?.label ?? 'badge'}
+              {topTier?.label ?? t('userMenu.badges.defaultLabel')}
             </ThemedText>
             <ThemedText variant="mono" size="xs" color="textSecondary">
-              {badge.placeName ?? 'lugar'}
+              {badge.placeName ?? t('userMenu.badges.defaultPlace')}
             </ThemedText>
           </Box>
 
@@ -65,7 +72,7 @@ const BadgeCard: React.FC<BadgeCardProps> = ({ badge, disabled, onPress }) => {
         {isSelected ? (
           <Box style={styles.visibleLabel}>
             <ThemedText variant="mono" size="xs" color="primary">
-              visível no perfil
+              {t('userMenu.badges.visibleLabel')}
             </ThemedText>
           </Box>
         ) : null}
@@ -79,7 +86,9 @@ type LockedBadgeCardProps = {
 }
 
 const LockedBadgeCard: React.FC<LockedBadgeCardProps> = ({ progressBadge }) => {
-  const progressPercent = `${Math.min(progressBadge.reviewCount / progressBadge.targetReviewCount, 1) * 100}%` as DimensionValue
+  const { t } = useAppTranslation()
+  const progressPercent =
+    `${Math.min(progressBadge.reviewCount / progressBadge.targetReviewCount, 1) * 100}%` as DimensionValue
 
   return (
     <Card p={5} gap={3} style={[styles.card, styles.lockedCard]}>
@@ -95,7 +104,7 @@ const LockedBadgeCard: React.FC<LockedBadgeCardProps> = ({ progressBadge }) => {
             {progressBadge.label}
           </ThemedText>
           <ThemedText variant="mono" size="xs" color="textSecondary">
-            {progressBadge.placeName ?? 'lugar'}
+            {progressBadge.placeName ?? t('userMenu.badges.defaultPlace')}
           </ThemedText>
           <Box style={styles.progressTrack}>
             <Box style={[styles.progressFill, { width: progressPercent }]} />
@@ -114,6 +123,7 @@ const LockedBadgeCard: React.FC<LockedBadgeCardProps> = ({ progressBadge }) => {
 export const UserBadgesScreen = () => {
   const [authState] = useAtom(authStateAtom)
   const queryClient = useQueryClient()
+  const { t } = useAppTranslation()
 
   const {
     data: unlockedBadges = [],
@@ -153,7 +163,9 @@ export const UserBadgesScreen = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: MY_BADGES_QUERY_KEY })
-      queryClient.invalidateQueries({ queryKey: [...USER_BADGES_QUERY_KEY, authState.user.id] })
+      queryClient.invalidateQueries({
+        queryKey: [...USER_BADGES_QUERY_KEY, authState.user.id]
+      })
     }
   })
 
@@ -164,7 +176,7 @@ export const UserBadgesScreen = () => {
       : [...selectedPlaceIds, badge.placeId]
 
     if (!isSelected && selectedPlaceIds.length >= 3) {
-      Alert.alert('limite de badges', 'você pode mostrar até 3 badges no perfil.')
+      Alert.alert(t('userMenu.badges.limitTitle'), t('userMenu.badges.limitMessage'))
       return
     }
 
@@ -177,24 +189,24 @@ export const UserBadgesScreen = () => {
         <Box pr={5} pl={5} mt={5} mb={5} flexDirection="row" alignItems="center" gap={3}>
           <GoBackButton />
           <Box>
-            <ThemedText variant="title">badges</ThemedText>
-            <ThemedText variant="mono">conquistas · perfil</ThemedText>
+            <ThemedText variant="title">{t('userMenu.badges.title')}</ThemedText>
+            <ThemedText variant="mono">{t('userMenu.badges.subtitle')}</ThemedText>
           </Box>
         </Box>
 
         <Box pl={6} pr={6} pb={8} gap={5}>
           <Box>
             <ThemedText variant="title" size="2xl">
-              suas conquistas
+              {t('userMenu.badges.sectionTitle')}
             </ThemedText>
             <ThemedText variant="mono" size="xs">
-              toque pra mostrar/ocultar no perfil
+              {t('userMenu.badges.hint')}
             </ThemedText>
           </Box>
 
           <Box flexDirection="row" alignItems="center" justifyContent="space-between">
             <ThemedText variant="mono" size="xs" style={styles.sectionLabel}>
-              desbloqueadas
+              {t('userMenu.badges.unlockedSection')}
             </ThemedText>
             <ThemedText variant="mono" size="xs">
               {unlockedBadges.length}
@@ -204,11 +216,11 @@ export const UserBadgesScreen = () => {
           <Box gap={4}>
             {isLoading ? (
               <ThemedText variant="mono" color="textSecondary">
-                carregando...
+                {t('common.loading')}
               </ThemedText>
             ) : hasUnlockedBadgesError ? (
               <ThemedText variant="mono" color="textSecondary">
-                não foi possível carregar suas conquistas
+                {t('userMenu.badges.loadError')}
               </ThemedText>
             ) : unlockedBadges.length ? (
               unlockedBadges.map((badge) => (
@@ -221,14 +233,14 @@ export const UserBadgesScreen = () => {
               ))
             ) : (
               <ThemedText variant="mono" color="textSecondary">
-                nenhuma conquista desbloqueada ainda
+                {t('userMenu.badges.emptyUnlocked')}
               </ThemedText>
             )}
           </Box>
 
           <Box flexDirection="row" alignItems="center" justifyContent="space-between" mt={3}>
             <ThemedText variant="mono" size="xs" style={styles.sectionLabel}>
-              bloqueadas
+              {t('userMenu.badges.lockedSection')}
             </ThemedText>
             <ThemedText variant="mono" size="xs">
               {progressBadges.length}
@@ -238,18 +250,15 @@ export const UserBadgesScreen = () => {
           <Box gap={4}>
             {isProgressLoading ? (
               <ThemedText variant="mono" color="textSecondary">
-                carregando...
+                {t('common.loading')}
               </ThemedText>
             ) : progressBadges.length ? (
               progressBadges.map((progressBadge) => (
-                <LockedBadgeCard
-                  key={`${progressBadge.placeId}-${progressBadge.tier}`}
-                  progressBadge={progressBadge}
-                />
+                <LockedBadgeCard key={`${progressBadge.placeId}-${progressBadge.tier}`} progressBadge={progressBadge} />
               ))
             ) : (
               <ThemedText variant="mono" color="textSecondary">
-                nenhuma badge em progresso
+                {t('userMenu.badges.emptyLocked')}
               </ThemedText>
             )}
           </Box>

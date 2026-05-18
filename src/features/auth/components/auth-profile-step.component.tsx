@@ -3,6 +3,7 @@ import { TextInput } from 'react-native'
 
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { SignUpProfileForm } from '../domain'
 import { UsernameField } from './username-field'
@@ -41,6 +42,7 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
   isActive
 }) => {
   const nameInputRef = useRef<TextInput>(null)
+  const { t } = useAppTranslation()
 
   useEffect(() => {
     if (!isActive) return
@@ -55,14 +57,14 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
   return (
     <Box gap={6}>
       <Box gap={1}>
-        <ThemedText variant="title">como te chamam?</ThemedText>
-        <ThemedText variant="secondary">é assim que seus amigos vão te encontrar.</ThemedText>
+        <ThemedText variant="title">{t('auth.signUp.profile.title')}</ThemedText>
+        <ThemedText variant="secondary">{t('auth.signUp.profile.subtitle')}</ThemedText>
       </Box>
 
       <Box gap={4}>
         <Input
           ref={nameInputRef}
-          label="nome"
+          label={t('auth.signUp.profile.nameLabel')}
           value={form.name}
           onChange={({ nativeEvent }) => onChangeForm('name', nativeEvent.text)}
           errorMessage={formError.name}
@@ -84,14 +86,14 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
       <Box mt={4} gap={3}>
         <Button loading={isLoading} onPress={onContinue}>
           <ThemedText color="background" size="lg" weight="semibold">
-            continuar
+            {t('auth.signUp.profile.continueButton')}
           </ThemedText>
         </Button>
 
         {showAppleButton && onAppleSignIn && (
           <Button variant="outline" onPress={onAppleSignIn} loading={appleLoading}>
             <ThemedText color="textPrimary" size="lg" weight="semibold">
-              cadastrar com apple
+              {t('auth.signUp.profile.appleButton')}
             </ThemedText>
           </Button>
         )}
@@ -99,7 +101,7 @@ export const AuthProfileStep: React.FC<AuthProfileStepProps> = ({
         {showGoogleButton && onGoogleSignIn && (
           <Button variant="outline" onPress={onGoogleSignIn} loading={googleLoading}>
             <ThemedText color="textPrimary" size="lg" weight="semibold">
-              cadastrar com google
+              {t('auth.signUp.profile.googleButton')}
             </ThemedText>
           </Button>
         )}

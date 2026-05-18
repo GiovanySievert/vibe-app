@@ -7,6 +7,7 @@ import { icons } from 'lucide-react-native'
 import { theme } from '@src/shared/constants/theme'
 import { HIT_SLOP } from '@src/shared/utils'
 
+import { useAppTranslation } from '../../i18n'
 import { AnimatedBox } from '../animated-box'
 import { Box } from '../box'
 import { ThemedIcon } from '../themed-icon'
@@ -59,6 +60,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     },
     ref
   ) => {
+    const { t } = useAppTranslation()
     const [localInputValue, setLocalInputValue] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const [secureTextEntryisShowing, setSecureTextEntryisShowing] = useState<boolean>(!!secureTextEntry)
@@ -165,7 +167,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               hitSlop={HIT_SLOP}
               style={style.endIconContainer}
               accessibilityRole="button"
-              accessibilityLabel="Limpar campo"
+              accessibilityLabel={t('common.clearField')}
             >
               <ThemedIcon name={'X'} size={18} testID="clear-button--input" color="textPrimary" />
             </Touchable>
@@ -177,11 +179,11 @@ export const Input = forwardRef<TextInput, InputProps>(
               style={style.endIconContainer}
               hitSlop={HIT_SLOP}
               accessibilityRole="button"
-              accessibilityLabel={secureTextEntryisShowing ? 'Ocultar senha' : 'Mostrar senha'}
+              accessibilityLabel={secureTextEntryisShowing ? t('common.password.hide') : t('common.password.show')}
               accessibilityState={{ expanded: !secureTextEntryisShowing }}
             >
               <ThemedText size="xs" weight="medium" color="textSecondary" textDecorationLine="underline">
-                {secureTextEntryisShowing ? 'mostrar' : 'ocultar'}
+                {secureTextEntryisShowing ? t('common.password.showLabel') : t('common.password.hideLabel')}
               </ThemedText>
             </Touchable>
           )}
@@ -230,5 +232,11 @@ const style = StyleSheet.create({
     position: 'absolute',
     zIndex: 10
   },
-  endIconContainer: { position: 'absolute', right: 0, zIndex: 10, color: '#fff', marginBottom: 4 }
+  endIconContainer: {
+    position: 'absolute',
+    right: 0,
+    zIndex: 10,
+    color: '#fff',
+    marginBottom: 4
+  }
 })

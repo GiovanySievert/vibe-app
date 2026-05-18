@@ -4,6 +4,7 @@ import Animated, { AnimatedStyle } from 'react-native-reanimated'
 
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type Props = {
   reviewCount: number
@@ -24,38 +25,62 @@ export const ProgressBlock: React.FC<Props> = ({
   isError,
   progressStyle
 }) => (
-  <Box gap={4} mt={6}>
-    <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-      <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
-        {hasUnlockedBadge ? 'próximo nível' : 'progresso'}
-      </ThemedText>
-      <ThemedText variant="mono" weight="bold" color="textPrimary" letterSpacing="normal">
-        {isLoading ? '--' : `${reviewCount} / ${progressTarget}`}
-      </ThemedText>
-    </Box>
+  <ProgressBlockContent
+    reviewCount={reviewCount}
+    progressTarget={progressTarget}
+    progressText={progressText}
+    hasUnlockedBadge={hasUnlockedBadge}
+    isLoading={isLoading}
+    isError={isError}
+    progressStyle={progressStyle}
+  />
+)
 
-    <View style={styles.track}>
-      <Animated.View style={[styles.fill, progressStyle]} />
-    </View>
+const ProgressBlockContent: React.FC<Props> = ({
+  reviewCount,
+  progressTarget,
+  progressText,
+  hasUnlockedBadge,
+  isLoading,
+  isError,
+  progressStyle
+}) => {
+  const { t } = useAppTranslation()
 
-    {isLoading ? (
-      <Box flexDirection="row" alignItems="center" gap={2}>
-        <ActivityIndicator color={theme.colors.primary} size="small" />
+  return (
+    <Box gap={4} mt={6}>
+      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
-          buscando seus marcos nesse local
+          {hasUnlockedBadge ? t('post.success.nextLevel') : t('post.success.progressLabel')}
+        </ThemedText>
+        <ThemedText variant="mono" weight="bold" color="textPrimary" letterSpacing="normal">
+          {isLoading ? '--' : `${reviewCount} / ${progressTarget}`}
         </ThemedText>
       </Box>
-    ) : isError ? (
-      <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
-        não foi possível carregar seu progresso agora
-      </ThemedText>
-    ) : (
-      <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
-        {progressText}
-      </ThemedText>
-    )}
-  </Box>
-)
+
+      <View style={styles.track}>
+        <Animated.View style={[styles.fill, progressStyle]} />
+      </View>
+
+      {isLoading ? (
+        <Box flexDirection="row" alignItems="center" gap={2}>
+          <ActivityIndicator color={theme.colors.primary} size="small" />
+          <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
+            {t('post.success.loadingMilestones')}
+          </ThemedText>
+        </Box>
+      ) : isError ? (
+        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
+          {t('post.success.progressFailed')}
+        </ThemedText>
+      ) : (
+        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
+          {progressText}
+        </ThemedText>
+      )}
+    </Box>
+  )
+}
 
 const styles = StyleSheet.create({
   track: {

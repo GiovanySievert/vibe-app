@@ -1,7 +1,7 @@
-export const AppleSignInMessage = {
-  iosOnly: 'apple sign in disponível apenas no ios',
-  missingIdentityToken: 'apple não retornou identityToken',
-  authFailed: 'falha ao autenticar com apple'
+export const AppleSignInMessageKey = {
+  iosOnly: 'auth.errors.appleIosOnly',
+  missingIdentityToken: 'auth.errors.appleNoToken',
+  authFailed: 'auth.errors.appleAuthFailed'
 } as const
 
 export const AppleErrorCode = {
@@ -9,16 +9,16 @@ export const AppleErrorCode = {
   REQUEST_CANCELED: 'ERR_REQUEST_CANCELED'
 } as const
 
-export const GoogleSignInMessage = {
-  notConfigured: 'google sign in não configurado',
-  missingIdToken: 'google não retornou idToken',
-  authFailed: 'falha ao autenticar com google',
-  signInInProgress: 'login em andamento',
-  playServicesUnavailable: 'google play services indisponível'
+export const GoogleSignInMessageKey = {
+  notConfigured: 'auth.errors.googleNotConfigured',
+  missingIdToken: 'auth.errors.googleNoToken',
+  authFailed: 'auth.errors.googleAuthFailed',
+  signInInProgress: 'auth.errors.googleInProgress',
+  playServicesUnavailable: 'auth.errors.googlePlayServices'
 } as const
 
-export const AuthMessage = {
-  banned: 'sua conta foi bloqueada. entre em contato com o suporte.'
+export const AuthMessageKey = {
+  banned: 'auth.errors.accountBanned'
 } as const
 
 export const AuthErrorCode = {
@@ -33,5 +33,7 @@ type AuthError = {
 
 export const isBannedAuthError = (error?: AuthError | null) => {
   const message = error?.message?.toLowerCase() ?? ''
-  return error?.code === AuthErrorCode.bannedUser || error?.code === AuthErrorCode.userBanned || message.includes('banned')
+  return (
+    error?.code === AuthErrorCode.bannedUser || error?.code === AuthErrorCode.userBanned || message.includes('banned')
+  )
 }

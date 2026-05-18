@@ -7,6 +7,7 @@ import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Input, ThemedIcon, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { triggerLightHaptic } from '@src/shared/utils'
 
 import { FeedReviewComment, ListFeedReviewCommentsResponse } from '../domain'
@@ -17,6 +18,7 @@ type Props = {
 }
 
 export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
+  const { t } = useAppTranslation()
   const { data: session } = authClient.useSession()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
@@ -28,7 +30,9 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
       const trimmedContent = nextContent.trim()
       setContent('')
 
-      await queryClient.cancelQueries({ queryKey: ['feedReviewComments', reviewId] })
+      await queryClient.cancelQueries({
+        queryKey: ['feedReviewComments', reviewId]
+      })
 
       const previousComments = queryClient.getQueryData<InfiniteData<ListFeedReviewCommentsResponse>>([
         'feedReviewComments',
@@ -42,7 +46,7 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
         createdAt: new Date().toISOString(),
         user: {
           id: session?.user.id ?? 'me',
-          username: session?.user.name ?? 'Você',
+          username: session?.user.name ?? t('feed.comments.currentUser'),
           image: session?.user.image ?? null
         }
       }
@@ -79,13 +83,18 @@ export const FeedReviewCommentCreate: React.FC<Props> = ({ reviewId }) => {
       if (context?.previousComments) {
         queryClient.setQueryData(['feedReviewComments', reviewId], context.previousComments)
       } else {
-        queryClient.removeQueries({ queryKey: ['feedReviewComments', reviewId], exact: true })
+        queryClient.removeQueries({
+          queryKey: ['feedReviewComments', reviewId],
+          exact: true
+        })
       }
 
-      showToast('não foi possível comentar essa review.', 'error')
+      showToast(t('feed.errors.commentFailed'), 'error')
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['feedReviewComments', reviewId] })
+      queryClient.invalidateQueries({
+        queryKey: ['feedReviewComments', reviewId]
+      })
       queryClient.invalidateQueries({ queryKey: ['feed'] })
     }
   })

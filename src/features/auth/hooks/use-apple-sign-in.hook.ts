@@ -4,9 +4,10 @@ import { Platform } from 'react-native'
 import * as AppleAuthentication from 'expo-apple-authentication'
 
 import { authClient } from '@src/services/api/auth-client'
+import { i18n } from '@src/shared/i18n'
 
 import { mapUserData } from '../domain'
-import { AppleErrorCode, AppleSignInMessage, AuthMessage, isBannedAuthError } from './auth-messages'
+import { AppleErrorCode, AppleSignInMessageKey, AuthMessageKey, isBannedAuthError } from './auth-messages'
 import { useAuthSession } from './use-auth-session.hook'
 
 type AppleSignInResult = {
@@ -22,7 +23,11 @@ export const useAppleSignIn = () => {
   const isAvailable = Platform.OS === 'ios'
 
   const signIn = useCallback(async (): Promise<AppleSignInResult> => {
-    if (!isAvailable) return { success: false, errorMessage: AppleSignInMessage.iosOnly }
+    if (!isAvailable)
+      return {
+        success: false,
+        errorMessage: i18n.t(AppleSignInMessageKey.iosOnly)
+      }
 
     setLoading(true)
     try {
@@ -34,7 +39,10 @@ export const useAppleSignIn = () => {
       })
 
       if (!credential.identityToken) {
-        return { success: false, errorMessage: AppleSignInMessage.missingIdentityToken }
+        return {
+          success: false,
+          errorMessage: i18n.t(AppleSignInMessageKey.missingIdentityToken)
+        }
       }
 
       const { data, error } = await authClient.signIn.social({
@@ -45,7 +53,9 @@ export const useAppleSignIn = () => {
       if (error || !data) {
         return {
           success: false,
-          errorMessage: isBannedAuthError(error) ? AuthMessage.banned : (error?.message ?? AppleSignInMessage.authFailed)
+          errorMessage: isBannedAuthError(error)
+            ? i18n.t(AuthMessageKey.banned)
+            : (error?.message ?? i18n.t(AppleSignInMessageKey.authFailed))
         }
       }
 
@@ -62,7 +72,10 @@ export const useAppleSignIn = () => {
       if (code === AppleErrorCode.REQUEST_CANCELED || code === AppleErrorCode.CANCELED) {
         return { success: false, cancelled: true }
       }
-      return { success: false, errorMessage: AppleSignInMessage.authFailed }
+      return {
+        success: false,
+        errorMessage: i18n.t(AppleSignInMessageKey.authFailed)
+      }
     } finally {
       setLoading(false)
     }

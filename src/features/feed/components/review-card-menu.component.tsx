@@ -7,6 +7,7 @@ import * as ExpoLinking from 'expo-linking'
 import { useToast } from '@src/app/providers/toast.provider'
 import { Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
 import { useFavoriteReview } from '../hooks/use-favorite-review'
@@ -19,6 +20,7 @@ type Props = {
 }
 
 export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavoriteAction = false }) => {
+  const { t } = useAppTranslation()
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const { isFavorite, setFavorite } = useFavoriteReview(review)
@@ -28,12 +30,15 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
     onSuccess: () => {
       queryClient.setQueriesData<{ pages: FeedReviewItem[][] }>({ queryKey: ['feed'] }, (old) => {
         if (!old) return old
-        return { ...old, pages: old.pages.map((page) => page.filter((r) => r.id !== review.id)) }
+        return {
+          ...old,
+          pages: old.pages.map((page) => page.filter((r) => r.id !== review.id))
+        }
       })
-      showToast('review excluída.', 'success')
+      showToast(t('feed.menu.deleteSuccess'), 'success')
     },
     onError: () => {
-      showToast('não foi possível excluir a review.', 'error')
+      showToast(t('feed.menu.deleteFailed'), 'error')
     }
   })
 
@@ -43,14 +48,10 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
       return
     }
 
-    Alert.alert(
-      'favoritar review?',
-      'essa review vai aparecer primeiro no seu grid. se você já tiver outra favorita, ela será substituída.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Favoritar', onPress: () => setFavorite(true) }
-      ]
-    )
+    Alert.alert(t('feed.menu.favoriteTitle'), t('feed.menu.favoriteMsg'), [
+      { text: t('feed.menu.cancelBtn'), style: 'cancel' },
+      { text: t('feed.menu.favoriteBtn'), onPress: () => setFavorite(true) }
+    ])
   }
 
   const handleMenuPress = () => {
@@ -59,27 +60,33 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
 
     if (isOwner && enableFavoriteAction) {
       actions.push({
-        text: isFavorite ? 'Desfavoritar' : 'Favoritar',
+        text: isFavorite ? t('feed.menu.unfavoriteBtn') : t('feed.menu.favoriteBtn'),
         onPress: handleFavoritePress
       })
     }
 
     actions.push({
-      text: 'Compartilhar',
+      text: t('feed.menu.shareBtn'),
       onPress: () =>
-        Share.share({ message: `${review.user.username} avaliou ${review.placeName} no vibes\n${shareUrl}` })
+        Share.share({
+          message: t('feed.card.shareMessage', {
+            username: review.user.username,
+            placeName: review.placeName,
+            shareUrl
+          })
+        })
     })
 
     if (isOwner) {
       actions.push({
-        text: 'Excluir review',
+        text: t('feed.menu.deleteBtn'),
         style: 'destructive',
         onPress: () => deleteReview()
       })
     }
 
-    actions.push({ text: 'Cancelar', style: 'cancel' })
-    Alert.alert('', '', actions)
+    actions.push({ text: t('feed.menu.cancelBtn'), style: 'cancel' })
+    Alert.alert(t('feed.menu.alertTitle'), '', actions)
   }
 
   return (

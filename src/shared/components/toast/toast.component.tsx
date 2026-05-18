@@ -7,6 +7,7 @@ import { icons } from 'lucide-react-native'
 
 import { useToast } from '@src/app/providers/toast.provider'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { HIT_SLOP } from '@src/shared/utils'
 
 import { Box } from '../box'
@@ -51,6 +52,7 @@ const PALETTE_BY_LEVEL: Record<ToastLevel, LevelPalette> = {
 }
 
 export const Toast = () => {
+  const { t } = useAppTranslation()
   const { toast, hideToast } = useToast()
   const insets = useSafeAreaInsets()
 
@@ -59,10 +61,16 @@ export const Toast = () => {
 
   useEffect(() => {
     if (toast) {
-      translateY.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.exp) })
+      translateY.value = withTiming(0, {
+        duration: 400,
+        easing: Easing.out(Easing.exp)
+      })
       opacity.value = withTiming(1, { duration: 300 })
     } else {
-      translateY.value = withTiming(-100, { duration: 300, easing: Easing.in(Easing.exp) })
+      translateY.value = withTiming(-100, {
+        duration: 300,
+        easing: Easing.in(Easing.exp)
+      })
       opacity.value = withTiming(0, { duration: 200 })
     }
   }, [toast, translateY, opacity])
@@ -112,7 +120,7 @@ export const Toast = () => {
         <Pressable
           onPress={hideToast}
           accessibilityRole="button"
-          accessibilityLabel="Fechar notificação"
+          accessibilityLabel={t('common.closeNotification')}
           hitSlop={HIT_SLOP}
           style={styles.dismiss}
         >

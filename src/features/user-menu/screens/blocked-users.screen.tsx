@@ -10,12 +10,14 @@ import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
 import { Box, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type Props = NativeStackScreenProps<ModalNavigatorParamsList, 'BlockedUsersScreen'>
 
 export const BlockedUsersScreen: React.FC<Props> = () => {
   const { unblockUser } = useBlockActions({ queryKeySuffix: 'infinite' })
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteBlockedUsers()
+  const { t } = useAppTranslation()
 
   const blockedUsers = data?.pages.flatMap((page) => page) ?? []
   const count = blockedUsers.length.toString().padStart(2, '0')
@@ -33,7 +35,7 @@ export const BlockedUsersScreen: React.FC<Props> = () => {
       <Box flex={1} pt={5}>
         <Box pl={5} pr={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
           <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
-            bloqueados
+            {t('userMenu.privacy.blockedSection')}
           </ThemedText>
           <ThemedText variant="mono" size="xs" letterSpacing="wider">
             {count}
@@ -59,7 +61,7 @@ export const BlockedUsersScreen: React.FC<Props> = () => {
             !isLoading ? (
               <Box mt={6} alignItems="center">
                 <ThemedText variant="mono" size="xs" color="textSecondary">
-                  você ainda não bloqueou ninguém.
+                  {t('userMenu.privacy.emptyBlocked')}
                 </ThemedText>
               </Box>
             ) : null

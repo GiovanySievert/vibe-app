@@ -7,9 +7,10 @@ import { UnathenticatedStackParamList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, Input, PasswordInput, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { forgotPasswordCodeStepSchema, UserResetPasswordRequestDTO } from '../../domain'
+import { buildForgotPasswordCodeStepSchema, UserResetPasswordRequestDTO } from '../../domain'
 
 type ForgotPasswordCodeStepProps = {
   typedEmail: string
@@ -20,6 +21,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
   const navigation = useNavigation<NavigationProp<UnathenticatedStackParamList>>()
 
   const { showToast } = useToast()
+  const { t } = useAppTranslation()
 
   const [form, setForm] = useState<UserResetPasswordRequestDTO>({
     code: '',
@@ -47,7 +49,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
       email: form.email
     }
 
-    const result = forgotPasswordCodeStepSchema.safeParse(values)
+    const result = buildForgotPasswordCodeStepSchema().safeParse(values)
     if (!result.success) {
       setFormError(validationMapErrors(result.error, formError))
       throw Error
@@ -56,11 +58,11 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
 
   const handleSubmitForgotPasswordError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('código inválido', 'error')
+      showToast(t('auth.errors.invalidOtp'), 'error')
       throw Error
     }
 
-    showToast('algo deu errado, tente novamente mais tarde', 'error')
+    showToast(t('auth.errors.generic'), 'error')
     throw Error
   }
 
@@ -94,15 +96,15 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
   return (
     <Box mb={4}>
       <ThemedText variant="title" size="4xl" color="textPrimary">
-        esqueceu a senha?
+        {t('auth.forgotPassword.codeStep.title')}
       </ThemedText>
       <ThemedText variant="primary" color="textSecondary">
-        digite o código que enviamos no seu email, se nāo recebeu nada, tente se cadastrar.
+        {t('auth.forgotPassword.codeStep.subtitle')}
       </ThemedText>
 
       <Box mt={4} gap={6}>
         <Input
-          label="código"
+          label={t('auth.forgotPassword.codeLabel')}
           value={form.code}
           onChange={({ nativeEvent }) => handleChangeInputValue('code', nativeEvent.text)}
           errorMessage={formError.code}
@@ -114,7 +116,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
         />
 
         <PasswordInput
-          label="nova senha"
+          label={t('auth.forgotPassword.newPasswordLabel')}
           value={form.password}
           onChange={(value) => handleChangeInputValue('password', value)}
           errorMessage={formError.password}
@@ -124,7 +126,7 @@ export const ForgotPasswordCodeStep: React.FC<ForgotPasswordCodeStepProps> = ({ 
         />
         <Button loading={isLoading} onPress={() => submitFormMutation()}>
           <ThemedText color="background" size="lg" weight="semibold">
-            continuar
+            {t('auth.forgotPassword.submitButton')}
           </ThemedText>
         </Button>
       </Box>

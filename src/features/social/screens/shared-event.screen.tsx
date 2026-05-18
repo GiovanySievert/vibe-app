@@ -10,6 +10,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Card, Divider, LoadingPage, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatEventDateTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { EventCommentsSection } from '../components/event-comments-section.component'
@@ -24,6 +25,7 @@ const AVATAR_OVERLAP = 10
 const MAX_VISIBLE_AVATARS = 5
 
 export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, navigation }) => {
+  const { t } = useAppTranslation()
   const { token } = route.params
   const { showToast } = useToast()
   const queryClient = useQueryClient()
@@ -81,13 +83,13 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
         queryClient.invalidateQueries({ queryKey: ['eventInvitations'] }),
         queryClient.invalidateQueries({ queryKey: ['myEvents'] })
       ])
-      showToast('resposta enviada com sucesso.')
+      showToast(t('social.sharedEvent.responseSuccess'))
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
         queryClient.setQueryData(['sharedEvent', token], context.previous)
       }
-      showToast('não foi possível responder ao convite.', 'error')
+      showToast(t('social.sharedEvent.responseFailed'), 'error')
     }
   })
 
@@ -108,14 +110,14 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
     return (
       <Box flex={1} style={styles.container} justifyContent="center" alignItems="center" ml={5} mr={5} gap={4}>
         <ThemedText weight="semibold" size="lg">
-          Não foi possível abrir este evento.
+          {t('social.sharedEvent.openFailedTitle')}
         </ThemedText>
         <ThemedText color="textSecondary" style={styles.centerText}>
-          Verifique se o link ainda é válido e tente novamente.
+          {t('social.sharedEvent.openFailedMsg')}
         </ThemedText>
         <Button onPress={() => refetch()}>
           <ThemedText color="background" weight="semibold">
-            Tentar novamente
+            {t('common.retry')}
           </ThemedText>
         </Button>
       </Box>
@@ -126,10 +128,10 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
     return (
       <Box flex={1} style={styles.container} justifyContent="center" alignItems="center" ml={5} mr={5} gap={4}>
         <ThemedText weight="semibold" size="lg">
-          Você não tem permissão para acessar este evento.
+          {t('social.sharedEvent.accessDeniedTitle')}
         </ThemedText>
         <ThemedText color="textSecondary" style={styles.centerText}>
-          Esse convite está disponível apenas para participantes autenticados.
+          {t('social.sharedEvent.accessDeniedMsg')}
         </ThemedText>
       </Box>
     )
@@ -168,23 +170,23 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
 
         <Box gap={1} mb={4}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
-            Descrição
+            {t('social.eventDetail.descLabel')}
           </ThemedText>
           <ThemedText color={event.description ? 'textPrimary' : 'textSecondary'}>
-            {event.description || 'Sem descrição'}
+            {event.description || t('social.eventDetail.noDesc')}
           </ThemedText>
         </Box>
 
         <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
-            Horário
+            {t('social.eventDetail.timeLabel')}
           </ThemedText>
           <ThemedText>{formatEventDateTime(event.date, event.time)}</ThemedText>
         </Box>
 
         <Box flexDirection="column" justifyContent="space-between" gap={1} mb={4}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
-            Local
+            {t('social.eventDetail.placeLabel')}
           </ThemedText>
           {event.place ? (
             <Touchable activeOpacity={0.7} onPress={handleOpenPlace}>
@@ -198,13 +200,15 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
               </Box>
             </Touchable>
           ) : (
-            <ThemedText color="textSecondary">Sem local</ThemedText>
+            <ThemedText color="textSecondary">{t('social.eventDetail.noPlace')}</ThemedText>
           )}
         </Box>
 
         <Box gap={2} mb={4}>
           <ThemedText size="sm" color="textSecondary" weight="semibold">
-            Convidados ({event.participants.length})
+            {t('social.sharedEvent.guestsLabel', {
+              count: event.participants.length
+            })}
           </ThemedText>
           <Box flexDirection="row" alignItems="center" gap={2}>
             <Box
@@ -225,7 +229,10 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
             </Box>
             {event.participants.length > MAX_VISIBLE_AVATARS && (
               <ThemedText size="sm" color="textSecondary">
-                + {event.participants.length - MAX_VISIBLE_AVATARS} pessoas
+                +{' '}
+                {t('social.sharedEvent.morePeople', {
+                  count: event.participants.length - MAX_VISIBLE_AVATARS
+                })}
               </ThemedText>
             )}
           </Box>
@@ -237,41 +244,38 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
               <Box flexDirection="row" alignItems="center" gap={2}>
                 <ThemedIcon name="Crown" size={16} color="primary" />
                 <ThemedText weight="semibold" size="sm">
-                  Você criou este evento
+                  {t('social.sharedEvent.ownerTitle')}
                 </ThemedText>
               </Box>
               <ThemedText color="textSecondary" size="sm">
-                Os participantes podem abrir este link no app para responder ao convite.
+                {t('social.sharedEvent.ownerDescription')}
               </ThemedText>
             </Card>
           ) : participant && participant.status === EventParticipantStatus.PENDING ? (
             <Card gap={3}>
-              <ThemedText weight="semibold">Sua resposta</ThemedText>
+              <ThemedText weight="semibold">{t('social.sharedEvent.yourResponse')}</ThemedText>
               <Box gap={3}>
                 <Button onPress={() => handleRespondToInvitation(EventParticipantStatus.ACCEPTED)}>
                   <ThemedText color="background" weight="semibold">
-                    Confirmar presença
+                    {t('social.sharedEvent.confirmPresence')}
                   </ThemedText>
                 </Button>
-                <Button
-                  variant="outline"
-                  onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}
-                >
+                <Button variant="outline" onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}>
                   <ThemedText color="primary" weight="semibold">
-                    Recusar convite
+                    {t('social.sharedEvent.declineInvite')}
                   </ThemedText>
                 </Button>
               </Box>
             </Card>
           ) : participant && participant.status === EventParticipantStatus.DECLINED ? (
             <Card gap={3}>
-              <ThemedText weight="semibold">Você recusou este convite</ThemedText>
+              <ThemedText weight="semibold">{t('social.sharedEvent.declinedTitle')}</ThemedText>
               <ThemedText color="textSecondary" size="sm">
-                Mudou de ideia? Você ainda pode confirmar presença.
+                {t('social.sharedEvent.declinedDescription')}
               </ThemedText>
               <Button onPress={() => handleRespondToInvitation(EventParticipantStatus.ACCEPTED)}>
                 <ThemedText color="background" weight="semibold">
-                  Confirmar presença
+                  {t('social.sharedEvent.confirmPresence')}
                 </ThemedText>
               </Button>
             </Card>
@@ -286,12 +290,12 @@ export const SharedEventScreen: React.FC<SharedEventScreenProps> = ({ route, nav
               <Box flexDirection="row" alignItems="center" gap={2}>
                 <ThemedIcon name="CircleCheck" size={14} color="success" />
                 <ThemedText size="sm" color="success" weight="semibold">
-                  Presença confirmada
+                  {t('social.eventDetail.statusAccepted')}
                 </ThemedText>
               </Box>
               <Touchable onPress={() => handleRespondToInvitation(EventParticipantStatus.DECLINED)}>
                 <ThemedText size="xs" color="textSecondary">
-                  Recusar convite
+                  {t('social.sharedEvent.declineInvite')}
                 </ThemedText>
               </Touchable>
             </Box>

@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { FeedService } from '../services'
 import { FeedReviewCommentItem } from './feed-review-comment-item.component'
@@ -18,7 +19,15 @@ type Props = {
   onTotalChange: (total: number) => void
 }
 
-export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, commentsCount, currentUserId, reviewOwnerId, onTotalChange }) => {
+export const FeedReviewCommentList: React.FC<Props> = ({
+  reviewId,
+  visible,
+  commentsCount,
+  currentUserId,
+  reviewOwnerId,
+  onTotalChange
+}) => {
+  const { t } = useAppTranslation()
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['feedReviewComments', reviewId],
     queryFn: async ({ pageParam = 1 }) => {
@@ -49,14 +58,16 @@ export const FeedReviewCommentList: React.FC<Props> = ({ reviewId, visible, comm
     <FlatList
       data={comments}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <FeedReviewCommentItem item={item} currentUserId={currentUserId} reviewOwnerId={reviewOwnerId} />}
+      renderItem={({ item }) => (
+        <FeedReviewCommentItem item={item} currentUserId={currentUserId} reviewOwnerId={reviewOwnerId} />
+      )}
       showsVerticalScrollIndicator={false}
       onEndReached={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
       onEndReachedThreshold={0.3}
       ListEmptyComponent={
         <Box pt={6}>
           <ThemedText size="sm" color="textSecondary">
-            Nenhum comentário ainda.
+            {t('feed.comments.empty')}
           </ThemedText>
         </Box>
       }

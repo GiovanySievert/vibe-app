@@ -6,6 +6,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { Avatar, Box, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 
 import { usePlaceReviewFriends } from '../hooks/use-place-reviews.hook'
 import { PlaceReviewFriend, PlaceReviewService } from '../services/place-review.service'
@@ -24,6 +25,7 @@ const formatNames = (friends: PlaceReviewFriend[]) => {
 }
 
 export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeId }) => {
+  const { t } = useAppTranslation()
   const [modalVisible, setModalVisible] = useState(false)
   const { data, isLoading, isError } = usePlaceReviewFriends(placeId)
   const navigateToProfile = useNavigateToProfile()
@@ -60,7 +62,9 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
         activeOpacity={0.7}
         onPress={() => handlePressFriend(item.id)}
         accessibilityRole="button"
-        accessibilityLabel={`Abrir perfil de ${item.username}`}
+        accessibilityLabel={t('places.reviews.openProfileA11y', {
+          username: item.username
+        })}
       >
         <Box flexDirection="row" alignItems="center" gap={3} pl={6} pr={6} pt={3} pb={3}>
           <Avatar size="sm" uri={item.image} fallbackLetter={item.name || item.username} />
@@ -87,7 +91,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
     <>
       <Box pl={6} pr={6} pt={5} pb={5} style={styles.section}>
         <ThemedText variant="mono" size="sm" textTransform="uppercase">
-          amigos que vieram nos últimos 90d
+          {t('places.reviews.friendsRecent')}
         </ThemedText>
 
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" gap={4} mt={3}>
@@ -109,10 +113,12 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
               activeOpacity={0.7}
               onPress={() => setModalVisible(true)}
               accessibilityRole="button"
-              accessibilityLabel={`Ver todos ${data.total} amigos que vieram`}
+              accessibilityLabel={t('places.reviews.viewAllFriendsA11y', {
+                count: data.total
+              })}
             >
               <ThemedText color="textPrimary" weight="semibold">
-                ver todos {data.total}
+                {t('places.reviews.viewAllFriends', { count: data.total })}
               </ThemedText>
             </Touchable>
           ) : null}
@@ -122,7 +128,7 @@ export const PlacesReviewFriends: React.FC<PlacesReviewFriendsProps> = ({ placeI
       <SwipeableModal visible={modalVisible} onClose={() => setModalVisible(false)} height={MODAL_HEIGHT}>
         <Box pl={6} pr={6} pt={2} pb={3} style={styles.modalHeader}>
           <ThemedText variant="mono" size="sm" textTransform="uppercase">
-            amigos que vieram
+            {t('places.reviews.friendsTitle')}
           </ThemedText>
         </Box>
         <FlatList

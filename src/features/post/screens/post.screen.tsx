@@ -17,11 +17,16 @@ import {
 } from '@src/features/places/domain/place-review-error.model'
 import { PlaceReviewService } from '@src/features/places/services/place-review.service'
 import { PostPhotoStep, PostPhotoType, PostPlaceStep, PostRating, PostReviewStep } from '@src/features/post/components'
-import { MY_BADGE_PROGRESS_QUERY_KEY, MY_BADGES_QUERY_KEY, USER_BADGES_QUERY_KEY } from '@src/features/users-profile/services'
+import {
+  MY_BADGE_PROGRESS_QUERY_KEY,
+  MY_BADGES_QUERY_KEY,
+  USER_BADGES_QUERY_KEY
+} from '@src/features/users-profile/services'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { locationStateAtom } from '@src/shared/state/location.state'
 import {
   getDevMockPhotoUriIfSimulator,
@@ -37,6 +42,7 @@ type Step = 0 | 1 | 2
 const STEPS = ['local', 'fotos', 'review']
 
 export function PostScreen({ navigation, route }: Props) {
+  const { t } = useAppTranslation()
   const { showToast } = useToast()
   const queryClient = useQueryClient()
   const tabsNavigation = navigation.getParent<NavigationProp<TabsNavigatorParamsList>>()
@@ -93,7 +99,7 @@ export function PostScreen({ navigation, route }: Props) {
 
     const permission = await ImagePicker.requestCameraPermissionsAsync()
     if (!permission.granted) {
-      showToast('ative a câmera para adicionar a foto.', 'error')
+      showToast(t('post.errors.cameraPermission'), 'error')
       return
     }
 
@@ -113,7 +119,7 @@ export function PostScreen({ navigation, route }: Props) {
         }
       }
     } catch {
-      showToast('não foi possível abrir a câmera.', 'error')
+      showToast(t('post.errors.cameraFailed'), 'error')
     }
   }
 
@@ -121,12 +127,12 @@ export function PostScreen({ navigation, route }: Props) {
     mutationFn: async () => {
       if (!selectedPlace || !rating) throw new Error('invalid review')
       if (!placePhotoUri) {
-        throw Object.assign(new Error('Foto do local obrigatória'), {
+        throw Object.assign(new Error(t('post.errors.placePhotoRequiredTitle')), {
           response: { data: { code: PlaceReviewErrorCode.PHOTO_REQUIRED } }
         })
       }
       if (!userLocation) {
-        throw Object.assign(new Error('Localização indisponível'), {
+        throw Object.assign(new Error(t('post.errors.locationUnavailableTitle')), {
           response: { data: { code: PlaceReviewErrorCode.OUT_OF_RANGE } }
         })
       }
@@ -157,7 +163,7 @@ export function PostScreen({ navigation, route }: Props) {
       queryClient.invalidateQueries({ queryKey: MY_BADGE_PROGRESS_QUERY_KEY })
       queryClient.invalidateQueries({ queryKey: USER_BADGES_QUERY_KEY })
       triggerSuccessHaptic()
-      showToast('review publicada.')
+      showToast(t('post.success.message'))
       navigation.replace('PostReviewSuccess', {
         placeId: selectedPlace.id,
         placeName: selectedPlace.name,
@@ -176,7 +182,7 @@ export function PostScreen({ navigation, route }: Props) {
   const handleNext = () => {
     if (activeStep === 0) {
       if (!selectedPlace) {
-        showToast('escolha um local para continuar.', 'error')
+        showToast(t('post.errors.placeRequired'), 'error')
         return
       }
 
@@ -187,7 +193,7 @@ export function PostScreen({ navigation, route }: Props) {
     if (activeStep === 1) {
       setSubmitAttempted(true)
       if (!placePhotoUri) {
-        showToast('a foto do local é obrigatória', 'error')
+        showToast(t('post.errors.photoRequired'), 'error')
         return
       }
 
@@ -198,17 +204,17 @@ export function PostScreen({ navigation, route }: Props) {
   const handleSubmit = () => {
     setSubmitAttempted(true)
     if (!selectedPlace) {
-      showToast('escolha um local para publicar.', 'error')
+      showToast(t('post.errors.placePublishRequired'), 'error')
       setActiveStep(0)
       return
     }
     if (!placePhotoUri) {
-      showToast('a foto do local é obrigatória', 'error')
+      showToast(t('post.errors.photoRequired'), 'error')
       setActiveStep(1)
       return
     }
     if (!rating) {
-      showToast('marque se o lugar está vazio ou lotado.', 'error')
+      showToast(t('post.errors.ratingRequired'), 'error')
       return
     }
     if (!userLocation) {
@@ -234,7 +240,7 @@ export function PostScreen({ navigation, route }: Props) {
           <Box pl={5} pr={5} pt={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={activeStep === 0 ? 'fechar' : 'voltar'}
+              accessibilityLabel={activeStep === 0 ? t('post.navigation.close') : t('post.navigation.back')}
               onPress={goBack}
               style={styles.headerButton}
             >
@@ -289,7 +295,7 @@ export function PostScreen({ navigation, route }: Props) {
             <Box pl={5} pr={5} pt={3} pb={5} bg="background">
               <Button onPress={handleNext} disabled={activeStep === 0 ? !selectedPlace : !placePhotoUri}>
                 <ThemedText weight="bold" color="background" letterSpacing="normal">
-                  continuar
+                  {t('post.actions.continueBtn')}
                 </ThemedText>
               </Button>
             </Box>

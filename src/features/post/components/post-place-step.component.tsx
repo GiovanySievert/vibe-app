@@ -6,6 +6,7 @@ import { NearbyPlacesScroll } from '@src/features/home/components'
 import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 import { space } from '@src/shared/utils'
 
 type Props = {
@@ -15,48 +16,52 @@ type Props = {
   onSelectPlace: (place: PlacesModel) => void
 }
 
+export const PostPlaceStep: React.FC<Props> = ({ places, isFetching, selectedPlace, onSelectPlace }) => {
+  const { t } = useAppTranslation()
 
-export const PostPlaceStep: React.FC<Props> = ({ places, isFetching, selectedPlace, onSelectPlace }) => (
-  <Box gap={5}>
-    <Box pl={5} pr={5} gap={2}>
-      <ThemedText variant="title" letterSpacing="normal">
-        onde voce está?
-      </ThemedText>
-      <ThemedText color="textSecondary" letterSpacing="normal">
-        escolha um local próximo para marcar a sua review.
-      </ThemedText>
-    </Box>
-
-    {places.length > 0 ? (
-      <NearbyPlacesScroll places={places} selectedPlaceId={selectedPlace?.id} onPlacePress={onSelectPlace} />
-    ) : (
-      <Box pl={5} pr={5} pt={6} pb={6} style={styles.emptyState}>
-        <ThemedText weight="semibold" letterSpacing="normal">
-          {isFetching ? 'buscando locais próximos...' : 'nenhum local próximo encontrado'}
+  return (
+    <Box gap={5}>
+      <Box pl={5} pr={5} gap={2}>
+        <ThemedText variant="title" letterSpacing="normal">
+          {t('post.place.title')}
         </ThemedText>
-        <ThemedText color="textSecondary" letterSpacing="normal" style={styles.emptyDescription}>
-          {isFetching ? 'isso deve levar só alguns segundos.' : 'ative sua localização ou tente mover o mapa na home.'}
+        <ThemedText color="textSecondary" letterSpacing="normal">
+          {t('post.place.description')}
         </ThemedText>
       </Box>
-    )}
 
-    {selectedPlace ? (
-      <Box pl={5} pr={5}>
-        <Box style={styles.selectedPlaceCard}>
-          <Box flex={1}>
-            <ThemedText weight="bold" size="xl" letterSpacing="normal">
-              {selectedPlace.name}
-            </ThemedText>
-            <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
-              {[selectedPlace.type, selectedPlace.neighborhood].filter(Boolean).join(' · ') || 'local selecionado'}
-            </ThemedText>
-          </Box>
-          <ThemedIcon name="Check" size={22} color="primary" />
+      {places.length > 0 ? (
+        <NearbyPlacesScroll places={places} selectedPlaceId={selectedPlace?.id} onPlacePress={onSelectPlace} />
+      ) : (
+        <Box pl={5} pr={5} pt={6} pb={6} style={styles.emptyState}>
+          <ThemedText weight="semibold" letterSpacing="normal">
+            {isFetching ? t('post.place.searching') : t('post.place.noPlaces')}
+          </ThemedText>
+          <ThemedText color="textSecondary" letterSpacing="normal" style={styles.emptyDescription}>
+            {isFetching ? t('post.place.searchingDesc') : t('post.place.noPlacesDesc')}
+          </ThemedText>
         </Box>
-      </Box>
-    ) : null}
-  </Box>
-)
+      )}
+
+      {selectedPlace ? (
+        <Box pl={5} pr={5}>
+          <Box style={styles.selectedPlaceCard}>
+            <Box flex={1}>
+              <ThemedText weight="bold" size="xl" letterSpacing="normal">
+                {selectedPlace.name}
+              </ThemedText>
+              <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal">
+                {[selectedPlace.type, selectedPlace.neighborhood].filter(Boolean).join(' · ') ||
+                  t('post.place.selectedFallback')}
+              </ThemedText>
+            </Box>
+            <ThemedIcon name="Check" size={22} color="primary" />
+          </Box>
+        </Box>
+      ) : null}
+    </Box>
+  )
+}
 
 const styles = StyleSheet.create({
   emptyState: {

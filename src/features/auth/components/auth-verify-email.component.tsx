@@ -5,9 +5,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useToast } from '@src/app/providers/toast.provider'
 import { authClient } from '@src/services/api/auth-client'
 import { Box, Button, OtpInput, ThemedText } from '@src/shared/components'
+import { useAppTranslation } from '@src/shared/i18n'
 import { validationMapErrors } from '@src/shared/utils'
 
-import { otpSchema, SendVerificationEmailForm } from '../domain'
+import { buildOtpSchema, SendVerificationEmailForm } from '../domain'
 import { useEmailVerificationSession } from '../hooks'
 
 type AuthVerifyEmailProps = {
@@ -27,6 +28,7 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
 }) => {
   const { showToast } = useToast()
   const { resolveEmailVerificationSession } = useEmailVerificationSession()
+  const { t } = useAppTranslation()
   const automaticallySentEmailRef = useRef<string | null>(null)
 
   const [isResendDisabled, setIsResendDisabled] = useState(false)
@@ -52,7 +54,7 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
       otp
     }
 
-    const result = otpSchema.safeParse(values)
+    const result = buildOtpSchema().safeParse(values)
     if (!result.success) {
       setFormError(validationMapErrors(result.error, formError))
       throw new Error('otp validation failed')
@@ -61,10 +63,10 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
 
   const handleVerifyEmailError = (error: any) => {
     if (error.code === 'INVALID_OTP') {
-      showToast('código inválido', 'error')
+      showToast(t('auth.errors.invalidOtp'), 'error')
       return
     }
-    showToast('algo deu errado, tente novamente mais tarde.', 'error')
+    showToast(t('auth.errors.generic'), 'error')
     return
   }
 
@@ -142,8 +144,8 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
   return (
     <Box gap={6}>
       <Box gap={1}>
-        {!hideTitle && <ThemedText variant="title">confirme seu email</ThemedText>}
-        <ThemedText variant="secondary">enviamos um código para {emailToBeVerified}.</ThemedText>
+        {!hideTitle && <ThemedText variant="title">{t('auth.verify.title')}</ThemedText>}
+        <ThemedText variant="secondary">{t('auth.verify.sentMessage', { email: emailToBeVerified })}</ThemedText>
       </Box>
 
       <OtpInput
@@ -158,7 +160,11 @@ export const AuthVerifyEmail: React.FC<AuthVerifyEmailProps> = ({
       <Box mt={4} gap={4}>
         <Button variant="ghost" disabled={isResendDisabled || isLoading} onPress={() => handleSendVerificationEmail()}>
           <ThemedText size="lg" weight="semibold">
-            {isLoading ? 'verificando...' : isResendDisabled ? `reenviar em ${countdown}s` : 'reenviar código'}
+            {isLoading
+              ? t('auth.verify.submittingButton')
+              : isResendDisabled
+                ? t('auth.verify.resendCountdown', { seconds: countdown })
+                : t('auth.verify.resendButton')}
           </ThemedText>
         </Button>
       </Box>

@@ -6,6 +6,7 @@ import { Avatar, Box, Divider, ThemedIcon, ThemedText, Touchable } from '@src/sh
 import { PlacesModel } from '@src/shared/domain'
 import { GetUserByUsername } from '@src/shared/domain/users.model'
 import { useNavigateToProfile } from '@src/shared/hooks'
+import { useAppTranslation } from '@src/shared/i18n'
 import { HIT_SLOP } from '@src/shared/utils'
 
 enum SearchType {
@@ -21,6 +22,7 @@ type SearchResultItemProps = {
 }
 
 export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, searchType, onItemClick, onRemove }) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   const navigateToProfile = useNavigateToProfile()
 
@@ -30,7 +32,10 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
     }
     navigation.goBack()
     if (searchType === SearchType.PLACES) {
-      return navigation.navigate('Modals', { screen: 'PlacesDetailsScreen', params: { placeId: data.id } })
+      return navigation.navigate('Modals', {
+        screen: 'PlacesDetailsScreen',
+        params: { placeId: data.id, isHot: (data as PlacesModel).isHot }
+      })
     } else {
       navigateToProfile(data.id)
     }
@@ -77,7 +82,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ data, search
             onPress={onRemove}
             hitSlop={HIT_SLOP}
             accessibilityRole="button"
-            accessibilityLabel="Remover do histórico"
+            accessibilityLabel={t('search.removeHistory')}
           >
             <ThemedIcon name="X" size={18} color="textSecondary" />
           </Pressable>

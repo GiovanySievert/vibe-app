@@ -1,32 +1,38 @@
 import { z } from 'zod'
 
+import { i18n } from '@src/shared/i18n'
+
 export const createEventSchema = z.object({
-  name: z.string().trim().min(2, 'nome muito curto').max(60, 'nome muito longo'),
+  name: z
+    .string()
+    .trim()
+    .min(2, i18n.t('social.createEvent.errors.nameTooShort'))
+    .max(60, i18n.t('social.createEvent.errors.nameTooLong')),
   date: z
     .string()
     .trim()
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/, 'data inválida')
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, i18n.t('social.createEvent.errors.invalidDate'))
     .refine((val) => {
       const [day, month, year] = val.split('/').map(Number)
       const date = new Date(year, month - 1, day)
       return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day
-    }, 'data inválida')
+    }, i18n.t('social.createEvent.errors.invalidDate'))
     .refine((val) => {
       const [day, month, year] = val.split('/').map(Number)
       const date = new Date(year, month - 1, day)
       const today = new Date()
       today.setHours(0, 0, 0, 0)
       return date >= today
-    }, 'data inválida'),
+    }, i18n.t('social.createEvent.errors.invalidDate')),
   time: z
     .string()
     .trim()
-    .regex(/^\d{2}:\d{2}$/, 'hora inválida')
+    .regex(/^\d{2}:\d{2}$/, i18n.t('social.createEvent.errors.invalidTime'))
     .refine((val) => {
       const [hours, minutes] = val.split(':').map(Number)
       return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59
-    }, 'hora inválida'),
-  description: z.string().max(300, 'descrição muito longa')
+    }, i18n.t('social.createEvent.errors.invalidTime')),
+  description: z.string().max(300, i18n.t('social.createEvent.errors.descriptionTooLong'))
 })
 
 export type CreateEventForm = z.infer<typeof createEventSchema>

@@ -10,6 +10,7 @@ import { authClient } from '@src/services/api/auth-client'
 import { Avatar, Box, Button, Card, Divider, ThemedText, Touchable } from '@src/shared/components'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { formatShortEventDateTime, triggerLightHaptic } from '@src/shared/utils'
 
 import { EventParticipantStatus } from '../domain/event.model'
@@ -17,13 +18,8 @@ import { EventResponse, EventService } from '../services/event.service'
 
 type Nav = NativeStackNavigationProp<AuthenticatedStackParamList>
 
-const EventInvitationItem = ({
-  item,
-  currentUserId
-}: {
-  item: EventResponse
-  currentUserId?: string
-}) => {
+const EventInvitationItem = ({ item, currentUserId }: { item: EventResponse; currentUserId?: string }) => {
+  const { t } = useAppTranslation()
   const navigation = useNavigation<Nav>()
   const queryClient = useQueryClient()
 
@@ -65,7 +61,9 @@ const EventInvitationItem = ({
             ))}
           </Box>
           <ThemedText variant="mono" size="xs">
-            {item.participants.length} pessoa{item.participants.length !== 1 ? 's' : ''}
+            {t('social.eventInvitations.people', {
+              count: item.participants.length
+            })}
           </ThemedText>
         </Box>
       )}
@@ -76,7 +74,7 @@ const EventInvitationItem = ({
         <Box flexDirection="row" alignItems="center" gap={2}>
           <ThemedIcon name="CircleCheck" size={18} color="primary" />
           <ThemedText color="primary" weight="semibold">
-            confirmado
+            {t('social.eventInvitations.accepted')}
           </ThemedText>
         </Box>
       )}
@@ -85,7 +83,7 @@ const EventInvitationItem = ({
         <Box flexDirection="row" alignItems="center" gap={2}>
           <ThemedIcon name="CircleX" size={18} color="error" />
           <ThemedText color="error" weight="semibold">
-            recusado
+            {t('social.eventInvitations.declined')}
           </ThemedText>
         </Box>
       )}
@@ -99,7 +97,7 @@ const EventInvitationItem = ({
             onPress={() => handleRespond(EventParticipantStatus.ACCEPTED)}
           >
             <ThemedText color="background" weight="bold">
-              vou
+              {t('social.eventInvitations.yesBtn')}
             </ThemedText>
           </Button>
           <Button
@@ -111,7 +109,7 @@ const EventInvitationItem = ({
             onPress={() => handleRespond(EventParticipantStatus.DECLINED)}
           >
             <ThemedText color="textPrimary" weight="bold">
-              não vou
+              {t('social.eventInvitations.noBtn')}
             </ThemedText>
           </Button>
         </Box>
@@ -121,6 +119,7 @@ const EventInvitationItem = ({
 }
 
 export const EventInvitationsList = () => {
+  const { t } = useAppTranslation()
   const { data: session } = authClient.useSession()
   const { data: invitations } = useQuery({
     queryKey: ['eventInvitations'],
@@ -138,7 +137,7 @@ export const EventInvitationsList = () => {
     <Box mr={5} ml={5} gap={3}>
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
-          convidado em
+          {t('social.eventInvitations.label')}
         </ThemedText>
         <ThemedText variant="mono" size="xs" letterSpacing="wider">
           {count}

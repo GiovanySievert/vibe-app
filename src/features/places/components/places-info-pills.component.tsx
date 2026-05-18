@@ -4,22 +4,24 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { Box, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type PlacesInfoPillsProps = {
   place: PlacesByIdResponse
 }
 
-const PLACEHOLDER_TAGS = ['Mulher feia', 'Forro', 'Música Eletrônica', 'Pista']
+const PLACEHOLDER_TAGS = ['uglyWoman', 'forro', 'electronicMusic', 'danceFloor'] as const
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const PlacesInfoPills: React.FC<PlacesInfoPillsProps> = ({ place: _place }) => {
+  const { t } = useAppTranslation()
+
   return (
     <Box mt={5} mb={1}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>
         {PLACEHOLDER_TAGS.map((tag) => (
           <Box key={tag} style={styles.pill}>
             <ThemedText size="xs" color="textSecondary">
-              {tag}
+              {t(`places.tags.${tag}`)}
             </ThemedText>
           </Box>
         ))}

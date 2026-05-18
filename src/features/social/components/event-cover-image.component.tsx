@@ -3,6 +3,7 @@ import { Dimensions, Image, Modal, Pressable, StyleSheet } from 'react-native'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 
 type EventCoverImageProps = {
   uri: string
@@ -13,6 +14,7 @@ const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
 export const EventCoverImage: React.FC<EventCoverImageProps> = ({ uri, height = 220 }) => {
+  const { t } = useAppTranslation()
   const [visible, setVisible] = useState(false)
   const scale = useSharedValue(0.92)
   const opacity = useSharedValue(0)
@@ -40,15 +42,15 @@ export const EventCoverImage: React.FC<EventCoverImageProps> = ({ uri, height = 
       <Pressable
         onPress={openModal}
         accessibilityRole="imagebutton"
-        accessibilityLabel="Imagem de capa do evento"
-        accessibilityHint="Toque para ampliar"
+        accessibilityLabel={t('social.createEvent.photoSelectedA11y')}
+        accessibilityHint={t('common.tapToExpand')}
       >
         <Image
           source={{ uri }}
           style={[styles.coverImage, { height }]}
           resizeMode="cover"
           accessible
-          accessibilityLabel="Imagem de capa do evento"
+          accessibilityLabel={t('social.createEvent.photoSelectedA11y')}
         />
       </Pressable>
 
@@ -57,14 +59,14 @@ export const EventCoverImage: React.FC<EventCoverImageProps> = ({ uri, height = 
           style={styles.backdrop}
           onPress={closeModal}
           accessibilityRole="button"
-          accessibilityLabel="Fechar imagem"
+          accessibilityLabel={t('common.closeImage')}
         >
           <Animated.Image
             source={{ uri }}
             resizeMode="contain"
             style={[styles.fullImage, animatedStyle]}
             accessible
-            accessibilityLabel="Imagem de capa do evento"
+            accessibilityLabel={t('social.createEvent.photoSelectedA11y')}
           />
         </Pressable>
       </Modal>

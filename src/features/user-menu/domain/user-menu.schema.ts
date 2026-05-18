@@ -1,11 +1,14 @@
-import { z, } from "zod";
+import { z } from 'zod'
+
+import { i18n } from '@src/shared/i18n'
 
 export const deleteAccountSchema = z.object({
-  password: z.string()
-    .min(8, "mínimo de 8 caracteres")
-    .regex(/[A-Z]/, "precisa de 1 letra maiúscula")
-    .regex(/[a-z]/, "precisa de 1 letra minúscula")
-    .regex(/[0-9]/, "precisa de 1 dígito"),
-});
+  password: z
+    .string()
+    .min(8, i18n.t('userMenu.deleteAccount.errors.passwordMinLength'))
+    .regex(/[A-Z]/, i18n.t('userMenu.deleteAccount.errors.passwordUppercase'))
+    .regex(/[a-z]/, i18n.t('userMenu.deleteAccount.errors.passwordLowercase'))
+    .regex(/[0-9]/, i18n.t('userMenu.deleteAccount.errors.passwordDigit'))
+})
 
-export type DeleteAccountForm = z.infer<typeof deleteAccountSchema>;
+export type DeleteAccountForm = z.infer<typeof deleteAccountSchema>

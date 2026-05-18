@@ -5,6 +5,7 @@ import { PostPreselectedPlace } from '@src/app/navigation/types'
 import { Box, Button, ThemedText } from '@src/shared/components'
 import { Input } from '@src/shared/components/input'
 import { theme } from '@src/shared/constants/theme'
+import { useAppTranslation } from '@src/shared/i18n'
 import { space } from '@src/shared/utils'
 
 export type PostRating = 'crowded' | 'dead'
@@ -47,76 +48,95 @@ export const PostReviewStep: React.FC<Props> = ({
   onChangeRating,
   onChangeComment,
   onSubmit
-}) => (
-  <Box pl={5} pr={5} gap={5}>
-    <Box style={styles.reviewPhotoCard}>
-      {placePhotoUri ? (
-        <Image
-          source={{ uri: placePhotoUri }}
-          style={styles.reviewPhoto}
-          resizeMode="cover"
-          accessible
-          accessibilityLabel="Foto do local"
-        />
-      ) : null}
-      {selfieUri ? (
-        <Image
-          source={{ uri: selfieUri }}
-          style={styles.reviewSelfie}
-          resizeMode="cover"
-          accessible
-          accessibilityLabel="Selfie do autor"
-        />
-      ) : null}
-    </Box>
+}) => {
+  const { t } = useAppTranslation()
 
-    <Box flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap={3}>
-      <Box flex={1}>
-        <ThemedText weight="bold" size="xl" letterSpacing="normal">
-          {selectedPlace?.name}
-        </ThemedText>
-        <ThemedText variant="mono" size="xs" color="textSecondary" letterSpacing="normal">
-          {[selectedPlace?.type, selectedPlace?.neighborhood].filter(Boolean).join(' · ') || 'review do local'}
-        </ThemedText>
+  return (
+    <Box pl={5} pr={5} gap={5}>
+      <Box style={styles.reviewPhotoCard}>
+        {placePhotoUri ? (
+          <Image
+            source={{ uri: placePhotoUri }}
+            style={styles.reviewPhoto}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel={t('post.review.placePhotoA11y')}
+          />
+        ) : null}
+        {selfieUri ? (
+          <Image
+            source={{ uri: selfieUri }}
+            style={styles.reviewSelfie}
+            resizeMode="cover"
+            accessible
+            accessibilityLabel={t('post.review.authorSelfieA11y')}
+          />
+        ) : null}
       </Box>
-      <Pressable accessibilityRole="button" accessibilityLabel="mudar local" onPress={onChangePlace}>
-        <ThemedText color="textSecondary" textDecorationLine="underline" letterSpacing="normal">
-          mudar
-        </ThemedText>
-      </Pressable>
-    </Box>
 
-    <Box gap={3}>
-      <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" textTransform="uppercase">
-        estado
-      </ThemedText>
-      <Box flexDirection="row" gap={3}>
-        <RatingOption value="dead" label="Vazio" selected={rating === 'dead'} onPress={onChangeRating} />
-        <RatingOption value="crowded" label="Lotado" selected={rating === 'crowded'} onPress={onChangeRating} />
+      <Box flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap={3}>
+        <Box flex={1}>
+          <ThemedText weight="bold" size="xl" letterSpacing="normal">
+            {selectedPlace?.name}
+          </ThemedText>
+          <ThemedText variant="mono" size="xs" color="textSecondary" letterSpacing="normal">
+            {[selectedPlace?.type, selectedPlace?.neighborhood].filter(Boolean).join(' · ') ||
+              t('post.review.subtitle')}
+          </ThemedText>
+        </Box>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('post.review.changePlaceA11y')}
+          onPress={onChangePlace}
+        >
+          <ThemedText color="textSecondary" textDecorationLine="underline" letterSpacing="normal">
+            {t('post.review.changeBtn')}
+          </ThemedText>
+        </Pressable>
       </Box>
-    </Box>
 
-    <Box gap={2}>
-      <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" textTransform="uppercase">
-        como foi
-      </ThemedText>
-      <Input
-        multiline
-        multilineHeight={136}
-        maxLength={MAX_COMMENT_LENGTH}
-        value={comment}
-        onChangeText={onChangeComment}
-        placeholder="fui só pra um drink rápido e fiquei até fechar..."
-      />
-    </Box>
+      <Box gap={3}>
+        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" textTransform="uppercase">
+          {t('post.review.stateLabel')}
+        </ThemedText>
+        <Box flexDirection="row" gap={3}>
+          <RatingOption
+            value="dead"
+            label={t('post.review.emptyLabel')}
+            selected={rating === 'dead'}
+            onPress={onChangeRating}
+          />
+          <RatingOption
+            value="crowded"
+            label={t('post.review.crowdedLabel')}
+            selected={rating === 'crowded'}
+            onPress={onChangeRating}
+          />
+        </Box>
+      </Box>
 
-    <Button onPress={onSubmit} loading={submitting} disabled={submitting}>
-      <ThemedText weight="bold" color="background" letterSpacing="normal">
-        publicar review
-      </ThemedText>
-    </Button>
-  </Box>
-)
+      <Box gap={2}>
+        <ThemedText variant="mono" color="textSecondary" size="xs" letterSpacing="normal" textTransform="uppercase">
+          {t('post.review.commentLabel')}
+        </ThemedText>
+        <Input
+          multiline
+          multilineHeight={136}
+          maxLength={MAX_COMMENT_LENGTH}
+          value={comment}
+          onChangeText={onChangeComment}
+          placeholder={t('post.review.commentPlaceholder')}
+        />
+      </Box>
+
+      <Button onPress={onSubmit} loading={submitting} disabled={submitting}>
+        <ThemedText weight="bold" color="background" letterSpacing="normal">
+          {t('post.review.publishBtn')}
+        </ThemedText>
+      </Button>
+    </Box>
+  )
+}
 
 const RatingOption: React.FC<RatingOptionProps> = ({ value, label, selected, onPress }) => (
   <Pressable
