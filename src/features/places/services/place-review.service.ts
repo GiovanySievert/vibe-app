@@ -17,6 +17,22 @@ export type CreatePlaceReviewResponse = {
   streakUpdate: StreakUpdateResponse | null
 }
 
+export type PlaceReviewFriend = {
+  id: string
+  name: string
+  username: string
+  image: string | null
+  latestReviewAt: string
+}
+
+export type PlaceReviewFriendsResponse = {
+  data: PlaceReviewFriend[]
+  total: number
+  hasMore: boolean
+  page: number
+  limit: number
+}
+
 export const PlaceReviewService = {
   create: (payload: {
     placeId: string
@@ -33,10 +49,12 @@ export const PlaceReviewService = {
   }) => coreApi.post<CreatePlaceReviewResponse>('/place-reviews', payload),
   getFeed: (page?: number) => coreApi.get<FeedReviewItem[]>('/place-reviews/feed', { params: { page } }),
   listByPlace: (placeId: string) => coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}`),
+  listFriendsByPlace: (placeId: string, page?: number, limit?: number) =>
+    coreApi.get<PlaceReviewFriendsResponse>(`/place-reviews/place/${placeId}/friends`, { params: { page, limit } }),
   listByUser: (userId: string, page?: number) =>
-    coreApi.get<FeedReviewItem[]>(`/place-reviews/user/${userId}`, { params: { page } }),
-  eligibility: (placeId: string) =>
-    coreApi.get<PlaceReviewEligibility>(`/place-reviews/place/${placeId}/eligibility`),
-  listPopularByPlace: (placeId: string) =>
-    coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}/popular`)
+    coreApi.get<FeedReviewItem[]>(`/place-reviews/user/${userId}`, {
+      params: { page }
+    }),
+  eligibility: (placeId: string) => coreApi.get<PlaceReviewEligibility>(`/place-reviews/place/${placeId}/eligibility`),
+  listPopularByPlace: (placeId: string) => coreApi.get<FeedReviewItem[]>(`/place-reviews/place/${placeId}/popular`)
 }

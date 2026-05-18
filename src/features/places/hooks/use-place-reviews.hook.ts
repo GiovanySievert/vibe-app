@@ -18,3 +18,12 @@ export const usePlacePopularReviews = (placeId: string, enabled: boolean) =>
     retry: false,
     enabled
   })
+
+export const usePlaceReviewFriends = (placeId: string) =>
+  useQuery({
+    queryKey: ['placeReviewFriends', placeId],
+    queryFn: () => PlaceReviewService.listFriendsByPlace(placeId, 1, 10).then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+    enabled: !!placeId
+  })

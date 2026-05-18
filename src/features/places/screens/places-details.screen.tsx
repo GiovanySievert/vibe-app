@@ -17,6 +17,7 @@ import {
   PlacesFlutuantButton,
   PlacesInfoHeader,
   PlacesInfoPills,
+  PlacesReviewFriends,
   PlacesReviews
 } from '../components'
 
@@ -75,6 +76,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
         ) : null}
         <PlacesCardInfo place={placeData} />
         <PlacesAddress place={placeData} />
+        <PlacesReviewFriends placeId={placeId} />
         <PlacesReviews placeId={placeId} />
         <Box h={14} />
       </ScrollView>
