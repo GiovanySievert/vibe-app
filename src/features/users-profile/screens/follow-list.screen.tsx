@@ -6,7 +6,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, Input, ThemedText, Touchable } from '@src/shared/components'
+import { Box, Input, LoadingScreen, ThemedText, Touchable } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { theme } from '@src/shared/constants/theme'
@@ -40,7 +40,7 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
   const { data: statsData } = useQuery({
     queryKey: ['fetchFollowersStats', userId],
     queryFn: async () => (await FollowStatsService.fetchUsersFollowStats(userId)).data,
-    staleTime: 0
+    staleTime: 60_000
   })
 
   const isSearching = debouncedQuery.trim().length > 0
@@ -136,7 +136,9 @@ export const FollowListScreen: React.FC<Props> = ({ route, navigation }) => {
         />
       </Box>
 
-      {!isLoading && (
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
         <FlatList
           data={allData}
           keyExtractor={(item) => item.id}

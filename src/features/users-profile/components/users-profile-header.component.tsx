@@ -4,6 +4,7 @@ import { useUserReviews } from '@src/features/users-profile/hooks/use-user-revie
 import { Avatar, Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { UserModel } from '@src/shared/domain/users.model'
 import { useAppTranslation } from '@src/shared/i18n'
+import { getAvatarImageUris } from '@src/shared/utils'
 
 import { FollowStatsService } from '../services'
 import { UserFollowStatsResponse } from '../types'
@@ -37,11 +38,12 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
     queryKey: ['fetchFollowersStats', userData.id],
     queryFn: fetchFollowersStats,
     retry: false,
-    staleTime: 0
+    staleTime: 60_000
   })
 
   const { data: reviews } = useUserReviews(userData.id, canViewReviews)
   const vibesCount = reviews?.length ?? 0
+  const avatarUris = getAvatarImageUris(userData)
 
   const handleOpenFollowers = () => {
     if (canViewFollowList && data && data.followersCount > 0) onOpenFollowers()
@@ -58,7 +60,7 @@ export const UsersProfileHeaderScreen: React.FC<UsersProfileHeaderProps> = ({
   return (
     <Box pl={5} pr={5} pt={6} pb={4}>
       <Box flexDirection="row" alignItems="center" justifyContent="space-between">
-        <Avatar size="lg" uri={userData.image} pressable />
+        <Avatar size="lg" uri={avatarUris.displayUri} fullUri={avatarUris.fullUri} pressable />
 
         <Box flexDirection="row" gap={6}>
           <Box alignItems="center" justifyContent="center">

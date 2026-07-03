@@ -5,6 +5,7 @@ import { FeedReviewCommentsContent } from '@src/features/feed/components/feed-re
 import { ReviewCard } from '@src/features/feed/components/review-card.component'
 import { FeedReviewItem } from '@src/features/feed/domain/feed-review-item.model'
 import { SwipeableModal } from '@src/shared/components/swipeable-modal'
+import { PlatformOS } from '@src/shared/constants/platform'
 
 const MODAL_HEIGHT = Dimensions.get('window').height * 0.9
 
@@ -18,7 +19,7 @@ export const UserReviewDetailModal: React.FC<Props> = ({ item, currentUserId, on
   return (
     <SwipeableModal visible={item !== null} height={MODAL_HEIGHT} onClose={onClose}>
       {item && (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === PlatformOS.IOS ? 'padding' : undefined}>
           <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
             <ReviewCard review={item} currentUserId={currentUserId} enableFavoriteAction />
           </ScrollView>

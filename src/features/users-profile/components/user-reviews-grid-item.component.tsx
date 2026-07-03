@@ -9,6 +9,7 @@ import { Box } from '@src/shared/components/box'
 import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
+import { getGridReviewImageUris } from '@src/shared/utils'
 
 const COLUMNS = 3
 const GAP = 2
@@ -22,8 +23,7 @@ type Props = {
 }
 
 export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => {
-  const imageUri = item.placeImageUrl ?? item.selfieUrl
-  const shouldShowSelfie = Boolean(item.placeImageUrl && item.selfieUrl)
+  const { displayUri, selfieUri, shouldShowSelfie } = getGridReviewImageUris(item)
 
   return (
     <Touchable
@@ -38,9 +38,9 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
         position="relative"
         style={[styles.cell, col !== 0 && styles.cellGap]}
       >
-        {imageUri && (
+        {displayUri && (
           <Image
-            source={{ uri: imageUri }}
+            source={{ uri: displayUri }}
             style={styles.image}
             resizeMode="cover"
             accessible
@@ -54,7 +54,7 @@ export const UserReviewsGridItem: React.FC<Props> = ({ item, col, onPress }) => 
         )}
         {shouldShowSelfie && (
           <Image
-            source={{ uri: item.selfieUrl ?? undefined }}
+            source={{ uri: selfieUri ?? undefined }}
             style={styles.selfie}
             resizeMode="cover"
             accessible

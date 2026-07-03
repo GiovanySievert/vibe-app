@@ -40,6 +40,7 @@ const LETTER_SIZES: Record<Size, number> = {
 type AvatarProps = {
   size?: Size
   uri?: string | null
+  fullUri?: string | null
   source?: ImageSourcePropType
   square?: boolean
   pressable?: boolean
@@ -93,6 +94,7 @@ const modalStyles = StyleSheet.create({
 export const Avatar: React.FC<AvatarProps> = ({
   size = 'md',
   uri,
+  fullUri,
   source,
   square = false,
   pressable = false,
@@ -107,6 +109,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     (fallbackLetter ? t('common.profilePhotoFor', { value: fallbackLetter }) : t('common.profilePhoto'))
   const avatarSize = SIZES[size]
   const imgSource = uri ? { uri } : source
+  const modalSource = fullUri ? { uri: fullUri } : imgSource
   const hasPlaceholder = !!(placeholderIcon || fallbackLetter)
   const s = createStyles(avatarSize, square, hasPlaceholder)
 
@@ -161,7 +164,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   )
 
   const content =
-    pressable && imgSource ? (
+    pressable && modalSource ? (
       <Pressable
         onPress={openModal}
         style={s.root}
@@ -193,7 +196,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           accessibilityLabel={t('common.closeImage')}
         >
           <Animated.Image
-            source={imgSource as ImageSourcePropType}
+            source={modalSource as ImageSourcePropType}
             resizeMode="cover"
             style={[modalStyles.fullImage, animatedStyle]}
             accessible

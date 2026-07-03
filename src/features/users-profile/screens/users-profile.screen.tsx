@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { authClient } from '@src/services/api/auth-client'
-import { Box, ThemedText } from '@src/shared/components'
+import { LoadingScreen } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
@@ -38,7 +38,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
     queryKey: ['fetchUserById', userId],
     queryFn: async () => (await UsersProfileService.fetchUserById(userId)).data,
     retry: false,
-    staleTime: 0
+    staleTime: 5 * 60_000
   })
 
   const { data: followStatusData, isLoading: isFollowStatusLoading } = useFollowStatus(userId, !isUserLoggedProfile)
@@ -59,11 +59,7 @@ export const UsersProfileScreen: React.FC<UsersProfileScreenScreenProps> = ({ ro
   }
 
   if (isLoading) {
-    return (
-      <Box bg="background">
-        <ThemedText>CARREGANDO</ThemedText>
-      </Box>
-    )
+    return <LoadingScreen />
   }
 
   if (!userData) return null

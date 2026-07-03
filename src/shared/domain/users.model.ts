@@ -3,6 +3,7 @@ export type UserModel = {
   name: string
   username: string
   image: string | null
+  imageThumbnail?: string | null
   bio: string | null
 }
 
@@ -14,12 +15,14 @@ export type GetUserByUsername = {
   id: string
   username: string
   image: string | null
+  imageThumbnail?: string | null
 }
 
 export type UserSuggestion = {
   id: string
   username: string
   image: string | null
+  imageThumbnail?: string | null
   mutualCount: number
 }
 
@@ -27,5 +30,6 @@ export type TrendingUser = {
   id: string
   username: string
   image: string | null
+  imageThumbnail?: string | null
   reviewsCount: number
 }
