@@ -1,3 +1,5 @@
+export * from './create-event.screen'
+export * from './event-detail.screen'
 export * from './event-place-search.screen'
 export * from './follow-requests.screen'
 export * from './shared-event.screen'

@@ -1,6 +1,5 @@
 export * from './blocked-user-actions.component'
 export * from './blocked-user-item.component'
-export * from './create-event'
 export * from './event-invitations-list.component'
 export * from './follow-request-actions.component'
 export * from './follow-request-item.component'

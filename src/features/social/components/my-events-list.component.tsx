@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Image, StyleSheet } from 'react-native'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { useQuery } from '@tanstack/react-query'
 
+import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, Card, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { formatShortEventDateTime } from '@src/shared/utils'
 
 import { EventResponse, EventService } from '../services/event.service'
-import { EventDetailModal } from './event-detail-modal.component'
 
 const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => void }) => (
   <Touchable onPress={onPress} activeOpacity={0.7}>
@@ -64,7 +65,7 @@ const MyEventItem = ({ item, onPress }: { item: EventResponse; onPress: () => vo
 )
 
 export const MyEventsList = () => {
-  const [selectedEvent, setSelectedEvent] = useState<EventResponse | null>(null)
+  const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
 
   const { data: myEvents, isLoading } = useQuery({
     queryKey: ['myEvents'],
@@ -79,28 +80,30 @@ export const MyEventsList = () => {
   }
 
   const count = myEvents.length.toString().padStart(2, '0')
+  const handleOpenEvent = (eventId: string) => {
+    navigation.navigate('Modals', {
+      screen: 'EventDetailScreen',
+      params: { eventId }
+    })
+  }
 
   return (
-    <>
-      <Box mr={5} ml={5} gap={3}>
-        <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-          <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
-            meus eventos
-          </ThemedText>
-          <ThemedText variant="mono" size="xs" letterSpacing="wider">
-            {count}
-          </ThemedText>
-        </Box>
-
-        <Box gap={3}>
-          {myEvents.map((item) => (
-            <MyEventItem key={item.id} item={item} onPress={() => setSelectedEvent(item)} />
-          ))}
-        </Box>
+    <Box mr={5} ml={5} gap={3}>
+      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+        <ThemedText variant="mono" size="xs" textTransform="uppercase" letterSpacing="wider">
+          meus eventos
+        </ThemedText>
+        <ThemedText variant="mono" size="xs" letterSpacing="wider">
+          {count}
+        </ThemedText>
       </Box>
 
-      <EventDetailModal event={selectedEvent} visible={!!selectedEvent} onClose={() => setSelectedEvent(null)} />
-    </>
+      <Box gap={3}>
+        {myEvents.map((item) => (
+          <MyEventItem key={item.id} item={item} onPress={() => handleOpenEvent(item.id)} />
+        ))}
+      </Box>
+    </Box>
   )
 }
 
