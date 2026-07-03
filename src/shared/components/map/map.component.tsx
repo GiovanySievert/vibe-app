@@ -18,9 +18,7 @@ import { Touchable } from '../touchable'
 import { vibesMapStyle } from './map.style'
 import { UserLocationPin } from './user-location-pin.component'
 
-MapboxGL.setAccessToken(
-  'sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21rcHh4OXRhMGdpYjNrb3BvdDg3b2RmYSJ9.oXn_yhtYHmnaAoeLUVXrxA'
-)
+MapboxGL.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '')
 
 type Coords = { latitude: number; longitude: number }
 
