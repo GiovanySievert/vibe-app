@@ -12,7 +12,7 @@ import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
 import { useNavigateToProfile } from '@src/shared/hooks'
 import { useAppTranslation } from '@src/shared/i18n'
-import { formatRelativeTime, triggerLightHaptic } from '@src/shared/utils'
+import { formatRelativeTime, getAvatarImageUris, getReviewDetailImageUris, triggerLightHaptic } from '@src/shared/utils'
 
 import { FeedReviewItem, ReviewCounts } from '../domain/feed-review-item.model'
 import { FeedService } from '../services'
@@ -37,6 +37,8 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
   const [counts, setCounts] = useState<ReviewCounts | null>(null)
   const relativeTime = formatRelativeTime(review.createdAt)
   const isOwner = review.userId === currentUserId
+  const avatarUris = getAvatarImageUris(review.user)
+  const detailImageUris = getReviewDetailImageUris(review)
 
   useEffect(() => {
     FeedService.getCounts(review.id)
@@ -92,7 +94,8 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
         <Box flexDirection="row" alignItems="center" gap={3} mb={3}>
           <Avatar
             size="xs"
-            uri={review.user.image}
+            uri={avatarUris.displayUri}
+            fullUri={avatarUris.fullUri}
             placeholderIcon="User"
             onPress={() => navigateToProfile(review.user.id)}
           />
@@ -116,7 +119,11 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
           <ReviewCardMenu review={review} isOwner={isOwner} enableFavoriteAction={enableFavoriteAction} />
         </Box>
 
-        <DualPhoto placeImageUrl={review.placeImageUrl} selfieUrl={review.selfieUrl} placeName={review.placeName} />
+        <DualPhoto
+          placeImageUrl={detailImageUris.placeImageUri}
+          selfieUrl={detailImageUris.selfieUri}
+          placeName={review.placeName}
+        />
 
         {review.comment && (
           <ThemedText size="sm" color="textPrimary" style={styles.caption}>

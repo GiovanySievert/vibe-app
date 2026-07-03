@@ -5,7 +5,9 @@ export type FeedReviewItem = {
   placeName: string
   rating: 'crowded' | 'dead'
   placeImageUrl: string | null
+  placeImageThumbnailUrl?: string | null
   selfieUrl: string | null
+  selfieThumbnailUrl?: string | null
   comment: string | null
   createdAt: string
   updatedAt: string
@@ -14,6 +16,7 @@ export type FeedReviewItem = {
     id: string
     username: string
     image: string | null
+    imageThumbnail?: string | null
   }
 }
 

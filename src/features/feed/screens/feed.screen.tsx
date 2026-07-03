@@ -6,6 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { authStateAtom } from '@src/features/auth/state/auth.state'
 import { Box } from '@src/shared/components/box'
+import { LoadingScreen } from '@src/shared/components/loading-screen'
 import { Screen } from '@src/shared/components/screen'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
@@ -22,11 +23,7 @@ export const FeedScreen = () => {
   const items = data?.pages.flatMap((page) => page) ?? []
 
   if (isPending) {
-    return (
-      <Box flex={1} alignItems="center" justifyContent="center">
-        <ActivityIndicator color={theme.colors.primary} />
-      </Box>
-    )
+    return <LoadingScreen />
   }
 
   return (

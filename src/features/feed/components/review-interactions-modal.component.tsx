@@ -3,12 +3,9 @@ import { Dimensions, FlatList, StyleSheet } from 'react-native'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { Touchable } from '@src/shared/components'
-import { Avatar } from '@src/shared/components/avatar'
-import { Box } from '@src/shared/components/box'
-import { SwipeableModal } from '@src/shared/components/swipeable-modal'
-import { ThemedText } from '@src/shared/components/themed-text'
+import { Avatar, Box, Divider, SwipeableModal, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
+import { useNavigateToProfile } from '@src/shared/hooks'
 
 import { ReviewInteractionUser } from '../domain'
 import { FeedService } from '../services'
@@ -31,6 +28,7 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<'on' | 'off'>('on')
+  const navigateToProfile = useNavigateToProfile()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['reviewInteractions', reviewId, activeTab],
@@ -41,7 +39,8 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
     },
     initialPageParam: 1,
     enabled: visible,
-    staleTime: 0
+    staleTime: 0,
+    gcTime: 0
   })
 
   const allUsers = data?.pages.flatMap((p) => p) ?? []
@@ -52,14 +51,27 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
 
   const renderItem = useCallback(
     ({ item }: { item: ReviewInteractionUser }) => (
-      <Box flexDirection="row" alignItems="center" gap={3} pl={5} pr={5} pt={3} pb={3}>
-        <Avatar size="xs" uri={item.image} placeholderIcon="User" />
-        <ThemedText size="sm" weight="medium" color="textPrimary">
-          {item.username}
-        </ThemedText>
-      </Box>
+      <Touchable
+        activeOpacity={0.7}
+        onPress={() => {
+          onClose()
+          navigateToProfile(item.id)
+        }}
+      >
+        <Box flexDirection="row" alignItems="center" gap={4} pl={5} pr={5} pt={3} pb={3}>
+          <Avatar size="sm" uri={item.image ?? undefined} placeholderIcon="User" />
+          <Box flex={1}>
+            <ThemedText color="textPrimary" weight="medium" size="lg">
+              {item.username}
+            </ThemedText>
+            <ThemedText color="textSecondary" variant="mono" weight="medium" size="xs" letterSpacing="wider">
+              @{item.username}
+            </ThemedText>
+          </Box>
+        </Box>
+      </Touchable>
     ),
-    []
+    [navigateToProfile, onClose]
   )
 
   return (
@@ -95,6 +107,7 @@ export const ReviewInteractionsModal: React.FC<ReviewInteractionsModalProps> = (
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
         contentContainerStyle={styles.listContent}
+        ItemSeparatorComponent={Divider}
       />
     </SwipeableModal>
   )

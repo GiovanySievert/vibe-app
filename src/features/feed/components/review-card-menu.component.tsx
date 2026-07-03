@@ -10,6 +10,7 @@ import { ThemedIcon } from '@src/shared/components/themed-icon'
 import { useAppTranslation } from '@src/shared/i18n'
 
 import { FeedReviewItem } from '../domain/feed-review-item.model'
+import { useDownloadReviewImage } from '../hooks/use-download-review-image'
 import { useFavoriteReview } from '../hooks/use-favorite-review'
 import { FeedService } from '../services'
 
@@ -24,6 +25,7 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const { isFavorite, setFavorite } = useFavoriteReview(review)
+  const { downloadImage } = useDownloadReviewImage()
 
   const { mutate: deleteReview } = useMutation({
     mutationFn: () => FeedService.deleteReview(review.id),
@@ -78,6 +80,20 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
     })
 
     if (isOwner) {
+      if (review.selfieUrl) {
+        actions.push({
+          text: t('feed.menu.downloadSelfieBtn'),
+          onPress: () => downloadImage(review.selfieUrl)
+        })
+      }
+
+      if (review.placeImageUrl) {
+        actions.push({
+          text: t('feed.menu.downloadPhotoBtn'),
+          onPress: () => downloadImage(review.placeImageUrl)
+        })
+      }
+
       actions.push({
         text: t('feed.menu.deleteBtn'),
         style: 'destructive',

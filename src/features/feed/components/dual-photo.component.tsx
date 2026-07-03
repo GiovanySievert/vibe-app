@@ -5,6 +5,7 @@ import { Touchable } from '@src/shared/components'
 import { Box } from '@src/shared/components/box'
 import { ThemedText } from '@src/shared/components/themed-text'
 import { theme } from '@src/shared/constants/theme'
+import { triggerLightHaptic } from '@src/shared/utils'
 
 type Props = {
   placeImageUrl: string | null
@@ -27,6 +28,7 @@ export const DualPhoto: React.FC<Props> = ({ placeImageUrl, selfieUrl, aspectRat
   }, [overlayOpacity, overlaysHidden])
 
   const handleThumbnailPress = () => {
+    triggerLightHaptic()
     setSelfieExpanded((prev) => !prev)
   }
 
