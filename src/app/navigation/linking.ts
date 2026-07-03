@@ -44,6 +44,8 @@ export const linking: LinkingOptions<AppNavigatorRootParamsList> = {
       Modals: {
         screens: {
           UsersProfileScreen: 'social/profile/:userId',
+          CreateEventScreen: 'social/events/create',
+          EventDetailScreen: 'social/events/:eventId',
           FollowRequestsScreen: 'social/follow-requests/:type',
           BlockedUsersScreen: 'social/blocked'
         }

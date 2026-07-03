@@ -61,6 +61,8 @@ export type ModalNavigatorParamsList = {
   PlacesDetailsScreen: { placeId: string; isHot?: boolean }
   UsersProfileScreen: { userId: string }
   SearchScreen: undefined
+  CreateEventScreen: undefined
+  EventDetailScreen: { eventId: string }
   EventPlaceSearchScreen: undefined
   LocationModal: undefined
   FollowRequestsScreen: { type: 'received' | 'sent' }
