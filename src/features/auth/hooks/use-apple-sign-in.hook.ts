@@ -4,6 +4,7 @@ import { Platform } from 'react-native'
 import * as AppleAuthentication from 'expo-apple-authentication'
 
 import { authClient } from '@src/services/api/auth-client'
+import { PlatformOS } from '@src/shared/constants/platform'
 import { i18n } from '@src/shared/i18n'
 
 import { mapUserData } from '../domain'
@@ -20,7 +21,7 @@ export const useAppleSignIn = () => {
   const { persistAuthSession } = useAuthSession()
   const [loading, setLoading] = useState(false)
 
-  const isAvailable = Platform.OS === 'ios'
+  const isAvailable = Platform.OS === PlatformOS.IOS
 
   const signIn = useCallback(async (): Promise<AppleSignInResult> => {
     if (!isAvailable)

@@ -3,6 +3,7 @@ import { Platform } from 'react-native'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
 
 import { authClient } from '@src/services/api/auth-client'
+import { PlatformOS } from '@src/shared/constants/platform'
 import { i18n } from '@src/shared/i18n'
 
 import { mapUserData } from '../domain'
@@ -21,7 +22,7 @@ export const useGoogleSignIn = () => {
   const { persistAuthSession } = useAuthSession()
   const [loading, setLoading] = useState(false)
 
-  const isConfigured = Platform.OS === 'android' && Boolean(webClientId)
+  const isConfigured = Platform.OS === PlatformOS.ANDROID && Boolean(webClientId)
 
   useEffect(() => {
     if (!isConfigured) return

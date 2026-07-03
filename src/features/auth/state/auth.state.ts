@@ -12,7 +12,8 @@ export const getUnauthenticatedAuthState = (): UserAuthenticated => ({
     emailVerified: false,
     name: '',
     username: '',
-    image: null
+    image: null,
+    imageThumbnail: null
   },
   session: {
     id: '',
