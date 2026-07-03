@@ -316,7 +316,8 @@
   },
   "map": {
     "searchHere": "Buscar en esta zona",
-    "centerMyLocation": "Centrar en mi ubicación"
+    "centerMyLocation": "Centrar en mi ubicación",
+    "loadingPlaces": "Buscando lugares..."
   },
   "feed": {
     "card": {
@@ -347,6 +348,12 @@
       "favoriteBtn": "Favorita",
       "unfavoriteBtn": "Quitar favorita",
       "shareBtn": "Compartir",
+      "downloadSelfieBtn": "Descargar selfie",
+      "downloadPhotoBtn": "Descargar foto",
+      "downloadSuccess": "imagen guardada en la galería.",
+      "downloadFailed": "no se pudo guardar la imagen.",
+      "downloadNoPermission": "permiso para guardar fotos denegado.",
+      "downloadNoImage": "imagen no disponible.",
       "deleteBtn": "Eliminar review",
       "cancelBtn": "Cancelar"
     },
@@ -623,7 +630,22 @@
     },
     "openingHours": {
       "title": "Horario",
-      "description": "de 19h a 07h, todos los días"
+      "description": "de 19h a 07h, todos los días",
+      "label": "HORARIO",
+      "openNow": "abierto ahora",
+      "closed": "cerrado",
+      "closesAt": "cierra {{time}}",
+      "opensAt": "abre {{day}} {{time}}",
+      "closedAllDay": "cerrado",
+      "weekdaysShort": {
+        "0": "dom",
+        "1": "lun",
+        "2": "mar",
+        "3": "mié",
+        "4": "jue",
+        "5": "vie",
+        "6": "sáb"
+      }
     },
     "errors": {
       "loadFailed": "algo salió mal, inténtalo de nuevo más tarde!"

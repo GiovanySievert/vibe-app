@@ -1,3 +1,5 @@
+import 'intl-pluralrules'
+
 import { initReactI18next } from 'react-i18next'
 
 import * as Localization from 'expo-localization'
@@ -36,7 +38,8 @@ export async function bootstrapI18n(): Promise<SupportedLanguage> {
       fallbackLng: DEFAULT_LANGUAGE,
       interpolation: { escapeValue: false },
       compatibilityJSON: 'v4',
-      returnNull: false
+      returnNull: false,
+      react: { useSuspense: false }
     })
     isInitialized = true
   } else {

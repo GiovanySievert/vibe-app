@@ -342,6 +342,12 @@
       "favoriteBtn": "Favorite",
       "unfavoriteBtn": "Unfavorite",
       "shareBtn": "Share",
+      "downloadSelfieBtn": "Download selfie",
+      "downloadPhotoBtn": "Download photo",
+      "downloadSuccess": "image saved to your gallery.",
+      "downloadFailed": "could not save the image.",
+      "downloadNoPermission": "permission to save photos denied.",
+      "downloadNoImage": "image unavailable.",
       "deleteBtn": "Delete review",
       "cancelBtn": "Cancel",
       "alertTitle": ""
@@ -622,7 +628,22 @@
     },
     "openingHours": {
       "title": "Hours",
-      "description": "from 7pm to 7am, every day"
+      "description": "from 7pm to 7am, every day",
+      "label": "HOURS",
+      "openNow": "open now",
+      "closed": "closed",
+      "closesAt": "closes {{time}}",
+      "opensAt": "opens {{day}} {{time}}",
+      "closedAllDay": "closed",
+      "weekdaysShort": {
+        "0": "sun",
+        "1": "mon",
+        "2": "tue",
+        "3": "wed",
+        "4": "thu",
+        "5": "fri",
+        "6": "sat"
+      }
     },
     "tags": {
       "uglyWoman": "Ugly Woman",
@@ -748,7 +769,8 @@
   },
   "map": {
     "searchHere": "Search this area",
-    "centerMyLocation": "Center on my location"
+    "centerMyLocation": "Center on my location",
+    "loadingPlaces": "Finding places..."
   },
   "location": {
     "permissionDenied": "Permission denied",
