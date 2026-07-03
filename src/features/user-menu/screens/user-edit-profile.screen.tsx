@@ -23,15 +23,16 @@ export const UserEditProfile = () => {
   const [bio, setBio] = useState(authState.user.bio ?? '')
   const [avatarUri, setAvatarUri] = useState<string | null>(null)
 
-  const { upload, uploading } = useUploadImage()
+  const { uploadVariants, uploading } = useUploadImage()
 
   const updateMutation = useMutation({
     mutationFn: async () => {
-      const image = avatarUri ? await upload(avatarUri, 'avatars') : undefined
+      const imageVariants = avatarUri ? await uploadVariants(avatarUri, 'avatars', 'avatar') : undefined
       return UserProfileService.update({
         name: name.trim(),
         bio: bio.trim() || undefined,
-        image
+        image: imageVariants?.fullUrl,
+        imageThumbnail: imageVariants?.thumbnailUrl
       })
     },
     onSuccess: (response) => {
@@ -41,7 +42,8 @@ export const UserEditProfile = () => {
           ...prev.user,
           name: response.data.name,
           bio: response.data.bio,
-          image: response.data.image
+          image: response.data.image,
+          imageThumbnail: response.data.imageThumbnail
         }
       }))
       queryClient.invalidateQueries({

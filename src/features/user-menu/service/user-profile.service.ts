@@ -6,6 +6,7 @@ export type UpdateUserProfilePayload = {
   name: string
   bio?: string
   image?: string
+  imageThumbnail?: string
 }
 
 export type UpdateUserProfileResponse = {
@@ -13,6 +14,7 @@ export type UpdateUserProfileResponse = {
   name: string
   bio: string | null
   image: string | null
+  imageThumbnail: string | null
   updatedAt: string
 }
 

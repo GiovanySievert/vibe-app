@@ -10,17 +10,15 @@ import { authStateAtom } from '@src/features/auth/state'
 import { UserOwnProfileActions, UserOwnProfileTopBar } from '@src/features/user-menu/components'
 import { UserReviewsGrid, UsersProfileHeaderScreen } from '@src/features/users-profile/components'
 import { UsersProfileService } from '@src/features/users-profile/services'
-import { Box, ThemedText } from '@src/shared/components'
+import { LoadingScreen } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { UserModel } from '@src/shared/domain/users.model'
-import { useAppTranslation } from '@src/shared/i18n'
 
 export const UserOwnProfileScreen = () => {
   const [authState] = useAtom(authStateAtom)
   const userId = authState.user.id
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
-  const { t } = useAppTranslation()
 
   const { data: userData, isLoading } = useQuery<UserModel, Error>({
     queryKey: ['fetchUserById', userId],
@@ -30,11 +28,7 @@ export const UserOwnProfileScreen = () => {
   })
 
   if (isLoading) {
-    return (
-      <Box bg="background">
-        <ThemedText>{t('userMenu.profile.loading')}</ThemedText>
-      </Box>
-    )
+    return <LoadingScreen />
   }
 
   if (!userData) return null

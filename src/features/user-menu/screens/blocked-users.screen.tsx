@@ -7,7 +7,7 @@ import { BlockedUserItem } from '@src/features/social/components/blocked-user-it
 import { useBlockActions } from '@src/features/social/hooks/use-block-actions'
 import { useInfiniteBlockedUsers } from '@src/features/social/hooks/use-blocked-users'
 import { ListBlockedUsersResponse } from '@src/features/users-profile/types'
-import { Box, ThemedText } from '@src/shared/components'
+import { Box, LoadingScreen, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
 import { theme } from '@src/shared/constants/theme'
 import { useAppTranslation } from '@src/shared/i18n'
@@ -42,31 +42,33 @@ export const BlockedUsersScreen: React.FC<Props> = () => {
           </ThemedText>
         </Box>
 
-        <FlatList
-          data={blockedUsers}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContent}
-          ItemSeparatorComponent={() => <Box style={styles.separator} />}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isFetchingNextPage ? (
-              <Box mt={4} alignItems="center">
-                <ActivityIndicator color={theme.colors.primary} />
-              </Box>
-            ) : null
-          }
-          ListEmptyComponent={
-            !isLoading ? (
+        {isLoading ? (
+          <LoadingScreen />
+        ) : (
+          <FlatList
+            data={blockedUsers}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContent}
+            ItemSeparatorComponent={() => <Box style={styles.separator} />}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              isFetchingNextPage ? (
+                <Box mt={4} alignItems="center">
+                  <ActivityIndicator color={theme.colors.primary} />
+                </Box>
+              ) : null
+            }
+            ListEmptyComponent={
               <Box mt={6} alignItems="center">
                 <ThemedText variant="mono" size="xs" color="textSecondary">
                   {t('userMenu.privacy.emptyBlocked')}
                 </ThemedText>
               </Box>
-            ) : null
-          }
-        />
+            }
+          />
+        )}
       </Box>
     </Screen>
   )
