@@ -4,7 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { HotPlaceItem } from '@src/features/search/domain'
-import { Avatar, Box, Divider, ThemedText, Touchable } from '@src/shared/components'
+import { Avatar, Box, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { formatDistance } from '@src/shared/utils'
 
 type HotPlacesCardProps = {
@@ -41,9 +41,12 @@ export const HotPlacesCard: React.FC<HotPlacesCardProps> = ({ item, index }) => 
           </ThemedText>
         </Touchable>
         {item.isHot && (
-          <ThemedText size="sm" color="success" weight="semibold">
-            em alta
-          </ThemedText>
+          <Box flexDirection="row" alignItems="center" gap={1}>
+            <ThemedIcon name="Flame" size={14} color="primary" type="solid" />
+            <ThemedText size="sm" color="primary" weight="semibold">
+              em alta
+            </ThemedText>
+          </Box>
         )}
       </Box>
       <Divider />

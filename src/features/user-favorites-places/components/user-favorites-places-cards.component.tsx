@@ -6,15 +6,9 @@ import { useAtom } from 'jotai'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { Avatar, Box, Card, Divider, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
+import { UserFavoritePlace } from '@src/shared/domain'
 import { useAppTranslation } from '@src/shared/i18n'
 import { userFavoritesPlacesAtom } from '@src/shared/state'
-
-interface UserFavoritePlace {
-  id: string
-  venueId: string
-  name: string
-  avatar: string
-}
 
 export const UserFavoritesPlacesCards = () => {
   const { t } = useAppTranslation()
@@ -32,7 +26,7 @@ export const UserFavoritesPlacesCards = () => {
             onPress={() =>
               navigation.navigate('Modals', {
                 screen: 'PlacesDetailsScreen',
-                params: { placeId: item.venueId }
+                params: { placeId: item.placeId }
               })
             }
           >

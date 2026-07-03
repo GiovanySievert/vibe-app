@@ -3,7 +3,7 @@ import { FlatList } from 'react-native'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 
 import { AuthenticatedStackParamList } from '@src/app/navigation/types'
-import { Box, ThemedText, Touchable } from '@src/shared/components'
+import { Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
 import { useAppTranslation } from '@src/shared/i18n'
@@ -78,6 +78,9 @@ export const NearbyPlacesScroll: React.FC<Props> = ({ places, selectedPlaceId, o
                 <ThemedText weight="semibold" color={isSelected ? 'background' : 'textPrimary'} numberOfLines={1}>
                   {place.name}
                 </ThemedText>
+                {place.isHot ? (
+                  <ThemedIcon name="Flame" size={14} color={isSelected ? 'background' : 'primary'} type="solid" />
+                ) : null}
                 <Box
                   style={{
                     width: 3,
