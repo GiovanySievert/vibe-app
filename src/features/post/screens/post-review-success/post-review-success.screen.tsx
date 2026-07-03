@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useQuery } from '@tanstack/react-query'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -203,9 +204,9 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
     </Box>
   )
 
-  return (
-    <Screen>
-      {step === 'streak' && streakUpdate ? (
+  if (step === 'streak' && streakUpdate) {
+    return (
+      <View style={styles.gradientWrapper}>
         <LinearGradient
           colors={UNLOCKED_GRADIENT_COLORS}
           locations={UNLOCKED_GRADIENT_LOCATIONS}
@@ -213,9 +214,17 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
           end={{ x: 0.2, y: 1 }}
           style={styles.gradient}
         >
-          <StreakCelebrationStep streakUpdate={streakUpdate} onClose={closeToFeed} onContinue={closeToFeed} />
+          <SafeAreaView style={styles.safeArea} edges={['right', 'left', 'top']}>
+            <StreakCelebrationStep streakUpdate={streakUpdate} onClose={closeToFeed} onContinue={closeToFeed} />
+          </SafeAreaView>
         </LinearGradient>
-      ) : hasUnlockedBadge ? (
+      </View>
+    )
+  }
+
+  if (hasUnlockedBadge) {
+    return (
+      <View style={styles.gradientWrapper}>
         <LinearGradient
           colors={UNLOCKED_GRADIENT_COLORS}
           locations={UNLOCKED_GRADIENT_LOCATIONS}
@@ -223,21 +232,31 @@ export const PostReviewSuccessScreen: React.FC<Props> = ({ navigation, route }) 
           end={{ x: 0.2, y: 1 }}
           style={styles.gradient}
         >
-          {content}
+          <SafeAreaView style={styles.safeArea} edges={['right', 'left', 'top']}>
+            {content}
+          </SafeAreaView>
         </LinearGradient>
-      ) : (
-        content
-      )}
-    </Screen>
-  )
+      </View>
+    )
+  }
+
+  return <Screen>{content}</Screen>
 }
 
 const styles = StyleSheet.create({
   content: {
     backgroundColor: 'transparent'
   },
+  gradientWrapper: {
+    flex: 1,
+    backgroundColor: theme.colors.background
+  },
   gradient: {
     flex: 1
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'transparent'
   },
   closeButton: {
     width: 40,

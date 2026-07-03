@@ -24,8 +24,8 @@ type PhotoButtonProps = {
 }
 
 const PHOTO_STAGE_HEIGHT = space(16) * 4
-const SELFIE_WIDTH = space(12) * 2
-const SELFIE_HEIGHT = space(16) + space(12)
+const SELFIE_WIDTH = space(16) + space(8)
+const SELFIE_HEIGHT = space(16) * 2
 
 export const PostPhotoStep: React.FC<Props> = ({
   placePhotoUri,
@@ -119,33 +119,38 @@ const styles = StyleSheet.create({
   photoStage: {
     height: PHOTO_STAGE_HEIGHT,
     borderRadius: 8,
-    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.backgroundSecondary
   },
   photoButton: {
-    height: PHOTO_STAGE_HEIGHT,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    borderRadius: 8,
-    backgroundColor: theme.colors.backgroundSecondary
+    borderRadius: 7,
+    overflow: 'hidden'
   },
   selfieSlot: {
     position: 'absolute',
-    right: space(4),
-    top: space(4),
+    right: space(3),
+    top: space(3),
     width: SELFIE_WIDTH,
     height: SELFIE_HEIGHT,
-    borderRadius: 8,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.background
+    borderRadius: 4,
+    borderWidth: 1.5,
+    borderColor: theme.colors.background,
+    backgroundColor: theme.colors.background,
+    shadowColor: 'rgb(0, 0, 0)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 6
   },
   selfieButton: {
-    height: SELFIE_HEIGHT,
-    width: '100%'
+    flex: 1,
+    width: '100%',
+    borderRadius: 3,
+    overflow: 'hidden'
   },
   photoImage: {
     width: '100%',

@@ -24,6 +24,7 @@ import {
 } from '@src/features/users-profile/services'
 import { Box, Button, ThemedIcon, ThemedText } from '@src/shared/components'
 import { Screen } from '@src/shared/components/screen'
+import { PlatformOS } from '@src/shared/constants/platform'
 import { theme } from '@src/shared/constants/theme'
 import { useUploadImage } from '@src/shared/hooks'
 import { useAppTranslation } from '@src/shared/i18n'
@@ -48,7 +49,7 @@ export function PostScreen({ navigation, route }: Props) {
   const tabsNavigation = navigation.getParent<NavigationProp<TabsNavigatorParamsList>>()
   const userLocation = useAtomValue(locationStateAtom)
   const { places, isFetching } = usePlacesNearMe()
-  const { upload, uploading } = useUploadImage()
+  const { uploadVariants, uploading } = useUploadImage()
   const preselectedPlace = route.params?.preselectedPlace ?? null
 
   const [activeStep, setActiveStep] = useState<Step>(preselectedPlace ? 1 : 0)
@@ -137,21 +138,23 @@ export function PostScreen({ navigation, route }: Props) {
         })
       }
 
-      const [placeImageUrl, selfieUrl] = await Promise.all([
-        upload(placePhotoUri, 'reviews'),
-        selfieUri ? upload(selfieUri, 'reviews') : Promise.resolve(undefined)
+      const [placeImageVariants, selfieImageVariants] = await Promise.all([
+        uploadVariants(placePhotoUri, 'reviews', 'review'),
+        selfieUri ? uploadVariants(selfieUri, 'reviews', 'review') : Promise.resolve(undefined)
       ])
 
       return PlaceReviewService.create({
         placeId: selectedPlace.id,
         placeName: selectedPlace.name,
         rating,
-        placeImageUrl,
+        placeImageUrl: placeImageVariants.fullUrl,
+        placeImageThumbnailUrl: placeImageVariants.thumbnailUrl,
         userLat: userLocation.latitude,
         userLng: userLocation.longitude,
         placeLat: selectedPlace.location.lat,
         placeLng: selectedPlace.location.lon,
-        selfieUrl,
+        selfieUrl: selfieImageVariants?.fullUrl,
+        selfieThumbnailUrl: selfieImageVariants?.thumbnailUrl,
         selfieFriendsOnly: selfieUri ? selfieFriendsOnly : false,
         comment: comment.trim() || undefined
       })
@@ -235,7 +238,7 @@ export function PostScreen({ navigation, route }: Props) {
 
   return (
     <Screen>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === PlatformOS.IOS ? 'padding' : undefined}>
         <Box flex={1} bg="background">
           <Box pl={5} pr={5} pt={5} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
             <Pressable

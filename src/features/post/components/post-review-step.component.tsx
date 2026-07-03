@@ -33,8 +33,8 @@ type RatingOptionProps = {
 const MAX_COMMENT_LENGTH = 600
 const PHOTO_STAGE_HEIGHT = space(16) * 4
 const REVIEW_PHOTO_HEIGHT = PHOTO_STAGE_HEIGHT - space(2)
-const SELFIE_WIDTH = space(12) * 2
-const SELFIE_HEIGHT = space(16) + space(12)
+const SELFIE_WIDTH = space(16) + space(8)
+const SELFIE_HEIGHT = space(16) * 2
 const RATING_OPTION_HEIGHT = space(8) + space(6)
 
 export const PostReviewStep: React.FC<Props> = ({
@@ -54,23 +54,27 @@ export const PostReviewStep: React.FC<Props> = ({
   return (
     <Box pl={5} pr={5} gap={5}>
       <Box style={styles.reviewPhotoCard}>
-        {placePhotoUri ? (
-          <Image
-            source={{ uri: placePhotoUri }}
-            style={styles.reviewPhoto}
-            resizeMode="cover"
-            accessible
-            accessibilityLabel={t('post.review.placePhotoA11y')}
-          />
-        ) : null}
+        <Box style={styles.reviewPhotoClip}>
+          {placePhotoUri ? (
+            <Image
+              source={{ uri: placePhotoUri }}
+              style={styles.reviewPhoto}
+              resizeMode="cover"
+              accessible
+              accessibilityLabel={t('post.review.placePhotoA11y')}
+            />
+          ) : null}
+        </Box>
         {selfieUri ? (
-          <Image
-            source={{ uri: selfieUri }}
-            style={styles.reviewSelfie}
-            resizeMode="cover"
-            accessible
-            accessibilityLabel={t('post.review.authorSelfieA11y')}
-          />
+          <Box style={styles.reviewSelfie}>
+            <Image
+              source={{ uri: selfieUri }}
+              style={styles.reviewSelfieImage}
+              resizeMode="cover"
+              accessible
+              accessibilityLabel={t('post.review.authorSelfieA11y')}
+            />
+          </Box>
         ) : null}
       </Box>
 
@@ -160,8 +164,14 @@ const styles = StyleSheet.create({
   reviewPhotoCard: {
     height: REVIEW_PHOTO_HEIGHT,
     borderRadius: 8,
-    overflow: 'hidden',
-    backgroundColor: theme.colors.backgroundSecondary
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 1,
+    borderColor: theme.colors.border
+  },
+  reviewPhotoClip: {
+    flex: 1,
+    borderRadius: 7,
+    overflow: 'hidden'
   },
   reviewPhoto: {
     width: '100%',
@@ -169,19 +179,23 @@ const styles = StyleSheet.create({
   },
   reviewSelfie: {
     position: 'absolute',
-    right: space(4),
-    top: space(4),
-    width: SELFIE_WIDTH - space(2),
+    right: space(3),
+    top: space(3),
+    width: SELFIE_WIDTH,
     height: SELFIE_HEIGHT,
     borderRadius: 4,
-    overflow: 'hidden',
     borderWidth: 1.5,
-    borderColor: 'rgb(17, 17, 17)',
+    borderColor: theme.colors.background,
+    backgroundColor: theme.colors.background,
     shadowColor: 'rgb(0, 0, 0)',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.35,
     shadowRadius: 6,
     elevation: 6
+  },
+  reviewSelfieImage: {
+    flex: 1,
+    borderRadius: 3
   },
   ratingOption: {
     flex: 1,
