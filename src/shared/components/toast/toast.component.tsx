@@ -3,6 +3,8 @@ import { Pressable, StyleSheet } from 'react-native'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { Portal } from '@gorhom/portal'
+
 import { icons } from 'lucide-react-native'
 
 import { useToast } from '@src/app/providers/toast.provider'
@@ -87,47 +89,49 @@ export const Toast = () => {
   const isAssertive = toast.level === 'error' || toast.level === 'warning'
 
   return (
-    <Animated.View
-      pointerEvents="box-none"
-      style={[styles.wrapper, animatedStyle, { top: insets.top + 12 }]}
-      accessibilityLiveRegion={isAssertive ? 'assertive' : 'polite'}
-      accessibilityRole={isAssertive ? 'alert' : 'text'}
-    >
-      <Box
-        flexDirection="row"
-        alignItems="flex-start"
-        gap={3}
-        p={3}
-        bg={palette.bg}
-        style={[styles.card, { borderColor: theme.colors[palette.border] }]}
+    <Portal hostName="toast">
+      <Animated.View
+        pointerEvents="box-none"
+        style={[styles.wrapper, animatedStyle, { top: insets.top + 12 }]}
+        accessibilityLiveRegion={isAssertive ? 'assertive' : 'polite'}
+        accessibilityRole={isAssertive ? 'alert' : 'text'}
       >
         <Box
-          h={6}
-          w={6}
-          alignItems="center"
-          justifyContent="center"
-          style={[styles.iconWrap, { borderColor: theme.colors[palette.iconColor] }]}
+          flexDirection="row"
+          alignItems="flex-start"
+          gap={3}
+          p={3}
+          bg={palette.bg}
+          style={[styles.card, { borderColor: theme.colors[palette.border] }]}
         >
-          <ThemedIcon name={palette.icon} color={palette.iconColor} size={14} />
-        </Box>
+          <Box
+            h={6}
+            w={6}
+            alignItems="center"
+            justifyContent="center"
+            style={[styles.iconWrap, { borderColor: theme.colors[palette.iconColor] }]}
+          >
+            <ThemedIcon name={palette.icon} color={palette.iconColor} size={14} />
+          </Box>
 
-        <Box flex={1}>
-          <ThemedText color="textPrimary" size="xs" weight="medium">
-            {toast.message}
-          </ThemedText>
-        </Box>
+          <Box flex={1}>
+            <ThemedText color="textPrimary" size="xs" weight="medium">
+              {toast.message}
+            </ThemedText>
+          </Box>
 
-        <Pressable
-          onPress={hideToast}
-          accessibilityRole="button"
-          accessibilityLabel={t('common.closeNotification')}
-          hitSlop={HIT_SLOP}
-          style={styles.dismiss}
-        >
-          <ThemedIcon name="X" color="textTerciary" size={16} />
-        </Pressable>
-      </Box>
-    </Animated.View>
+          <Pressable
+            onPress={hideToast}
+            accessibilityRole="button"
+            accessibilityLabel={t('common.closeNotification')}
+            hitSlop={HIT_SLOP}
+            style={styles.dismiss}
+          >
+            <ThemedIcon name="X" color="textTerciary" size={16} />
+          </Pressable>
+        </Box>
+      </Animated.View>
+    </Portal>
   )
 }
 

@@ -8,6 +8,7 @@ import { AuthenticatedStackParamList } from '@src/app/navigation/types'
 import { theme } from '@src/shared/constants/theme'
 
 import { Box } from '../box'
+import { ThemedIcon } from '../themed-icon'
 import { ThemedText } from '../themed-text'
 import { Touchable } from '../touchable'
 
@@ -21,8 +22,14 @@ type PinProps = {
 const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, coordinate }) => {
   const navigation = useNavigation<NavigationProp<AuthenticatedStackParamList>>()
   return (
-    <MapboxGL.MarkerView id={placeId} coordinate={coordinate} allowOverlap={true} anchor={{ x: 0.5, y: 1.0 }}>
-      <Box style={styles.wrapper}>
+    <MapboxGL.MarkerView
+      id={placeId}
+      coordinate={coordinate}
+      allowOverlap={true}
+      anchor={{ x: 0.5, y: 1.0 }}
+      isSelected={placeIsHot}
+    >
+      <Box style={[styles.wrapper, placeIsHot && styles.wrapperHot]}>
         <Touchable
           onPress={() =>
             navigation.navigate('Modals', {
@@ -35,10 +42,16 @@ const MapPinComponent: React.FC<PinProps> = ({ placeId, placeName, placeIsHot, c
           accessibilityHint="Abre os detalhes do lugar"
           accessibilityState={{ selected: placeIsHot }}
         >
-          <Box style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}>
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            gap={1}
+            style={[styles.pill, placeIsHot ? styles.pillHot : styles.pillInactive]}
+          >
             <ThemedText weight="semibold" style={[styles.pillText, placeIsHot && styles.pillTextHot]} numberOfLines={1}>
               {placeName}
             </ThemedText>
+            {placeIsHot ? <ThemedIcon name="Flame" size={12} color="background" type="solid" /> : null}
           </Box>
           <Box style={[styles.dot, placeIsHot ? styles.dotHot : styles.dotInactive]} />
         </Touchable>
@@ -59,6 +72,7 @@ export const MapPin = React.memo(
 
 const styles = StyleSheet.create({
   wrapper: { alignItems: 'center' },
+  wrapperHot: { zIndex: 999, elevation: 999 },
   pill: {
     paddingHorizontal: 8,
     borderRadius: 7,

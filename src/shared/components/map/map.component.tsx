@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 
 import MapboxGL from '@rnmapbox/maps'
 import { useAtomValue } from 'jotai'
@@ -7,16 +7,20 @@ import { LocateFixed } from 'lucide-react-native'
 
 import { theme } from '@src/shared/constants/theme'
 import { PlacesModel } from '@src/shared/domain'
+import { useAppTranslation } from '@src/shared/i18n'
 import { locationStateAtom } from '@src/shared/state/location.state'
 import { calculateDistance } from '@src/shared/utils'
 
 import { Box } from '../box'
 import { MapPin } from '../map-pin'
 import { ThemedText } from '../themed-text'
+import { Touchable } from '../touchable'
 import { vibesMapStyle } from './map.style'
 import { UserLocationPin } from './user-location-pin.component'
 
-MapboxGL.setAccessToken('')
+MapboxGL.setAccessToken(
+  'sk.eyJ1IjoiZ2lvdmFueXNpZXZlcnQiLCJhIjoiY21rcHh4OXRhMGdpYjNrb3BvdDg3b2RmYSJ9.oXn_yhtYHmnaAoeLUVXrxA'
+)
 
 type Coords = { latitude: number; longitude: number }
 
@@ -30,6 +34,7 @@ const THRESHOLD_KM = 1
 const TELEPORT_THRESHOLD_KM = 20
 
 export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, onRegionMoved }) => {
+  const { t } = useAppTranslation()
   const locationState = useAtomValue(locationStateAtom)
   const initialCenter = useRef<Coords | null>(null)
   const lastSearchCoords = useRef<Coords | null>(null)
@@ -125,25 +130,34 @@ export const MapWithPins: React.FC<MapWithPinsProps> = ({ points, isSearching, o
         {userCoord && <UserLocationPin coordinate={userCoord} />}
       </MapboxGL.MapView>
 
-      {(showSearchButton || isSearching) && (
+      {isSearching && (
+        <Box style={styles.loadingPill}>
+          <ActivityIndicator size="small" color={theme.colors.primary} />
+          <ThemedText size="xs" weight="semibold">
+            {t('map.loadingPlaces')}
+          </ThemedText>
+        </Box>
+      )}
+
+      {showSearchButton && (
         <Box style={styles.searchButtonContainer}>
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearchHere} disabled={isSearching}>
+          <Touchable style={styles.searchButton} onPress={handleSearchHere} disabled={isSearching}>
             <ThemedText size="xs" weight="semibold">
-              {isSearching ? 'Carregando...' : 'Buscar nesta área'}
+              {t('map.searchHere')}
             </ThemedText>
-          </TouchableOpacity>
+          </Touchable>
         </Box>
       )}
 
       {locationState && (
-        <TouchableOpacity
+        <Touchable
           style={styles.recenterButton}
           onPress={handleRecenter}
           accessibilityRole="button"
-          accessibilityLabel="Centrar no meu local"
+          accessibilityLabel={t('map.centerMyLocation')}
         >
           <LocateFixed size={20} color={theme.colors.textPrimary} strokeWidth={1.5} />
-        </TouchableOpacity>
+        </Touchable>
       )}
     </View>
   )
@@ -158,6 +172,20 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.textTerciary
   },
   map: { flex: 1 },
+  loadingPill: {
+    position: 'absolute',
+    top: 16,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 0.5,
+    borderColor: theme.colors.border
+  },
   searchButtonContainer: {
     position: 'absolute',
     bottom: 16,

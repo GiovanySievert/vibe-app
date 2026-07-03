@@ -64,6 +64,13 @@ export type VenueLocation = {
   updatedAt: string
 }
 
+export type PlaceOpeningHour = {
+  weekday: number
+  opensAt: string
+  closesAt: string
+  isClosed: boolean
+}
+
 export type PlacesByIdResponse = {
   id: string
   brandId: string
@@ -79,4 +86,5 @@ export type PlacesByIdResponse = {
   updatedAt: string
   brand: Brand
   location: VenueLocation
+  openingHours: PlaceOpeningHour[]
 }
