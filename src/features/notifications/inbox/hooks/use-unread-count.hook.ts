@@ -11,6 +11,7 @@ export const useUnreadCount = () => {
     },
     refetchOnWindowFocus: true,
     refetchInterval: 60_000,
-    staleTime: 30_000
+    staleTime: 30_000,
+    gcTime: 0
   })
 }

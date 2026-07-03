@@ -4,6 +4,8 @@ import Constants from 'expo-constants'
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 
+import { PlatformOS } from '@src/shared/constants/platform'
+
 import {
   getPushInstallationId,
   getStoredPushToken,
@@ -22,7 +24,7 @@ Notifications.setNotificationHandler({
 })
 
 export async function registerForPushNotificationsAsync() {
-  if (Platform.OS === 'android') {
+  if (Platform.OS === PlatformOS.ANDROID) {
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX
