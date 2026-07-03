@@ -11,11 +11,14 @@ import { locationStateAtom } from '@src/shared/state/location.state'
 import { formaterAddress } from '@src/shared/utils'
 import { calculateDistance } from '@src/shared/utils/calculate-distance'
 
+type PlacesAddressVariant = 'standalone' | 'embedded'
+
 type PlacesAddressProps = {
   place: PlacesByIdResponse
+  variant?: PlacesAddressVariant
 }
 
-export const PlacesAddress: React.FC<PlacesAddressProps> = ({ place }) => {
+export const PlacesAddress: React.FC<PlacesAddressProps> = ({ place, variant = 'standalone' }) => {
   const userLocation = useAtomValue(locationStateAtom)
   const distance = userLocation
     ? calculateDistance(userLocation.latitude, userLocation.longitude, +place.location.lat, +place.location.lng)
@@ -23,8 +26,16 @@ export const PlacesAddress: React.FC<PlacesAddressProps> = ({ place }) => {
         .replace('.', ',')
     : null
 
+  const isStandalone = variant === 'standalone'
+
   return (
-    <Box flexDirection="row" alignItems="flex-start" gap={3} pl={6} pr={6} style={styles.row}>
+    <Box
+      flexDirection="row"
+      alignItems="flex-start"
+      gap={3}
+      pl={isStandalone ? 6 : 0}
+      pr={isStandalone ? 6 : 0}
+      style={isStandalone ? styles.standalone : undefined}>
       <ThemedIcon name="MapPin" color="primary" size={16} />
       <Box flex={1} gap={1}>
         <ThemedText>{formaterAddress(place.location, 'full')}</ThemedText>
@@ -35,7 +46,7 @@ export const PlacesAddress: React.FC<PlacesAddressProps> = ({ place }) => {
 }
 
 const styles = StyleSheet.create({
-  row: {
+  standalone: {
     paddingVertical: 16,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border

@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { ModalNavigatorParamsList } from '@src/app/navigation/types'
 import { useToast } from '@src/app/providers/toast.provider'
-import { Box, ThemedIcon, ThemedText } from '@src/shared/components'
+import { Box, LoadingScreen, ThemedIcon, ThemedText } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
 import { useAppTranslation } from '@src/shared/i18n'
@@ -18,6 +18,7 @@ import {
   PlacesFlutuantButton,
   PlacesInfoHeader,
   PlacesInfoPills,
+  PlacesOpeningHours,
   PlacesReviewFriends,
   PlacesReviews
 } from '../components'
@@ -42,7 +43,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
     queryKey: ['fetchPlacesById', placeId],
     queryFn: fetchPlaces,
     retry: false,
-    staleTime: 0,
+    staleTime: 10 * 60_000,
     enabled: !!placeId
   })
 
@@ -55,11 +56,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
   }, [hasFailed, navigation, showToast, t])
 
   if (isLoading) {
-    return (
-      <Box flex={1} bg="background" alignItems="center" justifyContent="center">
-        <ThemedText variant="mono">carregando...</ThemedText>
-      </Box>
-    )
+    return <LoadingScreen />
   }
 
   if (!placeData) {
@@ -71,7 +68,7 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
   return (
     <Box flex={1} bg="background">
       <ScrollView style={styles.scroll} overScrollMode="never" showsVerticalScrollIndicator={false}>
-        <PlacesInfoHeader place={placeData} onBack={() => navigation.goBack()} />
+        <PlacesInfoHeader place={placeData} isHot={isHot} onBack={() => navigation.goBack()} />
         <PlacesInfoPills place={placeData} />
         {placeData.about ? (
           <Box pl={6} pr={6} mt={5} pb={1}>
@@ -79,7 +76,11 @@ export const PlacesDetailsScreen: React.FC<PlacesDetailsScreenScreenProps> = ({ 
           </Box>
         ) : null}
         <PlacesCardInfo place={placeData} />
-        <PlacesAddress place={placeData} />
+        {placeData.openingHours?.length ? (
+          <PlacesOpeningHours place={placeData} />
+        ) : (
+          <PlacesAddress place={placeData} />
+        )}
         {isHot ? (
           <Box pl={6} pr={6} pt={5} pb={5} style={styles.hotSection}>
             <Box flexDirection="row" alignItems="center" gap={3}>

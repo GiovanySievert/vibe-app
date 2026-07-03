@@ -22,7 +22,7 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
   const [userFavoritesPlaces] = useAtom(userFavoritesPlacesAtom)
 
   const isPlaceFavorited = useMemo(
-    () => userFavoritesPlaces.find((favoritePlace) => favoritePlace.venueId === place.id),
+    () => userFavoritesPlaces.find((favoritePlace) => favoritePlace.placeId === place.id),
     [userFavoritesPlaces, place.id]
   )
   const animatedStyle = useAnimatedStyle(() => {
@@ -48,7 +48,7 @@ export const PlacesHeaderFavoriteButton: React.FC<PlacesHeaderFavoriteButtonProp
       withSpring(1.15, { damping: 5, stiffness: 200 }),
       withSpring(1, { damping: 5, stiffness: 200 })
     )
-    setFavoritePlaces((prev) => prev.filter((fav) => fav.venueId !== place.id))
+    setFavoritePlaces((prev) => prev.filter((fav) => fav.placeId !== place.id))
     return UserFavoritesPlacesService.unfavoritePlace(place.id)
   }
 

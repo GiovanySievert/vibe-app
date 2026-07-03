@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet } from 'react-native'
 
-import { Box, ThemedText, Touchable } from '@src/shared/components'
+import { Box, ThemedIcon, ThemedText, Touchable } from '@src/shared/components'
 import { theme } from '@src/shared/constants/theme'
 import { PlacesByIdResponse } from '@src/shared/domain'
 import { useAppTranslation } from '@src/shared/i18n'
@@ -10,10 +10,11 @@ import { PlacesActions } from './places-screen-header.component'
 
 type PlacesInfoHeaderProps = {
   place: PlacesByIdResponse
+  isHot?: boolean
   onBack: () => void
 }
 
-export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBack }) => {
+export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, isHot, onBack }) => {
   const { t } = useAppTranslation()
 
   return (
@@ -47,9 +48,12 @@ export const PlacesInfoHeader: React.FC<PlacesInfoHeaderProps> = ({ place, onBac
         <ThemedText variant="mono" style={styles.liveTag}>
           {t('common.live')}
         </ThemedText>
-        <ThemedText variant="title" style={styles.placeName}>
-          {place.name}
-        </ThemedText>
+        <Box flexDirection="row" alignItems="center" gap={2}>
+          <ThemedText variant="title" style={styles.placeName}>
+            {place.name}
+          </ThemedText>
+          {isHot ? <ThemedIcon name="Flame" size={26} color="primary" type="solid" /> : null}
+        </Box>
         <ThemedText variant="mono" style={styles.subtitle}>
           {place.brand?.type.toLowerCase()} · {place.location?.neighborhood?.toLowerCase() ?? 'sem bairro'} · 0.3 km
         </ThemedText>

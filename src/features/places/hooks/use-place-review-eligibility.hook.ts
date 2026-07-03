@@ -29,7 +29,8 @@ export const usePlaceReviewEligibility = ({
     queryKey: ['placeReviewEligibility', placeId],
     queryFn: () => PlaceReviewService.eligibility(placeId).then((r) => r.data),
     enabled,
-    staleTime: 60_000,
+    staleTime: 0,
+    gcTime: 0,
     retry: false
   })
 
