@@ -322,6 +322,8 @@
   "feed": {
     "card": {
       "ownerBadge": "tú",
+      "anonymous": "Anónimo",
+      "anonymousYou": "Anónimo (tú)",
       "viewInteractions": "ver {{count}} interacciones",
       "noInteractions": "sin interacciones",
       "comments": "comentarios · {{count}}",
@@ -395,8 +397,8 @@
       "title": "muestra cómo está",
       "description": "la foto del lugar es obligatoria; la selfie es opcional.",
       "requiredError": "la foto del lugar es obligatoria",
-      "privacyLabel": "¿Selfie solo para amigos?",
-      "privacyDesc": "Quienes te siguen aún ven la selfie. Si está desactivado, aparece para todos.",
+      "anonymousLabel": "¿Publicar de forma anónima?",
+      "anonymousDesc": "Tu nombre y tu foto no se muestran. Solo se publica la foto del lugar.",
       "addPlacePhoto": "agregar foto del lugar",
       "addSelfie": "agregar selfie",
       "placePhotoCaptured": "Foto del lugar capturada",

@@ -46,7 +46,7 @@ export const PlaceReviewService = {
     placeLng: number
     selfieUrl?: string
     selfieThumbnailUrl?: string
-    selfieFriendsOnly?: boolean
+    isAnonymous?: boolean
     comment?: string
   }) => coreApi.post<CreatePlaceReviewResponse>('/place-reviews', payload),
   getFeed: (page?: number) => coreApi.get<FeedReviewItem[]>('/place-reviews/feed', { params: { page } }),

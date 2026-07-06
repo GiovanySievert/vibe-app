@@ -36,9 +36,16 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
   const [isInteractionsVisible, setIsInteractionsVisible] = useState(false)
   const [counts, setCounts] = useState<ReviewCounts | null>(null)
   const relativeTime = formatRelativeTime(review.createdAt)
-  const isOwner = review.userId === currentUserId
-  const avatarUris = getAvatarImageUris(review.user)
+  const isOwner = review.userId === currentUserId || review.isOwnAnonymous
+  const avatarUris = review.user
+    ? getAvatarImageUris(review.user)
+    : { displayUri: null, fullUri: null }
   const detailImageUris = getReviewDetailImageUris(review)
+  const displayName = review.isOwnAnonymous
+    ? t('feed.card.anonymousYou')
+    : review.isAnonymous
+      ? t('feed.card.anonymous')
+      : review.user?.username
 
   useEffect(() => {
     FeedService.getCounts(review.id)
@@ -97,11 +104,11 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
             uri={avatarUris.displayUri}
             fullUri={avatarUris.fullUri}
             placeholderIcon="User"
-            onPress={() => navigateToProfile(review.user.id)}
+            onPress={review.isAnonymous || !review.user ? undefined : () => navigateToProfile(review.user!.id)}
           />
           <Box flexDirection="row" alignItems="center" gap={2} flex={1}>
             <ThemedText weight="semibold" size="sm" color="textPrimary">
-              {review.user.username}
+              {displayName}
             </ThemedText>
             {isOwner && (
               <Box style={styles.ownerBadge}>
@@ -178,7 +185,7 @@ export const ReviewCard: React.FC<Props> = ({ review, currentUserId, enableFavor
         visible={isCommentsVisible}
         commentsCount={counts?.commentsCount ?? 0}
         currentUserId={currentUserId}
-        reviewOwnerId={review.userId}
+        reviewOwnerId={review.userId ?? ''}
         onClose={() => setIsCommentsVisible(false)}
       />
 

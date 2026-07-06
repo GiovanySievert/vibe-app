@@ -58,8 +58,13 @@ export function PostScreen({ navigation, route }: Props) {
   const [comment, setComment] = useState('')
   const [placePhotoUri, setPlacePhotoUri] = useState<string | null>(null)
   const [selfieUri, setSelfieUri] = useState<string | null>(null)
-  const [selfieFriendsOnly, setSelfieFriendsOnly] = useState(false)
+  const [isAnonymous, setIsAnonymous] = useState(false)
   const [submitAttempted, setSubmitAttempted] = useState(false)
+
+  const handleAnonymousChange = (value: boolean) => {
+    setIsAnonymous(value)
+    if (value) setSelfieUri(null)
+  }
 
   useEffect(() => {
     if (!preselectedPlace) return
@@ -138,9 +143,10 @@ export function PostScreen({ navigation, route }: Props) {
         })
       }
 
+      const shouldUploadSelfie = !isAnonymous && selfieUri
       const [placeImageVariants, selfieImageVariants] = await Promise.all([
         uploadVariants(placePhotoUri, 'reviews', 'review'),
-        selfieUri ? uploadVariants(selfieUri, 'reviews', 'review') : Promise.resolve(undefined)
+        shouldUploadSelfie ? uploadVariants(selfieUri, 'reviews', 'review') : Promise.resolve(undefined)
       ])
 
       return PlaceReviewService.create({
@@ -155,7 +161,7 @@ export function PostScreen({ navigation, route }: Props) {
         placeLng: selectedPlace.location.lon,
         selfieUrl: selfieImageVariants?.fullUrl,
         selfieThumbnailUrl: selfieImageVariants?.thumbnailUrl,
-        selfieFriendsOnly: selfieUri ? selfieFriendsOnly : false,
+        isAnonymous,
         comment: comment.trim() || undefined
       })
     },
@@ -272,10 +278,10 @@ export function PostScreen({ navigation, route }: Props) {
               <PostPhotoStep
                 placePhotoUri={placePhotoUri}
                 selfieUri={selfieUri}
-                selfieFriendsOnly={selfieFriendsOnly}
+                isAnonymous={isAnonymous}
                 submitAttempted={submitAttempted}
                 onPhotoPress={launchCamera}
-                onSelfieFriendsOnlyChange={setSelfieFriendsOnly}
+                onIsAnonymousChange={handleAnonymousChange}
               />
             ) : null}
             {activeStep === 2 ? (

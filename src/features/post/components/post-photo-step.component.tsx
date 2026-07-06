@@ -11,10 +11,10 @@ export type PostPhotoType = 'place' | 'selfie'
 type Props = {
   placePhotoUri: string | null
   selfieUri: string | null
-  selfieFriendsOnly: boolean
+  isAnonymous: boolean
   submitAttempted: boolean
   onPhotoPress: (type: PostPhotoType) => void
-  onSelfieFriendsOnlyChange: (value: boolean) => void
+  onIsAnonymousChange: (value: boolean) => void
 }
 
 type PhotoButtonProps = {
@@ -30,10 +30,10 @@ const SELFIE_HEIGHT = space(16) * 2
 export const PostPhotoStep: React.FC<Props> = ({
   placePhotoUri,
   selfieUri,
-  selfieFriendsOnly,
+  isAnonymous,
   submitAttempted,
   onPhotoPress,
-  onSelfieFriendsOnlyChange
+  onIsAnonymousChange
 }) => {
   const { t } = useAppTranslation()
 
@@ -50,9 +50,11 @@ export const PostPhotoStep: React.FC<Props> = ({
 
       <Box style={styles.photoStage}>
         <PhotoButton type="place" uri={placePhotoUri} onPress={onPhotoPress} />
-        <View style={styles.selfieSlot}>
-          <PhotoButton type="selfie" uri={selfieUri} onPress={onPhotoPress} />
-        </View>
+        {!isAnonymous ? (
+          <View style={styles.selfieSlot}>
+            <PhotoButton type="selfie" uri={selfieUri} onPress={onPhotoPress} />
+          </View>
+        ) : null}
       </Box>
 
       {submitAttempted && !placePhotoUri ? (
@@ -64,16 +66,15 @@ export const PostPhotoStep: React.FC<Props> = ({
       <Box style={styles.privacyCard}>
         <Box flex={1} pr={3}>
           <ThemedText weight="semibold" size="sm" letterSpacing="normal">
-            {t('post.photos.privacyLabel')}
+            {t('post.photos.anonymousLabel')}
           </ThemedText>
           <ThemedText size="xs" color="textSecondary" letterSpacing="normal" style={styles.privacyDescription}>
-            {t('post.photos.privacyDesc')}
+            {t('post.photos.anonymousDesc')}
           </ThemedText>
         </Box>
         <Switch
-          value={selfieFriendsOnly}
-          onValueChange={onSelfieFriendsOnlyChange}
-          disabled={!selfieUri}
+          value={isAnonymous}
+          onValueChange={onIsAnonymousChange}
           trackColor={{
             true: theme.colors.primary,
             false: theme.colors.border

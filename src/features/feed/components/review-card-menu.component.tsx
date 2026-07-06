@@ -72,7 +72,7 @@ export const ReviewCardMenu: React.FC<Props> = ({ review, isOwner, enableFavorit
       onPress: () =>
         Share.share({
           message: t('feed.card.shareMessage', {
-            username: review.user.username,
+            username: review.user?.username ?? t('feed.card.anonymous'),
             placeName: review.placeName,
             shareUrl
           })

@@ -317,6 +317,8 @@
   "feed": {
     "card": {
       "ownerBadge": "você",
+      "anonymous": "Anônimo",
+      "anonymousYou": "Anônimo (você)",
       "viewInteractions": "ver {{count}} interações",
       "noInteractions": "sem interações",
       "comments": "comentários · {{count}}",
@@ -390,8 +392,8 @@
       "title": "mostra como tá",
       "description": "a foto do local é obrigatória; a selfie é opcional.",
       "requiredError": "a foto do local é obrigatória",
-      "privacyLabel": "Selfie apenas para amigos?",
-      "privacyDesc": "Quem segue você ainda vê a selfie. Se desligado, ela aparece para todo mundo.",
+      "anonymousLabel": "Postar anonimamente?",
+      "anonymousDesc": "Seu nome e sua foto não aparecem. Só a foto do local é publicada.",
       "addPlacePhoto": "adicionar foto do local",
       "addSelfie": "adicionar selfie",
       "placePhotoCaptured": "Foto do local capturada",

@@ -1,6 +1,6 @@
 export type FeedReviewItem = {
   id: string
-  userId: string
+  userId: string | null
   placeId: string
   placeName: string
   rating: 'crowded' | 'dead'
@@ -12,12 +12,14 @@ export type FeedReviewItem = {
   createdAt: string
   updatedAt: string
   isFavorite: boolean
+  isAnonymous: boolean
+  isOwnAnonymous: boolean
   user: {
     id: string
     username: string
     image: string | null
     imageThumbnail?: string | null
-  }
+  } | null
 }
 
 export type ReviewCounts = {

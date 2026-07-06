@@ -317,6 +317,8 @@
   "feed": {
     "card": {
       "ownerBadge": "you",
+      "anonymous": "Anonymous",
+      "anonymousYou": "Anonymous (you)",
       "viewInteractions": "view {{count}} interactions",
       "noInteractions": "no interactions",
       "comments": "comments · {{count}}",
@@ -390,8 +392,8 @@
       "title": "show how it is",
       "description": "the place photo is required; the selfie is optional.",
       "requiredError": "the place photo is required",
-      "privacyLabel": "Selfie only for friends?",
-      "privacyDesc": "Followers still see the selfie. If off, it appears to everyone.",
+      "anonymousLabel": "Post anonymously?",
+      "anonymousDesc": "Your name and photo won't be shown. Only the place photo is posted.",
       "addPlacePhoto": "add place photo",
       "addSelfie": "add selfie",
       "placePhotoCaptured": "Place photo captured",
