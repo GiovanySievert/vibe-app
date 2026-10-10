@@ -88,14 +88,14 @@ export function PostScreen({ navigation, route }: Props) {
 
   const launchCamera = async (type: PostPhotoType) => {
     if (type === 'place') {
-      const mock = getDevMockPhotoUriIfSimulator()
+      const mock = await getDevMockPhotoUriIfSimulator()
       if (mock) {
         triggerLightHaptic()
         setPlacePhotoUri(mock)
         return
       }
     } else if (isSimulatorDev()) {
-      const mock = getDevMockPhotoUriIfSimulator()
+      const mock = await getDevMockPhotoUriIfSimulator()
       if (mock) {
         triggerLightHaptic()
         setSelfieUri(mock)
